@@ -8,7 +8,10 @@ BIOME_DEFS = {
         id = 1,
         name = 'Grassland',
         tiles = {
-            TILE_DEFS['Grass']
+            {
+                tileType = TILE_DEFS['Grass'],
+                proc = 1
+            }
         },
         enemies = {},
         features = {
@@ -27,7 +30,10 @@ BIOME_DEFS = {
         id = 2,
         name = 'Mountain',
         tiles = {
-            TILE_DEFS['Stone']
+            {
+                tileType = TILE_DEFS['Stone'],
+                proc = 1
+            }
         },
         enemies = {},
         features = {

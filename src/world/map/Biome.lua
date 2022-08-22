@@ -14,3 +14,19 @@ function Biome:init(def)
     self.features = def.features or {}
     self.featProc = def.featProc or 0
 end
+
+function Biome:getTile()
+    local tile
+
+    -- randomly determine a tile from the selection
+    local num = math.random()
+    local sum = 0
+    for i in pairs(self.tiles) do
+        sum = sum + self.tiles[i].proc 
+        if num < sum then
+            tile = self.tiles[i].tileType
+        end
+    end
+
+    return tile
+end
