@@ -23,18 +23,24 @@ function Map:update(dt)
     end
 end
 
-function Map:render()
+function Map:render(camera)
+    local xStart = math.floor(camera.cambox.x / TILE_SIZE)
+    local xEnd = math.floor(camera.cambox.x + camera.cambox.width / TILE_SIZE)
+    local yStart = math.floor(camera.cambox.y / TILE_SIZE)
+    local yEnd = math.floor(camera.cambox.y + camera.cambox.height / TILE_SIZE)
+
     -- render tiles
-    for i, row in pairs(self.tileMap) do
-        for j, tile in pairs(row) do
-            tile:maprender()
+    
+    for row = xStart, xEnd, 1 do
+        for col = yStart, yEnd, 1 do
+            self.tileMap.tiles[row][col]:render(camera.x, camera.y)
         end
     end
 
     -- render features
-    for i, row in pairs(self.featureMap) do
-        for j, feature in pairs(row) do
-            feature:render()
+    for row = xStart, xEnd, 1 do
+        for col = yStart, yEnd, 1 do
+            self.featureMap[row][col]:render(camera.x, camera.y)
         end
     end
 end

@@ -18,10 +18,10 @@ end
 
 function Tile:update(dt) end
 
-function Tile:render()
+function Tile:render(camx, camy)
     -- temporary color until sprites added
     love.graphics.setColor(self.color)
-    love.graphics.rectangle('fill', self.mapX * TILE_SIZE + MAP_OFFSET_X, self.mapY * TILE_SIZE + MAP_OFFSET_Y, TILE_SIZE, TILE_SIZE)
+    love.graphics.rectangle('fill', (self.mapX * TILE_SIZE) - camx, (self.mapY * TILE_SIZE) -camy, TILE_SIZE, TILE_SIZE)
     love.graphics.setColor({1, 1, 1, 1})
 
     --love.graphics.draw(self.sprite, self.x, self.y)

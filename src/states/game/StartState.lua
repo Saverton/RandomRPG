@@ -3,7 +3,7 @@
     @author Saverton
 ]]
 
-StartState = Class{__includes, BaseState}
+StartState = Class{__includes = BaseState}
 
 function StartState:init() end
 

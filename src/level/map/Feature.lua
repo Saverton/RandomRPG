@@ -19,6 +19,6 @@ end
 
 function Feature:update(dt) end
 
-function Feature:render()
-    love.graphics.draw(self.sprite, self.mapX * TILE_SIZE + MAP_OFFSET_X, self.mapY * TILE_SIZE + MAP_OFFSET_Y)
+function Feature:render(camx, camy)
+    love.graphics.draw(self.sprite, (self.mapX * TILE_SIZE) - camx, (self.mapY * TILE_SIZE) - camy)
 end
