@@ -9,8 +9,16 @@ Level = Class{}
 function Level:init(map, entities, player)
     self.map = map
     self.entities = entities
+    
     self.player = player
-    self.camera = Camera(player)
+    self.player.stateMachine = StateMachine({
+        ['idle'] = function() return PlayerIdleState(self.player) end,
+        ['walk'] = function() return PlayerWalkState(self.player, self) end
+    })
+    self.player.stateMachine:change('idle', self.player)
+    self.player.level = self
+
+    self.camera = Camera(player, self)
 end
 
 function Level:update(dt)

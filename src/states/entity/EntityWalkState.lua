@@ -3,9 +3,9 @@
     @author Saverton
 ]]
 
-EntityWalkState = Class{__includes = BaseState}
+EntityWalkState = Class{__includes = EntityBaseState}
 
-function EntityIdleState:init(entity)
+function EntityWalkState:init(entity)
     self.entity = entity
 
     self.animate = true
@@ -13,7 +13,7 @@ function EntityIdleState:init(entity)
     self.entity:changeAnimation('walk-' .. entity.direction)
 end
 
-function EntityIdleState:update(dt)
+function EntityWalkState:update(dt)
     if self.entity.direction == 'up' then
         self.entity.y = self.entity.y - (self.entity.speed * dt)
     elseif self.entity.direction == 'right' then
@@ -23,9 +23,17 @@ function EntityIdleState:update(dt)
     elseif self.entity.direction == 'left' then
         self.entity.x = self.entity.x - (self.entity.speed * dt)
     end
-end
 
-function EntityIdleState:render(x, y)
-    love.graphics.draw(self.entity.currentAnimation.texture, self.entity.currentAnimation.frames[self.entity.currentFrame],
-        x, y, DEFAULT_ENTITY_ROTATION, self.entity.currentAnimation.xScale)
+    -- keep entity on map
+    if self.entity.x < 0 then
+        self.entity.x = 0
+    elseif self.entity.x + self.entity.width > (self.entity.level.map.size * TILE_SIZE) then
+        self.entity.x = math.floor((self.level.map.size * TILE_SIZE) - self.entity.width)
+    end
+
+    if self.entity.y < 0 then
+        self.entity.y = 0
+    elseif self.entity.y + self.entity.height > (self.entity.level.map.size * TILE_SIZE) then
+        self.entity.y = math.floor((self.level.map.size * TILE_SIZE) - self.entity.height)
+    end
 end

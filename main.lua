@@ -17,7 +17,14 @@ function love.load()
     })
 
     gStateStack = StateStack()
-    gStateStack:push(BaseState())
+    --gStateStack:push(StartState())
+    gStateStack:push(WorldState({
+        level = Level(
+            Map('my_map', DEFAULT_MAP_SIZE),
+            {},
+            Player(ENTITY_DEFS['player'])
+        )
+    }))
 
     love.keyboard.keysPressed = {}
 end

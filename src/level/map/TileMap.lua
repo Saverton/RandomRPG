@@ -7,6 +7,6 @@ TileMap = Class{}
 
 function TileMap:init(size, tiles, biomes)
     self.size = size or DEFAULT_MAP_SIZE
-    self.tiles = tiles or GenerateTiles()
-    self.biomes = biomes or GenerateBiomes()
+    self.biomes = biomes or GenerateBiomes(size)
+    self.tiles = tiles or GenerateTiles(size, self.biomes)
 end

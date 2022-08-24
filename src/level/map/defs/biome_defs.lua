@@ -9,18 +9,18 @@ BIOME_DEFS = {
         name = 'Grassland',
         tiles = {
             {
-                tileType = TILE_DEFS['Grass'],
+                tileType = 'Grass',
                 proc = 1
             }
         },
         enemies = {},
         features = {
             {
-                feature = FEATURE_DEFS['Tree'], 
+                feature = 'Tree', 
                 proc = 0.9
             },
             {
-                feature = FEATURE_DEFS['Rock'], 
+                feature = 'Rock', 
                 proc = 0.1
             }
         },
@@ -31,14 +31,14 @@ BIOME_DEFS = {
         name = 'Mountain',
         tiles = {
             {
-                tileType = TILE_DEFS['Stone'],
+                tileType = 'Stone',
                 proc = 1
             }
         },
         enemies = {},
         features = {
             {
-                feature = FEATURE_DEFS['Rock'], 
+                feature = 'Rock', 
                 proc = 1
             }
         },

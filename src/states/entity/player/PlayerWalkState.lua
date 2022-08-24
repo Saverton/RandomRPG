@@ -5,26 +5,24 @@
 
 PlayerWalkState = Class{__includes = EntityWalkState}
 
-function PlayerIdleState:init(entity)
-    EntityIdleState.init(self, entity)
-end
-
-function PlayerIdleState:update(dt)
-    EntityIdleState.update(self)
+function PlayerWalkState:update(dt)
+    EntityWalkState.update(self, dt)
+    local lastDirection = self.entity.direction
+    local newDirection = lastDirection
 
     if love.keyboard.isDown('w') then
-        self.entity.direction = 'up'
+        newDirection = 'up'
     elseif love.keyboard.isDown('d') then
-        self.entity.direction = 'right'
+        newDirection = 'right'
     elseif love.keyboard.isDown('s') then
-        self.entity.direction = 'down'
+        newDirection = 'down'
     elseif love.keyboard.isDown('a') then
-        self.entity.direction = 'left'
+        newDirection = 'left'
     else
         self.entity:changeState('idle')
     end
-end
 
-function PlayerIdleState:render(x, y)
-    EntityIdleState.render(self, x ,y)
+    if lastDirection ~= newDirection then
+        self.entity:changeAnimation('walk-' .. newDirection)
+    end
 end

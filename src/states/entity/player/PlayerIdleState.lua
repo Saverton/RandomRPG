@@ -10,23 +10,17 @@ function PlayerIdleState:init(entity)
 end
 
 function PlayerIdleState:update(dt)
-    EntityIdleState.update(self)
-
-    if love.keyboard.wasPressed('w') then
+    if love.keyboard.isDown('w') then
         self.entity.direction = 'up'
         self.entity:changeState('walk')
-    elseif love.keyboard.wasPressed('d') then
+    elseif love.keyboard.isDown('d') then
         self.entity.direction = 'right'
         self.entity:changeState('walk')
-    elseif love.keyboard.wasPressed('s') then
+    elseif love.keyboard.isDown('s') then
         self.entity.direction = 'down'
         self.entity:changeState('walk')
-    elseif love.keyboard.wasPressed('a') then
+    elseif love.keyboard.isDown('a') then
         self.entity.direction = 'left'
         self.entity:changeState('walk')
     end
-end
-
-function PlayerIdleState:render(x, y)
-    EntityIdleState.render(self, x ,y)
 end

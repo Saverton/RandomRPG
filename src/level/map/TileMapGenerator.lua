@@ -35,7 +35,7 @@ function GenerateTiles(size, biomeMap)
     for row = 1, size, 1 do
         tileMap[row] = {}
         for column = 1, size, 1 do
-            tileMap[row][column] = biomeMap[row][column]:getTile()
+            tileMap[row][column] = Tile(TILE_DEFS[biomeMap[row][column]:getTile()], row, column)
         end
     end
 

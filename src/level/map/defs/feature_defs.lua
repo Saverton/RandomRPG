@@ -7,13 +7,15 @@ FEATURE_DEFS = {
     ['Tree'] = {
         id = 1,
         name = 'Tree',
-        sprite = nil,
+        texture = nil,
+        frame = 0,
         onInteract = function() end
     },
     ['Rock'] = {
         id = 2,
         name = 'Rock',
-        sprite = nil,
+        texture = nil,
+        frame = 0,
         onInteract = function() end
     }
 }

@@ -7,18 +7,23 @@
 
 Entity = Class{}
 
-function Entity:init(def)
-    self.x = def.x or 0
-    self.y = def.y or 0
+function Entity:init(def, level)
+    self.x = def.x or 1
+    self.y = def.y or 1
     self.width = def.width or DEFAULT_ENTITY_WIDTH
     self.height = def.height or DEFAULT_ENTITY_HEIGHT
+    self.direction = START_DIRECTION
+
+    self.level = level
+
+    self.defs = def.defs
     
-    self.stateMachine = def.stateMachine or StateMachine({
+    self.stateMachine = StateMachine(def.stateMachine) or StateMachine({
         ['Base'] = function() return BaseState() end
     })
 
-    self.animations = self:generateAnimations(def.animations)
-    self.currentAnimation = self.animations[1]
+    self.animations = def.animations
+    self.currentAnimation = def.startAnim or 'idle-right'
     self.currentFrame = 1
     self.timeSinceLastFrame = 0
 
@@ -29,26 +34,11 @@ function Entity:init(def)
     self.onDeath = def.onDeath or function() end
 end
 
-function Entity:generateAnimations(animations)
-    local returnAnimations = {}
-
-    for i, animation in pairs(animations) do
-        returnAnimations[i] = {
-            texture = animation.texture or 'entities',
-            frames = animation.frames or {1},
-            speed = animation.speed or DEFAULT_ANIMATION_SPEED,
-            xScale = animation.xScale or 1
-        }
-    end
-
-    return returnAnimations
-end
-
 function Entity:update(dt) 
     self.stateMachine:update(dt)
 
     -- update frames
-    if self.stateMachine.animate then
+    if #self.animations[self.currentAnimation].frames > 1 then
         self:updateFrames(dt)
     end
 end
@@ -58,18 +48,21 @@ function Entity:changeState(name)
 end
 
 function Entity:changeAnimation(name)
-    self.currentAnimation = self.animations[name]
+    assert(self.animations[name])
+    self.currentAnimation = name
     self.currentFrame = 1
 end
 
 function Entity:updateFrames(dt)
     -- update frames
+    local anim = self.animations[self.currentAnimation]
     self.timeSinceLastFrame = self.timeSinceLastFrame + dt
-    if self.timeSinceLastFrame > self.currentAnimation.speed then
+    if self.timeSinceLastFrame > anim.interval then
         self.currentFrame = self.currentFrame + 1
-        if self.currentFrame > #self.currentAnimation.frames then
+        if self.currentFrame > #anim.frames then
             self.currentFrame = 1
         end
+        self.timeSinceLastFrame = 0
     end
 end
 
@@ -79,8 +72,11 @@ function Entity:collides(target)
 end
 
 function Entity:render(camera)
-    local onScreenX = self.x - camera.x
-    local onScreenY = self.y - camera.y
+    local onScreenX = math.floor(self.x - camera.x)
+    if self.animations[self.currentAnimation].xScale == -1 then
+        onScreenX = onScreenX + self.width
+    end
+    local onScreenY = math.floor(self.y - camera.y)
     -- base function for drawing an entity
     self.stateMachine:render(onScreenX, onScreenY)
     --love.graphics.draw(self.animations[self.currentAnimation].texture, 
