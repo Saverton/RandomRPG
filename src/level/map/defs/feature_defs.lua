@@ -16,6 +16,7 @@ FEATURE_DEFS = {
         name = 'Rock',
         texture = 'features',
         frame = 2,
-        onInteract = function() end
+        onInteract = function() end,
+        isSolid = true
     }
 }

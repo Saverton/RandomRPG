@@ -16,6 +16,7 @@ function Feature:init(def, x, y)
     self.mapY = y
 
     self.onInteract = def.onInteract
+    self.isSolid = def.isSolid or false
 end
 
 function Feature:update(dt) end

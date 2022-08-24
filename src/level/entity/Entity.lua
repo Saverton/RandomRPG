@@ -71,12 +71,19 @@ function Entity:collides(target)
         self.y > target.y + target.height or self.y + self.height < target.y)
 end
 
-function Entity:render(camera)
-    local onScreenX = math.floor(self.x - camera.x)
-    if self.animations[self.currentAnimation].xScale == -1 then
+function Entity:render(camera, offsetX, offsetY)
+    local xScale = self.animations[self.currentAnimation].xScale or 1
+    if offsetX == nil then
+        offsetX = 0
+    end
+    if offsetY == nil then
+        offsetY = 0
+    end
+    local onScreenX = math.floor(self.x - camera.x + (xScale * offsetX))
+    if xScale == -1 then
         onScreenX = onScreenX + self.width
     end
-    local onScreenY = math.floor(self.y - camera.y)
+    local onScreenY = math.floor(self.y - camera.y + offsetY)
     -- base function for drawing an entity
     self.stateMachine:render(onScreenX, onScreenY)
     --love.graphics.draw(self.animations[self.currentAnimation].texture, 
