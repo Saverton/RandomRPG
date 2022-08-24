@@ -23,6 +23,7 @@ function PlayerWalkState:update(dt)
     end
 
     if lastDirection ~= newDirection then
+        self.entity.direction = newDirection
         self.entity:changeAnimation('walk-' .. newDirection)
     end
 end
