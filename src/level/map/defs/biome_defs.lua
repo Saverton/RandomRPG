@@ -42,6 +42,6 @@ BIOME_DEFS = {
                 proc = 1
             }
         },
-        featProc = 0.1
+        featProc = 0.5
     }
 }

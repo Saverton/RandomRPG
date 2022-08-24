@@ -48,11 +48,15 @@ require 'src/level/entity/Player'
 require 'src/level/entity/entity_defs'
 
 gTextures = {
-    ['player'] = love.graphics.newImage('graphics/entities/character.png')
+    ['player'] = love.graphics.newImage('graphics/entities/character.png'),
+    ['tiles'] = love.graphics.newImage('graphics/map/tiles.png'),
+    ['features'] = love.graphics.newImage('graphics/map/features.png')
 }
 
 gFrames = {
-    ['player'] = GenerateQuads(gTextures['player'], 16, 16)
+    ['player'] = GenerateQuads(gTextures['player'], 16, 16),
+    ['tiles'] = GenerateQuads(gTextures['tiles'], TILE_SIZE, TILE_SIZE),
+    ['features'] = GenerateQuads(gTextures['features'], FEATURE_SIZE, FEATURE_SIZE)
 }
 
 gFonts = {

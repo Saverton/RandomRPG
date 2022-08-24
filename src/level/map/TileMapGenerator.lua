@@ -17,10 +17,10 @@ function GenerateBiomes(size)
 
     -- generate mountains locations and sizes
     for i = 1, numOfMtns, 1 do
-        local x, y= math.random(1, size), math.random(1, size)
         local mtnSize = math.random(MOUNTAIN_MIN_SIZE, MOUNTAIN_MAX_SIZE)
-        for row = x, mtnSize, 1 do
-            for column = y, mtnSize, 1 do
+        local x, y= math.random(1, size - mtnSize), math.random(1, size - mtnSize)
+        for row = x, x + mtnSize, 1 do
+            for column = y, y + mtnSize, 1 do
                 biomeMap[row][column] = Biome(BIOME_DEFS['Mountain'])
             end
         end

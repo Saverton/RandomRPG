@@ -28,7 +28,6 @@ function Map:render(camera)
     local xEnd = math.floor((camera.cambox.x + camera.cambox.width) / TILE_SIZE)
     local yStart = math.floor(camera.cambox.y / TILE_SIZE)
     local yEnd = math.floor((camera.cambox.y + camera.cambox.height) / TILE_SIZE)
-    print('xEnd: ' .. tostring(xEnd))
 
     -- render tiles
     
@@ -38,7 +37,7 @@ function Map:render(camera)
         end
     end
 
-    --[[ render features
+    -- render features
 
     for row = math.max(1, xStart), math.min(self.size, xEnd), 1 do
         for col = math.max(1, yStart), math.min(self.size, yEnd), 1 do
@@ -47,5 +46,5 @@ function Map:render(camera)
                 self.featureMap[row][col]:render(camera.x, camera.y)
             end
         end
-    end]]
+    end
 end

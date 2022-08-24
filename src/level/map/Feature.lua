@@ -21,5 +21,6 @@ end
 function Feature:update(dt) end
 
 function Feature:render(camx, camy)
-    love.graphics.draw(gTextures[self.texture], gFrames[self.frame], (self.mapX * TILE_SIZE) - camx, (self.mapY * TILE_SIZE) - camy)
+    love.graphics.draw(gTextures[self.texture], gFrames[self.texture][self.frame], 
+        ((self.mapX - 1) * TILE_SIZE) - camx, ((self.mapY - 1) * TILE_SIZE) - camy)
 end

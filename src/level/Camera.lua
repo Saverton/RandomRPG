@@ -46,5 +46,4 @@ function Camera:update()
         width = self.width + (2 * OFFSCREEN_CAM_WIDTH),
         height = self.height + (2 * OFFSCREEN_CAM_HEIGHT)
     }
-    print('cam.x: ' .. tostring(self.x))
 end
