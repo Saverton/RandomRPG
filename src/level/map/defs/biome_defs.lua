@@ -13,7 +13,13 @@ BIOME_DEFS = {
                 proc = 1
             }
         },
-        enemies = {},
+        enemies = {
+            {
+                name = 'goblin',
+                proc = 1
+            }
+        },
+        spawnRate = 0.02,
         features = {
             {
                 feature = 'Tree', 
@@ -36,6 +42,7 @@ BIOME_DEFS = {
             }
         },
         enemies = {},
+        spawnRate = 0.05,
         features = {
             {
                 feature = 'Rock', 

@@ -24,6 +24,9 @@ require 'src/states/entity/EntityWalkState'
 require 'src/states/entity/player/PlayerIdleState'
 require 'src/states/entity/player/PlayerWalkState'
 
+require 'src/states/entity/enemy/EnemyIdleState'
+require 'src/states/entity/enemy/EnemyWalkState'
+
 require 'src/level/Level' 
 require 'src/level/Camera'
 
@@ -41,22 +44,24 @@ require 'src/level/map/TileMapGenerator'
 
 require 'src/level/entity/Enemy'
 require 'src/level/entity/Entity' 
-require 'src/level/entity/EntitySpawner' 
 require 'src/level/entity/NPC' 
 require 'src/level/entity/Object' 
 require 'src/level/entity/Player' 
 require 'src/level/entity/entity_defs'
+require 'src/level/entity/EnemySpawner'
 
 gTextures = {
     ['player'] = love.graphics.newImage('graphics/entities/character.png'),
     ['tiles'] = love.graphics.newImage('graphics/map/tiles.png'),
-    ['features'] = love.graphics.newImage('graphics/map/features.png')
+    ['features'] = love.graphics.newImage('graphics/map/features.png'),
+    ['goblin'] = love.graphics.newImage('graphics/entities/goblin.png')
 }
 
 gFrames = {
     ['player'] = GenerateQuads(gTextures['player'], 16, 16),
     ['tiles'] = GenerateQuads(gTextures['tiles'], TILE_SIZE, TILE_SIZE),
-    ['features'] = GenerateQuads(gTextures['features'], FEATURE_SIZE, FEATURE_SIZE)
+    ['features'] = GenerateQuads(gTextures['features'], FEATURE_SIZE, FEATURE_SIZE),
+    ['goblin'] = GenerateQuads(gTextures['goblin'], 16, 16)
 }
 
 gFonts = {

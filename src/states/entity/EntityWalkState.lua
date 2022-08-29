@@ -77,3 +77,7 @@ function EntityWalkState:checkCollision()
 
     return collide
 end
+
+function EntityWalkState:render(x, y)
+    EntityBaseState.render(self, x ,y)
+end

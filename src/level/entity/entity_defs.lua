@@ -50,5 +50,56 @@ ENTITY_DEFS = {
         hp = PLAYER_BASE_HP,
         speed = PLAYER_BASE_SPEED,
         defense = PLAYER_BASE_DEFENSE
+    },
+    ['goblin'] = {
+        width = 16,
+        height = 16,
+        animations = {
+            ['idle-right'] = {
+                texture = 'goblin',
+                frames = {1}
+            },
+            ['idle-down'] = {
+                texture = 'goblin',
+                frames = {5}
+            },
+            ['idle-left'] = {
+                texture = 'goblin',
+                frames = {1},
+                xScale = -1
+            },
+            ['idle-up'] = {
+                texture = 'goblin',
+                frames = {9}
+            },
+            ['walk-right'] = {
+                texture = 'goblin',
+                frames = {1, 2, 3, 4},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['walk-down'] = {
+                texture = 'goblin',
+                frames = {5, 6, 7, 8},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['walk-left'] = {
+                texture = 'goblin',
+                frames = {1, 2, 3, 4},
+                interval = DEFAULT_ANIMATION_SPEED,
+                xScale = -1
+            },
+            ['walk-up'] = {
+                texture = 'goblin',
+                frames = {9, 10, 11, 12},
+                interval = DEFAULT_ANIMATION_SPEED
+            }
+        },
+        hp = 3,
+        speed = 3,
+        defense = 1,
+        attack = 1
+    },
+    ['rock_golem'] = {
+
     }
 }

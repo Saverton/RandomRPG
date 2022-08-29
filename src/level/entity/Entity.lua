@@ -7,9 +7,9 @@
 
 Entity = Class{}
 
-function Entity:init(def, level)
-    self.x = def.x or 1
-    self.y = def.y or 1
+function Entity:init(def, level, x, y)
+    self.x = x or 1
+    self.y = y or 1
     self.width = def.width or DEFAULT_ENTITY_WIDTH
     self.height = def.height or DEFAULT_ENTITY_HEIGHT
     self.direction = START_DIRECTION
@@ -34,12 +34,17 @@ function Entity:init(def, level)
     self.onDeath = def.onDeath or function() end
 end
 
-function Entity:update(dt) 
+function Entity:update(dt, removeList, i) 
     self.stateMachine:update(dt)
 
     -- update frames
     if #self.animations[self.currentAnimation].frames > 1 then
         self:updateFrames(dt)
+    end
+
+    if removeList ~= nil and self.hp <= 0 then
+        table.insert(removeList, i)
+        self.onDeath()
     end
 end
 
@@ -67,8 +72,11 @@ function Entity:updateFrames(dt)
 end
 
 function Entity:collides(target)
-    return not (self.x > target.x + target.width or self.x + self.width < target.x or
-        self.y > target.y + target.height or self.y + self.height < target.y)
+    return Collide(self, target)
+end
+
+function Entity:damage(amount)
+    self.hp = math.max(0, self.hp - (math.max(1, amount - self.defense)))
 end
 
 function Entity:render(camera, offsetX, offsetY)

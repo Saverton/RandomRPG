@@ -64,3 +64,8 @@ function print_r ( t )
     end
     print()
 end
+
+function Collide(a, b)
+    return not (a.x > b.x + b.width or a.x + a.width < b.x or
+        a.y > b.y + b.height or a.y + a.height < b.y)
+end

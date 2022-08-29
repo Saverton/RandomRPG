@@ -11,6 +11,7 @@ function Biome:init(def)
     self.name = def.name
     self.tiles = def.tiles or {}
     self.enemies = def.enemies or {}
+    self.spawnRate = def.spawnRate
     self.features = def.features or {}
     self.featProc = def.featProc or 0
 end

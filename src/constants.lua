@@ -51,3 +51,16 @@ DEFAULT_DEFENSE = 0
 
 START_DIRECTION = 'down'
 
+DIRECTIONS = {
+    [1] = 'up',
+    [2] = 'right',
+    [3] = 'down',
+    [4] = 'left'
+}
+
+DEFAULT_ENEMY_AGRO_DIST = 5
+
+DEFAULT_ENTITY_CAP = 20
+
+SPAWN_RANGE = 20
+DESPAWN_RANGE = 25 * TILE_SIZE
