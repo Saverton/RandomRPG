@@ -12,7 +12,7 @@ function EnemyWalkState:init(entity)
     self.distanceToTravel = math.random(1, 5) * TILE_SIZE
 
     self.distanceTraveled = 0
-end    
+end
 
 function EnemyWalkState:update(dt)
     EntityWalkState.update(self, dt) 
