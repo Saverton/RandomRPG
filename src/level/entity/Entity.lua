@@ -14,13 +14,9 @@ function Entity:init(def, level, x, y)
     self.height = def.height or DEFAULT_ENTITY_HEIGHT
     self.direction = START_DIRECTION
 
-    self.level = level
-
-    self.defs = def.defs
+    self.level = level or nil
     
-    self.stateMachine = StateMachine(def.stateMachine) or StateMachine({
-        ['Base'] = function() return BaseState() end
-    })
+    self.stateMachine = nil
 
     self.animations = def.animations
     self.currentAnimation = def.startAnim or 'idle-right'
@@ -34,17 +30,12 @@ function Entity:init(def, level, x, y)
     self.onDeath = def.onDeath or function() end
 end
 
-function Entity:update(dt, removeList, i) 
+function Entity:update(dt) 
     self.stateMachine:update(dt)
 
     -- update frames
     if #self.animations[self.currentAnimation].frames > 1 then
         self:updateFrames(dt)
-    end
-
-    if removeList ~= nil and self.hp <= 0 then
-        table.insert(removeList, i)
-        self.onDeath()
     end
 end
 
@@ -80,6 +71,8 @@ function Entity:damage(amount)
 end
 
 function Entity:render(camera, offsetX, offsetY)
+    -- determine the on screen x and y positions of the entity based on the camera, any
+    -- drawing manipulation, or offsets.
     local xScale = self.animations[self.currentAnimation].xScale or 1
     if offsetX == nil then
         offsetX = 0
@@ -92,9 +85,7 @@ function Entity:render(camera, offsetX, offsetY)
         onScreenX = onScreenX + self.width
     end
     local onScreenY = math.floor(self.y - camera.y + offsetY)
-    -- base function for drawing an entity
+
+    -- draw the entity at the specified x and y.
     self.stateMachine:render(onScreenX, onScreenY)
-    --love.graphics.draw(self.animations[self.currentAnimation].texture, 
-        --self.animations[self.currentAnimation].texture[self.animations[self.currentAnimation].frames[self.currentFrame]],
-        --self.x + MAP_OFFSET_X, self.y + MAP_OFFSET_Y, DEFAULT_ENTITY_ROTATION, )
 end

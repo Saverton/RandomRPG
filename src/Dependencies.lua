@@ -42,13 +42,13 @@ require 'src/level/map/Tile'
 require 'src/level/map/TileMap' 
 require 'src/level/map/TileMapGenerator'
 
-require 'src/level/entity/Enemy'
 require 'src/level/entity/Entity' 
+require 'src/level/entity/entity_defs'
 require 'src/level/entity/NPC' 
 require 'src/level/entity/Object' 
 require 'src/level/entity/Player' 
-require 'src/level/entity/entity_defs'
 require 'src/level/entity/EnemySpawner'
+require 'src/level/entity/Enemy'
 
 gTextures = {
     ['player'] = love.graphics.newImage('graphics/entities/character.png'),

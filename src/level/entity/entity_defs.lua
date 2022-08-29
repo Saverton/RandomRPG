@@ -95,7 +95,7 @@ ENTITY_DEFS = {
             }
         },
         hp = 3,
-        speed = 3,
+        speed = 16,
         defense = 1,
         attack = 1
     },

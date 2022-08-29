@@ -1,20 +1,49 @@
 --[[
-    Enemy Spawner Class: defines how enemies are spawned in on the map.
+    Enemy Spawner Class: defines how enemies are spawned in on the map, keeps refs to all
+    active enemies.
     @author Saverton
 ]]
+EnemySpawner = Class{}
 
-function SpawnEnemies(level, range)
-    local map = level.map
-    local entities = level.entities
-    local entityCap = level.entityCap
-    local x, y = math.floor(level.player.x / TILE_SIZE), math.floor(level.player.y / TILE_SIZE)
+function EnemySpawner:init(level, entityCap)
+    self.level = level
 
-    if #entities >= entityCap then
+    self.entities = {}
+
+    self.entityCap = entityCap or DEFAULT_ENTITY_CAP
+
+    self:spawnEnemies()
+end
+
+function EnemySpawner:update(dt)
+    for i, enemy in pairs(self.entities) do
+        enemy:update(dt)
+    end
+
+    for i, enemy in pairs(self.entities) do
+        if GetDistance(self.level.player, enemy) > DESPAWN_RANGE or enemy.hp <= 0 then
+            table.remove(self.entities, i)
+        end
+    end
+end
+
+function EnemySpawner:render(camera)
+    for i, enemy in pairs(self.entities) do 
+        enemy:render(camera)
+    end
+end
+
+function EnemySpawner:spawnEnemies()
+    local map = self.level.map
+    local x, y = math.floor(self.level.player.x / TILE_SIZE),
+        math.floor(self.level.player.y / TILE_SIZE)
+
+    if #self.entities >= self.entityCap then
         goto stop
     end
 
-    for row = math.max(1, y - range), math.min(map.size, y + range), 1 do
-        for column = math.max(1, x - range), math.min(map.size, x + range), 1 do
+    for row = math.max(1, y - SPAWN_RANGE), math.min(map.size, y + SPAWN_RANGE), 1 do
+        for column = math.max(1, x - SPAWN_RANGE), math.min(map.size, x + SPAWN_RANGE), 1 do
             if map.featureMap[row][column] ~= nil then
                 goto continue
             end
@@ -27,22 +56,22 @@ function SpawnEnemies(level, range)
                     if num < sum then
                         local entity = Enemy(
                             ENTITY_DEFS[enemy.name],
-                            level,
-                            column * TILE_SIZE,
-                            row * TILE_SIZE
+                            self.level,
+                            (column - 1) * TILE_SIZE,
+                            (row - 1) * TILE_SIZE
                         )
                         entity.stateMachine = StateMachine({
                             ['idle'] = function() return EnemyIdleState(entity) end,
-                            ['walk'] = function() return EnemyWalkState(entity, level) end
+                            ['walk'] = function() return EnemyWalkState(entity, self.level) end
                         })
-                        entity.stateMachine:change('idle', entity)
-                        table.insert(entities, entity)
+                        entity:changeState('idle')
+                        table.insert(self.entities, entity)
                         break
                     end
                 end
             end
 
-            if #entities >= entityCap then
+            if #self.entities >= self.entityCap then
                 goto stop
             end
             ::continue::

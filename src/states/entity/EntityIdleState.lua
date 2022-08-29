@@ -10,10 +10,5 @@ function EntityIdleState:init(entity)
 
     self.animate = false
 
-    self.entity:changeAnimation('idle-' .. entity.direction)
-end
-
-function EntityIdleState:render(x, y)
-    print('call EntityIdleState render entity at: ' .. tostring(x) .. ', ' .. tostring(y))
-    EntityBaseState.render(self, x ,y)
+    self.entity:changeAnimation('idle-' .. self.entity.direction)
 end

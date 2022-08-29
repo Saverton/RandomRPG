@@ -6,7 +6,7 @@
 
 Enemy = Class{__includes = Entity}
 
-function Enemy:init(def, level, target, x, y)
+function Enemy:init(def, level, x, y, target)
     Entity.init(self, def, level, x, y)
 
     self.name = def.name
@@ -30,6 +30,8 @@ function Enemy:update(dt)
             self.target:damage(self.attack)
         end
     end]]
+
+    self.stateMachine:processAI()
 end
 
 function Enemy:findTarget(entity)

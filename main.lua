@@ -6,7 +6,7 @@
 require 'src/Dependencies'
 
 function love.load()
-    love.window.setTitle('Title')
+    love.window.setTitle('Random RPG')
     love.graphics.setDefaultFilter('nearest', 'nearest')
     math.randomseed(os.time())
 
@@ -19,11 +19,7 @@ function love.load()
     gStateStack = StateStack()
     --gStateStack:push(StartState())
     gStateStack:push(WorldState({
-        level = Level(
-            Map('my_map', DEFAULT_MAP_SIZE),
-            {},
-            Player(ENTITY_DEFS['player'])
-        )
+        level = Level()
     }))
 
     love.keyboard.keysPressed = {}

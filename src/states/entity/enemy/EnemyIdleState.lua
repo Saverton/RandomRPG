@@ -18,18 +18,11 @@ function EnemyIdleState:update(dt)
     EntityIdleState.update(self, dt)
 
     self.timeWaited = self.timeWaited + dt
-
-    if self.timeWaited >= self.waitTime then
-        self:processAI()
-    end
 end
 
 function EnemyIdleState:processAI()
-    self.entity.direction = DIRECTIONS[math.random(1, 4)]
-    self.entity:changeState('walk')
-end
-
-function EnemyIdleState:render(x, y)
-    print('call EnemyIdleState render entity at: ' .. tostring(x) .. ', ' .. tostring(y))
-    EntityIdleState.render(self, x ,y)
+    if self.timeWaited >= self.waitTime then
+        self.entity.direction = DIRECTIONS[math.random(1, 4)]
+        self.entity:changeState('walk')
+    end
 end
