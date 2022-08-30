@@ -37,11 +37,26 @@ function Entity:init(def, level, pos, off)
     self.speed = def.speed or DEFAULT_SPEED
     self.defense = def.defense or DEFAULT_DEFENSE
 
+    self.projectiles = {}
+
     self.onDeath = def.onDeath or function() end
 end
 
 function Entity:update(dt) 
     self.stateMachine:update(dt)
+
+    --update projectiles
+    local removeIndex = {}
+    for i, projectile in pairs(self.projectiles) do
+        projectile:update(dt)
+        if projectile.hits <= 0 or projectile.lifetime <= 0 then
+            table.insert(removeIndex, i)
+        end
+    end
+    --remove dead projectiles
+    for i, index in pairs(removeIndex) do
+        table.remove(self.projectiles, index)
+    end
 
     -- update frames
     if #self.animations[self.currentAnimation].frames > 1 then
@@ -49,8 +64,8 @@ function Entity:update(dt)
     end
 end
 
-function Entity:changeState(name)
-    self.stateMachine:change(name)
+function Entity:changeState(name, params)
+    self.stateMachine:change(name, params)
 end
 
 function Entity:changeAnimation(name)
@@ -100,6 +115,11 @@ function Entity:render(camera, offsetX, offsetY)
 
     -- draw the entity at the specified x and y.
     self.stateMachine:render(onScreenX, onScreenY)
+
+    --draw the projectiles
+    for i, projectile in pairs(self.projectiles) do
+        projectile:render(camera)
+    end
 
     -- draw the health bar
     onScreenX = math.floor(self.x - camera.x + offsetX)

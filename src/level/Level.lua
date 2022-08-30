@@ -12,7 +12,8 @@ function Level:init(map, player, enemySpawner)
     self.player = player or Player(ENTITY_DEFS['player'], self, self:getPlayerSpawnSpace(), {x = PLAYER_SPAWN_X_OFFSET, y = PLAYER_SPAWN_Y_OFFSET})
     self.player.stateMachine = StateMachine({
         ['idle'] = function() return PlayerIdleState(self.player) end,
-        ['walk'] = function() return PlayerWalkState(self.player, self) end
+        ['walk'] = function() return PlayerWalkState(self.player, self) end,
+        ['interact'] = function() return EntityInteractState(self.player) end
     })
     self.player:changeState('idle')
 

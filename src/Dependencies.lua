@@ -21,6 +21,7 @@ require 'src/states/game/GameOverState'
 require 'src/states/entity/EntityBaseState' 
 require 'src/states/entity/EntityIdleState' 
 require 'src/states/entity/EntityWalkState'
+require 'src/states/entity/EntityInteractState'
 
 require 'src/states/entity/player/PlayerIdleState'
 require 'src/states/entity/player/PlayerWalkState'
@@ -51,18 +52,23 @@ require 'src/level/entity/Player'
 require 'src/level/entity/EnemySpawner'
 require 'src/level/entity/Enemy'
 
+require 'src/level/entity/projectile/projectile_defs'
+require 'src/level/entity/projectile/Projectile'
+
 gTextures = {
     ['player'] = love.graphics.newImage('graphics/entities/character.png'),
     ['tiles'] = love.graphics.newImage('graphics/map/tiles.png'),
     ['features'] = love.graphics.newImage('graphics/map/features.png'),
-    ['goblin'] = love.graphics.newImage('graphics/entities/goblin.png')
+    ['goblin'] = love.graphics.newImage('graphics/entities/goblin.png'),
+    ['sword'] = love.graphics.newImage('graphics/entities/items/sword.png')
 }
 
 gFrames = {
     ['player'] = GenerateQuads(gTextures['player'], 16, 16),
     ['tiles'] = GenerateQuads(gTextures['tiles'], TILE_SIZE, TILE_SIZE),
     ['features'] = GenerateQuads(gTextures['features'], FEATURE_SIZE, FEATURE_SIZE),
-    ['goblin'] = GenerateQuads(gTextures['goblin'], 16, 16)
+    ['goblin'] = GenerateQuads(gTextures['goblin'], 16, 16),
+    ['sword'] = GenerateQuads(gTextures['sword'], 16, 16)
 }
 
 gFonts = {

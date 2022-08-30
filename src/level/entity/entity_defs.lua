@@ -45,6 +45,23 @@ ENTITY_DEFS = {
                 texture = 'player',
                 frames = {9, 10, 11, 12},
                 interval = PLAYER_ANIMATION_SPEED
+            },
+            ['interact-up'] = {
+                texture = 'player',
+                frames = {14},
+            },
+            ['interact-right'] = {
+                texture = 'player',
+                frames = {13},
+            },
+            ['interact-down'] = {
+                texture = 'player',
+                frames = {15},
+            },
+            ['interact-left'] = {
+                texture = 'player',
+                frames = {13},
+                xScale = -1
             }
         },
         hp = PLAYER_BASE_HP,
