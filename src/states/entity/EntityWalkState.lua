@@ -81,7 +81,7 @@ function EntityWalkState:checkCollision()
         end
         local feature = ent.level.map.featureMap[coord[1]][coord[2]]
         local tile = ent.level.map.tileMap.tiles[coord[1]][coord[2]]
-        if (feature ~= nil and feature.isSolid) or tile.barrier then
+        if (feature ~= nil and FEATURE_DEFS[feature.name].isSolid) or tile.barrier then
             collide = true
             break
         end

@@ -44,7 +44,7 @@ function EnemySpawner:spawnEnemies()
 
     for row = math.max(1, y - SPAWN_RANGE), math.min(map.size, y + SPAWN_RANGE), 1 do
         for column = math.max(1, x - SPAWN_RANGE), math.min(map.size, x + SPAWN_RANGE), 1 do
-            if map.featureMap[row][column] ~= nil then
+            if not (map:isSpawnableSpace(row, column)) then
                 goto continue
             end
             local biome = map.tileMap.biomes[row][column]
