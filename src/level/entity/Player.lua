@@ -15,35 +15,32 @@ function Player:update(dt)
     Entity.update(self, dt)
 
     -- if space is pressed, launch a sword.
-    if love.keyboard.wasPressed('space') then
+    if self.canAttack and love.keyboard.wasPressed('space') then
+        love.audio.play(gSounds['sword_swing_1'])
         self:changeState('interact', {time = 0.3})
         -- calculate starting position and rotation of the sword
         local pos = {x = self.x, y = self.y, dx = 0, dy = 0}
         if self.direction == 'up' then
-            pos.y = self.y - 16
-            pos.dy = -1
+            pos.x = self.x - 3
+            pos.y = self.y - 18
         elseif self.direction == 'right' then
-            pos.x = self.x + 24
-            pos.dx = 1
+            pos.x = self.x + 10
         elseif self.direction == 'down' then
-            pos.x = self.x + 16
-            pos.y = self.y + 20
-            pos.dy = 1
+            pos.x = self.x - 3
+            pos.y = self.y + 10
         elseif self.direction == 'left' then
             pos.x = self.x - 16
-            pos.y = self.y + 16
-            pos.dx = -1
         end
 
-        table.insert(self.projectiles, Projectile(PROJECTILE_DEFS['sword'], {
+        table.insert(self.projectiles, Projectile('sword', {
             x = pos.x,
-            y = pos.y,
-            rotation = math.rad((DIRECTION_TO_NUM[self.direction] - 1) * 90)
-        }, pos.dx, pos.dy))
+            y = pos.y
+        }, pos.dx, pos.dy, DIRECTION_TO_NUM[self.direction]))
     end
 
     --check for death
     if self.currenthp <= 0 then
+        self:onDeath()
         gStateStack:pop()
         gStateStack:push(GameOverState())
     end

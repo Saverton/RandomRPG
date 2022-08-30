@@ -26,7 +26,6 @@ function Enemy:update(dt)
     else
         --check if damage target melee
         if Collide(self, self.target) then
-            print('damage player')
             self.target:damage(self.attack)
         end
     end

@@ -6,21 +6,21 @@
 
 Projectile = Class{}
 
-function Projectile:init(def, pos, dx, dy)
+function Projectile:init(name, pos, dx, dy, frame)
+    self.name = name
+
     self.x = pos.x
     self.y = pos.y
-    self.rotation = pos.rotation
-    self.width = def.width
-    self.height = def.height
+    self.width = PROJECTILE_DEFS[self.name].width
+    self.height = PROJECTILE_DEFS[self.name].height
 
-    self.texture = def.texture
-    self.frame = def.frame
-    self.damage = def.damage
-    self.dx = dx * def.speed
-    self.dy = dy * def.speed
-    self.lifetime = def.lifetime
+    self.frame = frame
+    
+    self.dx = dx * PROJECTILE_DEFS[self.name].speed
+    self.dy = dy * PROJECTILE_DEFS[self.name].speed
+    self.lifetime = PROJECTILE_DEFS[self.name].lifetime
     -- number of hits before projectile dies
-    self.hits = def.hits
+    self.hits = PROJECTILE_DEFS[self.name].hits
 end
 
 function Projectile:update(dt)
@@ -34,10 +34,14 @@ end
 
 -- target must be an entity
 function Projectile:hit(target)
-    target:damage(self.damage)
+    target:damage(PROJECTILE_DEFS[self.name].damage)
     self.hits = self.hits - 1
 end
 
 function Projectile:render(camera)
-    love.graphics.draw(gTextures[self.texture], gFrames[self.texture][self.frame], math.floor(self.x - camera.x), math.floor(self.y - camera.y), self.rotation)
+    --debug: hitbox
+    -- love.graphics.rectangle('line', math.floor(self.x - camera.x),  math.floor(self.y - camera.y), self.width, self.height)
+    love.graphics.draw(gTextures[PROJECTILE_DEFS[self.name].texture], 
+        gFrames[PROJECTILE_DEFS[self.name].texture][PROJECTILE_DEFS[self.name].frames[self.frame]],
+        math.floor(self.x - camera.x), math.floor(self.y - camera.y))
 end

@@ -8,10 +8,10 @@ PROJECTILE_DEFS = {
         width = 16,
         height = 16,
         texture = 'sword',
-        frame = 1,
+        frames = {1, 2, 3, 4},
         damage = 1,
         speed = 10,
         lifetime = 0.3,
-        hits = 1
+        hits = 5
     }
 }

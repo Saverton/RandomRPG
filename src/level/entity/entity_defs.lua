@@ -66,7 +66,8 @@ ENTITY_DEFS = {
         },
         hp = PLAYER_BASE_HP,
         speed = PLAYER_BASE_SPEED,
-        defense = PLAYER_BASE_DEFENSE
+        defense = PLAYER_BASE_DEFENSE,
+        onDeath = function() love.audio.play(gSounds['player_dies_1']) end
     },
     ['goblin'] = {
         width = 16,
@@ -115,7 +116,8 @@ ENTITY_DEFS = {
         speed = 16,
         defense = 1,
         attack = 1,
-        agroDist = 5
+        agroDist = 5,
+        onDeath = function() love.audio.play(gSounds['enemy_dies_1']) end
     },
     ['rock_golem'] = {
 

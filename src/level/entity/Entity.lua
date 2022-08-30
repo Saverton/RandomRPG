@@ -40,6 +40,12 @@ function Entity:init(def, level, pos, off)
     self.projectiles = {}
 
     self.onDeath = def.onDeath or function() end
+
+    self.invincible = false
+    self.invincibleTimer = 0
+    self.flashCounter = 0
+
+    self.canAttack = true
 end
 
 function Entity:update(dt) 
@@ -49,6 +55,11 @@ function Entity:update(dt)
     local removeIndex = {}
     for i, projectile in pairs(self.projectiles) do
         projectile:update(dt)
+        for i, entity in pairs(self.level.enemySpawner.entities) do
+            if Collide(projectile, entity) then
+                projectile:hit(entity)
+            end
+        end
         if projectile.hits <= 0 or projectile.lifetime <= 0 then
             table.insert(removeIndex, i)
         end
@@ -61,6 +72,17 @@ function Entity:update(dt)
     -- update frames
     if #self.animations[self.currentAnimation].frames > 1 then
         self:updateFrames(dt)
+    end
+
+    --update flash counter and invincibleTimer
+    if self.invincible then
+        self.invincibleTimer = self.invincibleTimer - dt
+        self.flashCounter = self.flashCounter + 1
+        if self.invincibleTimer <= 0 then
+            self.invincible = false
+            self.invincibleTimer = 0
+            self.flashCounter = 0
+        end
     end
 end
 
@@ -92,7 +114,18 @@ function Entity:collides(target)
 end
 
 function Entity:damage(amount)
-    self.currenthp = math.max(0, self.currenthp - (amount))
+    if not self.invincible then
+        love.audio.play(gSounds['hit_1'])
+        self.currenthp = math.max(0, self.currenthp - (amount))
+        self:goInvincible()
+        return true
+    end
+    return false
+end
+
+function Entity:goInvincible()
+    self.invincible = true
+    self.invincibleTimer = INVINCIBLE_TIME
 end
 
 function Entity:render(camera, offsetX, offsetY)
@@ -114,7 +147,13 @@ function Entity:render(camera, offsetX, offsetY)
     end
 
     -- draw the entity at the specified x and y.
+    if self.flashCounter == FLASH_FRAME then
+        local r, g, b, a = love.graphics.getColor()
+        love.graphics.setColor(r, g, b, 0)
+        self.flashCounter = 0
+    end
     self.stateMachine:render(onScreenX, onScreenY)
+    love.graphics.setColor(1, 1, 1, 1)
 
     --draw the projectiles
     for i, projectile in pairs(self.projectiles) do

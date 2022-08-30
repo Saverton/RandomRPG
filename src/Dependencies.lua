@@ -78,5 +78,10 @@ gFonts = {
 }
 
 gSounds = {
-    
+    ['menu_blip_1'] = love.audio.newSource('sounds/menu_blip_1.wav', 'static'),
+    ['menu_select_1'] = love.audio.newSource('sounds/menu_select_1.wav', 'static'),
+    ['hit_1'] = love.audio.newSource('sounds/hit_1.wav', 'static'),
+    ['sword_swing_1'] = love.audio.newSource('sounds/sword_swing_1.wav', 'static'),
+    ['player_dies_1'] = love.audio.newSource('sounds/player_dies_1.wav', 'static'),
+    ['enemy_dies_1'] = love.audio.newSource('sounds/enemy_dies_1.wav', 'static')
 }

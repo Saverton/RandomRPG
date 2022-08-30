@@ -17,6 +17,7 @@ end
 
 function EntityInteractState:enter(params)
     self.waitTime = params.time
+    self.entity.canAttack = false
 end
 
 function EntityInteractState:update(dt)
@@ -25,4 +26,8 @@ function EntityInteractState:update(dt)
     if self.waitTime <= 0 then
         self.entity:changeState('idle')
     end
+end
+
+function EntityInteractState:exit()
+    self.entity.canAttack = true
 end

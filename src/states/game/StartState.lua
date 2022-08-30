@@ -11,6 +11,7 @@ end
 
 function StartState:update(dt) 
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+        love.audio.play(gSounds['menu_select_1'])
         gStateStack:push(WorldState({}))
     end
 
