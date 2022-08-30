@@ -33,6 +33,7 @@ function Entity:init(def, level, pos, off)
     self.timeSinceLastFrame = 0
 
     self.hp = def.hp or DEFAULT_HP
+    self.currenthp = self.hp
     self.speed = def.speed or DEFAULT_SPEED
     self.defense = def.defense or DEFAULT_DEFENSE
 
@@ -76,7 +77,7 @@ function Entity:collides(target)
 end
 
 function Entity:damage(amount)
-    self.hp = math.max(0, self.hp - (math.max(1, amount - self.defense)))
+    self.currenthp = math.max(0, self.hp - (math.max(1, amount - self.defense)))
 end
 
 function Entity:render(camera, offsetX, offsetY)
@@ -90,11 +91,28 @@ function Entity:render(camera, offsetX, offsetY)
         offsetY = 0
     end
     local onScreenX = math.floor(self.x - camera.x + (xScale * offsetX))
+    local onScreenY = math.floor(self.y - camera.y + offsetY)
+
+    -- fix player sprite being off by 16 pixels
     if xScale == -1 then
         onScreenX = onScreenX + self.width
     end
-    local onScreenY = math.floor(self.y - camera.y + offsetY)
 
     -- draw the entity at the specified x and y.
     self.stateMachine:render(onScreenX, onScreenY)
+
+    -- draw the health bar
+    onScreenX = math.floor(self.x - camera.x + offsetX)
+    onScreenY = math.floor(self.y - camera.y + offsetY)
+    self:drawHealthBar(onScreenX, onScreenY)
+end
+
+function Entity:drawHealthBar(entityX, entityY)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.rectangle('fill', entityX - 1, entityY - 7, HEALTH_BAR_WIDTH + 2, HEALTH_BAR_HEIGHT + 2)
+    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.rectangle('fill', entityX, entityY - 6, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT)
+    love.graphics.setColor(1, 0, 0, 1)
+    love.graphics.rectangle('fill', entityX, entityY - 6, (self.currenthp / self.hp) * HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT)
+    love.graphics.setColor(1, 1, 1, 1)
 end

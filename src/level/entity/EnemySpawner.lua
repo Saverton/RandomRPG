@@ -21,7 +21,7 @@ function EnemySpawner:update(dt)
     end
 
     for i, enemy in pairs(self.entities) do
-        if GetDistance(self.level.player, enemy) > DESPAWN_RANGE or enemy.hp <= 0 then
+        if GetDistance(self.level.player, enemy) > DESPAWN_RANGE or enemy.currenthp <= 0 then
             table.remove(self.entities, i)
         end
     end
