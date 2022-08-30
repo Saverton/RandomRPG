@@ -11,7 +11,7 @@ function GenerateBiomes(size)
     for row = 1, size, 1 do
         biomeMap[row] = {}
         for column = 1, size, 1 do
-            biomeMap[row][column] = Biome(BIOME_DEFS['Grassland'])
+            biomeMap[row][column] = Biome(BIOME_DEFS['grassland'])
         end
     end
 
@@ -21,11 +21,19 @@ function GenerateBiomes(size)
         local x, y= math.random(1, size - mtnSize), math.random(1, size - mtnSize)
         for row = x, x + mtnSize, 1 do
             for column = y, y + mtnSize, 1 do
-                biomeMap[row][column] = Biome(BIOME_DEFS['Mountain'])
+                biomeMap[row][column] = Biome(BIOME_DEFS['mountain'])
             end
         end
     end
 
+    -- generate water around edges and a river that cuts through the world
+    for i = 1, size, 1 do
+        biomeMap[1][i] = Biome(BIOME_DEFS['water'])
+        biomeMap[i][size] = Biome(BIOME_DEFS['water'])
+        biomeMap[size][i] = Biome(BIOME_DEFS['water'])
+        biomeMap[i][1] = Biome(BIOME_DEFS['water'])
+    end
+    
     return biomeMap
 end
 

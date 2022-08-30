@@ -3,17 +3,17 @@
     @author Saverton
 ]]
 TILE_DEFS = {
-    ['Grass'] = {
+    ['grass'] = {
         id = 1,
         texture = 'tiles',
         frame = 1,
     },
-    ['Water'] = {
+    ['water'] = {
         id = 2,
         texture = nil,
         frame = 0,
     },
-    ['Stone'] = {
+    ['stone'] = {
         id = 3,
         texture = 'tiles',
         frame = 2,

@@ -4,16 +4,16 @@
 ]]
 
 FEATURE_DEFS = {
-    ['Tree'] = {
+    ['tree'] = {
         id = 1,
-        name = 'Tree',
+        name = 'tree',
         texture = 'features',
         frame = 1,
         onInteract = function() end
     },
-    ['Rock'] = {
+    ['rock'] = {
         id = 2,
-        name = 'Rock',
+        name = 'rock',
         texture = 'features',
         frame = 2,
         onInteract = function() end,

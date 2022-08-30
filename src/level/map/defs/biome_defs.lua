@@ -4,12 +4,12 @@
 ]]
 
 BIOME_DEFS = {
-    ['Grassland'] = {
+    ['grassland'] = {
         id = 1,
-        name = 'Grassland',
+        name = 'grassland',
         tiles = {
             {
-                tileType = 'Grass',
+                tileType = 'grass',
                 proc = 1
             }
         },
@@ -22,22 +22,23 @@ BIOME_DEFS = {
         spawnRate = 0.02,
         features = {
             {
-                feature = 'Tree', 
+                feature = 'rree', 
                 proc = 0.9
             },
             {
-                feature = 'Rock', 
+                feature = 'rock', 
                 proc = 0.1
             }
         },
-        featProc = 0.05
+        featProc = 0.05,
+        barrier = false
     },
-    ['Mountain'] = {
+    ['mountain'] = {
         id = 2,
-        name = 'Mountain',
+        name = 'mountain',
         tiles = {
             {
-                tileType = 'Stone',
+                tileType = 'stone',
                 proc = 1
             }
         },
@@ -45,10 +46,25 @@ BIOME_DEFS = {
         spawnRate = 0.05,
         features = {
             {
-                feature = 'Rock', 
+                feature = 'rock', 
                 proc = 1
             }
         },
-        featProc = 0.5
+        featProc = 0.5,
+        barrier = false
+    },
+    ['water'] = {
+        id = 3,
+        name = 'water',
+        tiles = {
+            {
+                tileType = 'water',
+                proc = 1
+            }
+        },
+        enemies = {},
+        spawnRate = 0,
+        features = {},
+        barrier = true
     }
 }
