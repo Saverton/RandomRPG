@@ -54,7 +54,6 @@ function EnemySpawner:spawnEnemies()
                 for i, enemy in pairs(biome.enemies) do
                     sum = sum + enemy.proc 
                     if num < sum then
-                        print('spawned enemy at ' .. tostring(col) .. ', ' .. tostring(row))
                         local entity = Enemy(
                             ENTITY_DEFS[enemy.name],
                             self.level,
