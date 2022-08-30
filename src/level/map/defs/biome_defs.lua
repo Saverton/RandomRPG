@@ -30,8 +30,7 @@ BIOME_DEFS = {
                 proc = 0.1
             }
         },
-        featProc = 0.05,
-        barrier = false
+        featProc = 0.05
     },
     ['mountain'] = {
         id = 2,
@@ -50,8 +49,7 @@ BIOME_DEFS = {
                 proc = 1
             }
         },
-        featProc = 0.5,
-        barrier = false
+        featProc = 0.5
     },
     ['water'] = {
         id = 3,
@@ -64,7 +62,6 @@ BIOME_DEFS = {
         },
         enemies = {},
         spawnRate = 0,
-        features = {},
-        barrier = true
+        features = {}
     }
 }

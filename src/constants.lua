@@ -57,10 +57,16 @@ DIRECTIONS = {
     [3] = 'down',
     [4] = 'left'
 }
+DIRECTION_TO_NUM = {
+    ['up'] = 1,
+    ['right'] = 2,
+    ['down'] = 3,
+    ['left'] = 4
+}
 
 DEFAULT_ENEMY_AGRO_DIST = 5
 
-DEFAULT_ENTITY_CAP = 20
+DEFAULT_ENTITY_CAP = 5
 
 SPAWN_RANGE = 20
 DESPAWN_RANGE = 25 * TILE_SIZE

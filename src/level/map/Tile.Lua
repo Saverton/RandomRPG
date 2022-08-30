@@ -12,6 +12,7 @@ function Tile:init(def, x, y)
     self.mapY = y
     self.texture = def.texture
     self.frame = def.frame
+    self.barrier = def.barrier
 end
 
 function Tile:update(dt) end
