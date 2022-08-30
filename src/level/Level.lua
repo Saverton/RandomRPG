@@ -9,7 +9,7 @@ Level = Class{}
 function Level:init(map, player, enemySpawner)
     self.map = map or Map('my_map', DEFAULT_MAP_SIZE)
     
-    self.player = player or Player(ENTITY_DEFS['player'], self, 100, 100)
+    self.player = player or Player(ENTITY_DEFS['player'], self, self:getSpawnSpace())
     self.player.stateMachine = StateMachine({
         ['idle'] = function() return PlayerIdleState(self.player) end,
         ['walk'] = function() return PlayerWalkState(self.player, self) end
@@ -21,6 +21,20 @@ function Level:init(map, player, enemySpawner)
     self.camera = Camera(self.player, self)
 
     Timer.every(10, function() return self.enemySpawner:spawnEnemies() end)
+end
+
+function Level:getSpawnSpace()
+    local pos = {
+        x = 10,
+        y = 10
+    }
+
+    while not self.map:isSpawnableSpace(pos.x, pos.y) do
+        pos.x = math.random(2, self.map.size)
+        pos.y = math.random(2, self.map.size)
+    end
+
+    return pos
 end
 
 function Level:update(dt)

@@ -4,12 +4,21 @@
 ]]
 
 FEATURE_DEFS = {
+    ['empty'] = {
+        id = 0,
+        name = 'empty',
+        texture = 'empty',
+        frame = 0,
+        onInteract = function() end,
+        isSolid = false
+    },
     ['tree'] = {
         id = 1,
         name = 'tree',
         texture = 'features',
         frame = 1,
-        onInteract = function() end
+        onInteract = function() end,
+        isSolid = false
     },
     ['rock'] = {
         id = 2,

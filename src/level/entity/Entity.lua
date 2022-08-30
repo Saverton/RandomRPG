@@ -7,9 +7,9 @@
 
 Entity = Class{}
 
-function Entity:init(def, level, x, y)
-    self.x = x or 1
-    self.y = y or 1
+function Entity:init(def, level, pos)
+    self.x = (pos.x * TILE_SIZE) or 1
+    self.y = (pos.y * TILE_SIZE) or 1
     self.width = def.width or DEFAULT_ENTITY_WIDTH
     self.height = def.height or DEFAULT_ENTITY_HEIGHT
     self.direction = START_DIRECTION

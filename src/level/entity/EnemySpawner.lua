@@ -57,8 +57,10 @@ function EnemySpawner:spawnEnemies()
                         local entity = Enemy(
                             ENTITY_DEFS[enemy.name],
                             self.level,
-                            (column - 1) * TILE_SIZE,
-                            (row - 1) * TILE_SIZE
+                            {
+                                x = (column - 1),
+                                y = (row - 1)
+                            }
                         )
                         entity.stateMachine = StateMachine({
                             ['idle'] = function() return EnemyIdleState(entity) end,

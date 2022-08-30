@@ -17,7 +17,7 @@ function GenerateFeatures(size, tileMap)
                 for i, feature in pairs(tileMap.biomes[row][column].features) do
                     sum = sum + feature.proc 
                     if num < sum then
-                        featureMap[row][column] = Feature(FEATURE_DEFS[feature.feature], row, column)
+                        featureMap[row][column] = Feature(feature.name, row, column)
                         break
                     end
                 end

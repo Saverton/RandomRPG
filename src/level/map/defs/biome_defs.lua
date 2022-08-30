@@ -22,11 +22,11 @@ BIOME_DEFS = {
         spawnRate = 0.02,
         features = {
             {
-                feature = 'tree', 
+                name = 'tree', 
                 proc = 0.9
             },
             {
-                feature = 'rock', 
+                name = 'rock', 
                 proc = 0.1
             }
         },
@@ -45,7 +45,7 @@ BIOME_DEFS = {
         spawnRate = 0.05,
         features = {
             {
-                feature = 'rock', 
+                name = 'rock', 
                 proc = 1
             }
         },
