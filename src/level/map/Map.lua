@@ -49,6 +49,6 @@ function Map:render(camera)
     end
 end
 
-function Map:isSpawnableSpace(x, y)
-    return not (self.tileMap.tiles[y][x].barrier or (self.featureMap[y][x] ~= nil and self.featureMap[y][x].isSolid))
+function Map:isSpawnableSpace(row, column)
+    return not (self.tileMap.tiles[row][column].barrier or (self.featureMap[row][column] ~= nil and FEATURE_DEFS[self.featureMap[row][column].name].isSolid))
 end

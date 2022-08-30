@@ -7,9 +7,18 @@
 
 Entity = Class{}
 
-function Entity:init(def, level, pos)
-    self.x = (pos.x * TILE_SIZE) or 1
-    self.y = (pos.y * TILE_SIZE) or 1
+function Entity:init(def, level, pos, off)
+    --[[if pos == nil then
+        pos = DEFAULT_SPAWN_POS
+    end]]
+    if off == nil then
+        off = {
+            x = 0,
+            y = 0
+        }
+    end
+    self.x = (((pos.x - 1) * TILE_SIZE) + (off.x))
+    self.y = (((pos.y - 1) * TILE_SIZE) + (off.y))
     self.width = def.width or DEFAULT_ENTITY_WIDTH
     self.height = def.height or DEFAULT_ENTITY_HEIGHT
     self.direction = START_DIRECTION
