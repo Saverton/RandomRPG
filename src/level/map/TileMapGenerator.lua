@@ -8,10 +8,10 @@ function GenerateBiomes(size)
     local numOfMtns = 5
 
     -- fill with grassland by default
-    for row = 1, size, 1 do
-        biomeMap[row] = {}
-        for column = 1, size, 1 do
-            biomeMap[row][column] = Biome(BIOME_DEFS['grassland'])
+    for col = 1, size, 1 do
+        biomeMap[col] = {}
+        for row = 1, size, 1 do
+            biomeMap[col][row] = Biome(BIOME_DEFS['grassland'])
         end
     end
 
@@ -19,9 +19,9 @@ function GenerateBiomes(size)
     for i = 1, numOfMtns, 1 do
         local mtnSize = math.random(MOUNTAIN_MIN_SIZE, MOUNTAIN_MAX_SIZE)
         local x, y= math.random(1, size - mtnSize), math.random(1, size - mtnSize)
-        for row = x, x + mtnSize, 1 do
-            for column = y, y + mtnSize, 1 do
-                biomeMap[row][column] = Biome(BIOME_DEFS['mountain'])
+        for col = x, x + mtnSize, 1 do
+            for row = y, y + mtnSize, 1 do
+                biomeMap[col][row] = Biome(BIOME_DEFS['mountain'])
             end
         end
     end
@@ -103,10 +103,10 @@ end
 function GenerateTiles(size, biomeMap)
     local tileMap = {}
 
-    for row = 1, size, 1 do
-        tileMap[row] = {}
-        for column = 1, size, 1 do
-            tileMap[row][column] = Tile(TILE_DEFS[biomeMap[row][column]:getTile()], row, column)
+    for col = 1, size, 1 do
+        tileMap[col] = {}
+        for row = 1, size, 1 do
+            tileMap[col][row] = Tile(TILE_DEFS[biomeMap[col][row]:getTile()], col, row)
         end
     end
 

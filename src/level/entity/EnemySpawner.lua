@@ -42,25 +42,25 @@ function EnemySpawner:spawnEnemies()
         goto stop
     end
 
-    for row = math.max(1, y - SPAWN_RANGE), math.min(map.size, y + SPAWN_RANGE), 1 do
-        for column = math.max(1, x - SPAWN_RANGE), math.min(map.size, x + SPAWN_RANGE), 1 do
-            if not (map:isSpawnableSpace(row, column)) then
+    for col = math.max(1, x - SPAWN_RANGE), math.min(map.size, x + SPAWN_RANGE), 1 do
+        for row = math.max(1, y - SPAWN_RANGE), math.min(map.size, y + SPAWN_RANGE), 1 do
+            if not (map:isSpawnableSpace(col, row)) then
                 goto continue
             end
-            local biome = map.tileMap.biomes[row][column]
+            local biome = map.tileMap.biomes[col][row]
             if #biome.enemies >= 1 and math.random() < biome.spawnRate then
                 local num = math.random()
                 local sum = 0
                 for i, enemy in pairs(biome.enemies) do
                     sum = sum + enemy.proc 
                     if num < sum then
-                        print('spawned enemy at ' .. tostring(row) .. ', ' .. tostring(column))
+                        print('spawned enemy at ' .. tostring(col) .. ', ' .. tostring(row))
                         local entity = Enemy(
                             ENTITY_DEFS[enemy.name],
                             self.level,
                             {
-                                x = (row),
-                                y = (column)
+                                x = (col),
+                                y = (row)
                             }
                         )
                         entity.stateMachine = StateMachine({

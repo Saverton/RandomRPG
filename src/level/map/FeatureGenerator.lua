@@ -6,18 +6,18 @@
 function GenerateFeatures(size, tileMap)
     local featureMap = {}
 
-    for row = 1, size, 1 do
-        featureMap[row] = {}
-        for column = 1, size, 1 do
+    for col = 1, size, 1 do
+        featureMap[col] = {}
+        for row = 1, size, 1 do
             -- determine if we generate a feature in this tile
-            if math.random() < tileMap.biomes[row][column].featProc then
+            if math.random() < tileMap.biomes[col][row].featProc then
                 -- generate a feature
                 local num = math.random()
                 local sum = 0
-                for i, feature in pairs(tileMap.biomes[row][column].features) do
+                for i, feature in pairs(tileMap.biomes[col][row].features) do
                     sum = sum + feature.proc 
                     if num < sum then
-                        featureMap[row][column] = Feature(feature.name, row, column)
+                        featureMap[col][row] = Feature(feature.name, col, row)
                         break
                     end
                 end

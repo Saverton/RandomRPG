@@ -16,8 +16,8 @@ end
 
 function Map:update(dt)
     -- update features
-    for i, row in pairs(self.featureMap) do
-        for j, feature in pairs(row) do
+    for i, col in pairs(self.featureMap) do
+        for j, feature in pairs(col) do
             feature:update(dt)
         end
     end
@@ -31,24 +31,24 @@ function Map:render(camera)
 
     -- render tiles
     
-    for row = math.max(1, xStart), math.min(self.size, xEnd), 1 do
-        for col = math.max(1, yStart), math.min(self.size, yEnd), 1 do
-            self.tileMap.tiles[row][col]:render(camera.x, camera.y)
+    for col = math.max(1, xStart), math.min(self.size, xEnd), 1 do
+        for row = math.max(1, yStart), math.min(self.size, yEnd), 1 do
+            self.tileMap.tiles[col][row]:render(camera.x, camera.y)
         end
     end
 
     -- render features
 
-    for row = math.max(1, xStart), math.min(self.size, xEnd), 1 do
-        for col = math.max(1, yStart), math.min(self.size, yEnd), 1 do
-            feat = self.featureMap[row][col]
+    for col = math.max(1, xStart), math.min(self.size, xEnd), 1 do
+        for row = math.max(1, yStart), math.min(self.size, yEnd), 1 do
+            feat = self.featureMap[col][row]
             if feat ~= nil then
-                self.featureMap[row][col]:render(camera.x, camera.y)
+                self.featureMap[col][row]:render(camera.x, camera.y)
             end
         end
     end
 end
 
-function Map:isSpawnableSpace(row, column)
-    return not (self.tileMap.tiles[row][column].barrier or (self.featureMap[row][column] ~= nil and FEATURE_DEFS[self.featureMap[row][column].name].isSolid))
+function Map:isSpawnableSpace(col, row)
+    return not (self.tileMap.tiles[col][row].barrier or (self.featureMap[col][row] ~= nil and FEATURE_DEFS[self.featureMap[col][row].name].isSolid))
 end
