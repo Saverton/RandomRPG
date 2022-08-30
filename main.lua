@@ -18,9 +18,7 @@ function love.load()
 
     gStateStack = StateStack()
     --gStateStack:push(StartState())
-    gStateStack:push(WorldState({
-        level = Level()
-    }))
+    gStateStack:push(WorldState({}))
 
     love.keyboard.keysPressed = {}
 end
