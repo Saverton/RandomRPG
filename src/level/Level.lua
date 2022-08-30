@@ -9,7 +9,7 @@ Level = Class{}
 function Level:init(map, player, enemySpawner)
     self.map = map or Map('my_map', DEFAULT_MAP_SIZE)
     
-    self.player = player or Player(ENTITY_DEFS['player'], self)
+    self.player = player or Player(ENTITY_DEFS['player'], self, 100, 100)
     self.player.stateMachine = StateMachine({
         ['idle'] = function() return PlayerIdleState(self.player) end,
         ['walk'] = function() return PlayerWalkState(self.player, self) end

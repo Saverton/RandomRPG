@@ -10,8 +10,8 @@ TILE_DEFS = {
     },
     ['water'] = {
         id = 2,
-        texture = nil,
-        frame = 0,
+        texture = 'tiles',
+        frame = 3,
     },
     ['stone'] = {
         id = 3,

@@ -22,7 +22,7 @@ BIOME_DEFS = {
         spawnRate = 0.02,
         features = {
             {
-                feature = 'rree', 
+                feature = 'tree', 
                 proc = 0.9
             },
             {
