@@ -16,6 +16,7 @@ require 'src/states/StateStack'
 
 require 'src/states/game/StartState'
 require 'src/states/game/WorldState'
+require 'src/states/game/GameOverState'
 
 require 'src/states/entity/EntityBaseState' 
 require 'src/states/entity/EntityIdleState' 

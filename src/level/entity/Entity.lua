@@ -77,7 +77,7 @@ function Entity:collides(target)
 end
 
 function Entity:damage(amount)
-    self.currenthp = math.max(0, self.hp - (math.max(1, amount - self.defense)))
+    self.currenthp = math.max(0, self.currenthp - (amount))
 end
 
 function Entity:render(camera, offsetX, offsetY)

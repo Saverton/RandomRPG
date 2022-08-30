@@ -11,15 +11,12 @@ end
 
 function StartState:update(dt) 
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
-        gStateStack:push(WorldState({
-            level = Level(
-                Map('my_map', DEFAULT_MAP_SIZE),
-                {},
-                Player(ENTITY_DEFS['player'])
-            )
-        }))
+        gStateStack:push(WorldState({}))
     end
 
+    if love.keyboard.wasPressed('escape') then
+        love.event.quit()
+    end
 end
 
 function StartState:render() 

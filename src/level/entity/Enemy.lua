@@ -20,22 +20,22 @@ end
 function Enemy:update(dt)
     Entity.update(self, dt)
 
-    --[[
     if self.target == nil then
         -- process AI
         self:findTarget(self.level.player)
     else
         --check if damage target melee
         if Collide(self, self.target) then
+            print('damage player')
             self.target:damage(self.attack)
         end
-    end]]
+    end
 
     self.stateMachine:processAI()
 end
 
 function Enemy:findTarget(entity)
-    if GetDistance(self, entity) <= self.agroDist then
+    if GetDistance(self, entity) <= self.agroDist * TILE_SIZE then
         self.target = entity
     end
 end

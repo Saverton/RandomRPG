@@ -97,7 +97,8 @@ ENTITY_DEFS = {
         hp = 3,
         speed = 16,
         defense = 1,
-        attack = 1
+        attack = 1,
+        agroDist = 5
     },
     ['rock_golem'] = {
 

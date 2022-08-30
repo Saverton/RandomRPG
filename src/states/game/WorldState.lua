@@ -13,8 +13,13 @@ end
 function WorldState:update(dt) 
     self.level:update(dt)
 
+    -- reload level if pressed r
     if love.keyboard.wasPressed('r') then
         self.level = Level()
+    end
+    -- return to title if pressed escape
+    if love.keyboard.wasPressed('escape') then
+        gStateStack:pop()
     end
 end
 
