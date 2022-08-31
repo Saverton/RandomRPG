@@ -53,6 +53,9 @@ function EntityWalkState:update(dt)
     end
 
     if stopMoving then
-        self.entity:changeState('idle')
+        if self.entity.target ~= nil then
+            self.entity:loseTarget()
+        end
+        self.entity:changeState('idle', 1)
     end
 end

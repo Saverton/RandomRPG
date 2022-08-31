@@ -14,6 +14,10 @@ function EnemyIdleState:init(entity)
     self.timeWaited = 0
 end
 
+function EnemyIdleState:enter(time)
+    self.waitTime = time or math.random(1, 10)
+end
+
 function EnemyIdleState:update(dt)
     EntityIdleState.update(self, dt)
 

@@ -144,14 +144,13 @@ function Entity:damage(amount)
 end
 
 function Entity:push(strength, from)
-    self.pushed = true
-    self.pushdx, self.pushdy = 0, 0
-    local dx, dy = (self.x + (math.floor(self.width / 2))) - (from.x + (math.floor(from.width / 2))),
-        (self.y + (math.floor(self.height / 2))) - (from.y + (math.floor(from.height / 2)))
-    if dx > dy then
-        self.pushdx = (dx / math.abs(dx)) * strength
-    else
-        self.pushdy = (dy / math.abs(dy)) * strength
+    if not self.pushed then
+        self.pushed = true
+        self.pushdx, self.pushdy = 0, 0
+        local dx, dy = (self.x + (math.floor(self.width / 2))) - (from.x + (math.floor(from.width / 2))),
+            (self.y + (math.floor(self.height / 2))) - (from.y + (math.floor(from.height / 2)))
+        self.pushdx = (dx / (math.abs(dx) + math.abs(dy))) * strength
+        self.pushdy = (dy / (math.abs(dx) + math.abs(dy))) * strength
     end
 end
 

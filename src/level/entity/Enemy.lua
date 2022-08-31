@@ -31,8 +31,7 @@ function Enemy:update(dt)
         end
         -- check if target is out of agro Range
         if GetDistance(self, self.target) > self.agroDist * TILE_SIZE then
-            self.target = nil
-            self.speed = ENTITY_DEFS[self.name].speed
+            self:loseTarget()
         end
     end
 
@@ -44,6 +43,11 @@ function Enemy:findTarget(entity)
         self.target = entity
         self.speed = ENTITY_DEFS[self.name].agroSpeed
     end
+end
+
+function Enemy:loseTarget()
+    self.target = nil
+    self.speed = ENTITY_DEFS[self.name].speed
 end
 
 function Enemy:render(camera)
