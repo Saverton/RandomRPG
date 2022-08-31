@@ -29,7 +29,7 @@ function EntityWalkState:update(dt)
     local stopMoving = false
 
     -- if the movement causes a collision, move the entity back to its old spot, that way they can move next frame without having to back up.
-    if (self:checkCollision()) then
+    if (self.entity:checkCollision()) then
         self.entity.x, self.entity.y = oldX, oldY
         stopMoving = true
     end
@@ -55,38 +55,4 @@ function EntityWalkState:update(dt)
     if stopMoving then
         self.entity:changeState('idle')
     end
-end
-
-function EntityWalkState:checkCollision()
-    local ent = self.entity
-    local tilesToCheck = {}
-    -- add one to each to match feature map indexes
-    local mapX, mapY, mapXB, mapYB = math.floor((ent.x + PLAYER_HITBOX_X_OFFSET) / TILE_SIZE) + 1, math.floor((ent.y + PLAYER_HITBOX_Y_OFFSET) / TILE_SIZE) + 1, 
-        math.floor((ent.x + ent.width + PLAYER_HITBOX_XB_OFFSET) / TILE_SIZE) + 1, math.floor((ent.y + ent.height + PLAYER_HITBOX_YB_OFFSET) / TILE_SIZE) + 1
-    local collide = false
-
-    if ent.direction == 'up' then
-        tilesToCheck = {{mapX, mapY}, {mapXB, mapY} }
-    elseif ent.direction == 'right' then
-        tilesToCheck = {{mapXB, mapY}, {mapXB, mapYB}}
-    elseif ent.direction == 'down' then
-        tilesToCheck = {{mapX, mapYB}, {mapXB, mapYB}}
-    elseif ent.direction == 'left' then
-        tilesToCheck = {{mapX, mapY}, {mapX, mapYB}}
-    end
-
-    for i, coord in pairs(tilesToCheck) do
-        if coord[1] < 1 or coord[1] > ent.level.map.size or coord[2] < 1 or coord[2] > ent.level.map.size then
-            goto continue
-        end
-        local feature = ent.level.map.featureMap[coord[1]][coord[2]]
-        local tile = ent.level.map.tileMap.tiles[coord[1]][coord[2]]
-        if (feature ~= nil and FEATURE_DEFS[feature.name].isSolid) or tile.barrier then
-            collide = true
-            break
-        end
-        ::continue::
-    end
-
-    return collide
 end

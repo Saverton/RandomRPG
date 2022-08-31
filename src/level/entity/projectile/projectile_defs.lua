@@ -12,6 +12,7 @@ PROJECTILE_DEFS = {
         damage = 1,
         speed = 10,
         lifetime = 0.3,
-        hits = 5
+        hits = 5,
+        push = 16
     }
 }

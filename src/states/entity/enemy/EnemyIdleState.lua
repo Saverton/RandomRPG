@@ -21,8 +21,13 @@ function EnemyIdleState:update(dt)
 end
 
 function EnemyIdleState:processAI()
-    if self.timeWaited >= self.waitTime then
-        self.entity.direction = DIRECTIONS[math.random(1, 4)]
-        self.entity:changeState('walk')
+    if self.entity.target == nil then
+        if self.timeWaited >= self.waitTime then
+            self.entity.direction = DIRECTIONS[math.random(1, 4)]
+            self.entity:changeState('walk')
+        end
+    else
+        self.entity:changeState('walk', 0)
     end
+    
 end

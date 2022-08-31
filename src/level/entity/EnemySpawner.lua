@@ -47,7 +47,8 @@ function EnemySpawner:spawnEnemies()
 
     for col = math.max(1, x - SPAWN_RANGE), math.min(map.size, x + SPAWN_RANGE), 1 do
         for row = math.max(1, y - SPAWN_RANGE), math.min(map.size, y + SPAWN_RANGE), 1 do
-            if not (map:isSpawnableSpace(col, row)) then
+            if not (map:isSpawnableSpace(col, row)) or
+                GetDistance(self.level.player, {x = col * TILE_SIZE, y = row * TILE_SIZE}) < SAFE_RANGE * TILE_SIZE then
                 goto continue
             end
             local biome = map.tileMap.biomes[col][row]

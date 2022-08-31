@@ -35,6 +35,7 @@ end
 -- target must be an entity
 function Projectile:hit(target)
     target:damage(PROJECTILE_DEFS[self.name].damage)
+    target:push(PROJECTILE_DEFS[self.name].push, self)
     self.hits = self.hits - 1
 end
 

@@ -5,6 +5,7 @@
 
 ENTITY_DEFS = {
     ['player'] = {
+        name = 'player',
         width = PLAYER_WIDTH,
         height = PLAYER_HEIGHT,
         animations = {
@@ -67,9 +68,11 @@ ENTITY_DEFS = {
         hp = PLAYER_BASE_HP,
         speed = PLAYER_BASE_SPEED,
         defense = PLAYER_BASE_DEFENSE,
-        onDeath = function() love.audio.play(gSounds['player_dies_1']) end
+        onDeath = function() love.audio.play(gSounds['player_dies_1']) end,
+        push = 16
     },
     ['goblin'] = {
+        name = 'goblin',
         width = 16,
         height = 16,
         animations = {
@@ -114,10 +117,12 @@ ENTITY_DEFS = {
         },
         hp = 3,
         speed = 16,
+        agroSpeed = 32,
         defense = 1,
         attack = 1,
-        agroDist = 5,
-        onDeath = function() love.audio.play(gSounds['enemy_dies_1']) end
+        agroDist = 7,
+        onDeath = function() love.audio.play(gSounds['enemy_dies_1']) end,
+        push = 12
     },
     ['rock_golem'] = {
 

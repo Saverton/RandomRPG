@@ -27,6 +27,12 @@ function Enemy:update(dt)
         --check if damage target melee
         if Collide(self, self.target) then
             self.target:damage(self.attack)
+            self.target:push(ENTITY_DEFS[self.name].push, self)
+        end
+        -- check if target is out of agro Range
+        if GetDistance(self, self.target) > self.agroDist * TILE_SIZE then
+            self.target = nil
+            self.speed = ENTITY_DEFS[self.name].speed
         end
     end
 
@@ -36,6 +42,7 @@ end
 function Enemy:findTarget(entity)
     if GetDistance(self, entity) <= self.agroDist * TILE_SIZE then
         self.target = entity
+        self.speed = ENTITY_DEFS[self.name].agroSpeed
     end
 end
 

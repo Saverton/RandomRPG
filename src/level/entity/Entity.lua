@@ -46,6 +46,10 @@ function Entity:init(def, level, pos, off)
     self.flashCounter = 0
 
     self.canAttack = true
+
+    self.pushed = false
+    self.pushdx = 0
+    self.pushdy = 0
 end
 
 function Entity:update(dt) 
@@ -60,7 +64,7 @@ function Entity:update(dt)
                 projectile:hit(entity)
             end
         end
-        if projectile.hits <= 0 or projectile.lifetime <= 0 then
+        if projectile.hits <= 0 or projectile.lifetime <= 0 or GetDistance(projectile, self.level.player) > DESPAWN_RANGE then
             table.insert(removeIndex, i)
         end
     end
@@ -82,6 +86,22 @@ function Entity:update(dt)
             self.invincible = false
             self.invincibleTimer = 0
             self.flashCounter = 0
+        end
+    end
+
+    --update push
+    if self.pushed then
+        local oldx, oldy = self.x, self.y
+        self.x = self.x + self.pushdx
+        self.y = self.y + self.pushdy
+        self.pushdx = math.max(0, math.floor(self.pushdx / 2))
+        self.pushdy = math.max(0, math.floor(self.pushdy / 2))
+        if self.pushdx == 0 and self.pushdy == 0 then
+            self.pushed = false
+            self:changeState('idle')
+        end
+        if self:checkCollision() then
+            self.x, self.y = oldx, oldy
         end
     end
 end
@@ -121,6 +141,18 @@ function Entity:damage(amount)
         return true
     end
     return false
+end
+
+function Entity:push(strength, from)
+    self.pushed = true
+    self.pushdx, self.pushdy = 0, 0
+    local dx, dy = (self.x + (math.floor(self.width / 2))) - (from.x + (math.floor(from.width / 2))),
+        (self.y + (math.floor(self.height / 2))) - (from.y + (math.floor(from.height / 2)))
+    if dx > dy then
+        self.pushdx = (dx / math.abs(dx)) * strength
+    else
+        self.pushdy = (dy / math.abs(dy)) * strength
+    end
 end
 
 function Entity:goInvincible()
@@ -174,4 +206,37 @@ function Entity:drawHealthBar(entityX, entityY)
     love.graphics.setColor(1, 0, 0, 1)
     love.graphics.rectangle('fill', entityX, entityY - 6, (self.currenthp / self.hp) * HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT)
     love.graphics.setColor(1, 1, 1, 1)
+end
+
+function Entity:checkCollision()
+    local tilesToCheck = {}
+    -- add one to each to match feature map indexes
+    local mapX, mapY, mapXB, mapYB = math.floor((self.x + PLAYER_HITBOX_X_OFFSET) / TILE_SIZE) + 1, math.floor((self.y + PLAYER_HITBOX_Y_OFFSET) / TILE_SIZE) + 1, 
+        math.floor((self.x + self.width + PLAYER_HITBOX_XB_OFFSET) / TILE_SIZE) + 1, math.floor((self.y + self.height + PLAYER_HITBOX_YB_OFFSET) / TILE_SIZE) + 1
+    local collide = false
+
+    if self.direction == 'up' then
+        tilesToCheck = {{mapX, mapY}, {mapXB, mapY} }
+    elseif self.direction == 'right' then
+        tilesToCheck = {{mapXB, mapY}, {mapXB, mapYB}}
+    elseif self.direction == 'down' then
+        tilesToCheck = {{mapX, mapYB}, {mapXB, mapYB}}
+    elseif self.direction == 'left' then
+        tilesToCheck = {{mapX, mapY}, {mapX, mapYB}}
+    end
+
+    for i, coord in pairs(tilesToCheck) do
+        if coord[1] < 1 or coord[1] > self.level.map.size or coord[2] < 1 or coord[2] > self.level.map.size then
+            goto continue
+        end
+        local feature = self.level.map.featureMap[coord[1]][coord[2]]
+        local tile = self.level.map.tileMap.tiles[coord[1]][coord[2]]
+        if (feature ~= nil and FEATURE_DEFS[feature.name].isSolid) or tile.barrier then
+            collide = true
+            break
+        end
+        ::continue::
+    end
+
+    return collide
 end
