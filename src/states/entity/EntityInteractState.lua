@@ -17,7 +17,7 @@ end
 
 function EntityInteractState:enter(params)
     self.waitTime = params.time
-    self.entity.canAttack = false
+    self.entity.canUseItem = false
 end
 
 function EntityInteractState:update(dt)
@@ -29,5 +29,5 @@ function EntityInteractState:update(dt)
 end
 
 function EntityInteractState:exit()
-    self.entity.canAttack = true
+    self.entity.canUseItem = true
 end

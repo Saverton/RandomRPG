@@ -46,6 +46,7 @@ function Entity:init(def, level, pos, off)
 
     self.currenthp = self.hp
 
+    -- status effect management
     self.effects = {} -- currently applied effects
     self.inflictions = def.inflictions or {} -- effects that are inflicted upon attack
     self.immunities = def.immunities or {} -- effects that this entity is immune to being afflicted by
@@ -59,12 +60,16 @@ function Entity:init(def, level, pos, off)
     self.invincible = false
     self.invincibleTimer = 0
     self.flashCounter = 0
-    self.canAttack = true
+    self.canUseItem = true
 
     -- push management
     self.pushed = false
     self.pushdx = 0
     self.pushdy = 0
+
+    -- item management
+    self.items = {}
+    self.heldItem = 0
 end
 
 function Entity:update(dt)
@@ -200,6 +205,12 @@ function Entity:goInvincible()
     self.invincibleTimer = INVINCIBLE_TIME
 end
 
+function Entity:setHeldItem(index)
+    if self.items[index] ~= nil then
+        self.heldItem = index
+    end
+end
+
 function Entity:render(camera, offsetX, offsetY)
     -- determine the on screen x and y positions of the entity based on the camera, any
     -- drawing manipulation, or offsets.
@@ -318,4 +329,8 @@ function Entity:getDefense()
         boost = boost * bonus
     end
     return self.defense * boost
+end
+
+function Entity:getItem(item)
+    table.insert(self.items, item)
 end

@@ -55,3 +55,22 @@ function Projectile:render(camera)
         gFrames[PROJECTILE_DEFS[self.name].texture][PROJECTILE_DEFS[self.name].frames[self.frame]],
         math.floor(self.x - camera.x), math.floor(self.y - camera.y))
 end
+
+--gets the starting position of a projectile
+function GetStartPosition(holder)
+     -- calculate starting position and rotation of the sword
+     local pos = {x = holder.x, y = holder.y, dx = 0, dy = 0}
+     if holder.direction == 'up' then
+         pos.x = holder.x - 3
+         pos.y = holder.y - 18
+     elseif holder.direction == 'right' then
+         pos.x = holder.x + 10
+     elseif holder.direction == 'down' then
+         pos.x = holder.x - 3
+         pos.y = holder.y + 10
+     elseif holder.direction == 'left' then
+         pos.x = holder.x - 16
+     end
+
+     return pos
+end

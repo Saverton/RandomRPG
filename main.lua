@@ -22,6 +22,10 @@ function love.load()
     gStateStack:push(WorldState({}))
 
     love.keyboard.keysPressed = {}
+    mouseWheelMovement = {
+        x = 0,
+        y = 0
+    }
 end
 
 function love.resize(w, h)
@@ -36,11 +40,22 @@ function love.keyboard.wasPressed(key)
     return love.keyboard.keysPressed[key]
 end
 
+function love.wheelmoved(x, y)
+    mouseWheelMovement.x = x
+    mouseWheelMovement.y = y
+end
+
+function GetYScroll()
+    return mouseWheelMovement.y
+end
+
 function love.update(dt)
     Timer.update(dt)
     gStateStack:update(dt)
 
     love.keyboard.keysPressed = {}
+    mouseWheelMovement.x = 0
+    mouseWheelMovement.y = 0
 end
 
 function love.draw()

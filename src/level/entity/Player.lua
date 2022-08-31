@@ -5,37 +5,37 @@
 
 Player = Class{__includes = Entity}
 
+function Player:init(def, level, pos, off)
+    Entity.init(self, def, level, pos, off)
+
+    self.ItemPanel = Panel(10, 10, 20, 20)
+end
+
 function Player:render(camera)
     Entity.render(self, camera, PLAYER_X_OFFSET, PLAYER_Y_OFFSET)
     -- debug: render player bounds
-    -- love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, PLAYER_WIDTH, PLAYER_HEIGHT)
+    -- love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, PLAYER_WIDTH, PLAYER_HEIGHT
+
+    --render Item Panel
+    local item = self.items[self.heldItem]
+    self.ItemPanel:render()
+    if item ~= nil then
+        item:render(12, 12)
+    end
 end
 
 function Player:update(dt)
     Entity.update(self, dt)
 
-    -- if space is pressed, launch a sword.
-    if self.canAttack and love.keyboard.wasPressed('space') then
-        love.audio.play(gSounds['sword_swing_1'])
-        self:changeState('interact', {time = 0.3})
-        -- calculate starting position and rotation of the sword
-        local pos = {x = self.x, y = self.y, dx = 0, dy = 0}
-        if self.direction == 'up' then
-            pos.x = self.x - 3
-            pos.y = self.y - 18
-        elseif self.direction == 'right' then
-            pos.x = self.x + 10
-        elseif self.direction == 'down' then
-            pos.x = self.x - 3
-            pos.y = self.y + 10
-        elseif self.direction == 'left' then
-            pos.x = self.x - 16
-        end
+    -- navigate between held items
+    self:translateHeldItem(GetYScroll())
 
-        table.insert(self.projectiles, Projectile('sword', {
-            x = pos.x,
-            y = pos.y
-        }, pos.dx, pos.dy, DIRECTION_TO_NUM[self.direction]))
+    -- if space is pressed, launch a sword.
+    if self.canUseItem and love.keyboard.wasPressed('space') then
+        local item = self.items[self.heldItem]
+        if item ~= nil then
+            self.items[self.heldItem]:use()
+        end
     end
 
     --check for death
@@ -44,4 +44,8 @@ function Player:update(dt)
         gStateStack:pop()
         gStateStack:push(GameOverState())
     end
+end
+
+function Player:translateHeldItem(amount)
+    self.heldItem = ((self.heldItem + amount) % #self.items) + 1
 end
