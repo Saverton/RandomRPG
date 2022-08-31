@@ -117,7 +117,7 @@ ENTITY_DEFS = {
         },
         hp = 3,
         speed = 16,
-        agroSpeed = 32,
+        agroSpeedBoost = 2,
         defense = 1,
         attack = 1,
         agroDist = 7,

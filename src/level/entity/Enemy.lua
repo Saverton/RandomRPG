@@ -14,10 +14,14 @@ function Enemy:init(def, level, x, y, target)
     self.agroDist = def.agroDist or 0 -- 0 = not aggressive
 
     self.attack = def.attack
+    self.currentattack = self.attack
+
     self.color = def.color or {math.random(), math.random(), math.random(), 1}
 end
 
 function Enemy:update(dt)
+    self.attack = self.attack * self.attackboost
+    
     Entity.update(self, dt)
 
     if self.target == nil then
@@ -41,13 +45,13 @@ end
 function Enemy:findTarget(entity)
     if GetDistance(self, entity) <= self.agroDist * TILE_SIZE then
         self.target = entity
-        self.speed = ENTITY_DEFS[self.name].agroSpeed
+        self.speedboost = ENTITY_DEFS[self.name].agroSpeedBoost
     end
 end
 
 function Enemy:loseTarget()
     self.target = nil
-    self.speed = ENTITY_DEFS[self.name].speed
+    self.speedboost = 1
 end
 
 function Enemy:render(camera)

@@ -19,6 +19,8 @@ function Projectile:init(name, pos, dx, dy, frame)
     self.dx = dx * PROJECTILE_DEFS[self.name].speed
     self.dy = dy * PROJECTILE_DEFS[self.name].speed
     self.lifetime = PROJECTILE_DEFS[self.name].lifetime
+
+    self.damage = PROJECTILE_DEFS[self.name].damage
     -- number of hits before projectile dies
     self.hits = PROJECTILE_DEFS[self.name].hits
 end

@@ -8,9 +8,7 @@
 Entity = Class{}
 
 function Entity:init(def, level, pos, off)
-    --[[if pos == nil then
-        pos = DEFAULT_SPAWN_POS
-    end]]
+    --positioning
     if off == nil then
         off = {
             x = 0,
@@ -23,41 +21,61 @@ function Entity:init(def, level, pos, off)
     self.height = def.height or DEFAULT_ENTITY_HEIGHT
     self.direction = START_DIRECTION
 
+    -- reference to level
     self.level = level or nil
     
+    -- owned stateMachine
     self.stateMachine = nil
 
+    -- animations
     self.animations = def.animations
     self.currentAnimation = def.startAnim or 'idle-right'
     self.currentFrame = 1
     self.timeSinceLastFrame = 0
 
+    -- combat statistics
     self.hp = def.hp or DEFAULT_HP
-    self.currenthp = self.hp
     self.speed = def.speed or DEFAULT_SPEED
     self.defense = def.defense or DEFAULT_DEFENSE
 
+    self.hpboost = def.hpboost or 1
+    self.attackboost = def.attackboost or 1
+    self.speedboost = def.speedboost or 1
+    self.defenseboost = def.defenseboost or 1
+
+    self.currenthp = self.hp
+    self.currentspeed = self.speed
+    self.currentdefense = self.defense
+
+    -- reference to owned projectiles
     self.projectiles = {}
 
     self.onDeath = def.onDeath or function() end
 
+    -- attack/defense management
     self.invincible = false
     self.invincibleTimer = 0
     self.flashCounter = 0
-
     self.canAttack = true
 
+    -- push management
     self.pushed = false
     self.pushdx = 0
     self.pushdy = 0
 end
 
 function Entity:update(dt) 
+    -- update current stat boosts
+    self.currenthp = self.hp * self.hpboost
+    self.currentspeed = self.speed * self.speedboost
+    self.currentdefense = self.defense * self.defenseboost
+
     self.stateMachine:update(dt)
 
     --update projectiles
     local removeIndex = {}
     for i, projectile in pairs(self.projectiles) do
+        projectile.damage = projectile.damage * self.attackboost
         projectile:update(dt)
         for i, entity in pairs(self.level.enemySpawner.entities) do
             if Collide(projectile, entity) then
@@ -136,7 +154,7 @@ end
 function Entity:damage(amount)
     if not self.invincible then
         love.audio.play(gSounds['hit_1'])
-        self.currenthp = math.max(0, self.currenthp - (math.max(1, amount - self.defense)))
+        self.currenthp = math.max(0, self.currenthp - (math.max(1, amount - self.currentdefense)))
         self:goInvincible()
         return true
     end
