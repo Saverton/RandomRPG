@@ -21,7 +21,7 @@ end
 
 function Enemy:update(dt)
     self.attack = self.attack * self.attackboost
-    
+
     Entity.update(self, dt)
 
     if self.target == nil then
@@ -45,13 +45,13 @@ end
 function Enemy:findTarget(entity)
     if GetDistance(self, entity) <= self.agroDist * TILE_SIZE then
         self.target = entity
-        self.speedboost = ENTITY_DEFS[self.name].agroSpeedBoost
+        self.speedboost = self.speedboost * ENTITY_DEFS[self.name].agroSpeedBoost
     end
 end
 
 function Enemy:loseTarget()
     self.target = nil
-    self.speedboost = 1
+    self.speedboost = math.max(1, self.speedboost / ENTITY_DEFS[self.name].agroSpeedBoost)
 end
 
 function Enemy:render(camera)
