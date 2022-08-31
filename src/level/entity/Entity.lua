@@ -136,7 +136,7 @@ end
 function Entity:damage(amount)
     if not self.invincible then
         love.audio.play(gSounds['hit_1'])
-        self.currenthp = math.max(0, self.currenthp - (amount))
+        self.currenthp = math.max(0, self.currenthp - (math.max(1, amount - self.defense)))
         self:goInvincible()
         return true
     end
