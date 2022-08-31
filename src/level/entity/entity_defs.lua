@@ -115,7 +115,7 @@ ENTITY_DEFS = {
                 interval = DEFAULT_ANIMATION_SPEED
             }
         },
-        hp = 3,
+        hp = 5,
         speed = 16,
         agroSpeedBoost = 2,
         defense = 1,

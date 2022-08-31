@@ -15,6 +15,6 @@ PROJECTILE_DEFS = {
         hits = 5,
         push = 16,
         type = 'melee',
-        inflictions = {}
+        inflictions = {{name = 'burn', duration = 2}}
     }
 }
