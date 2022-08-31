@@ -184,7 +184,13 @@ end
 function Entity:inflict(inflictions)
     for i, effect in pairs(inflictions) do
         if not Contains(self.immunities, effect.name) then
-            table.insert(self.effects, Effect(effect.name, effect.duration, self))
+            if not ContainsName(self.effects, effect.name) then
+                -- add new effect
+                table.insert(self.effects, Effect(effect.name, effect.duration, self))
+            else
+                --reset duration of effect if already held
+                self.effects[GetIndex(self.effects, effect.name)].duration = effect.duration
+            end
         end
     end
 end

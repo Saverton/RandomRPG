@@ -79,6 +79,15 @@ function Contains(list, element)
     return false
 end
 
+function ContainsName(list, element)
+    for i, index in pairs(list) do
+        if index.name == element then
+            return true
+        end
+    end
+    return false
+end
+
 function GetIndex(list, name)
     for i, index in pairs(list) do
         if index.name == name then
