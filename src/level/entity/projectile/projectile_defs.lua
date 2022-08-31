@@ -14,6 +14,7 @@ PROJECTILE_DEFS = {
         lifetime = 0.3,
         hits = 5,
         push = 16,
-        type = 'melee'
+        type = 'melee',
+        inflictions = {}
     }
 }

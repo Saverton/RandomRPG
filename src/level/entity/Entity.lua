@@ -39,14 +39,16 @@ function Entity:init(def, level, pos, off)
     self.speed = def.speed or DEFAULT_SPEED
     self.defense = def.defense or DEFAULT_DEFENSE
 
-    self.hpboost = def.hpboost or {['base'] = 1}
-    self.attackboost = def.attackboost or {
-        ['base'] = {num = 1, tag = 'any'}
-    }
-    self.speedboost = def.speedboost or {['base'] = 1, ['agro'] = 1}
-    self.defenseboost = def.defenseboost or {['base'] = 1}
+    self.hpboost = def.hpboost or {}
+    self.attackboost = def.attackboost or {}
+    self.speedboost = def.speedboost or {}
+    self.defenseboost = def.defenseboost or {}
 
     self.currenthp = self.hp
+
+    self.effects = {} -- currently applied effects
+    self.inflictions = def.inflictions or {} -- effects that are inflicted upon attack
+    self.immunities = def.immunities or {} -- effects that this entity is immune to being afflicted by
 
     -- reference to owned projectiles
     self.projectiles = {}
@@ -67,6 +69,18 @@ end
 
 function Entity:update(dt)
     self.stateMachine:update(dt)
+
+    --update effects
+    local removeEffect = {}
+    for i, effect in pairs(self.effects) do
+        effect:update(dt)
+        if effect.duration <= 0 then
+            table.insert(removeEffect, i)
+        end
+    end
+    for i, index in pairs(removeEffect) do
+        table.remove(self.effects, index)
+    end
 
     --update projectiles
     local removeIndex = {}
@@ -167,6 +181,14 @@ function Entity:push(strength, from)
     end
 end
 
+function Entity:inflict(inflictions)
+    for i, effect in pairs(inflictions) do
+        if not Contains(self.immunities, effect.name) then
+            table.insert(self.effects, Effect(effect.name, effect.duration, self))
+        end
+    end
+end
+
 function Entity:goInvincible()
     self.invincible = true
     self.invincibleTimer = INVINCIBLE_TIME
@@ -202,6 +224,11 @@ function Entity:render(camera, offsetX, offsetY)
     --draw the projectiles
     for i, projectile in pairs(self.projectiles) do
         projectile:render(camera)
+    end
+
+    -- draw effects
+    for i, effect in pairs(self.effects) do
+        effect:render(camera)
     end
 
     -- draw the health bar
@@ -274,7 +301,7 @@ end
 function Entity:getSpeed()
     local boost = 1
     for i, bonus in pairs(self.speedboost) do
-        boost = boost * bonus
+        boost = boost * bonus.num
     end
     return self.speed * boost
 end

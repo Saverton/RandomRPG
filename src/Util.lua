@@ -69,3 +69,21 @@ function Collide(a, b)
     return not (a.x > b.x + b.width or a.x + a.width < b.x or
         a.y > b.y + b.height or a.y + a.height < b.y)
 end
+
+function Contains(list, element)
+    for i, index in pairs(list) do
+        if index == element then
+            return true
+        end
+    end
+    return false
+end
+
+function GetIndex(list, name)
+    for i, index in pairs(list) do
+        if index.name == name then
+            return i
+        end
+    end
+    return -1
+end

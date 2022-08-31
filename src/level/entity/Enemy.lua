@@ -25,8 +25,7 @@ function Enemy:update(dt)
     else
         --check if damage target melee
         if Collide(self, self.target) then
-            self.target:damage(self:getDamage())
-            self.target:push(ENTITY_DEFS[self.name].push, self)
+            self:attackTarget()
         end
         -- check if target is out of agro Range
         if GetDistance(self, self.target) > self.agroDist * TILE_SIZE then
@@ -40,17 +39,23 @@ end
 function Enemy:findTarget(entity)
     if GetDistance(self, entity) <= self.agroDist * TILE_SIZE then
         self.target = entity
-        self.speedboost['agro'] = ENTITY_DEFS[self.name].agroSpeedBoost
-    end
+        table.insert(self.speedboost, {name = 'agro', num = ENTITY_DEFS[self.name].agroSpeedBoost})
+    end 
 end
 
 function Enemy:loseTarget()
     self.target = nil
-    self.speedboost['agro'] = 1
+    table.remove(self.speedboost, GetIndex(self.speedboost, 'agro'))
 end
 
 function Enemy:render(camera)
     love.graphics.setColor(self.color)
     Entity.render(self, camera) 
     love.graphics.setColor(1, 1, 1, 1)
+end
+
+function Enemy:attackTarget()
+    self.target:damage(self:getDamage())
+    self.target:push(ENTITY_DEFS[self.name].push, self)
+    self.target:inflict(self.inflictions)
 end

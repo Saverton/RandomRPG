@@ -44,6 +44,7 @@ function Projectile:hit(target, attackboost)
     end
     target:damage(PROJECTILE_DEFS[self.name].damage * boost)
     target:push(PROJECTILE_DEFS[self.name].push, self)
+    target:inflict(PROJECTILE_DEFS[self.name].inflictions)
     self.hits = self.hits - 1
 end
 

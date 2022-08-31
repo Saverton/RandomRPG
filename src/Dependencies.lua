@@ -51,6 +51,8 @@ require 'src/level/entity/Object'
 require 'src/level/entity/Player' 
 require 'src/level/entity/EnemySpawner'
 require 'src/level/entity/Enemy'
+require 'src/level/entity/Effect'
+require 'src/level/entity/effect_defs'
 
 require 'src/level/entity/projectile/projectile_defs'
 require 'src/level/entity/projectile/Projectile'
@@ -60,7 +62,8 @@ gTextures = {
     ['tiles'] = love.graphics.newImage('graphics/map/tiles.png'),
     ['features'] = love.graphics.newImage('graphics/map/features.png'),
     ['goblin'] = love.graphics.newImage('graphics/entities/goblin.png'),
-    ['sword'] = love.graphics.newImage('graphics/entities/items/sword.png')
+    ['sword'] = love.graphics.newImage('graphics/entities/items/sword.png'),
+    ['effects'] = love.graphics.newImage('graphics/effects/effects.png')
 }
 
 gFrames = {
@@ -68,7 +71,8 @@ gFrames = {
     ['tiles'] = GenerateQuads(gTextures['tiles'], TILE_SIZE, TILE_SIZE),
     ['features'] = GenerateQuads(gTextures['features'], FEATURE_SIZE, FEATURE_SIZE),
     ['goblin'] = GenerateQuads(gTextures['goblin'], 16, 16),
-    ['sword'] = GenerateQuads(gTextures['sword'], 16, 16)
+    ['sword'] = GenerateQuads(gTextures['sword'], 16, 16),
+    ['effects'] = GenerateQuads(gTextures['effects'], 8, 8)
 }
 
 gFonts = {
