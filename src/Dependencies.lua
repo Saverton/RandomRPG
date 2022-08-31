@@ -46,8 +46,6 @@ require 'src/level/map/TileMapGenerator'
 
 require 'src/level/entity/Entity' 
 require 'src/level/entity/entity_defs'
-require 'src/level/entity/NPC' 
-require 'src/level/entity/Object' 
 require 'src/level/entity/Player' 
 require 'src/level/entity/EnemySpawner'
 require 'src/level/entity/Enemy'
@@ -56,6 +54,10 @@ require 'src/level/entity/effect_defs'
 
 require 'src/level/entity/projectile/projectile_defs'
 require 'src/level/entity/projectile/Projectile'
+
+require 'src/level/entity/item/item_defs'
+require 'src/level/entity/item/Item'
+require 'src/level/entity/item/Weapon'
 
 gTextures = {
     ['player'] = love.graphics.newImage('graphics/entities/character.png'),
