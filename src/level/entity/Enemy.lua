@@ -13,15 +13,10 @@ function Enemy:init(def, level, x, y, target)
     self.target = target or nil
     self.agroDist = def.agroDist or 0 -- 0 = not aggressive
 
-    self.attack = def.attack
-    self.currentattack = self.attack
-
     self.color = def.color or {math.random(), math.random(), math.random(), 1}
 end
 
 function Enemy:update(dt)
-    self.attack = self.attack * self.attackboost
-
     Entity.update(self, dt)
 
     if self.target == nil then
@@ -30,7 +25,7 @@ function Enemy:update(dt)
     else
         --check if damage target melee
         if Collide(self, self.target) then
-            self.target:damage(self.attack)
+            self.target:damage(self:getDamage())
             self.target:push(ENTITY_DEFS[self.name].push, self)
         end
         -- check if target is out of agro Range
@@ -45,13 +40,13 @@ end
 function Enemy:findTarget(entity)
     if GetDistance(self, entity) <= self.agroDist * TILE_SIZE then
         self.target = entity
-        self.speedboost = self.speedboost * ENTITY_DEFS[self.name].agroSpeedBoost
+        self.speedboost['agro'] = ENTITY_DEFS[self.name].agroSpeedBoost
     end
 end
 
 function Enemy:loseTarget()
     self.target = nil
-    self.speedboost = math.max(1, self.speedboost / ENTITY_DEFS[self.name].agroSpeedBoost)
+    self.speedboost['agro'] = 1
 end
 
 function Enemy:render(camera)

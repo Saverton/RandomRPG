@@ -13,6 +13,7 @@ PROJECTILE_DEFS = {
         speed = 10,
         lifetime = 0.3,
         hits = 5,
-        push = 16
+        push = 16,
+        type = 'melee'
     }
 }

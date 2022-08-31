@@ -35,17 +35,18 @@ function Entity:init(def, level, pos, off)
 
     -- combat statistics
     self.hp = def.hp or DEFAULT_HP
+    self.attack = def.attack or DEFAULT_ATTACK
     self.speed = def.speed or DEFAULT_SPEED
     self.defense = def.defense or DEFAULT_DEFENSE
 
-    self.hpboost = def.hpboost or 1
-    self.attackboost = def.attackboost or 1
-    self.speedboost = def.speedboost or 1
-    self.defenseboost = def.defenseboost or 1
+    self.hpboost = def.hpboost or {['base'] = 1}
+    self.attackboost = def.attackboost or {
+        ['base'] = {num = 1, tag = 'any'}
+    }
+    self.speedboost = def.speedboost or {['base'] = 1, ['agro'] = 1}
+    self.defenseboost = def.defenseboost or {['base'] = 1}
 
     self.currenthp = self.hp
-    self.currentspeed = self.speed
-    self.currentdefense = self.defense
 
     -- reference to owned projectiles
     self.projectiles = {}
@@ -64,22 +65,16 @@ function Entity:init(def, level, pos, off)
     self.pushdy = 0
 end
 
-function Entity:update(dt) 
-    -- update current stat boosts
-    self.currenthp = self.hp * self.hpboost
-    self.currentspeed = self.speed * self.speedboost
-    self.currentdefense = self.defense * self.defenseboost
-
+function Entity:update(dt)
     self.stateMachine:update(dt)
 
     --update projectiles
     local removeIndex = {}
     for i, projectile in pairs(self.projectiles) do
-        projectile.damage = projectile.damage * self.attackboost
         projectile:update(dt)
         for i, entity in pairs(self.level.enemySpawner.entities) do
             if Collide(projectile, entity) then
-                projectile:hit(entity)
+                projectile:hit(entity, self.attackboost)
             end
         end
         if projectile.hits <= 0 or projectile.lifetime <= 0 or GetDistance(projectile, self.level.player) > DESPAWN_RANGE then
@@ -154,7 +149,7 @@ end
 function Entity:damage(amount)
     if not self.invincible then
         love.audio.play(gSounds['hit_1'])
-        self.currenthp = math.max(0, self.currenthp - (math.max(1, amount - self.currentdefense)))
+        self.currenthp = math.max(0, self.currenthp - (math.max(1, amount - self:getDefense())))
         self:goInvincible()
         return true
     end
@@ -221,7 +216,7 @@ function Entity:drawHealthBar(entityX, entityY)
     love.graphics.setColor(0, 0, 0, 1)
     love.graphics.rectangle('fill', entityX, entityY - 6, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT)
     love.graphics.setColor(1, 0, 0, 1)
-    love.graphics.rectangle('fill', entityX, entityY - 6, (self.currenthp / self.hp) * HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT)
+    love.graphics.rectangle('fill', entityX, entityY - 6, (self.currenthp / self:getHp()) * HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT)
     love.graphics.setColor(1, 1, 1, 1)
 end
 
@@ -256,4 +251,38 @@ function Entity:checkCollision()
     end
 
     return collide
+end
+
+function Entity:getDamage()
+    local boost = 1
+    for i, bonus in pairs(self.attackboost) do
+        if bonus.tag == 'melee' or bonus.tag == 'normal' then
+            boost = boost * bonus.num
+        end
+    end
+    return self.attack * boost
+end
+
+function Entity:getHp()
+    local boost = 1
+    for i, bonus in pairs(self.hpboost) do
+        boost = boost * bonus
+    end
+    return self.hp * boost
+end
+
+function Entity:getSpeed()
+    local boost = 1
+    for i, bonus in pairs(self.speedboost) do
+        boost = boost * bonus
+    end
+    return self.speed * boost
+end
+
+function Entity:getDefense()
+    local boost = 1
+    for i, bonus in pairs(self.defenseboost) do
+        boost = boost * bonus
+    end
+    return self.defense * boost
 end

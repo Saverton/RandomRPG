@@ -16,13 +16,13 @@ end
 function EntityWalkState:update(dt)
     local oldX, oldY = self.entity.x, self.entity.y
     if self.entity.direction == 'up' then
-        self.entity.y = self.entity.y - (self.entity.currentspeed * dt)
+        self.entity.y = self.entity.y - (self.entity:getSpeed() * dt)
     elseif self.entity.direction == 'right' then
-        self.entity.x = self.entity.x + (self.entity.currentspeed * dt)
+        self.entity.x = self.entity.x + (self.entity:getSpeed() * dt)
     elseif self.entity.direction == 'down' then
-        self.entity.y = self.entity.y + (self.entity.currentspeed * dt)
+        self.entity.y = self.entity.y + (self.entity:getSpeed() * dt)
     elseif self.entity.direction == 'left' then
-        self.entity.x = self.entity.x - (self.entity.currentspeed * dt)
+        self.entity.x = self.entity.x - (self.entity:getSpeed() * dt)
     end
 
     -- flag to show if at any point the entity has to stop moving and change into an idle state.

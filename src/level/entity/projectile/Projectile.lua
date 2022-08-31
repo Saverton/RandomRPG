@@ -35,8 +35,14 @@ function Projectile:update(dt)
 end
 
 -- target must be an entity
-function Projectile:hit(target)
-    target:damage(PROJECTILE_DEFS[self.name].damage)
+function Projectile:hit(target, attackboost)
+    local boost = 1
+    for i, bonus in pairs(attackboost) do
+        if bonus.tag == PROJECTILE_DEFS[self.name].type or bonus.tag == 'any' then
+            boost = boost * bonus.num
+        end
+    end
+    target:damage(PROJECTILE_DEFS[self.name].damage * boost)
     target:push(PROJECTILE_DEFS[self.name].push, self)
     self.hits = self.hits - 1
 end
