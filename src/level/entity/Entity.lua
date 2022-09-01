@@ -98,7 +98,8 @@ function Entity:update(dt)
                 projectile:hit(entity, self.attackboost)
             end
         end
-        if projectile.hits <= 0 or projectile.lifetime <= 0 or GetDistance(projectile, self.level.player) > DESPAWN_RANGE then
+        if projectile.hits <= 0 or projectile.lifetime <= 0 or GetDistance(projectile, self.level.player) > DESPAWN_RANGE or 
+            projectile:checkCollision(self.level.map) then
             table.insert(removeIndex, i)
         end
     end

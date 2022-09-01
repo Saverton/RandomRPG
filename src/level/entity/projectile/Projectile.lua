@@ -25,7 +25,7 @@ function Projectile:init(name, pos, dx, dy, frame)
     self.hits = PROJECTILE_DEFS[self.name].hits
 end
 
-function Projectile:update(dt)
+function Projectile:update(dt, map)
     -- update position
     self.x = self.x + (self.dx * dt)
     self.y = self.y + (self.dy * dt) 
@@ -76,4 +76,43 @@ function GetStartPosition(holder)
      end
 
      return pos
+end
+
+function Projectile:checkCollision(map)
+    local tilesToCheck = {}
+    -- add one to each to match feature map indexes
+    local mapX, mapY, mapXB, mapYB = math.floor((self.x + PLAYER_HITBOX_X_OFFSET) / TILE_SIZE) + 1, math.floor((self.y + PLAYER_HITBOX_Y_OFFSET) / TILE_SIZE) + 1, 
+        math.floor((self.x + self.width + PLAYER_HITBOX_XB_OFFSET) / TILE_SIZE) + 1, math.floor((self.y + self.height + PLAYER_HITBOX_YB_OFFSET) / TILE_SIZE) + 1
+    local collide = false
+
+    if self.dy < 0 then
+        table.insert(tilesToCheck, {mapX, mapY})
+        table.insert(tilesToCheck, {mapXB, mapY})
+    end
+    if self.dx > 0 then
+        table.insert(tilesToCheck, {mapXB, mapY})
+        table.insert(tilesToCheck, {mapXB, mapYB})
+    end
+    if self.dy > 0 then
+        table.insert(tilesToCheck, {mapX, mapYB})
+        table.insert(tilesToCheck, {mapXB, mapYB})
+    end
+    if self.dx < 0 then
+        table.insert(tilesToCheck, {mapX, mapY})
+        table.insert(tilesToCheck, {mapX, mapYB})
+    end
+
+    for i, coord in pairs(tilesToCheck) do
+        if coord[1] < 1 or coord[1] > map.size or coord[2] < 1 or coord[2] > map.size then
+            goto continue
+        end
+        local feature = map.featureMap[coord[1]][coord[2]]
+        if (feature ~= nil and FEATURE_DEFS[feature.name].isSolid) then
+            collide = true
+            break
+        end
+        ::continue::
+    end
+
+    return collide
 end
