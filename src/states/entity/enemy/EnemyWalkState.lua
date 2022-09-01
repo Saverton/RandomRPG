@@ -25,14 +25,16 @@ function EnemyWalkState:update(dt)
     EntityWalkState.update(self, dt) 
 
     self.distanceTraveled = self.distanceTraveled + (self.entity.speed * dt) 
+    
 end
 
 function EnemyWalkState:processAI()
     if self.hitObstacle then
         self.hitObstacle = false
         self.entity.direction = DIRECTIONS[(DIRECTION_TO_NUM[self.entity.direction] % 4) + 1]
-        self.distanceToTravel = 1 * TILE_SIZE
+        self.distanceToTravel = 0.5 * TILE_SIZE
         self.distanceTraveled = 0
+        print('distance traveled: (' .. tostring(self.distanceTraveled) .. ' / ' .. tostring(self.distanceToTravel) .. ')')
         self.entity:changeAnimation('walk-' .. self.entity.direction)
     end
     if self.distanceTraveled >= self.distanceToTravel then

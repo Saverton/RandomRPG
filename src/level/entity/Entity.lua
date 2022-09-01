@@ -267,7 +267,7 @@ function Entity:render(camera)
     self:drawHealthBar(onScreenX, onScreenY)
 
     --debug: draw hitbox
-    love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, self.width, self.height)
+    --love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, self.width, self.height)
 end
 
 function Entity:drawHealthBar(entityX, entityY)
