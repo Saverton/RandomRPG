@@ -22,6 +22,13 @@ function Player:render(camera)
     if item ~= nil then
         item:render(12, 12)
     end
+
+    -- render ammo count
+    love.graphics.setFont(gFonts['small'])
+    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.print('Ammo: ' .. tostring(self.ammo), AMMO_TEXT_POS_X + 1, AMMO_TEXT_POS_Y + 1)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print('Ammo: ' .. tostring(self.ammo), AMMO_TEXT_POS_X, AMMO_TEXT_POS_Y)
 end
 
 function Player:update(dt)

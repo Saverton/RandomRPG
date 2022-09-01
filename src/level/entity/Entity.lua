@@ -40,13 +40,17 @@ function Entity:init(def, level, pos, off)
     self.attack = def.attack or DEFAULT_ATTACK
     self.speed = def.speed or DEFAULT_SPEED
     self.defense = def.defense or DEFAULT_DEFENSE
+    self.magic = def.magic or DEFAULT_MAGIC
+    self.magicRegenRate = def.magicRegenRate or 0
 
     self.hpboost = def.hpboost or {}
     self.attackboost = def.attackboost or {}
     self.speedboost = def.speedboost or {}
     self.defenseboost = def.defenseboost or {}
+    self.magicboost = def.magicboost or {}
 
-    self.currenthp = self.hp
+    self.currenthp = self:getHp()
+    self.currentmagic = self:getMagic()
 
     -- status effect management
     self.effects = {} -- currently applied effects
@@ -72,6 +76,7 @@ function Entity:init(def, level, pos, off)
     -- item management
     self.items = {}
     self.heldItem = 0
+    self.ammo = START_AMMO
 end
 
 function Entity:update(dt)
@@ -94,7 +99,7 @@ function Entity:update(dt)
     for i, projectile in pairs(self.projectiles) do
         projectile:update(dt)
         for i, entity in pairs(self.level.enemySpawner.entities) do
-            if projectile.type ~= 'none' and Collide(projectile, entity) then
+            if projectile.type ~= 'none' and not entity.invincible and Collide(projectile, entity) then
                 projectile:hit(entity, self.attackboost)
             end
         end
@@ -149,6 +154,12 @@ function Entity:update(dt)
     --update Item use timer
     if self.items[self.heldItem] ~= nil then
         self.items[self.heldItem]:update(dt)
+    end
+
+    --regen magic
+    if self.currentmagic ~= self:getMagic() then
+        print('regen mana')
+        self.currentmagic = math.min(self:getMagic(), self.currentmagic + (self.magicRegenRate * dt))
     end
 end
 
@@ -265,19 +276,24 @@ function Entity:render(camera)
     -- draw the health bar
     onScreenX = math.floor(self.x - camera.x + self.xOffset)
     onScreenY = math.floor(self.y - camera.y + self.yOffset)
-    self:drawHealthBar(onScreenX, onScreenY)
+    self:drawBar(onScreenX, onScreenY, {1, 0, 0, 1}, self:getHp(), self.currenthp, -6)
+
+    --draw the magic bar
+    if self:getMagic() ~= 0 then
+        self:drawBar(onScreenX, onScreenY, {0, 0, 1, 1}, self:getMagic(), self.currentmagic, -12)
+    end
 
     --debug: draw hitbox
     --love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, self.width, self.height)
 end
 
-function Entity:drawHealthBar(entityX, entityY)
+function Entity:drawBar(entityX, entityY, color, max_stat, current_stat, height_offset)
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.rectangle('fill', entityX - 1, entityY - 7, HEALTH_BAR_WIDTH + 2, HEALTH_BAR_HEIGHT + 2)
+    love.graphics.rectangle('fill', entityX - 1, entityY + height_offset - 1, BAR_WIDTH + 2, BAR_HEIGHT + 2)
     love.graphics.setColor(0, 0, 0, 1)
-    love.graphics.rectangle('fill', entityX, entityY - 6, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT)
-    love.graphics.setColor(1, 0, 0, 1)
-    love.graphics.rectangle('fill', entityX, entityY - 6, (self.currenthp / self:getHp()) * HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT)
+    love.graphics.rectangle('fill', entityX, entityY + height_offset, BAR_WIDTH, BAR_HEIGHT)
+    love.graphics.setColor(color)
+    love.graphics.rectangle('fill', entityX, entityY + height_offset, (current_stat / max_stat) * BAR_WIDTH, BAR_HEIGHT)
     love.graphics.setColor(1, 1, 1, 1)
 end
 
@@ -348,6 +364,14 @@ function Entity:getDefense()
     return self.defense * boost
 end
 
+function Entity:getMagic()
+    local boost = 1
+    for i, bonus in pairs(self.magicboost) do
+        boost = boost * bonus
+    end
+    return self.magic * boost
+end
+
 function Entity:getItem(item)
     table.insert(self.items, item)
 end
@@ -357,4 +381,20 @@ function Entity:useHeldItem()
     if item ~= nil and item.useRate == 0 then
         item:use()
     end
+end
+
+function Entity:useAmmo(amount)
+    if (amount <= self.ammo) then
+        self.ammo = self.ammo - amount
+        return true
+    end
+    return false
+end
+
+function Entity:useMagic(amount)
+    if (amount <= math.floor(self.currentmagic)) then
+        self.currentmagic = math.floor(self.currentmagic - amount)
+        return true
+    end
+    return false
 end

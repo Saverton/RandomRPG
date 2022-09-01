@@ -70,6 +70,8 @@ ENTITY_DEFS = {
         hp = PLAYER_BASE_HP,
         speed = PLAYER_BASE_SPEED,
         defense = PLAYER_BASE_DEFENSE,
+        magic = PLAYER_BASE_MAGIC,
+        magicRegenRate = 0.5,
         onDeath = function() love.audio.play(gSounds['player_dies_1']) end,
         push = 16
     },

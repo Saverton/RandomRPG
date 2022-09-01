@@ -6,7 +6,7 @@
 ITEM_DEFS = {
     ['sword'] = {
         name = 'sword',
-        weapon = true,
+        type = 'melee',
         texture = 'items',
         frame = 1,
         price = {
@@ -28,7 +28,8 @@ ITEM_DEFS = {
     },
     ['bow'] = {
         name = 'bow',
-        weapon = true,
+        type = 'ranged',
+        cost = 1,
         texture = 'items',
         frame = 2,
         price = {
@@ -54,7 +55,8 @@ ITEM_DEFS = {
     },
     ['fire_tome'] = {
         name = 'fire_tome',
-        weapon = true,
+        type = 'magic',
+        cost = 1,
         texture = 'items',
         frame = 3,
         price = {

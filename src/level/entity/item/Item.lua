@@ -19,8 +19,19 @@ function Item:update(dt)
 end
 
 function Item:use()
-    self.useRate = ITEM_DEFS[self.name].useRate
-    return ITEM_DEFS[self.name].onUse(self, self.holder)
+    local item = ITEM_DEFS[self.name]
+    self.useRate = item.useRate
+    if item.type == 'ranged' then
+        if not self.holder:useAmmo(item.cost) then
+            goto noUse
+        end
+    elseif item.type == 'magic' then
+        if not self.holder:useMagic(item.cost) then
+            goto noUse
+        end
+    end
+    item.onUse(self, self.holder)
+    ::noUse::
 end
 
 function Item:render(x, y)
