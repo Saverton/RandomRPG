@@ -126,9 +126,16 @@ function Entity:update(dt)
         local oldx, oldy = self.x, self.y
         self.x = self.x + self.pushdx
         self.y = self.y + self.pushdy
-        self.pushdx = (self.pushdx / math.abs(self.pushdx)) * math.max(1, math.floor(math.abs(self.pushdx) / PUSH_DECAY))
-        self.pushdy = (self.pushdy / math.abs(self.pushdy)) * math.max(1, math.floor(math.abs(self.pushdy) / PUSH_DECAY))
-        if math.abs(self.pushdx) == 1 and math.abs(self.pushdy) == 1 then
+        local modx, mody = (self.pushdx / math.abs(self.pushdx)), (self.pushdy / math.abs(self.pushdy))
+        self.pushdx = math.floor(math.abs(self.pushdx) / PUSH_DECAY)
+        self.pushdy = math.floor(math.abs(self.pushdy) / PUSH_DECAY)
+        if self.pushdx > 0 then
+            self.pushdx = self.pushdx * modx
+        end
+        if self.pushdy > 0 then
+            self.pushdy = self.pushdy * mody
+        end
+        if self.pushdx == 0 and self.pushdy == 0 then
             self.pushed = false
         end
         if self:checkCollision() then
