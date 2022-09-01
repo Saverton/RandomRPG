@@ -63,13 +63,17 @@ function GetStartPosition(holder)
      if holder.direction == 'up' then
          pos.x = holder.x - 3
          pos.y = holder.y - 18
+         pos.dy = -1
      elseif holder.direction == 'right' then
          pos.x = holder.x + 10
+         pos.dx = 1
      elseif holder.direction == 'down' then
          pos.x = holder.x - 3
          pos.y = holder.y + 10
+         pos.dy = 1
      elseif holder.direction == 'left' then
          pos.x = holder.x - 16
+         pos.dx = -1
      end
 
      return pos

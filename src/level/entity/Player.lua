@@ -32,10 +32,7 @@ function Player:update(dt)
 
     -- if space is pressed, launch a sword.
     if self.canUseItem and love.keyboard.wasPressed('space') then
-        local item = self.items[self.heldItem]
-        if item ~= nil then
-            self.items[self.heldItem]:use()
-        end
+        self:useHeldItem()
     end
 
     --check for death
@@ -47,5 +44,5 @@ function Player:update(dt)
 end
 
 function Player:translateHeldItem(amount)
-    self.heldItem = ((self.heldItem + amount) % #self.items) + 1
+    self.heldItem = (((self.heldItem - 1) + amount) % #self.items) + 1
 end

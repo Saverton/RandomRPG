@@ -66,7 +66,9 @@ gTextures = {
     ['tiles'] = love.graphics.newImage('graphics/map/tiles.png'),
     ['features'] = love.graphics.newImage('graphics/map/features.png'),
     ['goblin'] = love.graphics.newImage('graphics/entities/goblin.png'),
-    ['sword'] = love.graphics.newImage('graphics/entities/items/sword.png'),
+    ['sword'] = love.graphics.newImage('graphics/entities/projectiles/sword.png'),
+    ['bow'] = love.graphics.newImage('graphics/entities/projectiles/bow.png'),
+    ['arrow'] = love.graphics.newImage('graphics/entities/projectiles/arrow.png'),
     ['effects'] = love.graphics.newImage('graphics/effects/effects.png'),
     ['items'] = love.graphics.newImage('graphics/items/items.png')
 }
@@ -77,6 +79,8 @@ gFrames = {
     ['features'] = GenerateQuads(gTextures['features'], FEATURE_SIZE, FEATURE_SIZE),
     ['goblin'] = GenerateQuads(gTextures['goblin'], 16, 16),
     ['sword'] = GenerateQuads(gTextures['sword'], 16, 16),
+    ['bow'] = GenerateQuads(gTextures['bow'], 16, 16),
+    ['arrow'] = GenerateQuads(gTextures['arrow'], 16, 16),
     ['effects'] = GenerateQuads(gTextures['effects'], 8, 8),
     ['items'] = GenerateQuads(gTextures['items'], 16, 16)
 }

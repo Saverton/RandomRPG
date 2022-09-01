@@ -92,7 +92,7 @@ function Entity:update(dt)
     for i, projectile in pairs(self.projectiles) do
         projectile:update(dt)
         for i, entity in pairs(self.level.enemySpawner.entities) do
-            if Collide(projectile, entity) then
+            if projectile.type ~= 'none' and Collide(projectile, entity) then
                 projectile:hit(entity, self.attackboost)
             end
         end
@@ -135,6 +135,11 @@ function Entity:update(dt)
         if self:checkCollision() then
             self.x, self.y = oldx, oldy
         end
+    end
+
+    --update Item use timer
+    if self.items[self.heldItem] ~= nil then
+        self.items[self.heldItem]:update(dt)
     end
 end
 
@@ -333,4 +338,11 @@ end
 
 function Entity:getItem(item)
     table.insert(self.items, item)
+end
+
+function Entity:useHeldItem()
+    local item = self.items[self.heldItem]
+    if item ~= nil and item.useRate == 0 then
+        item:use()
+    end
 end

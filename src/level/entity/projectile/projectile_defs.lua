@@ -10,11 +10,37 @@ PROJECTILE_DEFS = {
         texture = 'sword',
         frames = {1, 2, 3, 4},
         damage = 2,
-        speed = 10,
+        speed = 0,
         lifetime = 0.3,
         hits = 5,
         push = 16,
         type = 'melee',
         inflictions = {{name = 'burn', duration = 2}}
+    },
+    ['bow'] = {
+        width = 16,
+        height = 16,
+        texture = 'bow',
+        frames = {1, 2, 3, 4},
+        damage = 0,
+        speed = 0,
+        lifetime = 0.3,
+        hits = 5,
+        push = 0,
+        type = 'none',
+        inflictions = {}
+    },
+    ['arrow'] = {
+        width = 16,
+        height = 16,
+        texture = 'arrow',
+        frames = {1, 2, 3, 4},
+        damage = 1,
+        speed = 128,
+        lifetime = 2,
+        hits = 1,
+        push = 16,
+        type = 'ranged',
+        inflictions = {}
     }
 }

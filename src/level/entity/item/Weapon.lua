@@ -11,5 +11,5 @@ function Weapon:init(name, holder)
 end
 
 function Weapon:use(target)
-    return ITEM_DEFS[self.name].onUse(self, self.holder, target)
+    Item.use(self)
 end

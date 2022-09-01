@@ -17,6 +17,7 @@ function Level:init(map, player, enemySpawner)
     })
     self.player:changeState('idle')
     self.player:getItem(Weapon('sword', self.player))
+    self.player:getItem(Weapon('bow', self.player))
 
     self.enemySpawner = enemySpawner or EnemySpawner(self, DEFAULT_ENTITY_CAP)
 
