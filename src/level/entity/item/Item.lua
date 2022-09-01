@@ -20,7 +20,6 @@ end
 
 function Item:use()
     self.useRate = ITEM_DEFS[self.name].useRate
-    print('use rate: ' .. tostring(self.useRate))
     return ITEM_DEFS[self.name].onUse(self, self.holder)
 end
 
