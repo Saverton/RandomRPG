@@ -16,13 +16,11 @@ function Level:init(map, player, enemySpawner)
         ['interact'] = function() return EntityInteractState(self.player) end
     })
     self.player:changeState('idle')
-    self.player:getItem(Weapon('sword', self.player))
-    self.player:getItem(Weapon('bow', self.player))
-    self.player:getItem(Weapon('fire_tome', self.player))
 
     self.enemySpawner = enemySpawner or EnemySpawner(self, DEFAULT_ENTITY_CAP)
 
     self.pickups = {}
+    self:generatePickups()
 
     self.camera = Camera(self.player, self)
 
@@ -30,17 +28,13 @@ function Level:init(map, player, enemySpawner)
 end
 
 function Level:getPlayerSpawnSpace()
-    local pos = {
-        x = PLAYER_SPAWN_X,
-        y = PLAYER_SPAWN_Y
-    }
+    local x, y = self:getRandomCoord()
 
-    while not self.map:isSpawnableSpace(pos.x, pos.y) do
-        pos.x = math.random(2, self.map.size)
-        pos.y = math.random(2, self.map.size)
+    while not self.map:isSpawnableSpace(x, y) do
+        x, y = self:getRandomCoord()
     end
 
-    return pos
+    return {x = x, y = y}
 end
 
 function Level:update(dt)
@@ -75,4 +69,21 @@ end
 
 function GetDistance(a, b)
     return (math.sqrt(math.pow(math.abs(a.x - b.x), 2) + math.pow(math.abs(a.y - b.y), 2)))
+end
+
+function Level:generatePickups()
+    local items = {
+        'sword', 'bow', 'fire_tome'
+    }
+    for i, item in pairs(items) do
+        local x, y = self:getRandomCoord()
+        while not self.map:isSpawnableSpace(x, y) do
+            x, y = self:getRandomCoord()
+        end
+        table.insert(self.pickups, Pickup(item, (x - 1) * TILE_SIZE, (y - 1) * TILE_SIZE))
+    end
+end
+
+function Level:getRandomCoord()
+    return math.random(2, self.map.size), math.random(2, self.map.size)
 end

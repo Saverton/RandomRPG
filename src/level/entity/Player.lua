@@ -21,7 +21,7 @@ function Player:render(camera)
     --render Item Panel
     local item = self.items[self.heldItem]
     self.ItemPanel:render()
-    if item ~= nil then
+    if item ~= nil and #self.items ~= 0 then
         item:render(12, 12)
     end
 
@@ -37,7 +37,10 @@ function Player:update(dt)
     Entity.update(self, dt)
 
     -- navigate between held items
-    self:translateHeldItem(GetYScroll())
+    local yScroll = GetYScroll()
+    if yScroll ~= 0 then
+        self:translateHeldItem(yScroll) 
+    end
 
     -- if space is pressed, launch a sword.
     if self.canUseItem and love.keyboard.wasPressed('space') then
@@ -53,5 +56,5 @@ function Player:update(dt)
 end
 
 function Player:translateHeldItem(amount)
-    self.heldItem = (((self.heldItem - 1) + amount) % #self.items) + 1
+    self.heldItem = (((self.heldItem - 1) + amount) % (#self.items) + 1)
 end

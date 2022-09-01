@@ -10,7 +10,7 @@ function Pickup:init(name, x, y, value)
     self.name = name
     self.x = x
     self.y = y
-    self.value = value
+    self.value = value or 1
 end
 
 function Pickup:render(camera)

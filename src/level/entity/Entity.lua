@@ -75,7 +75,7 @@ function Entity:init(def, level, pos, off)
 
     -- item management
     self.items = {}
-    self.heldItem = 0
+    self.heldItem = 1
     self.ammo = START_AMMO
 end
 
@@ -374,7 +374,10 @@ end
 
 function Entity:getItem(item)
     if ITEM_DEFS[item.name].type ~= 'pickup' then
+        print('item, adding')
         table.insert(self.items, item)
+    else
+        print('pickup, not adding')
     end
 end
 
