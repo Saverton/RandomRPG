@@ -12,7 +12,7 @@ function Player:init(def, level, pos, off)
 end
 
 function Player:render(camera)
-    Entity.render(self, camera, PLAYER_X_OFFSET, PLAYER_Y_OFFSET)
+    Entity.render(self, camera)
     -- debug: render player bounds
     -- love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, PLAYER_WIDTH, PLAYER_HEIGHT
 

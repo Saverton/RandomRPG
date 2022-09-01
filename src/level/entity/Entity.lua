@@ -20,6 +20,8 @@ function Entity:init(def, level, pos, off)
     self.width = def.width or DEFAULT_ENTITY_WIDTH
     self.height = def.height or DEFAULT_ENTITY_HEIGHT
     self.direction = START_DIRECTION
+    self.xOffset = def.xOffset or 0
+    self.yOffset = def.yOffset or 0
 
     -- reference to level
     self.level = level or nil
@@ -228,18 +230,12 @@ function Entity:setHeldItem(index)
     end
 end
 
-function Entity:render(camera, offsetX, offsetY)
+function Entity:render(camera)
     -- determine the on screen x and y positions of the entity based on the camera, any
     -- drawing manipulation, or offsets.
     local xScale = self.animations[self.currentAnimation].xScale or 1
-    if offsetX == nil then
-        offsetX = 0
-    end
-    if offsetY == nil then
-        offsetY = 0
-    end
-    local onScreenX = math.floor(self.x - camera.x + (xScale * offsetX))
-    local onScreenY = math.floor(self.y - camera.y + offsetY)
+    local onScreenX = math.floor(self.x - camera.x + (xScale * self.xOffset))
+    local onScreenY = math.floor(self.y - camera.y + self.yOffset)
 
     -- fix player sprite being off by 16 pixels
     if xScale == -1 then
@@ -266,9 +262,12 @@ function Entity:render(camera, offsetX, offsetY)
     end
 
     -- draw the health bar
-    onScreenX = math.floor(self.x - camera.x + offsetX)
-    onScreenY = math.floor(self.y - camera.y + offsetY)
+    onScreenX = math.floor(self.x - camera.x + self.xOffset)
+    onScreenY = math.floor(self.y - camera.y + self.yOffset)
     self:drawHealthBar(onScreenX, onScreenY)
+
+    --debug: draw hitbox
+    love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, self.width, self.height)
 end
 
 function Entity:drawHealthBar(entityX, entityY)
