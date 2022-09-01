@@ -73,5 +73,19 @@ ITEM_DEFS = {
             table.insert(holder.projectiles, Projectile('tome', {x = pos.x, y = pos.y}, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
             table.insert(holder.projectiles, Projectile('fireball', {x = pos.x, y = pos.y}, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
         end
+    },
+    ['ammo'] = {
+        name = 'ammo',
+        type = 'pickup',
+        texture = 'arrow',
+        frame = 1,
+        price = {
+            buy = 1,
+            sell = 0
+        },
+        useRate = 0,
+        useTime = 0,
+        onUse = function() end,
+        onPickup = function(holder, quantity) holder.ammo = holder.ammo + quantity end
     }
 }

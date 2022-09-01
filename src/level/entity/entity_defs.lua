@@ -127,7 +127,10 @@ ENTITY_DEFS = {
         defense = 1,
         attack = 1,
         agroDist = 7,
-        onDeath = function() love.audio.play(gSounds['enemy_dies_1']) end,
+        onDeath = function(entity, level) 
+            love.audio.play(gSounds['enemy_dies_1'])
+            table.insert(level.pickups, Pickup('ammo', entity.x, entity.y, math.random(1, 3)))
+        end,
         push = 8
     },
     ['rock_golem'] = {

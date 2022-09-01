@@ -373,7 +373,9 @@ function Entity:getMagic()
 end
 
 function Entity:getItem(item)
-    table.insert(self.items, item)
+    if ITEM_DEFS[item.name].type ~= 'pickup' then
+        table.insert(self.items, item)
+    end
 end
 
 function Entity:useHeldItem()

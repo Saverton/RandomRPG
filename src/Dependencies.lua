@@ -58,6 +58,7 @@ require 'src/level/entity/projectile/Projectile'
 require 'src/level/entity/item/item_defs'
 require 'src/level/entity/item/Item'
 require 'src/level/entity/item/Weapon'
+require 'src/level/entity/item/Pickup'
 
 require 'src/gui/Panel'
 
@@ -102,5 +103,6 @@ gSounds = {
     ['sword_swing_1'] = love.audio.newSource('sounds/sword_swing_1.wav', 'static'),
     ['player_dies_1'] = love.audio.newSource('sounds/player_dies_1.wav', 'static'),
     ['enemy_dies_1'] = love.audio.newSource('sounds/enemy_dies_1.wav', 'static'),
-    ['fire_hit_1'] = love.audio.newSource('sounds/fire_hit_1.wav', 'static')
+    ['fire_hit_1'] = love.audio.newSource('sounds/fire_hit_1.wav', 'static'),
+    ['pickup_item'] = love.audio.newSource('sounds/pickup_item.wav', 'static')
 }

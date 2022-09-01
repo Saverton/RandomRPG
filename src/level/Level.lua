@@ -22,6 +22,8 @@ function Level:init(map, player, enemySpawner)
 
     self.enemySpawner = enemySpawner or EnemySpawner(self, DEFAULT_ENTITY_CAP)
 
+    self.pickups = {}
+
     self.camera = Camera(self.player, self)
 
     Timer.every(10, function() return self.enemySpawner:spawnEnemies() end)
@@ -48,11 +50,23 @@ function Level:update(dt)
 
     self.player:update(dt)
 
+    for i, pickup in pairs(self.pickups) do
+        if GetDistance(self.player, pickup) < self.player.pickupRange then
+            self.player:getItem(Item(pickup.name, self.player, pickup.value))
+            love.audio.play(gSounds['pickup_item'])
+            table.remove(self.pickups, i)
+        end
+    end
+
     self.camera:update()
 end
 
 function Level:render()
     self.map:render(self.camera)
+
+    for i, pickup in pairs(self.pickups) do
+        pickup:render(self.camera)
+    end
 
     self.enemySpawner:render(self.camera)
 

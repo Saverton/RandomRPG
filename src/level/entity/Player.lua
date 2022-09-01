@@ -9,6 +9,8 @@ function Player:init(def, level, pos, off)
     Entity.init(self, def, level, pos, off)
 
     self.ItemPanel = Panel(10, 10, 20, 20)
+
+    self.pickupRange = 16
 end
 
 function Player:render(camera)

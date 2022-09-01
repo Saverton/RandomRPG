@@ -6,12 +6,16 @@
 
 Item = Class{}
 
-function Item:init(name, holder)
+function Item:init(name, holder, quantity)
     self.name = name
 
     self.holder = holder
 
     self.useRate = 0
+
+    if ITEM_DEFS[self.name].type == 'pickup' then
+        ITEM_DEFS[self.name].onPickup(self.holder, quantity)
+    end
 end
 
 function Item:update(dt)
