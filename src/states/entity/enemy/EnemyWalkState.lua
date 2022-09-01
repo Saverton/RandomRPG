@@ -12,6 +12,8 @@ function EnemyWalkState:init(entity)
     self.distanceToTravel = math.random(1, 5) * TILE_SIZE
 
     self.distanceTraveled = 0
+
+    self.hitObstacle = false
 end
 
 function EnemyWalkState:enter(dist)
@@ -26,6 +28,13 @@ function EnemyWalkState:update(dt)
 end
 
 function EnemyWalkState:processAI()
+    if self.hitObstacle then
+        self.hitObstacle = false
+        self.entity.direction = DIRECTIONS[(DIRECTION_TO_NUM[self.entity.direction] % 4) + 1]
+        self.distanceToTravel = 1 * TILE_SIZE
+        self.distanceTraveled = 0
+        self.entity:changeAnimation('walk-' .. self.entity.direction)
+    end
     if self.distanceTraveled >= self.distanceToTravel then
         if self.entity.target == nil then
             self.entity:changeState('idle')
