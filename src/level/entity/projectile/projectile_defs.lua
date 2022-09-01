@@ -42,5 +42,31 @@ PROJECTILE_DEFS = {
         push = 8,
         type = 'ranged',
         inflictions = {}
+    },
+    ['fireball'] = {
+        width = 16,
+        height = 16,
+        texture = 'fireball',
+        frames = {1, 2, 3, 4},
+        damage = 1,
+        speed = 64,
+        lifetime = 1,
+        hits = 3,
+        push = 4,
+        type = 'magic',
+        inflictions = {{name = 'burn', duration = 2}}
+    },
+    ['tome'] = {
+        width = 16,
+        height = 16,
+        texture = 'tome',
+        frames = {1, 2, 3, 4},
+        damage = 0,
+        speed = 0,
+        lifetime = 0.5,
+        hits = 5,
+        push = 0,
+        type = 'none',
+        inflictions = {}
     }
 }

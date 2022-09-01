@@ -51,5 +51,25 @@ ITEM_DEFS = {
                 y = pos.y
             }, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
         end
+    },
+    ['fire_tome'] = {
+        name = 'fire_tome',
+        weapon = true,
+        texture = 'items',
+        frame = 3,
+        price = {
+            buy = 20,
+            sell = 10
+        },
+        useRate = 1,
+        useTime = 0.5,
+        onUse = function(item, holder, target)
+            love.audio.play(gSounds['fire_hit_1'])
+            holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
+            local pos = GetStartPosition(holder)
+
+            table.insert(holder.projectiles, Projectile('tome', {x = pos.x, y = pos.y}, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
+            table.insert(holder.projectiles, Projectile('fireball', {x = pos.x, y = pos.y}, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
+        end
     }
 }

@@ -69,6 +69,8 @@ gTextures = {
     ['sword'] = love.graphics.newImage('graphics/entities/projectiles/sword.png'),
     ['bow'] = love.graphics.newImage('graphics/entities/projectiles/bow.png'),
     ['arrow'] = love.graphics.newImage('graphics/entities/projectiles/arrow.png'),
+    ['tome'] = love.graphics.newImage('graphics/entities/projectiles/tome.png'),
+    ['fireball'] = love.graphics.newImage('graphics/entities/projectiles/fireball.png'),
     ['effects'] = love.graphics.newImage('graphics/effects/effects.png'),
     ['items'] = love.graphics.newImage('graphics/items/items.png')
 }
@@ -82,7 +84,9 @@ gFrames = {
     ['bow'] = GenerateQuads(gTextures['bow'], 16, 16),
     ['arrow'] = GenerateQuads(gTextures['arrow'], 16, 16),
     ['effects'] = GenerateQuads(gTextures['effects'], 8, 8),
-    ['items'] = GenerateQuads(gTextures['items'], 16, 16)
+    ['items'] = GenerateQuads(gTextures['items'], 16, 16),
+    ['tome'] = GenerateQuads(gTextures['tome'], 16, 16),
+    ['fireball'] = GenerateQuads(gTextures['fireball'], 16, 16)
 }
 
 gFonts = {
