@@ -9,7 +9,7 @@ EFFECT_DEFS = {
         frame = 1,
         effect = function(holder) 
             --every second lose 1hp
-            holder:damage(1)
+            holder:hurt(1)
             --play burn sound
             love.audio.play(gSounds['fire_hit_1'])
         end,

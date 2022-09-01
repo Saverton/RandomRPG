@@ -126,11 +126,10 @@ function Entity:update(dt)
         local oldx, oldy = self.x, self.y
         self.x = self.x + self.pushdx
         self.y = self.y + self.pushdy
-        self.pushdx = math.max(0, math.floor(self.pushdx / 2))
-        self.pushdy = math.max(0, math.floor(self.pushdy / 2))
-        if self.pushdx == 0 and self.pushdy == 0 then
+        self.pushdx = (self.pushdx / math.abs(self.pushdx)) * math.max(1, math.floor(math.abs(self.pushdx) / PUSH_DECAY))
+        self.pushdy = (self.pushdy / math.abs(self.pushdy)) * math.max(1, math.floor(math.abs(self.pushdy) / PUSH_DECAY))
+        if math.abs(self.pushdx) == 1 and math.abs(self.pushdy) == 1 then
             self.pushed = false
-            self:changeState('idle')
         end
         if self:checkCollision() then
             self.x, self.y = oldx, oldy
@@ -170,7 +169,13 @@ function Entity:collides(target)
     return Collide(self, target)
 end
 
-function Entity:damage(amount)
+function Entity:damage(amount, pushStrength, pushFrom, inflictions)
+    self:push(pushStrength, pushFrom)
+    self:hurt(amount)
+    self:inflict(inflictions)
+end
+
+function Entity:hurt(amount)
     if not self.invincible then
         love.audio.play(gSounds['hit_1'])
         self.currenthp = math.max(0, self.currenthp - (math.max(1, amount - self:getDefense())))
@@ -181,7 +186,7 @@ function Entity:damage(amount)
 end
 
 function Entity:push(strength, from)
-    if not self.pushed then
+    if not self.pushed and not self.invincible then
         self.pushed = true
         self.pushdx, self.pushdy = 0, 0
         local dx, dy = (self.x + (math.floor(self.width / 2))) - (from.x + (math.floor(from.width / 2))),

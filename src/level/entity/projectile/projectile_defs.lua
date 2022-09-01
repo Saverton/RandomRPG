@@ -13,7 +13,7 @@ PROJECTILE_DEFS = {
         speed = 0,
         lifetime = 0.3,
         hits = 5,
-        push = 16,
+        push = 8,
         type = 'melee',
         inflictions = {{name = 'burn', duration = 2}}
     },
@@ -39,7 +39,7 @@ PROJECTILE_DEFS = {
         speed = 128,
         lifetime = 2,
         hits = 1,
-        push = 16,
+        push = 8,
         type = 'ranged',
         inflictions = {}
     }

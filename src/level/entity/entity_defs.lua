@@ -122,7 +122,7 @@ ENTITY_DEFS = {
         attack = 1,
         agroDist = 7,
         onDeath = function() love.audio.play(gSounds['enemy_dies_1']) end,
-        push = 12
+        push = 8
     },
     ['rock_golem'] = {
 

@@ -25,7 +25,7 @@ function Enemy:update(dt)
     else
         --check if damage target melee
         if Collide(self, self.target) then
-            self:attackTarget()
+            self.target:damage(self:getDamage(), ENTITY_DEFS[self.name].push, self, self.inflictions)
         end
         -- check if target is out of agro Range
         if GetDistance(self, self.target) > self.agroDist * TILE_SIZE then
@@ -52,10 +52,4 @@ function Enemy:render(camera)
     love.graphics.setColor(self.color)
     Entity.render(self, camera) 
     love.graphics.setColor(1, 1, 1, 1)
-end
-
-function Enemy:attackTarget()
-    self.target:damage(self:getDamage())
-    self.target:push(ENTITY_DEFS[self.name].push, self)
-    self.target:inflict(self.inflictions)
 end
