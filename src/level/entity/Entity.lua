@@ -205,6 +205,10 @@ function Entity:hurt(amount)
     return false
 end
 
+function Entity:heal(amount)
+    self.currenthp = math.min(self:getHp(), math.floor(self.currenthp + amount))
+end
+
 function Entity:push(strength, from)
     if not self.pushed and not self.invincible then
         self.pushed = true
@@ -344,7 +348,7 @@ function Entity:getHp()
     for i, bonus in pairs(self.hpboost) do
         boost = boost * bonus
     end
-    return self.hp * boost
+    return math.floor(self.hp * boost)
 end
 
 function Entity:getSpeed()
@@ -352,7 +356,7 @@ function Entity:getSpeed()
     for i, bonus in pairs(self.speedboost) do
         boost = boost * bonus.num
     end
-    return self.speed * boost
+    return math.floor(self.speed * boost)
 end
 
 function Entity:getDefense()
@@ -360,7 +364,7 @@ function Entity:getDefense()
     for i, bonus in pairs(self.defenseboost) do
         boost = boost * bonus
     end
-    return self.defense * boost
+    return math.floor(self.defense * boost)
 end
 
 function Entity:getMagic()
@@ -368,7 +372,7 @@ function Entity:getMagic()
     for i, bonus in pairs(self.magicboost) do
         boost = boost * bonus
     end
-    return self.magic * boost
+    return math.floor(self.magic * boost)
 end
 
 function Entity:getItem(item)

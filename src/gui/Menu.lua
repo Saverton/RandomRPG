@@ -25,7 +25,7 @@ function Menu:update(dt)
     elseif love.keyboard.wasPressed('s') or love.keyboard.wasPressed('down') then
         love.audio.play(gSounds['menu_blip_1'])
         self.currentSelection = ((self.currentSelection) % #self.selections) + 1
-    elseif love.keyboard.wasPressed('space') then
+    elseif love.keyboard.wasPressed('space') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
         self.selections[self.currentSelection]:select()
     end
 end

@@ -129,7 +129,15 @@ ENTITY_DEFS = {
         agroDist = 7,
         onDeath = function(entity, level) 
             love.audio.play(gSounds['enemy_dies_1'])
-            table.insert(level.pickups, Pickup('ammo', entity.x, entity.y, math.random(1, 3)))
+            if math.random(1, 3) == 1 then
+                table.insert(level.pickups, Pickup('ammo', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height) - 8, math.random(2, 5)))
+            end
+            if math.random(1, 3) ~= 1 then
+                table.insert(level.pickups, Pickup('money', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height), math.random(1, 2)))
+            end
+            if math.random(1, 5) == 1 then
+                table.insert(level.pickups, Pickup('health', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height) - 8, 1))
+            end
         end,
         push = 8
     },

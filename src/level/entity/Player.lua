@@ -11,6 +11,8 @@ function Player:init(def, level, pos, off)
     self.ItemPanel = Panel(10, 10, 20, 20)
 
     self.pickupRange = 16
+
+    self.money = 0
 end
 
 function Player:render(camera)
@@ -28,9 +30,14 @@ function Player:render(camera)
     -- render ammo count
     love.graphics.setFont(gFonts['small'])
     love.graphics.setColor(0, 0, 0, 1)
-    love.graphics.print('Ammo: ' .. tostring(self.ammo), AMMO_TEXT_POS_X + 1, AMMO_TEXT_POS_Y + 1)
+    love.graphics.print('Ammo: ' .. tostring(self.ammo), PLAYER_TEXT_POS_X + 1, AMMO_TEXT_POS_Y + 1)
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print('Ammo: ' .. tostring(self.ammo), AMMO_TEXT_POS_X, AMMO_TEXT_POS_Y)
+    love.graphics.print('Ammo: ' .. tostring(self.ammo), PLAYER_TEXT_POS_X, AMMO_TEXT_POS_Y)
+    -- render money amount
+    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.print('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X + 1, MONEY_TEXT_POS_Y + 1)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X, MONEY_TEXT_POS_Y)
 end
 
 function Player:update(dt)

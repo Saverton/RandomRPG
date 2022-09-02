@@ -87,5 +87,33 @@ ITEM_DEFS = {
         useTime = 0,
         onUse = function() end,
         onPickup = function(holder, quantity) holder.ammo = holder.ammo + quantity end
+    },
+    ['health'] = {
+        name = 'health',
+        type = 'pickup',
+        texture = 'items',
+        frame = 4,
+        price = {
+            buy = 5,
+            sell = 0
+        },
+        useRate = 0,
+        useTime = 0,
+        onUse = function() end,
+        onPickup = function(holder, quantity) holder:heal(quantity) end
+    },
+    ['money'] = {
+        name = 'money',
+        type = 'pickup',
+        texture = 'items',
+        frame = 5,
+        price = {
+            buy = 1,
+            sell = 1
+        },
+        useRate = 0,
+        useTime = 0,
+        onUse = function() end,
+        onPickup = function(holder, quantity) holder.money = holder.money + quantity end
     }
 }
