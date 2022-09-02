@@ -17,9 +17,14 @@ function WorldState:update(dt)
     if love.keyboard.wasPressed('r') then
         self.level = Level()
     end
-    -- return to title if pressed escape
+    -- pause if pressed escape
     if love.keyboard.wasPressed('escape') then
-        gStateStack:pop()
+        gStateStack:push(MenuState(
+            Menu(
+                MENU_DEFS['pause'].x, MENU_DEFS['pause'].y, MENU_DEFS['pause'].width, MENU_DEFS['pause'].height,
+                MENU_DEFS['pause'].title, MENU_DEFS['pause'].selections
+            )
+        ))
     end
 end
 
