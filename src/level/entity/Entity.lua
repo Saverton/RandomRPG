@@ -382,6 +382,9 @@ function Entity:getItem(item)
 end
 
 function Entity:useHeldItem()
+    if (self.heldItem > #self.items) then
+        return
+    end
     local item = self.items[self.heldItem]
     if item ~= nil and item.useRate == 0 then
         item:use()

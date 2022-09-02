@@ -8,36 +8,11 @@ Player = Class{__includes = Entity}
 function Player:init(def, level, pos, off)
     Entity.init(self, def, level, pos, off)
 
-    self.ItemPanel = Panel(10, 10, 20, 20)
-
     self.pickupRange = 16
 
     self.money = 0
-end
 
-function Player:render(camera)
-    Entity.render(self, camera)
-    -- debug: render player bounds
-    -- love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, PLAYER_WIDTH, PLAYER_HEIGHT
-
-    --render Item Panel
-    local item = self.items[self.heldItem]
-    self.ItemPanel:render()
-    if item ~= nil and #self.items ~= 0 then
-        item:render(12, 12)
-    end
-
-    -- render ammo count
-    love.graphics.setFont(gFonts['small'])
-    love.graphics.setColor(0, 0, 0, 1)
-    love.graphics.print('Ammo: ' .. tostring(self.ammo), PLAYER_TEXT_POS_X + 1, AMMO_TEXT_POS_Y + 1)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print('Ammo: ' .. tostring(self.ammo), PLAYER_TEXT_POS_X, AMMO_TEXT_POS_Y)
-    -- render money amount
-    love.graphics.setColor(0, 0, 0, 1)
-    love.graphics.print('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X + 1, MONEY_TEXT_POS_Y + 1)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X, MONEY_TEXT_POS_Y)
+    self.hotbar = self:getHotbar(3)
 end
 
 function Player:update(dt)
@@ -62,6 +37,49 @@ function Player:update(dt)
     end
 end
 
+function Player:render(camera)
+    Entity.render(self, camera)
+    -- debug: render player bounds
+    -- love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, PLAYER_WIDTH, PLAYER_HEIGHT
+
+    --render Item Hotbar Panels
+    for i, slot in ipairs(self.hotbar) do
+        local opa = 0.5
+        if i == self.heldItem then
+            opa = 1
+        end
+        slot:render(opa)
+        if self.items[i] ~= nil and #self.items ~= 0 then
+            self.items[i]:render(slot.x + 2, slot.y + 2)
+        end
+    end
+
+    -- render ammo count
+    love.graphics.setFont(gFonts['small'])
+    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.print('Ammo: ' .. tostring(self.ammo), PLAYER_TEXT_POS_X + 1, AMMO_TEXT_POS_Y + 1)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print('Ammo: ' .. tostring(self.ammo), PLAYER_TEXT_POS_X, AMMO_TEXT_POS_Y)
+    -- render money amount
+    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.print('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X + 1, MONEY_TEXT_POS_Y + 1)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X, MONEY_TEXT_POS_Y)
+end
+
 function Player:translateHeldItem(amount)
-    self.heldItem = (((self.heldItem - 1) + amount) % (#self.items) + 1)
+    love.audio.stop(gSounds['menu_blip_1'])
+    love.audio.play(gSounds['menu_blip_1'])
+    self.heldItem = (((self.heldItem - 1) - amount) % (#self.hotbar) + 1)
+    print('held item: ' .. tostring(self.heldItem))
+end
+
+function Player:getHotbar(size)
+    local hotbar = {}
+
+    for i = 1, size, 1 do
+        table.insert(hotbar, i, Panel(HOTBAR_X, HOTBAR_Y + ((i - 1) * (HOTBAR_MARGIN + HOTBAR_PANEL_SIZE)), HOTBAR_PANEL_SIZE, HOTBAR_PANEL_SIZE))
+    end
+
+    return hotbar
 end

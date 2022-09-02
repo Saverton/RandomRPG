@@ -12,11 +12,11 @@ function Panel:init(x, y, width, height)
     self.height = height
 end
 
-function Panel:render()
+function Panel:render(opa)
     --draw main rectangle
-    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.setColor(0, 0, 0, opa or 1)
     love.graphics.rectangle('fill', self.x, self.y, self.width, self.height, 2, 2)
     --draw outer rectangle
-    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setColor(1, 1, 1, opa or 1)
     love.graphics.rectangle('line', self.x, self.y, self.width, self.height, 2, 2)
 end
