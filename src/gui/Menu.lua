@@ -5,16 +5,16 @@
 
 Menu = Class{}
 
-function Menu:init(x, y, width, height, title, selections)
-    self.x = x
-    self.y = y
-    self.width = width
-    self.height = height
-    self.title = title or 'Menu'
+function Menu:init(def)
+    self.x = def.x
+    self.y = def.y
+    self.width = def.width
+    self.height = def.height
+    self.title = def.title or 'Menu'
 
     self.panel = Panel(self.x, self.y, self.width, self.height)
 
-    self.selections = selections
+    self.selections = def.selections
     self.currentSelection = 1
 end
 

@@ -5,8 +5,8 @@
 
 MenuState = Class{__includes = BaseState}
 
-function MenuState:init(menu)
-    self.menu = menu
+function MenuState:init(def)
+    self.menu = Menu(def)
 end
 
 function MenuState:update(dt)

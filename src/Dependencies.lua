@@ -19,6 +19,7 @@ require 'src/states/game/WorldState'
 require 'src/states/game/GameOverState'
 require 'src/states/game/DialogueState'
 require 'src/states/game/MenuState'
+require 'src/states/game/InventoryState'
 
 require 'src/states/entity/EntityBaseState' 
 require 'src/states/entity/EntityIdleState' 
@@ -67,6 +68,7 @@ require 'src/gui/Textbox'
 require 'src/gui/Selection'
 require 'src/gui/Menu'
 require 'src/gui/menu_defs'
+require 'src/gui/OrderMenu'
 
 gTextures = {
     ['player'] = love.graphics.newImage('graphics/entities/character.png'),

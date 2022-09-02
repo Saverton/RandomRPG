@@ -17,5 +17,13 @@ MENU_DEFS = {
                 gStateStack:pop()
             end)
         }
+    },
+    ['inventory'] = {
+        x = MENU_X,
+        y = MENU_Y,
+        width = MENU_WIDTH,
+        height = MENU_HEIGHT,
+        title = 'Inventory',
+        selections = {}
     }
 }

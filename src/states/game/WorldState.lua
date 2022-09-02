@@ -17,13 +17,20 @@ function WorldState:update(dt)
     if love.keyboard.wasPressed('r') then
         self.level = Level()
     end
+    -- give player items if pressed b
+    if love.keyboard.wasPressed('b') then
+        self.level.player:getItem(Item('sword', self.level.player, 1))
+        self.level.player:getItem(Item('bow', self.level.player, 1))
+        self.level.player:getItem(Item('fire_tome', self.level.player, 1))
+    end
     -- pause if pressed escape
     if love.keyboard.wasPressed('escape') then
         gStateStack:push(MenuState(
-            Menu(
-                MENU_DEFS['pause'].x, MENU_DEFS['pause'].y, MENU_DEFS['pause'].width, MENU_DEFS['pause'].height,
-                MENU_DEFS['pause'].title, MENU_DEFS['pause'].selections
-            )
+            Menu(MENU_DEFS['pause'])
+        ))
+    elseif love.keyboard.wasPressed('i') then
+        gStateStack:push(InventoryState(
+            MENU_DEFS['inventory'], self.level.player
         ))
     end
 end

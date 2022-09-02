@@ -83,3 +83,23 @@ function Player:getHotbar(size)
 
     return hotbar
 end
+
+function Player:getInventory()
+    local inventory = {}
+
+    for i, slot in ipairs(self.items) do
+        table.insert(inventory, Selection(slot.name, function() end))
+    end
+
+    return inventory
+end
+
+function Player:sortInventory(sortList)
+    local newItems = {}
+
+    for i, slot in pairs(sortList) do
+        table.insert(newItems, slot.newPos, self.items[slot.oldPos])
+    end
+
+    self.items = newItems
+end
