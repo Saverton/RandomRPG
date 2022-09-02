@@ -69,6 +69,7 @@ require 'src/gui/Selection'
 require 'src/gui/Menu'
 require 'src/gui/menu_defs'
 require 'src/gui/OrderMenu'
+require 'src/gui/Imagebox'
 
 gTextures = {
     ['player'] = love.graphics.newImage('graphics/entities/character.png'),

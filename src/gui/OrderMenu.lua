@@ -16,11 +16,7 @@ function OrderMenu:init(def, selections)
         selection.oldPos = i
     end
 
-    self.selector = 1
-    self.selectors = {
-        {pos = 1, selected = false, text = 'select an index'},
-        {pos = 1, selected = false, text = 'select index to switch'}
-    }
+    
 end
 
 function OrderMenu:update(dt)
@@ -46,15 +42,6 @@ function OrderMenu:update(dt)
 end
 
 function OrderMenu:switch()
-    local temp = self.selections[self.selectors[1].pos]
-    self.selections[self.selectors[1].pos] = self.selections[self.selectors[2].pos]
-    self.selections[self.selectors[2].pos] = temp
-
-    for i, selector in pairs(self.selectors) do
-        selector.selected = false
-        selector.pos = 1
-    end
-    self.selector = 1
 end
 
 function OrderMenu:getOrderChange()

@@ -6,10 +6,10 @@
 Panel = Class{}
 
 function Panel:init(x, y, width, height)
-    self.x = x
-    self.y = y
-    self.width = width
-    self.height = height
+    self.x = math.floor(x)
+    self.y = math.floor(y)
+    self.width = math.floor(width)
+    self.height = math.floor(height)
 end
 
 function Panel:render(opa)

@@ -13,6 +13,8 @@ function Item:init(name, holder, quantity)
 
     self.useRate = 0
 
+    self.quantity = quantity or 1
+
     if ITEM_DEFS[self.name].type == 'pickup' then
         ITEM_DEFS[self.name].onPickup(self.holder, quantity)
     end
@@ -41,4 +43,12 @@ end
 function Item:render(x, y)
     local def = ITEM_DEFS[self.name]
     love.graphics.draw(gTextures[def.texture], gFrames[def.texture][def.frame], x, y)
+end
+
+function Item:getQuantityText()
+    local text = ''
+    if self.quantity > 1 then
+        text = ' ... (' .. tostring(self.quantity) .. ')'
+    end
+    return text
 end

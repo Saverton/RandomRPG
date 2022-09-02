@@ -25,13 +25,9 @@ function WorldState:update(dt)
     end
     -- pause if pressed escape
     if love.keyboard.wasPressed('escape') then
-        gStateStack:push(MenuState(
-            Menu(MENU_DEFS['pause'])
-        ))
+        gStateStack:push(MenuState(Menu(MENU_DEFS['pause']), {}))
     elseif love.keyboard.wasPressed('i') then
-        gStateStack:push(InventoryState(
-            MENU_DEFS['inventory'], self.level.player
-        ))
+        gStateStack:push(InventoryState(MENU_DEFS['inventory'], self.level.player))
     end
 end
 

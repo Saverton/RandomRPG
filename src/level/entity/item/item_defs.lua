@@ -6,6 +6,8 @@
 ITEM_DEFS = {
     ['sword'] = {
         name = 'sword',
+        displayName = 'Sword',
+        description = 'A basic sword, swipes outward and can strike multiple enemies.',
         type = 'melee',
         texture = 'items',
         frame = 1,
@@ -28,6 +30,8 @@ ITEM_DEFS = {
     },
     ['bow'] = {
         name = 'bow',
+        displayName = 'Bow',
+        description = 'Shoots arrows in the direction you aim, requires ammo to use.',
         type = 'ranged',
         cost = 1,
         texture = 'items',
@@ -55,6 +59,8 @@ ITEM_DEFS = {
     },
     ['fire_tome'] = {
         name = 'fire_tome',
+        displayName = 'Tome of Fire',
+        description = 'This magic tome summons a fireball that can set enemies on fire for a couple seconds, requires mana to use',
         type = 'magic',
         cost = 1,
         texture = 'items',

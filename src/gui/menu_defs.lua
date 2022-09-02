@@ -25,5 +25,34 @@ MENU_DEFS = {
         height = MENU_HEIGHT,
         title = 'Inventory',
         selections = {}
+    },
+    ['inventory_item'] = {
+        x = MENU_X + MENU_WIDTH + 5,
+        y = MENU_Y + MENU_HEIGHT / 2,
+        width = 50,
+        height = 100,
+        title = 'Item',
+        selections = {
+            Selection('About', function(menuState) 
+                local item = ITEM_DEFS[menuState.menu.selections[menuState.menu.selectors[menuState.menu.selector].pos].name]
+                gStateStack:push(DialogueState(item.displayName .. ': ' .. item.description, item.texture, item.frame)) 
+            end),
+            Selection('Switch', function(menuState)
+                table.insert(menuState.menu.selectors, {pos = 1, selected = false, text = 'select item to switch', 
+                    onChoose = function() 
+                        menuState.menu:switch(menuState.menu.selectors[1].pos, menuState.menu.selectors[2].pos) 
+                        table.remove(menuState.menu.selectors, 2)
+                        menuState.menu.selector = 1
+                    end}
+                )
+                menuState.menu.selector = 2
+                gStateStack:pop()
+            end),
+            Selection('Delete', function(menuState) 
+                table.remove(menuState.menu.selections, menuState.menu.selectors[menuState.menu.selector].pos)
+                gStateStack:pop()
+            end),
+            Selection('Back', function() gStateStack:pop() end)
+        }
     }
 }

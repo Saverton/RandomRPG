@@ -14,7 +14,7 @@ function Textbox:init(x, y, width, height, text, font, onComplete)
     self.panel = Panel(x, y, width, height)
     
     self.font = font
-    self.textChunks = self.font:getWrap(text, self.width - (2 * TEXTBOX_MARGIN))
+    _, self.textChunks = self.font:getWrap(text, self.width - (2 * TEXTBOX_MARGIN))
     self.displayingChunks = {}
     self.currentChunk = 1
     
@@ -41,11 +41,11 @@ end
 
 function Textbox:getNextChunks()
     -- get the next three chunks
-    local chunks
+    local chunks = {}
 
     for i = self.currentChunk, self.currentChunk + 2 do
         if i <= #self.textChunks then
-            chunks = self.textChunks[i]
+            table.insert(chunks, self.textChunks[i])
         else
             self.finishedText = true
             break
@@ -65,6 +65,6 @@ function Textbox:render()
     local x = self.x + TEXTBOX_MARGIN
     for i, chunk in ipairs(self.displayingChunks) do
         local y = self.y + (TEXTBOX_MARGIN * i) + (self.font:getHeight() * (i - 1))
-        love.graphics.print(chunk, love.math.newTransform(x, y))
+        love.graphics.print(chunk, love.math.newTransform(math.floor(x), math.floor(y)))
     end
 end
