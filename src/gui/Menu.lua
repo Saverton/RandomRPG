@@ -48,7 +48,7 @@ function Menu:update(dt)
             self.selector = self.selector + 1
             self.selectors[self.selector].pos = selector.pos
         else
-            selector.onChoose(selector.pos)
+            selector.onChoose(selector.pos, self)
         end
     end
 

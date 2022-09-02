@@ -24,7 +24,8 @@ MENU_DEFS = {
         width = MENU_WIDTH,
         height = MENU_HEIGHT,
         title = 'Inventory',
-        selections = {}
+        selections = {},
+        selectors = {{pos = 1, selected = false, text = '\'esc\' to exit', onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}}
     },
     ['inventory_item'] = {
         x = MENU_X + MENU_WIDTH + 5,

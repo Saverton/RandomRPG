@@ -33,4 +33,10 @@ end
 
 function WorldState:render()
     self.level:render()
+
+    --print tiptext
+    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.print('\'i\' = Open Inventory', TIPTEXT_X + 1, TIPTEXT_Y + 1)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print('\'i\' = Open Inventory', TIPTEXT_X, TIPTEXT_Y)
 end
