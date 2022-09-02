@@ -158,7 +158,6 @@ function Entity:update(dt)
 
     --regen magic
     if self.currentmagic ~= self:getMagic() then
-        print('regen mana')
         self.currentmagic = math.min(self:getMagic(), self.currentmagic + (self.magicRegenRate * dt))
     end
 end
@@ -374,10 +373,7 @@ end
 
 function Entity:getItem(item)
     if ITEM_DEFS[item.name].type ~= 'pickup' then
-        print('item, adding')
         table.insert(self.items, item)
-    else
-        print('pickup, not adding')
     end
 end
 

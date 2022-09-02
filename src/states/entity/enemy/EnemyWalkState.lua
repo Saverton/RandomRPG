@@ -34,7 +34,6 @@ function EnemyWalkState:processAI()
         self.entity.direction = DIRECTIONS[(DIRECTION_TO_NUM[self.entity.direction] % 4) + 1]
         self.distanceToTravel = 0.5 * TILE_SIZE
         self.distanceTraveled = 0
-        print('distance traveled: (' .. tostring(self.distanceTraveled) .. ' / ' .. tostring(self.distanceToTravel) .. ')')
         self.entity:changeAnimation('walk-' .. self.entity.direction)
     end
     if self.distanceTraveled >= self.distanceToTravel then
