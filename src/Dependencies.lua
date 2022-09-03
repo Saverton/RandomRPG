@@ -48,6 +48,7 @@ require 'src/level/map/TileMap'
 require 'src/level/map/TileMapGenerator'
 
 require 'src/level/entity/Entity' 
+require 'src/level/entity/CombatEntity'
 require 'src/level/entity/entity_defs'
 require 'src/level/entity/Player' 
 require 'src/level/entity/EnemySpawner'

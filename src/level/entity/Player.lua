@@ -3,10 +3,10 @@
     attributes: x, y, width, height, onDeath()
 ]]
 
-Player = Class{__includes = Entity}
+Player = Class{__includes = CombatEntity}
 
 function Player:init(def, level, pos, off)
-    Entity.init(self, def, level, pos, off)
+    CombatEntity.init(self, def, level, pos, off)
 
     self.pickupRange = 16
 
@@ -19,7 +19,7 @@ function Player:init(def, level, pos, off)
 end
 
 function Player:update(dt)
-    Entity.update(self, dt)
+    CombatEntity.update(self, dt)
 
     -- navigate between held items
     local yScroll = GetYScroll()
@@ -41,7 +41,7 @@ function Player:update(dt)
 end
 
 function Player:render(camera)
-    Entity.render(self, camera)
+    CombatEntity.render(self, camera)
     -- debug: render player bounds
     -- love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, PLAYER_WIDTH, PLAYER_HEIGHT
 
@@ -82,7 +82,6 @@ function Player:translateHeldItem(amount)
     love.audio.stop(gSounds['menu_blip_1'])
     love.audio.play(gSounds['menu_blip_1'])
     self.heldItem = (((self.heldItem - 1) - amount) % (#self.hotbar) + 1)
-    print('held item: ' .. tostring(self.heldItem))
 end
 
 function Player:getHotbar(size)

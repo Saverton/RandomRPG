@@ -4,10 +4,10 @@
     @author Saverton
 ]]
 
-Enemy = Class{__includes = Entity}
+Enemy = Class{__includes = CombatEntity}
 
 function Enemy:init(def, level, x, y, target)
-    Entity.init(self, def, level, x, y)
+    CombatEntity.init(self, def, level, x, y)
 
     self.name = def.name
     self.target = target or nil
@@ -19,7 +19,7 @@ function Enemy:init(def, level, x, y, target)
 end
 
 function Enemy:update(dt)
-    Entity.update(self, dt)
+    CombatEntity.update(self, dt)
 
     if self.target == nil then
         -- process AI
@@ -52,7 +52,7 @@ end
 
 function Enemy:render(camera)
     love.graphics.setColor(self.color)
-    Entity.render(self, camera) 
+    CombatEntity.render(self, camera) 
 
     local onScreenX = math.floor(self.x - camera.x + self.xOffset)
     local onScreenY = math.floor(self.y - camera.y + self.yOffset - 4)
