@@ -67,6 +67,10 @@ DIRECTION_TO_NUM = {
     ['left'] = 4
 }
 
+DIRECTION_COORDS = {
+    {0, -1}, {1, 0}, {0, 1}, {-1, 0}
+}
+
 DEFAULT_ENEMY_AGRO_DIST = 5
 
 DEFAULT_ENTITY_CAP = 5

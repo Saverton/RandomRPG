@@ -112,3 +112,23 @@ function GenerateTiles(size, biomeMap)
 
     return tileMap
 end
+
+function GenerateEdges(size, tiles)
+    local edgeMap = {}
+    
+    for col = 1, size, 1 do
+        edgeMap[col] = {}
+        for row = 1, size, 1 do
+            edgeMap[col][row] = {}
+            -- check all 4 sides
+            for i = 1, 4, 1 do
+                local x, y = col + DIRECTION_COORDS[i][1], row + DIRECTION_COORDS[i][2]
+                if x >= 1 and x <= size and y >= 1 and y <= size and tiles[x][y].id ~= tiles[col][row].id then
+                    table.insert(edgeMap[col][row], i)
+                end
+            end
+        end
+    end
+
+    return edgeMap
+end

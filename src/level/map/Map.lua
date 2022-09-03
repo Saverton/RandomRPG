@@ -34,6 +34,9 @@ function Map:render(camera)
     for col = math.max(1, xStart), math.min(self.size, xEnd), 1 do
         for row = math.max(1, yStart), math.min(self.size, yEnd), 1 do
             self.tileMap.tiles[col][row]:render(camera.x, camera.y)
+            for i, edge in pairs (self.tileMap.edges[col][row]) do
+                love.graphics.draw(gTextures['edges'], gFrames['edges'][edge], ((col - 1) * TILE_SIZE - camera.x), ((row - 1) * TILE_SIZE - camera.y))
+            end
         end
     end
 
