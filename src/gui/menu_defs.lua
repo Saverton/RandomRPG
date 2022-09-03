@@ -4,6 +4,18 @@
 ]]
 
 MENU_DEFS = {
+    ['start'] = {
+        x = VIRTUAL_WIDTH / 2 - 50,
+        y = 100,
+        width = 100,
+        height = 100,
+        title = 'Options',
+        selections = {
+            Selection('Play', function() gStateStack:push(WorldState({debug = false})) end),
+            Selection('Debug', function() gStateStack:push(WorldState({debug = true})) end),
+            Selection('Exit', function() love.event.quit() end)
+        }
+    },
     ['pause'] = {
         x = MENU_X,
         y = MENU_Y,
