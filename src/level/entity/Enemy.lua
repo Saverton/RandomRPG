@@ -22,7 +22,7 @@ function Enemy:update(dt)
     CombatEntity.update(self, dt)
 
     if self.target == nil then
-        -- process AI
+        -- try and find a target
         self:findTarget(self.level.player)
     else
         --check if damage target melee
@@ -34,8 +34,6 @@ function Enemy:update(dt)
             self:loseTarget()
         end
     end
-
-    self.stateMachine:processAI()
 end
 
 function Enemy:findTarget(entity)
