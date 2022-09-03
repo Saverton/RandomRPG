@@ -96,3 +96,7 @@ function GetIndex(list, name)
     end
     return -1
 end
+
+function GetDistance(a, b)
+    return (math.sqrt(math.pow(math.abs(a.x - b.x), 2) + math.pow(math.abs(a.y - b.y), 2)))
+end

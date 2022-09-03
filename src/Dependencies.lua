@@ -62,6 +62,7 @@ require 'src/level/entity/item/item_defs'
 require 'src/level/entity/item/Item'
 require 'src/level/entity/item/Weapon'
 require 'src/level/entity/item/Pickup'
+require 'src/level/entity/item/PickupManager'
 
 require 'src/gui/Panel'
 require 'src/gui/Textbox'

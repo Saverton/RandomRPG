@@ -19,8 +19,8 @@ function Level:init(map, player, enemySpawner)
 
     self.enemySpawner = enemySpawner or EnemySpawner(self, DEFAULT_ENTITY_CAP)
 
-    self.pickups = {}
-    self:generatePickups()
+    self.pickupManager = PickupManager(self)
+    self.pickupManager:spawnPickups({'sword', 'bow', 'fire_tome'})
 
     self.camera = Camera(self.player, self)
 
@@ -44,13 +44,7 @@ function Level:update(dt)
 
     self.player:update(dt)
 
-    for i, pickup in pairs(self.pickups) do
-        if GetDistance(self.player, pickup) < self.player.pickupRange then
-            self.player:getItem(Item(pickup.name, self.player, pickup.value))
-            love.audio.play(gSounds['pickup_item'])
-            table.remove(self.pickups, i)
-        end
-    end
+    self.pickupManager:update(dt)
 
     self.camera:update()
 end
@@ -58,30 +52,11 @@ end
 function Level:render()
     self.map:render(self.camera)
 
-    for i, pickup in pairs(self.pickups) do
-        pickup:render(self.camera)
-    end
+    self.pickupManager:render(self.camera)
 
     self.enemySpawner:render(self.camera)
 
     self.player:render(self.camera)
-end
-
-function GetDistance(a, b)
-    return (math.sqrt(math.pow(math.abs(a.x - b.x), 2) + math.pow(math.abs(a.y - b.y), 2)))
-end
-
-function Level:generatePickups()
-    local items = {
-        'sword', 'bow', 'fire_tome'
-    }
-    for i, item in pairs(items) do
-        local x, y = self:getRandomCoord()
-        while not self.map:isSpawnableSpace(x, y) do
-            x, y = self:getRandomCoord()
-        end
-        table.insert(self.pickups, Pickup(item, (x - 1) * TILE_SIZE, (y - 1) * TILE_SIZE))
-    end
 end
 
 function Level:getRandomCoord()

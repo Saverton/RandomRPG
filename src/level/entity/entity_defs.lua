@@ -6,6 +6,7 @@
 ENTITY_DEFS = {
     ['player'] = {
         name = 'player',
+        displayName = 'Player',
         width = PLAYER_WIDTH,
         height = PLAYER_HEIGHT,
         xOffset = PLAYER_X_OFFSET,
@@ -77,6 +78,7 @@ ENTITY_DEFS = {
     },
     ['goblin'] = {
         name = 'goblin',
+        displayName = 'Goblin',
         width = 12,
         height = 12,
         xOffset = -2,
