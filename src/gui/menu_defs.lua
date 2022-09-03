@@ -42,6 +42,7 @@ MENU_DEFS = {
                 table.insert(menuState.menu.selectors, {pos = 1, selected = false, text = 'select item to switch', 
                     onChoose = function() 
                         menuState.menu:switch(menuState.menu.selectors[1].pos, menuState.menu.selectors[2].pos) 
+                        menuState:updateInventory()
                         table.remove(menuState.menu.selectors, 2)
                         menuState.menu.selector = 1
                     end}
@@ -51,6 +52,7 @@ MENU_DEFS = {
             end),
             Selection('Delete', function(menuState) 
                 table.remove(menuState.menu.selections, menuState.menu.selectors[menuState.menu.selector].pos)
+                menuState:updateInventory()
                 gStateStack:pop()
             end),
             Selection('Back', function() gStateStack:pop() end)

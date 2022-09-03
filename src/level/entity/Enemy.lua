@@ -13,7 +13,7 @@ function Enemy:init(def, level, x, y, target)
     self.target = target or nil
     self.agroDist = def.agroDist or 0 -- 0 = not aggressive
 
-    self.color = def.color or {math.random(), math.random(), math.random(), 1}
+    self.color = def.color or ENEMY_COLORS[math.random(1, 8)]
 
     self.hpBar = ProgressBar(self.x, self.y - 6, BAR_WIDTH, BAR_HEIGHT, {1, 0, 0, 1})
 end

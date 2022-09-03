@@ -3,6 +3,9 @@
     @author Saverton
 ]]
 
+ENEMY_COLORS = {{252/255, 227/255, 3/255, 1}, {252/255, 94/255, 3/255, 1}, {3/255, 252/255, 235/255, 1}, {210/255, 3/255, 252/255, 1}, 
+    {3/255, 252/255, 74/255, 1}, {150/255, 150/255, 150/255, 1}, {1, 0, 0, 1}, {255/255, 128/255, 128/255, 1}}
+
 ENTITY_DEFS = {
     ['player'] = {
         name = 'player',
@@ -132,13 +135,13 @@ ENTITY_DEFS = {
         onDeath = function(entity, level) 
             love.audio.play(gSounds['enemy_dies_1'])
             if math.random(1, 3) == 1 then
-                table.insert(level.pickups, Pickup('ammo', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height) - 8, math.random(2, 5)))
+                table.insert(level.pickupManager.pickups, Pickup('ammo', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height) - 8, math.random(2, 5)))
             end
             if math.random(1, 3) ~= 1 then
-                table.insert(level.pickups, Pickup('money', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height), math.random(1, 2)))
+                table.insert(level.pickupManager.pickups, Pickup('money', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height), math.random(1, 2)))
             end
             if math.random(1, 5) == 1 then
-                table.insert(level.pickups, Pickup('health', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height) - 8, 1))
+                table.insert(level.pickupManager.pickups, Pickup('health', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height) - 8, 1))
             end
         end,
         push = 8

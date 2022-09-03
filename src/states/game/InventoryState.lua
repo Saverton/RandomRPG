@@ -17,6 +17,13 @@ function InventoryState:init(def, player)
     MenuState.init(self, def, {selections = selectionList})
 end
 
+function InventoryState:updateInventory()
+    self.player:sortInventory(self.menu.selections)
+    for i, slot in ipairs(self.menu.selections) do
+        slot.oldIndex = i
+    end
+end
+
 function InventoryState:exit()
     self.player:sortInventory(self.menu.selections)
 end

@@ -45,6 +45,10 @@ function Player:render(camera)
     -- debug: render player bounds
     -- love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, PLAYER_WIDTH, PLAYER_HEIGHT
 
+    self:renderGui()
+end
+
+function Player:renderGui()
     --render Item Hotbar Panels
     for i, slot in ipairs(self.hotbar) do
         local opa = 0.5
@@ -52,7 +56,7 @@ function Player:render(camera)
             opa = 1
         end
         slot:render(opa)
-        if self.items[i] ~= nil and #self.items ~= 0 then
+        if self.items[i] ~= nil then
             self.items[i]:render(slot.x + 2, slot.y + 2)
         end
     end

@@ -31,7 +31,8 @@ end
 function EnemyWalkState:processAI()
     if self.hitObstacle then
         self.hitObstacle = false
-        self.entity.direction = DIRECTIONS[(DIRECTION_TO_NUM[self.entity.direction] % 4) + 1]
+        local dir = {-1, 1}
+        self.entity.direction = DIRECTIONS[(DIRECTION_TO_NUM[self.entity.direction] % 4) + dir[math.random(2)]]
         self.distanceToTravel = 0.5 * TILE_SIZE
         self.distanceTraveled = 0
         self.entity:changeAnimation('walk-' .. self.entity.direction)
