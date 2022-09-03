@@ -276,28 +276,8 @@ function Entity:render(camera)
         effect:render(camera)
     end
 
-    -- draw the health bar
-    onScreenX = math.floor(self.x - camera.x + self.xOffset)
-    onScreenY = math.floor(self.y - camera.y + self.yOffset)
-    self:drawBar(onScreenX, onScreenY, {1, 0, 0, 1}, self:getHp(), self.currenthp, -6)
-
-    --draw the magic bar
-    if self:getMagic() ~= 0 then
-        self:drawBar(onScreenX, onScreenY, {0, 0, 1, 1}, self:getMagic(), self.currentmagic, -12)
-    end
-
     --debug: draw hitbox
     --love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, self.width, self.height)
-end
-
-function Entity:drawBar(entityX, entityY, color, max_stat, current_stat, height_offset)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.rectangle('fill', entityX - 1, entityY + height_offset - 1, BAR_WIDTH + 2, BAR_HEIGHT + 2)
-    love.graphics.setColor(0, 0, 0, 1)
-    love.graphics.rectangle('fill', entityX, entityY + height_offset, BAR_WIDTH, BAR_HEIGHT)
-    love.graphics.setColor(color)
-    love.graphics.rectangle('fill', entityX, entityY + height_offset, (current_stat / max_stat) * BAR_WIDTH, BAR_HEIGHT)
-    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function Entity:checkCollision()

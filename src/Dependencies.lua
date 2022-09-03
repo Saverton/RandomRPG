@@ -70,6 +70,7 @@ require 'src/gui/Menu'
 require 'src/gui/menu_defs'
 require 'src/gui/OrderMenu'
 require 'src/gui/Imagebox'
+require 'src/gui/ProgressBar'
 
 gTextures = {
     ['player'] = love.graphics.newImage('graphics/entities/character.png'),

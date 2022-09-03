@@ -14,6 +14,8 @@ function Enemy:init(def, level, x, y, target)
     self.agroDist = def.agroDist or 0 -- 0 = not aggressive
 
     self.color = def.color or {math.random(), math.random(), math.random(), 1}
+
+    self.hpBar = ProgressBar(self.x, self.y - 6, BAR_WIDTH, BAR_HEIGHT, {1, 0, 0, 1})
 end
 
 function Enemy:update(dt)
@@ -51,5 +53,8 @@ end
 function Enemy:render(camera)
     love.graphics.setColor(self.color)
     Entity.render(self, camera) 
-    love.graphics.setColor(1, 1, 1, 1)
+
+    local onScreenX = math.floor(self.x - camera.x + self.xOffset)
+    local onScreenY = math.floor(self.y - camera.y + self.yOffset - 4)
+    self.hpBar:render((self.currenthp / self:getHp()), onScreenX, onScreenY)
 end

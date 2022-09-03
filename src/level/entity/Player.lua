@@ -13,6 +13,9 @@ function Player:init(def, level, pos, off)
     self.money = 0
 
     self.hotbar = self:getHotbar(3)
+
+    self.hpBar = ProgressBar(PLAYER_BAR_X, PLAYER_HP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {1, 0, 0, 1})
+    self.magicBar = ProgressBar(PLAYER_BAR_X, PLAYER_MAGIC_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 0, 1, 1})
 end
 
 function Player:update(dt)
@@ -65,6 +68,10 @@ function Player:render(camera)
     love.graphics.print('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X + 1, MONEY_TEXT_POS_Y + 1)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X, MONEY_TEXT_POS_Y)
+
+    --render health and magic bars
+    self.hpBar:render((self.currenthp / self:getHp()))
+    self.magicBar:render((self.currentmagic / self:getMagic()))
 end
 
 function Player:translateHeldItem(amount)
