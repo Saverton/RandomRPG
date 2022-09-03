@@ -23,7 +23,9 @@ end
 
 function PickupManager:render(camera)
     for i, pickup in pairs(self.pickups) do
-        pickup:render(camera)
+        if GetDistance(self.level.player, pickup) < PICKUP_RENDER_RANGE * TILE_SIZE then
+            pickup:render(camera)
+        end
     end
 end
 
