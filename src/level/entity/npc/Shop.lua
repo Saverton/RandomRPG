@@ -42,10 +42,8 @@ end
 
 function Shop:open(player)
     self.player = player
-    gStateStack:push(
-        MenuState(MENU_DEFS['shop_main'], {parent = self})
-    )
-    gStateStack:push(DialogueState(self.startText, self.npc.animations['idle-down'].texture, 1))
+    gStateStack:push(DialogueState(self.startText, self.npc.animations['idle-down'].texture, 1, function() gStateStack:push(
+        MenuState(MENU_DEFS['shop_main'], {parent = self})) end))
 end
 
 function Shop:close()

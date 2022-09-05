@@ -5,8 +5,13 @@
 
 DialogueState = Class{__includes = BaseState}
 
-function DialogueState:init(text, texture, frame)
-    self.textbox = Textbox(TEXTBOX_X, TEXTBOX_Y, TEXTBOX_WIDTH, TEXTBOX_HEIGHT, text, gFonts['small'], function() gStateStack:pop() end)
+function DialogueState:init(text, texture, frame, onExit)
+    self.onExit = onExit or function() end
+
+    self.textbox = Textbox(TEXTBOX_X, TEXTBOX_Y, TEXTBOX_WIDTH, TEXTBOX_HEIGHT, text, gFonts['small'], function() 
+        gStateStack:pop() 
+        self.onExit()
+    end)
 
     if texture == nil or frame == nil then
         self.imagebox = nil

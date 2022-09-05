@@ -144,8 +144,18 @@ function Entity:checkCollision()
 end
 
 function Entity:getItem(item)
-    if ITEM_DEFS[item.name].type ~= 'pickup' then
-        table.insert(self.items, item)
+    local itemData = ITEM_DEFS[item.name]
+    if itemData.type ~= 'pickup' then
+        if itemData.stackable then
+            local insertIndex = GetIndex(self.items, item.name)
+            if insertIndex ~= -1 then
+                self.items[insertIndex].quantity = self.items[insertIndex].quantity + item.quantity
+            else
+                table.insert(self.items, item)
+            end
+        else
+            table.insert(self.items, item)
+        end
     end
 end
 
