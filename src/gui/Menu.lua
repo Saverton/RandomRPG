@@ -23,12 +23,12 @@ function Menu:init(def, inst)
         self.selections = inst.selections
     end
 
+    self.parent = inst.parent or nil
+
     self.selector = 1
     self.selectors = def.selectors or {
-        {pos = 1, selected = false, text = '', onChoose = function(pos) self.selections[pos].onSelect(self.parent) end}
+        {pos = 1, selected = false, text = '', onChoose = function(pos, menu) self.selections[pos].onSelect(self.parent) end}
     }
-
-    self.parent = inst.parent or nil
 end
 
 function Menu:update(dt)

@@ -162,3 +162,53 @@ function Player:stringQuestProgress(quest)
 
     return string
 end
+
+function Player:getInventorySelections(fun, shop)
+    local selectionList = {}
+
+    for i, slot in ipairs(self.items) do
+        local displayText = ITEM_DEFS[slot.name].displayName .. slot:getQuantityText()
+        if shop ~= nil then
+            displayText = displayText .. ' . . . ($' .. tostring(math.max(0, ITEM_DEFS[slot.name].price.sell + shop.sellDiff)) .. ')'
+        end
+        table.insert(selectionList, Selection(slot.name, fun, i, displayText))
+    end
+
+    table.insert(selectionList, Selection('Close', function() gStateStack:pop() end))
+
+    return selectionList
+end
+
+function Player:sell(index, shop, menu)
+    local item = self.items[index]
+
+    if not item.stackable then
+        gStateStack:push(ConfirmState(MENU_DEFS['confirm'], {
+            onConfirm = function() 
+                self.money = self.money + math.max(ITEM_DEFS[item.name].price.sell + shop.sellDiff, 0)
+                table.remove(self.items, index)
+                gStateStack:pop()
+                print(tostring(#self.items))
+                menu.selections = self:getInventorySelections(
+                    function(subMenuState, otherMenu)
+                        gStateStack:push(MenuState(MENU_DEFS['shop_sell_item'], {parent = {shop = subMenuState, menu = otherMenu}}))
+                    end,
+                    shop
+                )
+            end
+        }))
+    else
+        self.money = self.money + math.max(item.price.sell + shop.sellDiff, 0)
+        item.quantity = item.quantity - 1
+        if item.quantity == 0 then
+            table.remove(self.items, index)
+            gStateStack:pop()
+            menu.selections = self:getInventorySelections(
+                function(subMenuState, otherMenu)
+                    gStateStack:push(MenuState(MENU_DEFS['shop_sell_item'], {parent = {shop = subMenuState, menu = otherMenu}}))
+                end,
+                shop
+            )
+        end
+    end
+end

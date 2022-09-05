@@ -34,7 +34,7 @@ end
 function Level:getPlayerSpawnSpace()
     local x, y = self:getSpawnableCoord()
 
-    return {x = x, y = y}
+    return {x = 10, y = 10}
 end
 
 function Level:update(dt)

@@ -35,18 +35,15 @@ function Shop:init(def, npc)
         table.insert(self.inventory, item) 
         table.insert(indexesUsed, id)
     end
+
+    -- price differing from market sale price that the shop buys things with
+    self.sellDiff = def.sellDiff or math.random(-2, 2)
 end
 
 function Shop:open(player)
     self.player = player
     gStateStack:push(
-        MenuState(
-            MENU_DEFS['shop'],
-            {
-                selections = self:getSelections(),
-                parent = self
-            }
-        )
+        MenuState(MENU_DEFS['shop_main'], {parent = self})
     )
     gStateStack:push(DialogueState(self.startText, self.npc.animations['idle-down'].texture, 1))
 end
@@ -60,22 +57,9 @@ function Shop:getSelections()
 
     for i, item in ipairs(self.inventory) do
         table.insert(selections, Selection(
-            ITEM_DEFS[item.name],
-            function()
-                if item.quantity > 0 then
-                    if self.player.money >= item.price then
-                        self.player.money = self.player.money - item.price
-                        self.player:getItem(Item(item.name, self.player, 1))
-                        item.quantity = math.max(0, item.quantity - 1)
-                        if item.quantity == 0 then
-                            table.remove(self.inventory, i)
-                        end
-                    else
-                        gStateStack:push(DialogueState(self.notEnoughText, self.npc.animations['idle-down'].texture, 1))
-                    end
-                else
-                    gStateStack:push(DialogueState(self.soldOutText, self.npc.animations['idle-down'].texture, 1))
-                end
+            item.name,
+            function(menu)
+                gStateStack:push(MenuState(MENU_DEFS['shop_buy_item'], {parent = {shop = self, menu = menu}}))
             end,
             0,
             ITEM_DEFS[item.name].displayName .. ' . . . ($' .. tostring(item.price) .. ')' .. ' . . . (' .. tostring(item.quantity) .. ')'
@@ -85,11 +69,37 @@ function Shop:getSelections()
     table.insert(selections, Selection(
         'close', function() 
             gStateStack:pop()
-            gStateStack:push(DialogueState(self.endText, self.npc.animations['idle-down'].texture, 1))
         end
     ))
 
     return selections
+end
+
+function Shop:transaction(index)
+    local item = self.inventory[index]
+
+    if item.quantity > 0 then
+        if self.player.money >= item.price then
+            --buy item
+            if not ITEM_DEFS[item.name].stackable then
+                gStateStack:push(ConfirmState(MENU_DEFS['confirm'], {
+                    onConfirm = function() 
+                        self.player.money = math.max(0, self.player.money - item.price)
+                        self.player:getItem(Item(item.name, self.player, 1))
+                        item.quantity = math.max(0, item.quantity - 1)
+                    end
+                }))
+            else
+                self.player.money = math.max(0, self.player.money)
+                self.player:getItem(Item(item.name, self.player, 1))
+                item.quantity = math.max(0, item.quantity - 1)
+            end
+        else
+            gStateStack:push(DialogueState(self.notEnoughText, self.npc.animations['idle-down'].texture, 1))
+        end
+    else
+        gStateStack:push(DialogueState(self.soldOutText, self.npc.animations['idle-down'].texture, 1))
+    end
 end
 
 function Shop:getNumItems()
