@@ -7,6 +7,7 @@ NPC = Class{__includes = Entity}
 
 function NPC:init(def, level, pos, off, manager)
     Entity.init(self, def, level, pos, off)
+    self.npcName = NPC_NAMES[math.random(#NPC_NAMES)]
     self.speed = def.speed
 
     self.onInteract = def.onInteract
@@ -15,8 +16,9 @@ function NPC:init(def, level, pos, off, manager)
 
     if def.shop ~= nil then
         self.shop = Shop(def.shop, self)
-    elseif def.quest ~= nil then
-        self.quest = Quest(def.quest, self)
+    elseif def.quest then
+        local difficulty = math.random(1, 3)
+        self.quest = Quest({}, difficulty, self)
     end
 
     self.stateMachine = StateMachine({

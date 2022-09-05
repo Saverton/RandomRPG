@@ -139,6 +139,4 @@ function Player:updateFlags(checkFlags)
             end
         end
     end
-
-    print_r(self.quests)
 end

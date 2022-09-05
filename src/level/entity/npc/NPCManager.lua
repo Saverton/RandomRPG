@@ -10,7 +10,9 @@ function NPCManager:init(npcs, level)
 
     self.level = level
 
-    table.insert(self.npcs, NPC(NPC_DEFS['quest'], self.level, {x = 10, y = 10}, {x = 0, y = 0}, self))
+    self.cap = NPC_CAP
+
+    self:spawnNPCs()
 end
 
 function NPCManager:update(dt)
@@ -25,10 +27,18 @@ function NPCManager:clearDespawned()
             table.remove(self.npcs, i)
         end
     end
+    self:spawnNPCs()
 end
 
 function NPCManager:render(camera)
     for i, npc in pairs(self.npcs) do
         npc:render(camera)
+    end
+end
+
+function NPCManager:spawnNPCs()
+    while #self.npcs < self.cap do
+        local x, y = self.level:getSpawnableCoord()
+        table.insert(self.npcs, NPC(NPC_DEFS[NPC_TYPES[math.random(#NPC_TYPES)]], self.level, {x = x, y = y}, {x = 0, y = 0}, self))
     end
 end

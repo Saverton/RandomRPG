@@ -312,8 +312,7 @@ NPC_DEFS = {
             }
         },
         startAnim = 'idle-down',
-        quest = {
-        },
+        quest = true,
         onInteract = function(player, npc)
             npc.quest:check(player)
         end,

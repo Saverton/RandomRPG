@@ -32,11 +32,7 @@ function Level:init(map, player, enemySpawner)
 end
 
 function Level:getPlayerSpawnSpace()
-    local x, y = 11, 11 -- self:getRandomCoord()
-
-    while not self.map:isSpawnableSpace(x, y) do
-        x, y = self:getRandomCoord()
-    end
+    local x, y = self:getSpawnableCoord()
 
     return {x = x, y = y}
 end
@@ -76,10 +72,16 @@ function Level:getRandomCoord()
     return math.random(2, self.map.size), math.random(2, self.map.size)
 end
 
+function Level:getSpawnableCoord()
+    local x, y = self:getRandomCoord()
+    while not self.map:isSpawnableSpace(x, y) do
+        x, y= self:getRandomCoord()
+    end
+    return x, y
+end
+
 function Level:throwFlags(flags)
-    print('threw flag')
     for i, flag in pairs(flags) do
         table.insert(self.flags, flag)
     end
-    print_r(self.flags)
 end

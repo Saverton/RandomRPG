@@ -8,17 +8,21 @@ Shop = Class{}
 function Shop:init(def, npc)
     self.npc = npc
     self.player = nil
-    self.shopSize = def.size or math.min(3, #def.itemPool)
 
     self.startText = def.startText or 'Hello, welcome to my shop.'
     self.endText = def.endText or 'Thank you for shopping, goodbye.'
     self.soldOutText = def.soldOutText or 'Sorry, we\'re out of that.'
     self.notEnoughText = def.notEnoughText or 'Sorry, you can\'t afford that.'
     -- generate the shop items
-    local itemPool = def.itemPool
+    local itemPool = def.itemPool or {}
+    self.shopSize = def.size or math.min(3, #itemPool)
     self.inventory = {}
+    local indexesUsed = {}
     for i = 1, self.shopSize, 1 do
         local id = math.random(1, #itemPool)
+        while Contains(indexesUsed, id) do
+            id = math.random(1, #itemPool)
+        end
         local quantity = 1
         if ITEM_DEFS[itemPool[id]].stackable then
             quantity = math.random(3, 10)
@@ -29,7 +33,7 @@ function Shop:init(def, npc)
             quantity = quantity
         }
         table.insert(self.inventory, item) 
-        table.remove(itemPool, id)
+        table.insert(indexesUsed, id)
     end
 end
 
