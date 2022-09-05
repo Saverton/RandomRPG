@@ -37,7 +37,8 @@ MENU_DEFS = {
         height = MENU_HEIGHT,
         title = 'Inventory',
         selections = {},
-        selectors = {{pos = 1, selected = false, text = '\'esc\' to exit', onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}}
+        selectors = {{pos = 1, selected = false, text = '\'esc\' to exit', 
+            onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}}
     },
     ['inventory_item'] = {
         x = MENU_X + MENU_WIDTH + 5,
@@ -83,6 +84,38 @@ MENU_DEFS = {
                     menu.selections = menu.parent:getSelections()
                 end
             }
+        }
+    },
+    ['quest'] = {
+        x = MENU_X,
+        y = MENU_Y,
+        width = MENU_WIDTH,
+        height = MENU_HEIGHT,
+        title = 'Quests',
+        selections = {},
+        selectors = {{pos = 1, selected = false, text = '\'esc\' to exit', 
+            onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}}
+    },
+    ['quest_item'] = {
+        x = MENU_X + MENU_WIDTH + 5,
+        y = MENU_Y + MENU_HEIGHT / 2,
+        width = 50,
+        height = 100,
+        title = 'Quest',
+        selections = {
+            Selection('Info', function(menuState) 
+                local menu = menuState.menu
+                local quest = menuState.player.quests[GetIndex(menuState.player.quests, menu.selections[menu.selectors[menu.selector].pos].name)].questRef
+                gStateStack:push(DialogueState(quest.quest.name .. ': ' .. quest:stringQuest() .. '\nRewards: ' .. quest:stringReward())) 
+            end),
+            Selection('Abandon', function(menuState) 
+                local menu = menuState.menu
+                local quest = menuState.player.quests[GetIndex(menuState.player.quests, menu.selections[menu.selectors[menu.selector].pos].name)]
+                table.remove(menuState.player.quests, GetIndex(menuState.player.quests, quest.name))
+                table.remove(menu.selections, menu.selectors[menu.selector].pos)
+                gStateStack:pop()
+            end),
+            Selection('Back', function() gStateStack:pop() end)
         }
     }
 }

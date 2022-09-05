@@ -141,5 +141,5 @@ PICKUP_RENDER_RANGE = 15
 DESPAWN_TIMER = 2
 
 NPC_CAP = 3
-NPC_TYPES = {'shop', 'test', 'quest'}
+NPC_TYPES = {'quest'}
 NPC_NAMES = {'Dorfinkle', 'Adronian', 'Quandale', 'Steve', 'Terrence', 'Dumbledalf', 'Frippin', 'Zink'}

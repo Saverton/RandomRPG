@@ -9,7 +9,7 @@ function InventoryState:init(def, player)
     self.player = player
 
     local selectionList = {}
-    local fun = function() gStateStack:push(MenuState(MENU_DEFS['inventory_item'], {parent = self, x = 5})) end
+    local fun = function() gStateStack:push(MenuState(MENU_DEFS['inventory_item'], {parent = self})) end
 
     for i, slot in ipairs(self.player.items) do
         table.insert(selectionList, Selection(slot.name, fun, i, ITEM_DEFS[slot.name].displayName .. slot:getQuantityText()))

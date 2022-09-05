@@ -38,6 +38,8 @@ function WorldState:update(dt)
         gStateStack:push(MenuState(Menu(MENU_DEFS['pause']), {}))
     elseif love.keyboard.wasPressed('i') then
         gStateStack:push(InventoryState(MENU_DEFS['inventory'], self.level.player))
+    elseif love.keyboard.wasPressed('q') then
+        gStateStack:push(QuestState(MENU_DEFS['quest'], self.level.player))
     end
 end
 

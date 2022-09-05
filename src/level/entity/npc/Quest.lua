@@ -51,7 +51,8 @@ end
 function Quest:GenerateQuest(diff)
     local quest = {
         name = self.npc.npcName .. '\'s ' .. QUEST_TITLES[math.random(#QUEST_TITLES)],
-        flags = {}
+        flags = {},
+        questRef = self
     }
     print(quest.name)
     local numOfFlags = math.random(1, diff)
