@@ -16,8 +16,11 @@ function EnemyWalkState:init(entity)
     self.hitObstacle = false
 end
 
-function EnemyWalkState:enter(dist)
-    self.distanceToTravel = dist or math.random(1, 5)
+function EnemyWalkState:enter(params)
+    if params == nil then
+        params = {}
+    end
+    self.distanceToTravel = params.dist or math.random(1, 5)
     self.distanceTraveled = 0
 end
 

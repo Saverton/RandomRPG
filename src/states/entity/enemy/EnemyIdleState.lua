@@ -12,8 +12,11 @@ function EnemyIdleState:init(entity)
     self.waitTime = math.random(1, 10)
 end
 
-function EnemyIdleState:enter(time)
-    self.waitTime = time or math.random(1, 10)
+function EnemyIdleState:enter(params)
+    if params == nil then
+        params = {}
+    end
+    self.waitTime = params.time or math.random(1, 10)
 end
 
 function EnemyIdleState:update(dt)
@@ -33,6 +36,6 @@ function EnemyIdleState:processAI()
             self.entity:changeState('walk')
         end
     else
-        self.entity:changeState('walk', 0)
+        self.entity:changeState('walk', {dist = 0})
     end
 end

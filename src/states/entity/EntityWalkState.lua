@@ -56,7 +56,7 @@ function EntityWalkState:update(dt)
         if self.entity.target ~= nil then
             self.hitObstacle = true
         else
-            self.entity:changeState('idle', 1)
+            self.entity:changeState('idle', {time = 1})
         end
     end
 end

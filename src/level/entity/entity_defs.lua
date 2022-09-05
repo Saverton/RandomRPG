@@ -164,15 +164,36 @@ NPC_DEFS = {
             }, 
             ['idle-right'] = {
                 texture = 'npc',
-                frames = {2}
+                frames = {4}
             },
             ['idle-up'] = {
                 texture = 'npc',
-                frames = {3}
+                frames = {7}
             },
             ['idle-left'] = {
                 texture = 'npc',
-                frames = {4},
+                frames = {10},
+                xScale = -1
+            },
+            ['walk-down'] = {
+                texture = 'npc',
+                frames = {1, 2, 1, 3},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['walk-right'] = {
+                texture = 'npc',
+                frames = {4, 5, 4, 6},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['walk-up'] = {
+                texture = 'npc',
+                frames = {7, 8, 7, 9},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['walk-left'] = {
+                texture = 'npc',
+                frames = {4, 5, 4, 6},
+                interval = DEFAULT_ANIMATION_SPEED,
                 xScale = -1
             }
         },
@@ -184,6 +205,7 @@ NPC_DEFS = {
         end,
         isDespawnable = function(timesInteractedWith)
             return (timesInteractedWith >= 2)
-        end
+        end,
+        speed = 16,
     }
 }

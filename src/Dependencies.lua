@@ -32,6 +32,9 @@ require 'src/states/entity/player/PlayerWalkState'
 require 'src/states/entity/enemy/EnemyIdleState'
 require 'src/states/entity/enemy/EnemyWalkState'
 
+require 'src/states/entity/npc/NPCIdleState' 
+require 'src/states/entity/npc/NPCWalkState'
+
 require 'src/level/Level' 
 require 'src/level/Camera'
 
