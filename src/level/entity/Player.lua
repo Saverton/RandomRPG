@@ -16,6 +16,8 @@ function Player:init(def, level, pos, off)
 
     self.hpBar = ProgressBar(PLAYER_BAR_X, PLAYER_HP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {1, 0, 0, 1})
     self.magicBar = ProgressBar(PLAYER_BAR_X, PLAYER_MAGIC_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 0, 1, 1})
+
+    self.quests = def.quests or {{name = 'golbin', {flag = 'kill goblin', counter = 1}}}
 end
 
 function Player:update(dt)
@@ -125,4 +127,18 @@ function Player:interactWithNPC(checkBox)
         end
     end
     return false
+end
+
+function Player:updateFlags(checkFlags)
+    for i, quest in pairs(self.quests) do
+        for j, flag in pairs(quest) do
+            for k, check in pairs(checkFlags) do
+                if flag.flag == check then
+                    flag.counter = flag.counter - 1
+                end
+            end
+        end
+    end
+
+    print_r(self.quests)
 end

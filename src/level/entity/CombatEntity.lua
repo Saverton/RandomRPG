@@ -260,3 +260,8 @@ function CombatEntity:useMagic(amount)
     end
     return false
 end
+
+function CombatEntity:dies()
+    self.onDeath(self, self.level)
+    self.level:throwFlags({'kill entity', 'kill ' .. self.name})
+end

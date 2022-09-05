@@ -26,6 +26,8 @@ function Level:init(map, player, enemySpawner)
 
     self.npcManager = NPCManager({}, self)
 
+    self.flags = {}
+
     Timer.every(10, function() return self.enemySpawner:spawnEnemies() end)
 end
 
@@ -63,8 +65,21 @@ function Level:render()
     self.npcManager:render(self.camera)
 
     self.player:render(self.camera)
+
+    if #self.flags > 0 then
+        self.player:updateFlags(self.flags)
+    end
+    self.flags = {}
 end
 
 function Level:getRandomCoord()
     return math.random(2, self.map.size), math.random(2, self.map.size)
+end
+
+function Level:throwFlags(flags)
+    print('threw flag')
+    for i, flag in pairs(flags) do
+        table.insert(self.flags, flag)
+    end
+    print_r(self.flags)
 end

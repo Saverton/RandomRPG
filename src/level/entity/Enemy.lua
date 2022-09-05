@@ -56,3 +56,8 @@ function Enemy:render(camera)
     local onScreenY = math.floor(self.y - camera.y + self.yOffset - 4)
     self.hpBar:render((self.currenthp / self:getHp()), onScreenX, onScreenY)
 end
+
+function Enemy:dies()
+    self.level:throwFlags{'kill enemy'}
+    CombatEntity.dies(self)
+end
