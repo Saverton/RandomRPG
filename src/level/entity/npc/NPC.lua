@@ -13,6 +13,12 @@ function NPC:init(def, level, pos, off, manager)
     self.timesInteractedWith = 0
     self.isDespawnable = def.isDespawnable
 
+    if def.shop ~= nil then
+        self.shop = Shop(def.shop, self)
+    elseif def.quest ~= nil then
+        self.quest = def.quest or nil
+    end
+
     self.stateMachine = StateMachine({
         ['idle'] = function() return NPCIdleState(self) end,
         ['walk'] = function() return NPCWalkState(self) end
@@ -30,6 +36,8 @@ function NPC:update(dt)
         if self.despawnTimer == 0 then
             self.manager:clearDespawned()
         end
+    elseif self.isDespawnable(self) then
+        self:despawn()
     end
 end
 
@@ -38,7 +46,7 @@ function NPC:despawn()
 end
 
 function NPC:interact(player)
-    self.onInteract(player)
+    self.onInteract(player, self)
 
     self.timesInteractedWith = self.timesInteractedWith + 1
 end

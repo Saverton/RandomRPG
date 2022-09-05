@@ -120,7 +120,7 @@ end
 function Player:interactWithNPC(checkBox)
     for i, npc in pairs(self.level.npcManager.npcs) do
         if npc.despawnTimer == -1 and Collide(npc, checkBox) then
-            npc:interact(self)
+            npc:interact(self, npc)
             return true
         end
     end

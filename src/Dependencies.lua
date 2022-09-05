@@ -58,8 +58,11 @@ require 'src/level/entity/EnemySpawner'
 require 'src/level/entity/Enemy'
 require 'src/level/entity/Effect'
 require 'src/level/entity/effect_defs'
-require 'src/level/entity/NPC'
-require 'src/level/entity/NPCManager'
+
+require 'src/level/entity/npc/NPC'
+require 'src/level/entity/npc/NPCManager'
+require 'src/level/entity/npc/Shop'
+require 'src/level/entity/npc/Quest'
 
 require 'src/level/entity/projectile/projectile_defs'
 require 'src/level/entity/projectile/Projectile'

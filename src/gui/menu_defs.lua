@@ -69,5 +69,20 @@ MENU_DEFS = {
             end),
             Selection('Back', function() gStateStack:pop() end)
         }
+    },
+    ['shop'] = {
+        x = MENU_X,
+        y = MENU_Y,
+        width = MENU_WIDTH,
+        height = MENU_HEIGHT,
+        title = 'Shop',
+        selectors = {
+            {pos = 1, selected = false, text = 'Pick an item to purchase',
+                onChoose = function(pos, menu)
+                    menu.selections[pos].onSelect()
+                    menu.selections = menu.parent:getSelections()
+                end
+            }
+        }
     }
 }

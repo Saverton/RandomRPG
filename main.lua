@@ -3,11 +3,11 @@
     @author Saverton
 ]]
 
+love.graphics.setDefaultFilter('nearest', 'nearest')
 require 'src/Dependencies'
 
 function love.load()
     love.window.setTitle('Random RPG')
-    love.graphics.setDefaultFilter('nearest', 'nearest')
     math.randomseed(os.time())
 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {

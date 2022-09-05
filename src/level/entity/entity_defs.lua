@@ -203,8 +203,66 @@ NPC_DEFS = {
                 DialogueState('Hello, I am Test NPC.')
             )
         end,
-        isDespawnable = function(timesInteractedWith)
-            return (timesInteractedWith >= 2)
+        isDespawnable = function(npc)
+            return (npc.timesInteractedWith >= 2)
+        end,
+        speed = 16,
+    },
+    ['shop'] = {
+        name = 'shop',
+        displayName = 'Shop NPC',
+        width = 16,
+        height = 16,
+        animations = {
+            ['idle-down'] = {
+                texture = 'npc',
+                frames = {1}
+            }, 
+            ['idle-right'] = {
+                texture = 'npc',
+                frames = {4}
+            },
+            ['idle-up'] = {
+                texture = 'npc',
+                frames = {7}
+            },
+            ['idle-left'] = {
+                texture = 'npc',
+                frames = {10},
+                xScale = -1
+            },
+            ['walk-down'] = {
+                texture = 'npc',
+                frames = {1, 2, 1, 3},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['walk-right'] = {
+                texture = 'npc',
+                frames = {4, 5, 4, 6},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['walk-up'] = {
+                texture = 'npc',
+                frames = {7, 8, 7, 9},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['walk-left'] = {
+                texture = 'npc',
+                frames = {4, 5, 4, 6},
+                interval = DEFAULT_ANIMATION_SPEED,
+                xScale = -1
+            }
+        },
+        startAnim = 'idle-down',
+        shop = {
+            size = 3,
+            itemPool = {'ammo', 'health', 'sword'}
+        },
+        onInteract = function(player, npc)
+            npc.shop:open(player)
+        end,
+        isDespawnable = function(npc)
+            return (npc.shop:getNumItems() == 0)
         end,
         speed = 16,
     }
