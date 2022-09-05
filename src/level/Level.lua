@@ -24,11 +24,13 @@ function Level:init(map, player, enemySpawner)
 
     self.camera = Camera(self.player, self)
 
+    self.npcManager = NPCManager({}, self)
+
     Timer.every(10, function() return self.enemySpawner:spawnEnemies() end)
 end
 
 function Level:getPlayerSpawnSpace()
-    local x, y = self:getRandomCoord()
+    local x, y = 11, 11 -- self:getRandomCoord()
 
     while not self.map:isSpawnableSpace(x, y) do
         x, y = self:getRandomCoord()
@@ -41,6 +43,8 @@ function Level:update(dt)
     self.map:update(dt)
 
     self.enemySpawner:update(dt)
+
+    self.npcManager:update(dt)
 
     self.player:update(dt)
 
@@ -55,6 +59,8 @@ function Level:render()
     self.pickupManager:render(self.camera)
 
     self.enemySpawner:render(self.camera)
+
+    self.npcManager:render(self.camera)
 
     self.player:render(self.camera)
 end

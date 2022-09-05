@@ -55,6 +55,8 @@ require 'src/level/entity/EnemySpawner'
 require 'src/level/entity/Enemy'
 require 'src/level/entity/Effect'
 require 'src/level/entity/effect_defs'
+require 'src/level/entity/NPC'
+require 'src/level/entity/NPCManager'
 
 require 'src/level/entity/projectile/projectile_defs'
 require 'src/level/entity/projectile/Projectile'
@@ -87,6 +89,7 @@ gTextures = {
     ['effects'] = love.graphics.newImage('graphics/effects/effects.png'),
     ['items'] = love.graphics.newImage('graphics/items/items.png'),
     ['edges'] = love.graphics.newImage('graphics/map/edges.png'),
+    ['npc'] = love.graphics.newImage('graphics/entities/npc.png')
 }
 
 gFrames = {
@@ -101,7 +104,8 @@ gFrames = {
     ['items'] = GenerateQuads(gTextures['items'], 16, 16),
     ['tome'] = GenerateQuads(gTextures['tome'], 16, 16),
     ['fireball'] = GenerateQuads(gTextures['fireball'], 16, 16),
-    ['edges'] = GenerateQuads(gTextures['edges'], 16, 16)
+    ['edges'] = GenerateQuads(gTextures['edges'], 16, 16),
+    ['npc'] = GenerateQuads(gTextures['npc'], 16, 16)
 }
 
 gFonts = {

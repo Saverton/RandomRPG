@@ -27,9 +27,15 @@ function Player:update(dt)
         self:translateHeldItem(yScroll) 
     end
 
-    -- if space is pressed, launch a sword.
+    -- if space is pressed, use current item or interact with npcs/features
     if self.canUseItem and love.keyboard.wasPressed('space') then
-        self:useHeldItem()
+        local checkBox = {x = self.x + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]][1] * TILE_SIZE) - ((TILE_SIZE - self.width) / 2),
+            y = self.y + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]][2] * TILE_SIZE),
+            width = TILE_SIZE, height = TILE_SIZE
+        }
+        if self:interactWithNPC(checkBox) then
+        elseif self:useHeldItem() then
+        end
     end
 
     --check for death
@@ -46,6 +52,13 @@ function Player:render(camera)
     -- love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, PLAYER_WIDTH, PLAYER_HEIGHT
 
     self:renderGui()
+
+    -- debug: render player interaction box
+    --local checkBox = {x = self.x + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]][1] * TILE_SIZE) - ((TILE_SIZE - self.width) / 2),
+    --    y = self.y + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]][2] * TILE_SIZE),
+    --    width = TILE_SIZE, height = TILE_SIZE
+    --}
+    --love.graphics.rectangle('line', checkBox.x - camera.x, checkBox.y - camera.y, checkBox.width, checkBox.height)
 end
 
 function Player:renderGui()
@@ -102,4 +115,14 @@ function Player:sortInventory(sortList)
     end
 
     self.items = newItems
+end
+
+function Player:interactWithNPC(checkBox)
+    for i, npc in pairs(self.level.npcManager.npcs) do
+        if npc.despawnTimer == -1 and Collide(npc, checkBox) then
+            npc:interact(self)
+            return true
+        end
+    end
+    return false
 end

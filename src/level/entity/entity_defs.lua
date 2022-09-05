@@ -150,3 +150,40 @@ ENTITY_DEFS = {
 
     }
 }
+
+NPC_DEFS = {
+    ['test'] = {
+        name = 'test',
+        displayName = 'Test NPC',
+        width = 16,
+        height = 16,
+        animations = {
+            ['idle-down'] = {
+                texture = 'npc',
+                frames = {1}
+            }, 
+            ['idle-right'] = {
+                texture = 'npc',
+                frames = {2}
+            },
+            ['idle-up'] = {
+                texture = 'npc',
+                frames = {3}
+            },
+            ['idle-left'] = {
+                texture = 'npc',
+                frames = {4},
+                xScale = -1
+            }
+        },
+        startAnim = 'idle-down',
+        onInteract = function(player)
+            gStateStack:push(
+                DialogueState('Hello, I am Test NPC.')
+            )
+        end,
+        isDespawnable = function(timesInteractedWith)
+            return (timesInteractedWith >= 2)
+        end
+    }
+}

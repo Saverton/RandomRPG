@@ -35,5 +35,4 @@ function EnemyIdleState:processAI()
     else
         self.entity:changeState('walk', 0)
     end
-    
 end
