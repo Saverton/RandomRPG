@@ -21,6 +21,7 @@ require 'src/states/game/DialogueState'
 require 'src/states/game/MenuState'
 require 'src/states/game/InventoryState'
 require 'src/states/game/QuestState'
+require 'src/states/game/ConfirmState'
 
 require 'src/states/entity/EntityBaseState' 
 require 'src/states/entity/EntityIdleState' 
@@ -96,7 +97,8 @@ gTextures = {
     ['effects'] = love.graphics.newImage('graphics/effects/effects.png'),
     ['items'] = love.graphics.newImage('graphics/items/items.png'),
     ['edges'] = love.graphics.newImage('graphics/map/edges.png'),
-    ['npc'] = love.graphics.newImage('graphics/entities/npc.png')
+    ['npc'] = love.graphics.newImage('graphics/entities/npc.png'),
+    ['selector'] = love.graphics.newImage('graphics/gui/selector.png')
 }
 
 gFrames = {
@@ -112,7 +114,8 @@ gFrames = {
     ['tome'] = GenerateQuads(gTextures['tome'], 16, 16),
     ['fireball'] = GenerateQuads(gTextures['fireball'], 16, 16),
     ['edges'] = GenerateQuads(gTextures['edges'], 16, 16),
-    ['npc'] = GenerateQuads(gTextures['npc'], 16, 16)
+    ['npc'] = GenerateQuads(gTextures['npc'], 16, 16),
+    ['selector'] = GenerateQuads(gTextures['selector'], 16, 16)
 }
 
 gFonts = {

@@ -134,9 +134,31 @@ function Player:updateFlags(checkFlags)
         for j, flag in pairs(quest.flags) do
             for k, check in pairs(checkFlags) do
                 if flag.flag == check then
-                    flag.counter = flag.counter - 1
+                    flag.counter = math.max(0, flag.counter - 1)
                 end
             end
         end
     end
+end
+
+function Player:giveQuest(quest)
+    if #self.quests < QUEST_LIMIT then
+        table.insert(self.quests, quest)
+        return true
+    end
+    return false
+end
+
+function Player:stringQuestProgress(quest)
+    local string = ' ' 
+
+    for i, flag in pairs(quest.flags) do
+        if i > 1 then
+            string = string .. ', '
+        end
+        string = string .. flag.flag .. ' (' .. flag.counter .. ' remaining)'
+    end
+    string = string .. '.'
+
+    return string
 end

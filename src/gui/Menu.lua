@@ -71,7 +71,11 @@ function Menu:render()
             self.width - (2 * SELECTION_MARGIN), 'left')
         for k, selector in pairs(self.selectors) do
             if (k == self.selector or selector.selected) and selector.pos == i then
-                love.graphics.rectangle('line', x - 1, y - 1, self.width - (SELECTION_MARGIN * 2) + 2, SELECTION_HEIGHT)
+                love.graphics.draw(gTextures['selector'], gFrames['selector'][1], x - 20, y - 4)
+                love.graphics.draw(gTextures['selector'], gFrames['selector'][1], x + self.width + 20 - (2 * SELECTION_MARGIN), y - 4, 0, -1, 1)
+                love.graphics.setColor(1, 1, 0, 0.5)
+                love.graphics.rectangle('line', math.floor(x), math.floor(y), self.width - (2 * SELECTION_MARGIN), SELECTION_HEIGHT)
+                love.graphics.setColor(1, 1, 1, 1)
             end
         end
     end

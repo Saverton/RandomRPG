@@ -143,3 +143,5 @@ DESPAWN_TIMER = 2
 NPC_CAP = 3
 NPC_TYPES = {'quest'}
 NPC_NAMES = {'Dorfinkle', 'Adronian', 'Quandale', 'Steve', 'Terrence', 'Dumbledalf', 'Frippin', 'Zink'}
+
+QUEST_LIMIT = 2

@@ -25,8 +25,12 @@ MENU_DEFS = {
         selections = {
             Selection('Resume', function() gStateStack:pop() end),
             Selection('Exit to Title', function() 
-                gStateStack:pop()
-                gStateStack:pop()
+                gStateStack:push(ConfirmState(MENU_DEFS['confirm'], {
+                    onConfirm = function() 
+                        gStateStack:pop()
+                        gStateStack:pop()
+                    end
+                }))
             end)
         }
     },
@@ -64,9 +68,13 @@ MENU_DEFS = {
                 gStateStack:pop()
             end),
             Selection('Delete', function(menuState) 
-                table.remove(menuState.menu.selections, menuState.menu.selectors[menuState.menu.selector].pos)
-                menuState:updateInventory()
-                gStateStack:pop()
+                gStateStack:push(ConfirmState(MENU_DEFS['confirm'], {
+                    onConfirm = function() 
+                        table.remove(menuState.menu.selections, menuState.menu.selectors[menuState.menu.selector].pos)
+                        menuState:updateInventory()
+                        gStateStack:pop()
+                    end
+                }))
             end),
             Selection('Back', function() gStateStack:pop() end)
         }
@@ -99,23 +107,67 @@ MENU_DEFS = {
     ['quest_item'] = {
         x = MENU_X + MENU_WIDTH + 5,
         y = MENU_Y + MENU_HEIGHT / 2,
-        width = 50,
+        width = 75,
         height = 100,
         title = 'Quest',
         selections = {
             Selection('Info', function(menuState) 
                 local menu = menuState.menu
-                local quest = menuState.player.quests[GetIndex(menuState.player.quests, menu.selections[menu.selectors[menu.selector].pos].name)].questRef
+                local playerQuest = menuState.player.quests[GetIndex(menuState.player.quests, menu.selections[menu.selectors[menu.selector].pos].name)]
+                local quest = playerQuest.questRef
+                gStateStack:push(DialogueState('Progress: ' .. menuState.player:stringQuestProgress(playerQuest)))
                 gStateStack:push(DialogueState(quest.quest.name .. ': ' .. quest:stringQuest() .. '\nRewards: ' .. quest:stringReward())) 
             end),
             Selection('Abandon', function(menuState) 
-                local menu = menuState.menu
-                local quest = menuState.player.quests[GetIndex(menuState.player.quests, menu.selections[menu.selectors[menu.selector].pos].name)]
-                table.remove(menuState.player.quests, GetIndex(menuState.player.quests, quest.name))
-                table.remove(menu.selections, menu.selectors[menu.selector].pos)
-                gStateStack:pop()
+                gStateStack:push(ConfirmState(MENU_DEFS['confirm'], {
+                    onConfirm = function() 
+                        local menu = menuState.menu
+                        local quest = menuState.player.quests[GetIndex(menuState.player.quests, menu.selections[menu.selectors[menu.selector].pos].name)]
+                        table.remove(menuState.player.quests, GetIndex(menuState.player.quests, quest.name))
+                        table.remove(menu.selections, menu.selectors[menu.selector].pos)
+                        gStateStack:pop()
+                    end
+                }))
             end),
             Selection('Back', function() gStateStack:pop() end)
         }
+    },
+    ['confirm'] = {
+        x = VIRTUAL_WIDTH / 2 - 40,
+        y = VIRTUAL_HEIGHT / 2 - 40,
+        width = 80,
+        height = 80,
+        title = 'Confirm?',
+        selections = {
+            Selection('Yes', function(menuState) 
+                gStateStack:pop()
+                menuState.onConfirm()
+            end),
+            Selection('No', function(menuState)
+                gStateStack:pop()
+                menuState.onDeny()
+            end)
+        },
+        selectors = {{pos = 1, selected = false, text = '\'esc\' = No', 
+            onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}}
+    },
+    ['quest_confirm'] = {
+        x = VIRTUAL_WIDTH / 2 - 40,
+        y = VIRTUAL_HEIGHT / 2 - 40,
+        width = 80,
+        height = 80,
+        title = 'Accept?',
+        selections = {
+            Selection('Yes', function(menuState) 
+                gStateStack:pop()
+                menuState.onConfirm()
+            end),
+            Selection('No', function(menuState)
+                gStateStack:pop()
+                menuState.onDeny()
+            end)
+        },
+        selectors = {{pos = 1, selected = false, text = 'Accept this quest?', 
+            onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}}
     }
 }

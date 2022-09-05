@@ -11,25 +11,42 @@ function Quest:init(def, diff, npc)
     self.rewards = def.rewards or self:GenerateReward(diff)
     self.quest = def.quest or self:GenerateQuest(diff)
     self.completed = false
+    self.denied = false
 
     self.startText = (def.startText or 'Can you do a job for me?') .. self:stringQuest()
     self.endText = (def.endText or 'Thank You! Here is a reward:') .. self:stringReward()
-    self.refuseText = def.refuseText or 'Oh, it seems you already have my quest.'
+    self.acceptText = def.acceptText or 'Thanks! Speak to me as soon as you are done!'
+    self.refuseText = def.refuseText or 'Pity! Now I have to fade away into nothingness.'
+    self.ongoingText = (def.ongoingText or 'Oh, it seems you already have my quest. Here is a reminder: ') .. self:stringQuest()
 end
 
 function Quest:check(player)
     if not ContainsName(player.quests, self.quest.name) then
-        table.insert(player.quests, self.quest)
+        gStateStack:push(DialogueState(self.startText, self.npc.animations['idle-down'].texture, 1))
+        gStateStack:push(ConfirmState(MENU_DEFS['quest_confirm'], {
+            onConfirm = function() 
+                gStateStack:pop()
+                if player:giveQuest(self.quest) then
+                    gStateStack:push(DialogueState(self.acceptText, self.npc.animations['idle-down'].texture, 1))
+                else
+                    gStateStack:push(DialogueState('You can only have ' .. tostring(QUEST_LIMIT) .. ' active quests!', self.npc.animations['idle-down'].texture, 1))
+                end
+            end,
+            onDeny = function()
+                gStateStack:pop()
+                self.denied = true
+                gStateStack:push(DialogueState(self.refuseText, self.npc.animations['idle-down'].texture, 1))
+            end
+        }))
     elseif self:checkCompletion(player) then
         self:reward(player)
         self.completed = true
         gStateStack:push(DialogueState(self.endText, self.npc.animations['idle-down'].texture, 1))
         return
     else
-        gStateStack:push(DialogueState(self.refuseText, self.npc.animations['idle-down'].texture, 1))
+        gStateStack:push(DialogueState(self.ongoingText, self.npc.animations['idle-down'].texture, 1))
+        gStateStack:push(DialogueState(self.startText, self.npc.animations['idle-down'].texture, 1))
     end
-
-    gStateStack:push(DialogueState(self.startText, self.npc.animations['idle-down'].texture, 1))
 end
 
 function Quest:checkCompletion(player)
@@ -54,7 +71,6 @@ function Quest:GenerateQuest(diff)
         flags = {},
         questRef = self
     }
-    print(quest.name)
     local numOfFlags = math.random(1, diff)
 
     for i = 1, numOfFlags, 1 do

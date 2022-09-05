@@ -317,7 +317,7 @@ NPC_DEFS = {
             npc.quest:check(player)
         end,
         isDespawnable = function(npc)
-            return (npc.quest.completed)
+            return (npc.quest.completed or npc.quest.denied)
         end,
         speed = 16,
     }
