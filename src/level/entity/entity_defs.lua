@@ -265,5 +265,61 @@ NPC_DEFS = {
             return (npc.shop:getNumItems() == 0)
         end,
         speed = 16,
+    },
+    ['quest'] = {
+        name = 'quest',
+        displayName = 'Quest NPC',
+        width = 16,
+        height = 16,
+        animations = {
+            ['idle-down'] = {
+                texture = 'npc',
+                frames = {1}
+            }, 
+            ['idle-right'] = {
+                texture = 'npc',
+                frames = {4}
+            },
+            ['idle-up'] = {
+                texture = 'npc',
+                frames = {7}
+            },
+            ['idle-left'] = {
+                texture = 'npc',
+                frames = {10},
+                xScale = -1
+            },
+            ['walk-down'] = {
+                texture = 'npc',
+                frames = {1, 2, 1, 3},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['walk-right'] = {
+                texture = 'npc',
+                frames = {4, 5, 4, 6},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['walk-up'] = {
+                texture = 'npc',
+                frames = {7, 8, 7, 9},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['walk-left'] = {
+                texture = 'npc',
+                frames = {4, 5, 4, 6},
+                interval = DEFAULT_ANIMATION_SPEED,
+                xScale = -1
+            }
+        },
+        startAnim = 'idle-down',
+        quest = {
+        },
+        onInteract = function(player, npc)
+            npc.quest:check(player)
+        end,
+        isDespawnable = function(npc)
+            return (npc.quest.completed)
+        end,
+        speed = 16,
     }
 }

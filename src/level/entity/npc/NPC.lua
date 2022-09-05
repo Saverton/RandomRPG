@@ -16,7 +16,7 @@ function NPC:init(def, level, pos, off, manager)
     if def.shop ~= nil then
         self.shop = Shop(def.shop, self)
     elseif def.quest ~= nil then
-        self.quest = def.quest or nil
+        self.quest = Quest(def.quest, self)
     end
 
     self.stateMachine = StateMachine({

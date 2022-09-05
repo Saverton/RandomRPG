@@ -10,7 +10,7 @@ function NPCManager:init(npcs, level)
 
     self.level = level
 
-    table.insert(self.npcs, NPC(NPC_DEFS['shop'], self.level, {x = 10, y = 10}, {x = 0, y = 0}, self))
+    table.insert(self.npcs, NPC(NPC_DEFS['quest'], self.level, {x = 10, y = 10}, {x = 0, y = 0}, self))
 end
 
 function NPCManager:update(dt)
