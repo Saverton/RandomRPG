@@ -146,8 +146,92 @@ ENTITY_DEFS = {
         end,
         push = 8
     },
-    ['rock_golem'] = {
-
+    ['skeleton'] = {
+        name = 'skeleton',
+        displayName = 'Skeleton',
+        width = 12,
+        height = 12,
+        xOffset = -2,
+        yOffset = -4,
+        animations = {
+            ['idle-right'] = {
+                texture = 'skeleton',
+                frames = {5}
+            },
+            ['idle-down'] = {
+                texture = 'skeleton',
+                frames = {1}
+            },
+            ['idle-left'] = {
+                texture = 'skeleton',
+                frames = {5},
+                xScale = -1
+            },
+            ['idle-up'] = {
+                texture = 'skeleton',
+                frames = {9}
+            },
+            ['walk-right'] = {
+                texture = 'skeleton',
+                frames = {5, 6, 5, 7},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['walk-down'] = {
+                texture = 'skeleton',
+                frames = {1, 2, 1, 3},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['walk-left'] = {
+                texture = 'skeleton',
+                frames = {5, 6, 5, 7},
+                interval = DEFAULT_ANIMATION_SPEED,
+                xScale = -1
+            },
+            ['walk-up'] = {
+                texture = 'skeleton',
+                frames = {9, 10, 9, 11},
+                interval = DEFAULT_ANIMATION_SPEED
+            },
+            ['interact-down'] = {
+                texture = 'skeleton',
+                frames = {4}
+            },
+            ['interact-right'] = {
+                texture = 'skeleton',
+                frames = {8}
+            },
+            ['interact-up'] = {
+                texture = 'skeleton',
+                frames = {12}
+            },
+            ['interact-left'] = {
+                texture = 'skeleton',
+                frames = {8},
+                xScale = -1
+            }
+        },
+        hp = 5,
+        speed = 16,
+        agroSpeedBoost = 2,
+        defense = 1,
+        attack = 1,
+        agroDist = 7,
+        onDeath = function(entity, level) 
+            love.audio.play(gSounds['enemy_dies_1'])
+            if math.random(1, 3) == 1 then
+                table.insert(level.pickupManager.pickups, Pickup('ammo', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height) - 8, math.random(2, 5)))
+            end
+            if math.random(1, 3) ~= 1 then
+                table.insert(level.pickupManager.pickups, Pickup('money', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height), math.random(1, 2)))
+            end
+            if math.random(1, 5) == 1 then
+                table.insert(level.pickupManager.pickups, Pickup('health', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height) - 8, 1))
+            end
+        end,
+        push = 8,
+        items = {
+            {name = 'sword', quantity = 1}
+        }
     }
 }
 

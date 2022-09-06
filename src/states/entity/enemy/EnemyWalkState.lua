@@ -48,27 +48,31 @@ function EnemyWalkState:processAI()
         self.distanceTraveled = 0
         self.entity:changeAnimation('walk-' .. self.entity.direction)
     elseif self.entity.target ~= nil and self.distanceTraveled >= self.distanceToTravel then
-        -- seek out target
-        local targetXDif = self.entity.x - self.entity.target.x
-        local targetYDif = self.entity.y - self.entity.target.y
-        if math.abs(targetXDif) > math.abs(targetYDif) then
-            --move on x axis
-            if targetXDif < 0 then
-                self.entity.direction = 'right'
-            else
-                self.entity.direction = 'left'
-            end
+        if #self.entity.items > 0 and GetDistance(self.entity, self.entity.target) <= 32 then
+            self.entity:useHeldItem()
         else
-            --move on y axis
-            if targetYDif < 0 then
-                self.entity.direction = 'down'
+            -- seek out target
+            local targetXDif = self.entity.x - self.entity.target.x
+            local targetYDif = self.entity.y - self.entity.target.y
+            if math.abs(targetXDif) > math.abs(targetYDif) then
+                --move on x axis
+                if targetXDif < 0 then
+                    self.entity.direction = 'right'
+                else
+                    self.entity.direction = 'left'
+                end
             else
-                self.entity.direction = 'up'
+                --move on y axis
+                if targetYDif < 0 then
+                    self.entity.direction = 'down'
+                else
+                    self.entity.direction = 'up'
+                end
             end
+            self.distanceToTravel = 1
+            self.distanceTraveled = 0
+            self.entity:changeAnimation('walk-' .. self.entity.direction)
         end
-        self.distanceToTravel = 1
-        self.distanceTraveled = 0
-        self.entity:changeAnimation('walk-' .. self.entity.direction)
     else
         self.entity:changeState('idle')
     end      

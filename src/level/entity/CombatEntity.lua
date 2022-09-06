@@ -45,6 +45,9 @@ function CombatEntity:init(def, level, pos, off)
     self.pushed = false
     self.pushdx = 0
     self.pushdy = 0
+
+    -- level system
+    self.statLevel = level.player.statLevel or 1
 end
 
 function CombatEntity:update(dt)
@@ -60,25 +63,6 @@ function CombatEntity:update(dt)
     end
     for i, index in pairs(removeEffect) do
         table.remove(self.effects, index)
-    end
-
-    --update projectiles
-    local removeIndex = {}
-    for i, projectile in pairs(self.projectiles) do
-        projectile:update(dt)
-        for i, entity in pairs(self.level.enemySpawner.entities) do
-            if projectile.type ~= 'none' and not entity.invincible and Collide(projectile, entity) then
-                projectile:hit(entity, self.attackboost)
-            end
-        end
-        if projectile.hits <= 0 or projectile.lifetime <= 0 or GetDistance(projectile, self.level.player) > DESPAWN_RANGE or 
-            projectile:checkCollision(self.level.map) then
-            table.insert(removeIndex, i)
-        end
-    end
-    --remove dead projectiles
-    for i, index in pairs(removeIndex) do
-        table.remove(self.projectiles, index)
     end
 
     --update flash counter and invincibleTimer
@@ -253,4 +237,8 @@ end
 function CombatEntity:dies()
     self.onDeath(self, self.level)
     self.level:throwFlags({'kill entity', 'kill ' .. self.name})
+end
+
+function UpdateStats()
+    
 end

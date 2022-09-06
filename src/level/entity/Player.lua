@@ -6,6 +6,8 @@
 Player = Class{__includes = CombatEntity}
 
 function Player:init(def, level, pos, off)
+    self.statLevel = def.statLevel or 1
+
     CombatEntity.init(self, def, level, pos, off)
 
     self.pickupRange = 16
@@ -21,6 +23,13 @@ function Player:init(def, level, pos, off)
 end
 
 function Player:update(dt)
+    --check for death
+    if self.currenthp <= 0 then
+        self:onDeath()
+        gStateStack:pop()
+        gStateStack:push(GameOverState())
+    end
+
     CombatEntity.update(self, dt)
 
     -- navigate between held items
@@ -40,11 +49,23 @@ function Player:update(dt)
         end
     end
 
-    --check for death
-    if self.currenthp <= 0 then
-        self:onDeath()
-        gStateStack:pop()
-        gStateStack:push(GameOverState())
+    --update projectiles
+    local removeIndex = {}
+    for i, projectile in pairs(self.projectiles) do
+        projectile:update(dt)
+        for i, entity in pairs(self.level.enemySpawner.entities) do
+            if projectile.type ~= 'none' and not entity.invincible and Collide(projectile, entity) then
+                projectile:hit(entity, self.attackboost)
+            end
+        end
+        if projectile.hits <= 0 or projectile.lifetime <= 0 or GetDistance(projectile, self.level.player) > DESPAWN_RANGE or 
+            projectile:checkCollision(self.level.map) then
+            table.insert(removeIndex, i)
+        end
+    end
+    --remove dead projectiles
+    for i, index in pairs(removeIndex) do
+        table.remove(self.projectiles, index)
     end
 end
 

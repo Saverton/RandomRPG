@@ -39,6 +39,11 @@ function Entity:init(def, level, pos, off)
 
     -- item management
     self.items = {}
+    if def.items ~= nil then
+        for i, item in ipairs(def.items) do
+            table.insert(self.items, Item(item.name, self, item.quantity))
+        end
+    end
     self.heldItem = 1
     self.ammo = START_AMMO
 end

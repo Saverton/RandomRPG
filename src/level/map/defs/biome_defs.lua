@@ -41,7 +41,12 @@ BIOME_DEFS = {
                 proc = 1
             }
         },
-        enemies = {},
+        enemies = {
+            {
+                name = 'skeleton',
+                proc = 1
+            }
+        },
         spawnRate = 0.05,
         features = {
             {

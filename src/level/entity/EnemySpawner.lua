@@ -17,16 +17,16 @@ end
 
 function EnemySpawner:update(dt)
     for i, enemy in pairs(self.entities) do
-        enemy:update(dt)
-    end
-
-    for i, enemy in pairs(self.entities) do
         if GetDistance(self.level.player, enemy) > DESPAWN_RANGE then
             table.remove(self.entities, i)
         elseif enemy.currenthp <= 0 then
             enemy:dies()
             table.remove(self.entities, i)
         end
+    end
+
+    for i, enemy in pairs(self.entities) do
+        enemy:update(dt)
     end
 end
 
@@ -68,7 +68,8 @@ function EnemySpawner:spawnEnemies()
                         )
                         entity.stateMachine = StateMachine({
                             ['idle'] = function() return EnemyIdleState(entity) end,
-                            ['walk'] = function() return EnemyWalkState(entity, self.level) end
+                            ['walk'] = function() return EnemyWalkState(entity, self.level) end,
+                            ['interact'] = function() return EntityInteractState(entity) end
                         })
                         entity:changeState('idle')
                         table.insert(self.entities, entity)
