@@ -24,6 +24,7 @@ require 'src/states/game/MenuState'
 require 'src/states/game/InventoryState'
 require 'src/states/game/QuestState'
 require 'src/states/game/ConfirmState'
+require 'src/states/game/DeathAnimationState'
 
 require 'src/states/entity/EntityBaseState' 
 require 'src/states/entity/EntityIdleState' 

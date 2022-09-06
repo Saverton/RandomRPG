@@ -16,6 +16,8 @@ function Player:init(def, level, pos, off)
 
     self.hotbar = self:getHotbar(3)
 
+    self.render = true
+
     self.hpBar = ProgressBar(PLAYER_BAR_X, PLAYER_HP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {1, 0, 0, 1})
     self.magicBar = ProgressBar(PLAYER_BAR_X, PLAYER_MAGIC_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 0, 1, 1})
 
@@ -30,8 +32,8 @@ function Player:update(dt)
     --check for death
     if self.currenthp <= 0 then
         self:onDeath()
-        gStateStack:pop()
-        gStateStack:push(GameOverState())
+        self.render = false
+        gStateStack:push(DeathAnimationState(self, self.x - self.level.camera.x + self.xOffset, self.y - self.level.camera.y + self.yOffset))
     end
 
     CombatEntity.update(self, dt)
@@ -75,7 +77,9 @@ function Player:update(dt)
 end
 
 function Player:render(camera)
-    CombatEntity.render(self, camera)
+    if self.render then
+        CombatEntity.render(self, camera)
+    end
     -- debug: render player bounds
     -- love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, PLAYER_WIDTH, PLAYER_HEIGHT
 

@@ -13,6 +13,8 @@ function GameOverState:update(dt)
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
         love.audio.play(gSounds['menu_select_1'])
         gStateStack:pop()
+        gStateStack:pop()
+        gStateStack:pop()
     end
 
 end

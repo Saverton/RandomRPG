@@ -59,6 +59,11 @@ ANIMATION_DEFS = {
             texture = 'player',
             frames = {13},
             xScale = -1
+        },
+        ['spin'] = {
+            texture = 'player',
+            frames = {1, 5, 9, 16},
+            interval = 0.1
         }
     },
     ['goblin'] = {
