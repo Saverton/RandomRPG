@@ -98,7 +98,11 @@ gTextures = {
     ['items'] = love.graphics.newImage('graphics/items/items.png'),
     ['edges'] = love.graphics.newImage('graphics/map/edges.png'),
     ['npc'] = love.graphics.newImage('graphics/entities/npc.png'),
-    ['selector'] = love.graphics.newImage('graphics/gui/selector.png')
+    ['selector'] = love.graphics.newImage('graphics/gui/selector.png'),
+    ['skeleton'] = love.graphics.newImage('graphics/entities/skeleton.png'),
+    ['ice'] = love.graphics.newImage('graphics/entities/projectiles/ice.png'),
+    ['wooden_sword'] = love.graphics.newImage('graphics/entities/projectiles/wooden_sword.png'),
+    ['battle_axe'] = love.graphics.newImage('graphics/entities/projectiles/battle_axe.png'),
 }
 
 gFrames = {
@@ -115,7 +119,11 @@ gFrames = {
     ['fireball'] = GenerateQuads(gTextures['fireball'], 16, 16),
     ['edges'] = GenerateQuads(gTextures['edges'], 16, 16),
     ['npc'] = GenerateQuads(gTextures['npc'], 16, 16),
-    ['selector'] = GenerateQuads(gTextures['selector'], 16, 16)
+    ['selector'] = GenerateQuads(gTextures['selector'], 16, 16),
+    ['skeleton'] = GenerateQuads(gTextures['skeleton'], 16, 16),
+    ['ice'] = GenerateQuads(gTextures['ice'], 16, 16),
+    ['wooden_sword'] = GenerateQuads(gTextures['wooden_sword'], 16, 16),
+    ['battle_axe'] = GenerateQuads(gTextures['battle_axe'], 16, 16)
 }
 
 gFonts = {
