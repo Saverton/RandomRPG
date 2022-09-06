@@ -133,5 +133,117 @@ ITEM_DEFS = {
         useTime = 0,
         onUse = function() end,
         onPickup = function(holder, quantity) holder.money = holder.money + quantity end
+    },
+    ['ice_tome'] = {
+        name = 'ice',
+        displayName = 'Tome of Ice',
+        description = 'This magic tome summons an Ice beam that can slow down enemies for a couple seconds, requires mana to use',
+        type = 'magic',
+        stackable = false,
+        cost = 1,
+        texture = 'items',
+        frame = 6,
+        price = {
+            buy = 20,
+            sell = 10
+        },
+        useRate = 1,
+        useTime = 0.5,
+        onUse = function(item, holder, target)
+            love.audio.play(gSounds['hit_1'])
+            holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
+            local pos = GetStartPosition(holder)
+
+            table.insert(holder.projectiles, Projectile('tome', {x = pos.x, y = pos.y}, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
+            table.insert(holder.projectiles, Projectile('ice', {x = pos.x, y = pos.y}, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
+        end
+    },
+    ['wooden_sword'] = {
+        name = 'wooden_sword',
+        displayName = 'Wooden Sword',
+        description = 'A basic and weak sword, swipes outward and can strike multiple enemies.',
+        type = 'melee',
+        stackable = false,
+        texture = 'items',
+        frame = 7,
+        price = {
+            buy = 5,
+            sell = 1
+        },
+        useRate = 0.4,
+        useTime = 0.3,
+        onUse = function(item, holder, target)
+            love.audio.play(gSounds['sword_swing_1'])
+            holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
+            local pos = GetStartPosition(holder)
+
+            table.insert(holder.projectiles, Projectile('wooden_sword', {
+                x = pos.x,
+                y = pos.y
+            }, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
+        end
+    },
+    ['battle_axe'] = {
+        name = 'battle_axe',
+        displayName = 'Battle Axe',
+        description = 'A strong melee weapon. Swipes outward, like a sword, but slower. Can be used to remove trees.',
+        type = 'melee',
+        stackable = false,
+        texture = 'items',
+        frame = 8,
+        price = {
+            buy = 30,
+            sell = 15
+        },
+        useRate = 1.5,
+        useTime = 0.5,
+        onUse = function(item, holder, target)
+            love.audio.play(gSounds['sword_swing_1'])
+            holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
+            local pos = GetStartPosition(holder)
+
+            table.insert(holder.projectiles, Projectile('battle_axe', {
+                x = pos.x,
+                y = pos.y
+            }, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
+        end
+    },
+    ['wood'] = {
+        name = 'wood',
+        displayName = 'Wood',
+        description = 'Wood can be used to make bridges.',
+        type = 'item',
+        stackable = true,
+        texture = 'items',
+        frame = 10,
+        price = {
+            buy = 1,
+            sell = 0
+        },
+        useRate = 0,
+        useTime = 0,
+        onUse = function()
+            --place bridge?
+        end
+    },
+    ['hp_upgrade'] = {
+        name = 'hp_upgrade',
+        displayName = 'Health Upgrade',
+        description = 'A Health pickup that increases the player\'s maximum health.',
+        type = 'pickup',
+        stackable = false,
+        texture = 'items',
+        frame = 4,
+        price = {
+            buy = 30,
+            sell = 0
+        },
+        useRate = 0,
+        useTime = 0,
+        onUse = function() end,
+        onPickup = function(holder, quantity) 
+            holder.hp = holder.hp + 1 
+            holder.currenthp = holder.currenthp + 1
+        end
     }
 }

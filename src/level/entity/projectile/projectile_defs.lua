@@ -68,5 +68,44 @@ PROJECTILE_DEFS = {
         push = 0,
         type = 'none',
         inflictions = {}
+    },
+    ['ice'] = {
+        width = 16,
+        height = 16,
+        texture = 'ice',
+        frames = {1, 2, 3, 4},
+        damage = 0,
+        speed = 64,
+        lifetime = 1,
+        hits = 3,
+        push = 4,
+        type = 'magic',
+        inflictions = {{name = 'freeze', duration = 5}}
+    },
+    ['wooden_sword'] = {
+        width = 16,
+        height = 16,
+        texture = 'wooden_sword',
+        frames = {1, 2, 3, 4},
+        damage = 1,
+        speed = 0,
+        lifetime = 0.3,
+        hits = 5,
+        push = 8,
+        type = 'melee',
+        inflictions = {}
+    },
+    ['battle_axe'] = {
+        width = 16,
+        height = 16,
+        texture = 'battle_axe',
+        frames = {1, 2, 3, 4},
+        damage = 4,
+        speed = 0,
+        lifetime = 0.5,
+        hits = 5,
+        push = 10,
+        type = 'melee',
+        inflictions = {}
     }
 }

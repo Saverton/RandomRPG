@@ -20,6 +20,10 @@ function Player:init(def, level, pos, off)
     self.magicBar = ProgressBar(PLAYER_BAR_X, PLAYER_MAGIC_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 0, 1, 1})
 
     self.quests = def.quests or {}
+
+    if #self.items == 0 then
+        self:getItem(Item('wooden_sword', self, 1))
+    end
 end
 
 function Player:update(dt)
