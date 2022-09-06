@@ -108,6 +108,22 @@ function Entity:render(camera)
 
     --debug: draw hitbox
     --love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, self.width, self.height)
+
+    --print simple string if showstats is true
+    local mouseX, mouseY = push:toGame(love.mouse.getPosition())
+    if (mouseX ~= nil and mouseY ~= nil) and Collide(self, {x = mouseX + camera.x, y = mouseY + camera.y, width = 1, height = 1}) then
+        love.graphics.setFont(gFonts['small'])
+        local message = ''
+        if self.currenthp ~= nil then
+            message = ENTITY_DEFS[self.name].displayName .. ': (' .. tostring(self.currenthp) .. ' / ' .. tostring(self:getHp()) .. ')'
+        elseif self.npcName ~= nil then
+            message = self.npcName
+        end
+        love.graphics.setColor({0, 0, 0, 1})
+        love.graphics.print(message, math.floor(self.x - camera.x + 1), math.floor(self.y - camera.y - 15 + 1))
+        love.graphics.setColor({1, 1, 1, 1})
+        love.graphics.print(message, math.floor(self.x - camera.x), math.floor(self.y - camera.y - 15))
+    end
 end
 
 function Entity:checkCollision()

@@ -91,6 +91,20 @@ function Player:renderGui()
     --render health and magic bars
     self.hpBar:render((self.currenthp / self:getHp()))
     self.magicBar:render((self.currentmagic / self:getMagic()))
+
+    --print tiptext
+    if #self.items > 0 then
+        love.graphics.setColor(0, 0, 0, 1)
+        love.graphics.print('\'i\' = Open Inventory', TIPTEXT_X + 1, TIPTEXT_Y + 1)
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.print('\'i\' = Open Inventory', TIPTEXT_X, TIPTEXT_Y)
+    end
+    if #self.quests > 0 then
+        love.graphics.setColor(0, 0, 0, 1)
+        love.graphics.print('\'q\' = Open Quests', TIPTEXT_X + 1, TIPTEXT_Y + 1 - 10)
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.print('\'q\' = Open Quests', TIPTEXT_X, TIPTEXT_Y - 10)
+    end
 end
 
 function Player:translateHeldItem(amount)

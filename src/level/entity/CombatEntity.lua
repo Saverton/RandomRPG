@@ -190,17 +190,6 @@ function CombatEntity:render(camera)
     for i, effect in pairs(self.effects) do
         effect:render(camera)
     end
-
-    --print simple string if showstats is true
-    local mouseX, mouseY = push:toGame(love.mouse.getPosition())
-    if Collide(self, {x = mouseX + camera.x, y = mouseY + camera.y, width = 1, height = 1}) then
-        love.graphics.setFont(gFonts['small'])
-        local message = ENTITY_DEFS[self.name].displayName .. ': (' .. tostring(self.currenthp) .. ' / ' .. tostring(self:getHp()) .. ')'
-        love.graphics.setColor({0, 0, 0, 1})
-        love.graphics.print(message, math.floor(self.x - camera.x + 1), math.floor(self.y - camera.y - 15 + 1))
-        love.graphics.setColor({1, 1, 1, 1})
-        love.graphics.print(message, math.floor(self.x - camera.x), math.floor(self.y - camera.y - 15))
-    end
 end
 
 function CombatEntity:getDamage()

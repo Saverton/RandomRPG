@@ -152,7 +152,7 @@ ENTITY_DEFS = {
 }
 
 NPC_DEFS = {
-    ['test'] = {
+    ['tips'] = {
         name = 'test',
         displayName = 'Test NPC',
         width = 16,
@@ -200,11 +200,11 @@ NPC_DEFS = {
         startAnim = 'idle-down',
         onInteract = function(player)
             gStateStack:push(
-                DialogueState('Hello, I am Test NPC.')
+                DialogueState(TIPS(math.random(#TIPS)))
             )
         end,
         isDespawnable = function(npc)
-            return (npc.timesInteractedWith >= 2)
+            return (npc.timesInteractedWith >= 1)
         end,
         speed = 16,
     },

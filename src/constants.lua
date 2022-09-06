@@ -141,7 +141,13 @@ PICKUP_RENDER_RANGE = 15
 DESPAWN_TIMER = 2
 
 NPC_CAP = 3
-NPC_TYPES = {'shop', 'quest', 'test'}
+NPC_TYPES = {'shop', 'quest', 'tips'}
 NPC_NAMES = {'Dorfinkle', 'Adronian', 'Quandale', 'Steve', 'Terrence', 'Dumbledalf', 'Frippin', 'Zink'}
 
 QUEST_LIMIT = 2
+
+TIPS = {
+    'There are three different weapons scattered across the world.',
+    'The Tome of Fire doesn\'t harm enemies directly, but it sets them on fire for a brief time.',
+    'There aren\' too many tips for me to give you, the game is still rather simple.'
+}
