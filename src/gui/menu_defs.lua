@@ -178,7 +178,7 @@ MENU_DEFS = {
             end),
             Selection('Leave', function(menuState)
                 gStateStack:pop()
-                gStateStack:push(DialogueState(menuState.endText, menuState.npc.animations['idle-down'].texture, 1))
+                gStateStack:push(DialogueState(menuState.endText, menuState.npc.animator.texture, 1))
             end)
         }
     },
@@ -247,7 +247,8 @@ MENU_DEFS = {
             Selection('About', function(menuState) 
                 local menu = menuState.menu
                 local item = ITEM_DEFS[menu.selections[menu.selectors[menu.selector].pos].name]
-                    gStateStack:push(DialogueState(item.displayName .. ': ' .. item.description .. '\nSale Price: $' .. tostring(math.max(item.price.sell + menuState.shop.sellDiff, 0)), item.texture, item.frame)) 
+                    gStateStack:push(DialogueState(item.displayName .. ': ' .. item.description .. '\nSale Price: $' .. tostring(math.max(item.price.sell + menuState.shop.sellDiff, 0)),
+                        item.texture, item.frame)) 
             end),
             Selection('Back', function(menuState) gStateStack:pop() end)
         }

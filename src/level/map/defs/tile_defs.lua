@@ -15,11 +15,13 @@ TILE_DEFS = {
         texture = 'tiles',
         frame = 3,
         barrier = true,
-        onInteract = function(player, tiles, col, row)
+        animated = true,
+        onInteract = function(player, map, col, row)
+            local tiles = map.tileMap.tiles
             local item = player.items[player.heldItem]
             if item ~= nil and item.name == 'wood' and item.quantity > 0 then
                 item.quantity = math.max(0, item.quantity - 1)
-                tiles[col][row] = Tile(TILE_DEFS['bridge'], col, row)
+                tiles[col][row] = Tile('bridge', col, row)
                 player:updateInventory()
             end
         end
@@ -34,7 +36,7 @@ TILE_DEFS = {
     ['bridge'] = {
         name = 'bridge',
         texture = 'tiles',
-        frame = 4,
+        frame = 5,
         barrier = false,
         onInteract = function() end
     }

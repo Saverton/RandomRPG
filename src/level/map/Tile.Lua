@@ -6,13 +6,11 @@
 
 Tile = Class{}
 
-function Tile:init(def, x, y)
-    self.name = def.name
+function Tile:init(name, x, y)
+    self.name = name
     self.mapX = x
     self.mapY = y
-    self.texture = def.texture
-    self.frame = def.frame
-    self.barrier = def.barrier
+    self.barrier = TILE_DEFS[self.name].barrier
 end
 
 function Tile:update(dt) end
@@ -20,5 +18,5 @@ function Tile:update(dt) end
 function Tile:render(camx, camy)
     local x = ((self.mapX - 1) * TILE_SIZE) - camx
     local y = ((self.mapY - 1) * TILE_SIZE) - camy
-    love.graphics.draw(gTextures[self.texture], gFrames[self.texture][self.frame], x, y)
+    love.graphics.draw(gTextures[TILE_DEFS[self.name].texture], gFrames[TILE_DEFS[self.name].texture][TILE_DEFS[self.name].frame], x, y)
 end

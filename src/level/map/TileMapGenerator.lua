@@ -100,13 +100,18 @@ function GenerateBiomes(size)
     return biomeMap
 end
 
-function GenerateTiles(size, biomeMap)
+function GenerateTiles(size, biomeMap, tileAnimators)
     local tileMap = {}
 
     for col = 1, size, 1 do
         tileMap[col] = {}
         for row = 1, size, 1 do
-            tileMap[col][row] = Tile(TILE_DEFS[biomeMap[col][row]:getTile()], col, row)
+            local name = biomeMap[col][row]:getTile()
+            if TILE_DEFS[name].animated then
+                tileMap[col][row] = AnimatedTile(name, col, row, tileAnimators[name])
+            else
+                tileMap[col][row] = Tile(name, col, row)
+            end
         end
     end
 

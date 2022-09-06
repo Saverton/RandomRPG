@@ -12,9 +12,16 @@ function Map:init(name, size, tileMap, featureMap)
     self.size = size or DEFAULT_MAP_SIZE
     self.tileMap = tileMap or TileMap(self.size)
     self.featureMap = featureMap or GenerateFeatures(self.size, self.tileMap)
+    self.animatedFeatures = GetAnimatedFeatures(self.featureMap)
 end
 
 function Map:update(dt)
+    self.tileMap:update(dt) 
+
+    -- update feature animations
+    for i, feature in pairs(self.animatedFeatures) do
+        feature:update(dt)
+    end
     -- update features
     for i, col in pairs(self.featureMap) do
         for j, feature in pairs(col) do

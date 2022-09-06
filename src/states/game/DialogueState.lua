@@ -15,6 +15,7 @@ function DialogueState:init(text, texture, frame, onExit)
 
     if texture == nil or frame == nil then
         self.imagebox = nil
+        print('texture or frame is nil')
     else
         self.imagebox = Imagebox(IMAGEBOX_X, IMAGEBOX_Y, IMAGEBOX_SIZE, IMAGEBOX_SIZE, texture, frame)
     end

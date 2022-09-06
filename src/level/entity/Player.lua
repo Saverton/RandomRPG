@@ -185,10 +185,10 @@ function Player:interactWithMap(checkBox)
             local feature = map.featureMap[col][row]
             local tile = map.tileMap.tiles[col][row]
             if feature ~= nil and Collide(checkBox, mapBox) then
-                FEATURE_DEFS[feature.name].onInteract(self, map.featureMap, col, row)
+                FEATURE_DEFS[feature.name].onInteract(self, map, col, row)
             end
             if Collide(checkBox, mapBox) then
-                TILE_DEFS[tile.name].onInteract(self, map.tileMap.tiles, col, row)
+                TILE_DEFS[tile.name].onInteract(self, map, col, row)
             end
         end
     end

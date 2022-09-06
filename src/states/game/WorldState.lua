@@ -46,3 +46,7 @@ end
 function WorldState:render()
     self.level:render()
 end
+
+function WorldState:exit()
+    Timer.clear()
+end

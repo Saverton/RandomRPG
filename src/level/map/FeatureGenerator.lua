@@ -17,7 +17,11 @@ function GenerateFeatures(size, tileMap)
                 for i, feature in pairs(tileMap.biomes[col][row].features) do
                     sum = sum + feature.proc 
                     if num < sum then
-                        featureMap[col][row] = Feature(feature.name, col, row)
+                        if FEATURE_DEFS[feature.name].animated then
+                            featureMap[col][row] = AnimatedFeature(feature.name, col, row, Animation(feature.name, 'main'))
+                        else
+                            featureMap[col][row] = Feature(feature.name, col, row)
+                        end
                         break
                     end
                 end
@@ -26,4 +30,18 @@ function GenerateFeatures(size, tileMap)
     end
 
     return featureMap
+end
+
+function GetAnimatedFeatures(featureMap)
+    local animatedFeatures = {}
+
+    for i, col in pairs(featureMap) do
+        for k, feature in pairs(col) do
+            if FEATURE_DEFS[feature.name].animated then
+                table.insert(animatedFeatures, feature)
+            end
+        end
+    end
+
+    return animatedFeatures
 end

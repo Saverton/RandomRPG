@@ -9,6 +9,7 @@ Entity = Class{}
 
 function Entity:init(def, level, pos, off)
     self.name = def.name
+    self.animName = def.animName or self.name
 
     --positioning
     if off == nil then
@@ -32,10 +33,7 @@ function Entity:init(def, level, pos, off)
     self.stateMachine = nil
 
     -- animations
-    self.animations = def.animations
-    self.currentAnimation = def.startAnim or 'idle-right'
-    self.currentFrame = 1
-    self.timeSinceLastFrame = 0
+    self.animator = Animation(self.animName, def.startAnim or 'idle-right')
 
     -- item management
     self.items = {}
@@ -52,9 +50,7 @@ function Entity:update(dt)
     self.stateMachine:update(dt)
 
     -- update frames
-    if #self.animations[self.currentAnimation].frames > 1 then
-        self:updateFrames(dt)
-    end
+    self.animator:update(dt)
 
     --update Item use timer
     if self.items[self.heldItem] ~= nil then
@@ -67,22 +63,7 @@ function Entity:changeState(name, params)
 end
 
 function Entity:changeAnimation(name)
-    assert(self.animations[name])
-    self.currentAnimation = name
-    self.currentFrame = 1
-end
-
-function Entity:updateFrames(dt)
-    -- update frames
-    local anim = self.animations[self.currentAnimation]
-    self.timeSinceLastFrame = self.timeSinceLastFrame + dt
-    if self.timeSinceLastFrame > anim.interval then
-        self.currentFrame = self.currentFrame + 1
-        if self.currentFrame > #anim.frames then
-            self.currentFrame = 1
-        end
-        self.timeSinceLastFrame = 0
-    end
+    self.animator:changeAnimation(name)
 end
 
 function Entity:collides(target)
@@ -98,14 +79,10 @@ end
 function Entity:render(camera)
     -- determine the on screen x and y positions of the entity based on the camera, any
     -- drawing manipulation, or offsets.
-    local xScale = self.animations[self.currentAnimation].xScale or 1
-    local onScreenX = math.floor(self.x - camera.x + (xScale * self.xOffset))
+    local onScreenX = math.floor(self.x - camera.x + self.xOffset)
     local onScreenY = math.floor(self.y - camera.y + self.yOffset)
 
     -- fix player sprite being off by 16 pixels
-    if xScale == -1 then
-        onScreenX = onScreenX + self.width
-    end
 
     -- draw the entity at the specified x and y.
     self.stateMachine:render(onScreenX, onScreenY)

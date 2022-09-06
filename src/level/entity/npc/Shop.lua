@@ -42,7 +42,7 @@ end
 
 function Shop:open(player)
     self.player = player
-    gStateStack:push(DialogueState(self.startText, self.npc.animations['idle-down'].texture, 1, function() gStateStack:push(
+    gStateStack:push(DialogueState(self.startText, self.npc.animator.texture, 1, function() gStateStack:push(
         MenuState(MENU_DEFS['shop_main'], {parent = self})) end))
 end
 
@@ -93,10 +93,10 @@ function Shop:transaction(index)
                 item.quantity = math.max(0, item.quantity - 1)
             end
         else
-            gStateStack:push(DialogueState(self.notEnoughText, self.npc.animations['idle-down'].texture, 1))
+            gStateStack:push(DialogueState(self.notEnoughText, self.npc.animator.texture, 1))
         end
     else
-        gStateStack:push(DialogueState(self.soldOutText, self.npc.animations['idle-down'].texture, 1))
+        gStateStack:push(DialogueState(self.soldOutText, self.npc.animator.texture, 1))
     end
 end
 

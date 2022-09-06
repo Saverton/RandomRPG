@@ -14,63 +14,6 @@ ENTITY_DEFS = {
         height = PLAYER_HEIGHT,
         xOffset = PLAYER_X_OFFSET,
         yOffset = PLAYER_Y_OFFSET,
-        animations = {
-            ['idle-right'] = {
-                texture = 'player',
-                frames = {1}
-            },
-            ['idle-down'] = {
-                texture = 'player',
-                frames = {5}
-            },
-            ['idle-left'] = {
-                texture = 'player',
-                frames = {1},
-                xScale = -1
-            },
-            ['idle-up'] = {
-                texture = 'player',
-                frames = {9}
-            },
-            ['walk-right'] = {
-                texture = 'player',
-                frames = {1, 2, 3, 4},
-                interval = PLAYER_ANIMATION_SPEED
-            },
-            ['walk-down'] = {
-                texture = 'player',
-                frames = {5, 6, 7, 8},
-                interval = PLAYER_ANIMATION_SPEED
-            },
-            ['walk-left'] = {
-                texture = 'player',
-                frames = {1, 2, 3, 4},
-                interval = PLAYER_ANIMATION_SPEED,
-                xScale = -1
-            },
-            ['walk-up'] = {
-                texture = 'player',
-                frames = {9, 10, 11, 12},
-                interval = PLAYER_ANIMATION_SPEED
-            },
-            ['interact-up'] = {
-                texture = 'player',
-                frames = {14},
-            },
-            ['interact-right'] = {
-                texture = 'player',
-                frames = {13},
-            },
-            ['interact-down'] = {
-                texture = 'player',
-                frames = {15},
-            },
-            ['interact-left'] = {
-                texture = 'player',
-                frames = {13},
-                xScale = -1
-            }
-        },
         hp = PLAYER_BASE_HP,
         speed = PLAYER_BASE_SPEED,
         defense = PLAYER_BASE_DEFENSE,
@@ -86,46 +29,6 @@ ENTITY_DEFS = {
         height = 12,
         xOffset = -2,
         yOffset = -4,
-        animations = {
-            ['idle-right'] = {
-                texture = 'goblin',
-                frames = {1}
-            },
-            ['idle-down'] = {
-                texture = 'goblin',
-                frames = {5}
-            },
-            ['idle-left'] = {
-                texture = 'goblin',
-                frames = {1},
-                xScale = -1
-            },
-            ['idle-up'] = {
-                texture = 'goblin',
-                frames = {9}
-            },
-            ['walk-right'] = {
-                texture = 'goblin',
-                frames = {1, 2, 3, 4},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['walk-down'] = {
-                texture = 'goblin',
-                frames = {5, 6, 7, 8},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['walk-left'] = {
-                texture = 'goblin',
-                frames = {1, 2, 3, 4},
-                interval = DEFAULT_ANIMATION_SPEED,
-                xScale = -1
-            },
-            ['walk-up'] = {
-                texture = 'goblin',
-                frames = {9, 10, 11, 12},
-                interval = DEFAULT_ANIMATION_SPEED
-            }
-        },
         hp = 5,
         speed = 16,
         agroSpeedBoost = 2,
@@ -153,63 +56,6 @@ ENTITY_DEFS = {
         height = 12,
         xOffset = -2,
         yOffset = -4,
-        animations = {
-            ['idle-right'] = {
-                texture = 'skeleton',
-                frames = {5}
-            },
-            ['idle-down'] = {
-                texture = 'skeleton',
-                frames = {1}
-            },
-            ['idle-left'] = {
-                texture = 'skeleton',
-                frames = {5},
-                xScale = -1
-            },
-            ['idle-up'] = {
-                texture = 'skeleton',
-                frames = {9}
-            },
-            ['walk-right'] = {
-                texture = 'skeleton',
-                frames = {5, 6, 5, 7},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['walk-down'] = {
-                texture = 'skeleton',
-                frames = {1, 2, 1, 3},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['walk-left'] = {
-                texture = 'skeleton',
-                frames = {5, 6, 5, 7},
-                interval = DEFAULT_ANIMATION_SPEED,
-                xScale = -1
-            },
-            ['walk-up'] = {
-                texture = 'skeleton',
-                frames = {9, 10, 9, 11},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['interact-down'] = {
-                texture = 'skeleton',
-                frames = {4}
-            },
-            ['interact-right'] = {
-                texture = 'skeleton',
-                frames = {8}
-            },
-            ['interact-up'] = {
-                texture = 'skeleton',
-                frames = {12}
-            },
-            ['interact-left'] = {
-                texture = 'skeleton',
-                frames = {8},
-                xScale = -1
-            }
-        },
         hp = 5,
         speed = 16,
         agroSpeedBoost = 2,
@@ -238,53 +84,14 @@ ENTITY_DEFS = {
 NPC_DEFS = {
     ['tips'] = {
         name = 'test',
+        animName = 'npc',
         displayName = 'Test NPC',
         width = 16,
         height = 16,
-        animations = {
-            ['idle-down'] = {
-                texture = 'npc',
-                frames = {1}
-            }, 
-            ['idle-right'] = {
-                texture = 'npc',
-                frames = {4}
-            },
-            ['idle-up'] = {
-                texture = 'npc',
-                frames = {7}
-            },
-            ['idle-left'] = {
-                texture = 'npc',
-                frames = {10},
-                xScale = -1
-            },
-            ['walk-down'] = {
-                texture = 'npc',
-                frames = {1, 2, 1, 3},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['walk-right'] = {
-                texture = 'npc',
-                frames = {4, 5, 4, 6},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['walk-up'] = {
-                texture = 'npc',
-                frames = {7, 8, 7, 9},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['walk-left'] = {
-                texture = 'npc',
-                frames = {4, 5, 4, 6},
-                interval = DEFAULT_ANIMATION_SPEED,
-                xScale = -1
-            }
-        },
         startAnim = 'idle-down',
-        onInteract = function(player)
+        onInteract = function(player, npc)
             gStateStack:push(
-                DialogueState(TIPS(math.random(#TIPS)))
+                DialogueState(TIPS[math.random(#TIPS)], npc.animator.texture, 1)
             )
         end,
         isDespawnable = function(npc)
@@ -294,49 +101,10 @@ NPC_DEFS = {
     },
     ['shop'] = {
         name = 'shop',
+        animName = 'npc',
         displayName = 'Shop NPC',
         width = 16,
         height = 16,
-        animations = {
-            ['idle-down'] = {
-                texture = 'npc',
-                frames = {1}
-            }, 
-            ['idle-right'] = {
-                texture = 'npc',
-                frames = {4}
-            },
-            ['idle-up'] = {
-                texture = 'npc',
-                frames = {7}
-            },
-            ['idle-left'] = {
-                texture = 'npc',
-                frames = {10},
-                xScale = -1
-            },
-            ['walk-down'] = {
-                texture = 'npc',
-                frames = {1, 2, 1, 3},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['walk-right'] = {
-                texture = 'npc',
-                frames = {4, 5, 4, 6},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['walk-up'] = {
-                texture = 'npc',
-                frames = {7, 8, 7, 9},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['walk-left'] = {
-                texture = 'npc',
-                frames = {4, 5, 4, 6},
-                interval = DEFAULT_ANIMATION_SPEED,
-                xScale = -1
-            }
-        },
         startAnim = 'idle-down',
         shop = {
             size = 3,
@@ -352,49 +120,10 @@ NPC_DEFS = {
     },
     ['quest'] = {
         name = 'quest',
+        animName = 'npc',
         displayName = 'Quest NPC',
         width = 16,
         height = 16,
-        animations = {
-            ['idle-down'] = {
-                texture = 'npc',
-                frames = {1}
-            }, 
-            ['idle-right'] = {
-                texture = 'npc',
-                frames = {4}
-            },
-            ['idle-up'] = {
-                texture = 'npc',
-                frames = {7}
-            },
-            ['idle-left'] = {
-                texture = 'npc',
-                frames = {10},
-                xScale = -1
-            },
-            ['walk-down'] = {
-                texture = 'npc',
-                frames = {1, 2, 1, 3},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['walk-right'] = {
-                texture = 'npc',
-                frames = {4, 5, 4, 6},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['walk-up'] = {
-                texture = 'npc',
-                frames = {7, 8, 7, 9},
-                interval = DEFAULT_ANIMATION_SPEED
-            },
-            ['walk-left'] = {
-                texture = 'npc',
-                frames = {4, 5, 4, 6},
-                interval = DEFAULT_ANIMATION_SPEED,
-                xScale = -1
-            }
-        },
         startAnim = 'idle-down',
         quest = true,
         onInteract = function(player, npc)

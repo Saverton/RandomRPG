@@ -10,7 +10,5 @@ function EntityBaseState:init(entity)
 end
 
 function EntityBaseState:render(x, y)
-    local anim = self.entity.animations[self.entity.currentAnimation]
-    love.graphics.draw(gTextures[anim.texture], gFrames[anim.texture][anim.frames[self.entity.currentFrame]],
-        x, y, DEFAULT_ENTITY_ROTATION, anim.xScale, 1)
+    self.entity.animator:render(x, y)
 end
