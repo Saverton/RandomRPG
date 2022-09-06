@@ -123,7 +123,7 @@ function GenerateEdges(size, tiles)
             -- check all 4 sides
             for i = 1, 4, 1 do
                 local x, y = col + DIRECTION_COORDS[i][1], row + DIRECTION_COORDS[i][2]
-                if x >= 1 and x <= size and y >= 1 and y <= size and tiles[x][y].id ~= tiles[col][row].id then
+                if x >= 1 and x <= size and y >= 1 and y <= size and tiles[x][y].name ~= tiles[col][row].name then
                     table.insert(edgeMap[col][row], i)
                 end
             end

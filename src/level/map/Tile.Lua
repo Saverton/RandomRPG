@@ -7,7 +7,7 @@
 Tile = Class{}
 
 function Tile:init(def, x, y)
-    self.id = def.id
+    self.name = def.name
     self.mapX = x
     self.mapY = y
     self.texture = def.texture

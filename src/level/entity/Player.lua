@@ -22,7 +22,7 @@ function Player:init(def, level, pos, off)
     self.quests = def.quests or {}
 
     if #self.items == 0 then
-        self:getItem(Item('wooden_sword', self, 1))
+        self:getItem(Item('battle_axe', self, 1))
     end
 end
 
@@ -51,6 +51,7 @@ function Player:update(dt)
         if self:interactWithNPC(checkBox) then
         elseif self:useHeldItem() then
         end
+        self:interactWithMap(checkBox)
     end
 
     --update projectiles
@@ -98,6 +99,12 @@ function Player:renderGui()
         slot:render(opa)
         if self.items[i] ~= nil then
             self.items[i]:render(slot.x + 2, slot.y + 2)
+        end
+        if i == self.heldItem and self.items[self.heldItem] ~= nil then
+            love.graphics.setColor(1, 1, 1, 0.25)
+            love.graphics.rectangle('fill', slot.x, slot.y + (((ITEM_DEFS[self.items[self.heldItem].name].useRate - self.items[self.heldItem].useRate) / ITEM_DEFS[self.items[self.heldItem].name].useRate) * slot.height), 
+                slot.width, slot.height * (self.items[self.heldItem].useRate / ITEM_DEFS[self.items[self.heldItem].name].useRate))
+            love.graphics.setColor(1, 1, 1, 1)
         end
     end
 
@@ -168,6 +175,26 @@ function Player:interactWithNPC(checkBox)
     return false
 end
 
+function Player:interactWithMap(checkBox)
+    local map = self.level.map
+    local startCol = math.max(1, math.floor(checkBox.x / 16) - 1)
+    local startRow = math.max(1, math.floor(checkBox.y / 16) - 1)
+    for col = startCol, math.min(map.size, startCol + 3), 1 do
+        for row = startRow, math.min(map.size, startRow + 3), 1 do
+            print('row, col: (' .. tostring(row) .. ', ' .. tostring(col) ..')')
+            local mapBox = {x = (col - 1) * TILE_SIZE, y = (row - 1) * TILE_SIZE, width = 16, height = 16}
+            local feature = map.featureMap[col][row]
+            local tile = map.tileMap.tiles[col][row]
+            if feature ~= nil and Collide(checkBox, mapBox) then
+                FEATURE_DEFS[feature.name].onInteract(self, map.featureMap, col, row)
+            end
+            if Collide(checkBox, mapBox) then
+                TILE_DEFS[tile.name].onInteract(self, map.tileMap.tiles, col, row)
+            end
+        end
+    end
+end
+
 function Player:updateFlags(checkFlags)
     for i, quest in pairs(self.quests) do
         for j, flag in pairs(quest.flags) do
@@ -216,6 +243,14 @@ function Player:getInventorySelections(fun, shop)
     table.insert(selectionList, Selection('Close', function() gStateStack:pop() end))
 
     return selectionList
+end
+
+function Player:updateInventory()
+    for i, item in pairs(self.items) do
+        if item.quantity <= 0 then
+            table.remove(self.items, i)
+        end
+    end
 end
 
 function Player:sell(index, shop, menu)

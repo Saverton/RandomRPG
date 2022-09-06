@@ -17,7 +17,12 @@ FEATURE_DEFS = {
         name = 'tree',
         texture = 'features',
         frame = 1,
-        onInteract = function() end,
+        onInteract = function(player, featureMap, col, row) 
+            if player.items[player.heldItem].name == 'battle_axe' then
+                featureMap[col][row] = nil
+                table.insert(player.level.pickupManager.pickups, Pickup('wood', (col - 1) * TILE_SIZE, (row - 1) * TILE_SIZE))
+            end
+        end,
         isSolid = false
     },
     ['rock'] = {
@@ -26,6 +31,16 @@ FEATURE_DEFS = {
         texture = 'features',
         frame = 2,
         onInteract = function() end,
+        isSolid = true
+    },
+    ['chest'] = {
+        id = 3,
+        name = 'chest',
+        texture = 'features',
+        frame = 3,
+        onInteract = function()
+
+        end,
         isSolid = true
     }
 }
