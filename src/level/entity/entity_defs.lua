@@ -340,7 +340,7 @@ NPC_DEFS = {
         startAnim = 'idle-down',
         shop = {
             size = 3,
-            itemPool = {'ammo', 'health', 'sword'}
+            itemPool = {'ammo', 'health', 'sword', 'bow', 'battle_axe', 'hp_upgrade'}
         },
         onInteract = function(player, npc)
             npc.shop:open(player)

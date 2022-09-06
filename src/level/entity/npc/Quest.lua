@@ -124,8 +124,8 @@ function Quest:stringReward()
     return string
 end
 
-QUEST_FLAGS = {'kill enemy', 'kill goblin'}
+QUEST_FLAGS = {'kill enemy', 'kill goblin', 'kill skeleton'}
 
-QUEST_REWARDS = {'ammo', 'money', 'fire_tome', 'bow', 'sword'}
+QUEST_REWARDS = {'ammo', 'money', 'fire_tome', 'ice_tome', 'bow', 'sword', 'battle_axe', 'hp_upgrade'}
 
 QUEST_TITLES = {'Burden', 'Quest', 'Endeavor', 'Undertaking', 'Task', 'Assignment', 'Commission', 'Pursuit', 'Crusade', 'Enterprise'}
