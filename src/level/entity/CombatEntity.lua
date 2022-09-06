@@ -114,7 +114,7 @@ function CombatEntity:hurt(amount)
     if not self.invincible then
         love.audio.play(gSounds['hit_1'])
         local defense = self:getDefense()
-        if defense > amount then
+        if defense >= amount then
             defense = math.max(amount - 1, 0)
         end
         self.currenthp = math.max(0, self.currenthp - (amount - defense))
