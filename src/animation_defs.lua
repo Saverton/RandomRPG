@@ -221,5 +221,39 @@ ANIMATION_DEFS = {
             interval = 0.3,
             looping = false
         }
+    },
+    ['projectiles'] = {
+        ['wooden_sword'] = {
+            texture = 'projectiles',
+            frames = {1},
+        },
+        ['sword'] = {
+            texture = 'projectiles',
+            frames = {2},
+        },
+        ['fireball'] = {
+            texture = 'projectiles',
+            frames = {3},
+        },
+        ['ice'] = {
+            texture = 'projectiles',
+            frames = {4},
+        },
+        ['tome'] = {
+            texture = 'projectiles',
+            frames = {5},
+        },
+        ['battle_axe'] = {
+            texture = 'projectiles',
+            frames = {6},
+        },
+        ['bow'] = {
+            texture = 'projectiles',
+            frames = {7},
+        },
+        ['arrow'] = {
+            texture = 'projectiles',
+            frames = {8},
+        }
     }
 }

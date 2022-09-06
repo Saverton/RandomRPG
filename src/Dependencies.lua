@@ -93,21 +93,14 @@ gTextures = {
     ['player'] = love.graphics.newImage('graphics/entities/character.png'),
     ['tiles'] = love.graphics.newImage('graphics/map/tiles.png'),
     ['features'] = love.graphics.newImage('graphics/map/features.png'),
-    ['goblin'] = love.graphics.newImage('graphics/entities/goblin.png'),
-    ['sword'] = love.graphics.newImage('graphics/entities/projectiles/sword.png'),
-    ['bow'] = love.graphics.newImage('graphics/entities/projectiles/bow.png'),
-    ['arrow'] = love.graphics.newImage('graphics/entities/projectiles/arrow.png'),
-    ['tome'] = love.graphics.newImage('graphics/entities/projectiles/tome.png'),
-    ['fireball'] = love.graphics.newImage('graphics/entities/projectiles/fireball.png'),
     ['effects'] = love.graphics.newImage('graphics/effects/effects.png'),
     ['items'] = love.graphics.newImage('graphics/items/items.png'),
     ['edges'] = love.graphics.newImage('graphics/map/edges.png'),
     ['npc'] = love.graphics.newImage('graphics/entities/npc.png'),
     ['selector'] = love.graphics.newImage('graphics/gui/selector.png'),
-    ['skeleton'] = love.graphics.newImage('graphics/entities/skeleton.png'),
-    ['ice'] = love.graphics.newImage('graphics/entities/projectiles/ice.png'),
-    ['wooden_sword'] = love.graphics.newImage('graphics/entities/projectiles/wooden_sword.png'),
-    ['battle_axe'] = love.graphics.newImage('graphics/entities/projectiles/battle_axe.png'),
+    ['skeleton'] = love.graphics.newImage('graphics/entities/enemies/skeleton.png'),
+    ['goblin'] = love.graphics.newImage('graphics/entities/enemies/goblin.png'),
+    ['projectiles'] = love.graphics.newImage('graphics/entities/projectiles.png')
 }
 
 gFrames = {
@@ -115,20 +108,13 @@ gFrames = {
     ['tiles'] = GenerateQuads(gTextures['tiles'], TILE_SIZE, TILE_SIZE),
     ['features'] = GenerateQuads(gTextures['features'], FEATURE_SIZE, FEATURE_SIZE),
     ['goblin'] = GenerateQuads(gTextures['goblin'], 16, 16),
-    ['sword'] = GenerateQuads(gTextures['sword'], 16, 16),
-    ['bow'] = GenerateQuads(gTextures['bow'], 16, 16),
-    ['arrow'] = GenerateQuads(gTextures['arrow'], 16, 16),
     ['effects'] = GenerateQuads(gTextures['effects'], 8, 8),
     ['items'] = GenerateQuads(gTextures['items'], 16, 16),
-    ['tome'] = GenerateQuads(gTextures['tome'], 16, 16),
-    ['fireball'] = GenerateQuads(gTextures['fireball'], 16, 16),
     ['edges'] = GenerateQuads(gTextures['edges'], 16, 16),
     ['npc'] = GenerateQuads(gTextures['npc'], 16, 16),
     ['selector'] = GenerateQuads(gTextures['selector'], 16, 16),
     ['skeleton'] = GenerateQuads(gTextures['skeleton'], 16, 16),
-    ['ice'] = GenerateQuads(gTextures['ice'], 16, 16),
-    ['wooden_sword'] = GenerateQuads(gTextures['wooden_sword'], 16, 16),
-    ['battle_axe'] = GenerateQuads(gTextures['battle_axe'], 16, 16)
+    ['projectiles'] = GenerateQuads(gTextures['projectiles'], 16, 16)
 }
 
 gFonts = {

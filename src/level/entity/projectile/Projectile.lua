@@ -6,18 +6,21 @@
 
 Projectile = Class{}
 
-function Projectile:init(name, pos, dx, dy, frame)
+function Projectile:init(name, pos)
     self.name = name
 
     self.x = pos.x
     self.y = pos.y
     self.width = PROJECTILE_DEFS[self.name].width
     self.height = PROJECTILE_DEFS[self.name].height
+    self.rotation = pos.rot
+    self.ox = pos.ox or 0
+    self.oy = pos.oy or 0
 
-    self.frame = frame
+    self.animation = Animation('projectiles', self.name)
     
-    self.dx = dx * PROJECTILE_DEFS[self.name].speed
-    self.dy = dy * PROJECTILE_DEFS[self.name].speed
+    self.dx = pos.dx * PROJECTILE_DEFS[self.name].speed
+    self.dy = pos.dy * PROJECTILE_DEFS[self.name].speed
     self.lifetime = PROJECTILE_DEFS[self.name].lifetime
 
     self.damage = PROJECTILE_DEFS[self.name].damage
@@ -26,6 +29,9 @@ function Projectile:init(name, pos, dx, dy, frame)
 end
 
 function Projectile:update(dt, map)
+    -- update animation
+    self.animation:update(dt) 
+
     -- update position
     self.x = self.x + (self.dx * dt)
     self.y = self.y + (self.dy * dt) 
@@ -50,30 +56,33 @@ end
 function Projectile:render(camera)
     --debug: hitbox
     -- love.graphics.rectangle('line', math.floor(self.x - camera.x),  math.floor(self.y - camera.y), self.width, self.height)
-    love.graphics.draw(gTextures[PROJECTILE_DEFS[self.name].texture], 
-        gFrames[PROJECTILE_DEFS[self.name].texture][PROJECTILE_DEFS[self.name].frames[self.frame]],
-        math.floor(self.x - camera.x), math.floor(self.y - camera.y))
+    self.animation:render(self.x + self.ox - camera.x, self.y + self.oy - camera.y, self.rotation)
 end
 
 --gets the starting position of a projectile
 function GetStartPosition(holder)
      -- calculate starting position and rotation of the sword
-     local pos = {x = holder.x, y = holder.y, dx = 0, dy = 0}
+     local pos = {x = holder.x, y = holder.y, dx = 0, dy = 0, rot = 0, ox = 0, oy = 0}
      if holder.direction == 'up' then
          pos.x = holder.x - 3
          pos.y = holder.y - 18
          pos.dy = -1
      elseif holder.direction == 'right' then
          pos.x = holder.x + 10
+         pos.ox = 16
          pos.dx = 1
      elseif holder.direction == 'down' then
          pos.x = holder.x - 3
          pos.y = holder.y + 10
+         pos.ox = 16
+         pos.oy = 16
          pos.dy = 1
      elseif holder.direction == 'left' then
          pos.x = holder.x - 16
+         pos.oy = 16
          pos.dx = -1
      end
+     pos.rot = math.rad((DIRECTION_TO_NUM[holder.direction] - 1) * 90)
 
      return pos
 end

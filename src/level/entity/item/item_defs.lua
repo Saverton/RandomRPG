@@ -23,10 +23,7 @@ ITEM_DEFS = {
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
             local pos = GetStartPosition(holder)
 
-            table.insert(holder.projectiles, Projectile('sword', {
-                x = pos.x,
-                y = pos.y
-            }, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
+            table.insert(holder.projectiles, Projectile('sword', pos))
         end
     },
     ['bow'] = {
@@ -49,14 +46,8 @@ ITEM_DEFS = {
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
             local pos = GetStartPosition(holder)
 
-            table.insert(holder.projectiles, Projectile('bow', {
-                x = pos.x,
-                y = pos.y
-            }, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
-            table.insert(holder.projectiles, Projectile('arrow', {
-                x = pos.x,
-                y = pos.y
-            }, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
+            table.insert(holder.projectiles, Projectile('bow', pos))
+            table.insert(holder.projectiles, Projectile('arrow', pos))
         end
     },
     ['fire_tome'] = {
@@ -79,8 +70,8 @@ ITEM_DEFS = {
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
             local pos = GetStartPosition(holder)
 
-            table.insert(holder.projectiles, Projectile('tome', {x = pos.x, y = pos.y}, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
-            table.insert(holder.projectiles, Projectile('fireball', {x = pos.x, y = pos.y}, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
+            table.insert(holder.projectiles, Projectile('tome', pos))
+            table.insert(holder.projectiles, Projectile('firebal', pos))
         end
     },
     ['ammo'] = {
@@ -89,8 +80,8 @@ ITEM_DEFS = {
         description = 'Ammunition for ranged weapons.',
         type = 'pickup',
         stackable = true,
-        texture = 'arrow',
-        frame = 1,
+        texture = 'projectiles',
+        frame = 8,
         price = {
             buy = 1,
             sell = 0
@@ -154,8 +145,8 @@ ITEM_DEFS = {
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
             local pos = GetStartPosition(holder)
 
-            table.insert(holder.projectiles, Projectile('tome', {x = pos.x, y = pos.y}, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
-            table.insert(holder.projectiles, Projectile('ice', {x = pos.x, y = pos.y}, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
+            table.insert(holder.projectiles, Projectile('tome', pos))
+            table.insert(holder.projectiles, Projectile('ice', pos))
         end
     },
     ['wooden_sword'] = {
@@ -177,10 +168,7 @@ ITEM_DEFS = {
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
             local pos = GetStartPosition(holder)
 
-            table.insert(holder.projectiles, Projectile('wooden_sword', {
-                x = pos.x,
-                y = pos.y
-            }, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
+            table.insert(holder.projectiles, Projectile('wooden_sword', pos))
         end
     },
     ['battle_axe'] = {
@@ -202,10 +190,7 @@ ITEM_DEFS = {
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
             local pos = GetStartPosition(holder)
 
-            table.insert(holder.projectiles, Projectile('battle_axe', {
-                x = pos.x,
-                y = pos.y
-            }, pos.dx, pos.dy, DIRECTION_TO_NUM[holder.direction]))
+            table.insert(holder.projectiles, Projectile('battle_axe', pos))
         end
     },
     ['wood'] = {
@@ -222,9 +207,7 @@ ITEM_DEFS = {
         },
         useRate = 0,
         useTime = 0,
-        onUse = function()
-            --place bridge?
-        end
+        onUse = function() end
     },
     ['hp_upgrade'] = {
         name = 'hp_upgrade',

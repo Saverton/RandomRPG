@@ -58,5 +58,5 @@ function Animation:render(x, y, rot, xScale, yScale)
         y = y + 16
     end
     love.graphics.draw(gTextures[self.texture], gFrames[self.texture][self.frames[self.currentFrame]], 
-        (x or 0), (y or 0), (rot or 0), (xScale or 1) * (ANIMATION_DEFS[self.name][self.currentAnimation].xScale or 1), (yScale or 1))
+        math.floor(x or 0), math.floor(y or 0), (rot or 0), (xScale or 1) * (ANIMATION_DEFS[self.name][self.currentAnimation].xScale or 1), (yScale or 1))
 end
