@@ -11,7 +11,7 @@ ANIMATION_DEFS = {
         },
         ['idle-down'] = {
             texture = 'player',
-            frames = {5}
+            frames = {4}
         },
         ['idle-left'] = {
             texture = 'player',
@@ -20,49 +20,49 @@ ANIMATION_DEFS = {
         },
         ['idle-up'] = {
             texture = 'player',
-            frames = {9}
+            frames = {7}
         },
         ['walk-right'] = {
             texture = 'player',
-            frames = {1, 2, 3, 4},
+            frames = {1, 2, 1, 3},
             interval = PLAYER_ANIMATION_SPEED
         },
         ['walk-down'] = {
             texture = 'player',
-            frames = {5, 6, 7, 8},
+            frames = {4, 5, 4, 6},
             interval = PLAYER_ANIMATION_SPEED
         },
         ['walk-left'] = {
             texture = 'player',
-            frames = {1, 2, 3, 4},
+            frames = {1, 2, 1, 3},
             interval = PLAYER_ANIMATION_SPEED,
             xScale = -1
         },
         ['walk-up'] = {
             texture = 'player',
-            frames = {9, 10, 11, 12},
+            frames = {7, 8, 7, 9},
             interval = PLAYER_ANIMATION_SPEED
         },
         ['interact-up'] = {
             texture = 'player',
-            frames = {14},
+            frames = {11},
         },
         ['interact-right'] = {
             texture = 'player',
-            frames = {13},
+            frames = {10},
         },
         ['interact-down'] = {
             texture = 'player',
-            frames = {15},
+            frames = {12},
         },
         ['interact-left'] = {
             texture = 'player',
-            frames = {13},
+            frames = {10},
             xScale = -1
         },
         ['spin'] = {
             texture = 'player',
-            frames = {1, 5, 9, 16},
+            frames = {1, 4, 7, 13},
             interval = 0.1
         }
     },
@@ -73,7 +73,7 @@ ANIMATION_DEFS = {
         },
         ['idle-down'] = {
             texture = 'goblin',
-            frames = {5}
+            frames = {4}
         },
         ['idle-left'] = {
             texture = 'goblin',
@@ -82,34 +82,34 @@ ANIMATION_DEFS = {
         },
         ['idle-up'] = {
             texture = 'goblin',
-            frames = {9}
+            frames = {7}
         },
         ['walk-right'] = {
             texture = 'goblin',
-            frames = {1, 2, 3, 4},
+            frames = {1, 2, 1, 3},
             interval = DEFAULT_ANIMATION_SPEED
         },
         ['walk-down'] = {
             texture = 'goblin',
-            frames = {5, 6, 7, 8},
+            frames = {4, 5, 4, 6},
             interval = DEFAULT_ANIMATION_SPEED
         },
         ['walk-left'] = {
             texture = 'goblin',
-            frames = {1, 2, 3, 4},
+            frames = {1, 2, 1, 3},
             interval = DEFAULT_ANIMATION_SPEED,
             xScale = -1
         },
         ['walk-up'] = {
             texture = 'goblin',
-            frames = {9, 10, 11, 12},
+            frames = {7, 8, 7, 9},
             interval = DEFAULT_ANIMATION_SPEED
         }
     },
     ['skeleton'] = {
         ['idle-right'] = {
             texture = 'skeleton',
-            frames = {5}
+            frames = {4}
         },
         ['idle-down'] = {
             texture = 'skeleton',
@@ -117,16 +117,16 @@ ANIMATION_DEFS = {
         },
         ['idle-left'] = {
             texture = 'skeleton',
-            frames = {5},
+            frames = {4},
             xScale = -1
         },
         ['idle-up'] = {
             texture = 'skeleton',
-            frames = {9}
+            frames = {7}
         },
         ['walk-right'] = {
             texture = 'skeleton',
-            frames = {5, 6, 5, 7},
+            frames = {4, 5, 4, 6},
             interval = DEFAULT_ANIMATION_SPEED
         },
         ['walk-down'] = {
@@ -136,22 +136,22 @@ ANIMATION_DEFS = {
         },
         ['walk-left'] = {
             texture = 'skeleton',
-            frames = {5, 6, 5, 7},
+            frames = {4, 5, 4, 6},
             interval = DEFAULT_ANIMATION_SPEED,
             xScale = -1
         },
         ['walk-up'] = {
             texture = 'skeleton',
-            frames = {9, 10, 9, 11},
+            frames = {7, 8, 7, 9},
             interval = DEFAULT_ANIMATION_SPEED
         },
         ['interact-down'] = {
             texture = 'skeleton',
-            frames = {4}
+            frames = {10}
         },
         ['interact-right'] = {
             texture = 'skeleton',
-            frames = {8}
+            frames = {11}
         },
         ['interact-up'] = {
             texture = 'skeleton',
@@ -159,7 +159,7 @@ ANIMATION_DEFS = {
         },
         ['interact-left'] = {
             texture = 'skeleton',
-            frames = {8},
+            frames = {10},
             xScale = -1
         }
     },
