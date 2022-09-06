@@ -23,7 +23,7 @@ function Menu:init(def, inst)
         self.selections = inst.selections
     end
 
-    self.parent = inst.parent or nil
+    self.parent = inst.parent
 
     self.selector = 1
     self.selectors = def.selectors or {

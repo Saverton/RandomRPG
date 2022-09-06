@@ -51,9 +51,9 @@ function Map:render(camera)
 
     for col = math.max(1, xStart), math.min(self.size, xEnd), 1 do
         for row = math.max(1, yStart), math.min(self.size, yEnd), 1 do
-            feat = self.featureMap[col][row]
+            local feat = self.featureMap[col][row]
             if feat ~= nil then
-                self.featureMap[col][row]:render(camera.x, camera.y)
+                feat:render(camera.x, camera.y)
             end
         end
     end

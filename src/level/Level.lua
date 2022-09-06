@@ -7,6 +7,7 @@
 Level = Class{}
 
 function Level:init(map, player, enemySpawner)
+    self.name = 'test'
     self.map = map or Map('my_map', DEFAULT_MAP_SIZE)
     
     self.player = player or Player(ENTITY_DEFS['player'], self, self:getPlayerSpawnSpace(), {x = PLAYER_SPAWN_X_OFFSET, y = PLAYER_SPAWN_Y_OFFSET})

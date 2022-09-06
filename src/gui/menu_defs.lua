@@ -11,9 +11,21 @@ MENU_DEFS = {
         height = 100,
         title = 'Options',
         selections = {
-            Selection('Play', function() gStateStack:push(WorldState({debug = false})) end),
+            Selection('Play', function() gStateStack:push(MenuState(Menu(MENU_DEFS['play']), {})) end),
             Selection('Debug', function() gStateStack:push(WorldState({debug = true})) end),
             Selection('Exit', function() love.event.quit() end)
+        }
+    },
+    ['play'] = {
+        x = VIRTUAL_WIDTH / 2 - 50,
+        y = 100,
+        width = 100,
+        height = 100,
+        title = 'Play',
+        selections = {
+            Selection('New Game', function() gStateStack:push(WorldState({debug = false})) end),
+            Selection('Load Game', function() gStateStack:push(LoadState('worlds/test')) end),
+            Selection('Back', function() gStateStack:pop() end)
         }
     },
     ['pause'] = {
@@ -24,6 +36,12 @@ MENU_DEFS = {
         title = 'Pause',
         selections = {
             Selection('Resume', function() gStateStack:pop() end),
+            Selection('Save Game', function(level) 
+                if level == nil then
+                    print('level passed as nil')
+                end
+                gStateStack:push(SaveState(level)) 
+            end),
             Selection('Exit to Title', function() 
                 gStateStack:push(ConfirmState(MENU_DEFS['confirm'], {
                     onConfirm = function() 
@@ -32,6 +50,9 @@ MENU_DEFS = {
                     end
                 }))
             end)
+        },
+        selectors = {
+            {pos = 1, selected = false, text = '', onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}
         }
     },
     ['inventory'] = {
