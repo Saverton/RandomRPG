@@ -149,5 +149,10 @@ QUEST_LIMIT = 2
 TIPS = {
     'There are three different weapons scattered across the world.',
     'The Tome of Fire doesn\'t harm enemies directly, but it sets them on fire for a brief time.',
-    'There aren\' too many tips for me to give you, the game is still rather simple.'
+    'There aren\' too many tips for me to give you, the game is still rather simple.',
+    'You can chop down a tree using the Battle Axe...',
+    'You can use wood to bridge across water...',
+    'Watch out for skeletons! They have weapons!'
 }
+
+CHEST_ITEMS = {'sword', 'battle_axe', 'bow', 'fire_tome', 'ice_tome'}

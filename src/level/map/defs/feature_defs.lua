@@ -38,8 +38,12 @@ FEATURE_DEFS = {
         name = 'chest',
         texture = 'features',
         frame = 3,
-        onInteract = function()
-
+        onInteract = function(player, featureMap, col, row)
+            featureMap[col][row] = nil
+            table.insert(player.level.pickupManager.pickups, Pickup(CHEST_ITEMS[math.random(#CHEST_ITEMS)], 
+                (col - 1) * TILE_SIZE, (row - 1) * TILE_SIZE))
+            table.insert(player.level.pickupManager.pickups, Pickup('ammo', 
+                (col - 1) * TILE_SIZE, (row - 1) * TILE_SIZE, math.random(5, 10)))
         end,
         isSolid = true
     }

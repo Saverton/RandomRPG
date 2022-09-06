@@ -181,7 +181,6 @@ function Player:interactWithMap(checkBox)
     local startRow = math.max(1, math.floor(checkBox.y / 16) - 1)
     for col = startCol, math.min(map.size, startCol + 3), 1 do
         for row = startRow, math.min(map.size, startRow + 3), 1 do
-            print('row, col: (' .. tostring(row) .. ', ' .. tostring(col) ..')')
             local mapBox = {x = (col - 1) * TILE_SIZE, y = (row - 1) * TILE_SIZE, width = 16, height = 16}
             local feature = map.featureMap[col][row]
             local tile = map.tileMap.tiles[col][row]

@@ -20,7 +20,6 @@ function Level:init(map, player, enemySpawner)
     self.enemySpawner = enemySpawner or EnemySpawner(self, DEFAULT_ENTITY_CAP)
 
     self.pickupManager = PickupManager(self)
-    self.pickupManager:spawnPickups({'sword', 'bow', 'fire_tome'})
 
     self.camera = Camera(self.player, self)
 
