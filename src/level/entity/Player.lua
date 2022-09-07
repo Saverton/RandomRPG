@@ -51,6 +51,13 @@ function Player:update(dt)
         self:translateHeldItem(yScroll) 
     end
 
+    for i = 1, #self.hotbar, 1 do
+        if love.keyboard.wasPressed(tostring(i)) then
+            self.heldItem = i
+        end
+    end
+
+
     -- if space is pressed, use current item or interact with npcs/features
     if self.canUseItem and love.keyboard.wasPressed('space') then
         local checkBox = {x = self.x + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]][1] * TILE_SIZE) - ((TILE_SIZE - self.width) / 2),
