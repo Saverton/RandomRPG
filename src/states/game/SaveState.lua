@@ -142,7 +142,7 @@ function SaveState:saveEntities(path)
         entityCap = self.enemySpawner.entityCap
     }
 
-    for i, entity in ipairs(self.enemySpawner) do
+    for i, entity in ipairs(self.enemySpawner.entities) do
         local pos = {
             x = (entity.x / 16) + 1, 
             y = (entity.y / 16) + 1

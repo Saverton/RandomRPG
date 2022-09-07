@@ -10,9 +10,15 @@ function EnemySpawner:init(level, entities, entityCap)
 
     self.entities = {}
     if entities ~= nil then
-        print('spawning entities')
         for i, entity in ipairs(entities) do
-            table.insert(self.entities, Enemy(entity.def, self.level, entity.pos))
+            local enemy = Enemy(entity.def, self.level, entity.pos)
+            enemy.stateMachine = StateMachine({
+                ['idle'] = function() return EnemyIdleState(enemy) end,
+                ['walk'] = function() return EnemyWalkState(enemy, self.level) end,
+                ['interact'] = function() return EntityInteractState(enemy) end
+            })
+            enemy:changeState('idle')
+            table.insert(self.entities, enemy)
         end
     end
 

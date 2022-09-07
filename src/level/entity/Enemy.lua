@@ -10,6 +10,9 @@ function Enemy:init(def, level, pos, target)
     CombatEntity.init(self, def, level, pos)
     
     self.target = target or nil
+    if GetIndex(self.speedboost, 'agro') ~= -1 then
+        table.remove(self.speedboost, GetIndex(self.speedboost, 'agro'))
+    end
     self.agroDist = def.agroDist or 0 -- 0 = not aggressive
 
     self.color = def.color or ENEMY_COLORS[math.random(1, 8)]
