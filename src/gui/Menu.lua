@@ -29,6 +29,8 @@ function Menu:init(def, inst)
     self.selectors = def.selectors or {
         {pos = 1, selected = false, text = '', onChoose = function(pos, menu) self.selections[pos].onSelect(self.parent) end}
     }
+
+    self.renderSelector = false
 end
 
 function Menu:update(dt)
@@ -55,6 +57,8 @@ function Menu:update(dt)
     if self.selector > #self.selectors then
         self.selector = 1
     end
+
+    self.renderSelector = true
 end
 
 function Menu:render()
@@ -70,7 +74,7 @@ function Menu:render()
         love.graphics.printf(selection.displayName, love.math.newTransform(x, y),
             self.width - (2 * SELECTION_MARGIN), 'left')
         for k, selector in pairs(self.selectors) do
-            if (k == self.selector or selector.selected) and selector.pos == i then
+            if (k == self.selector or selector.selected) and selector.pos == i and self.renderSelector then
                 love.graphics.draw(gTextures['selector'], gFrames['selector'][1], x - 20, y - 4)
                 love.graphics.draw(gTextures['selector'], gFrames['selector'][1], x + self.width + 20 - (2 * SELECTION_MARGIN), y - 4, 0, -1, 1)
                 love.graphics.setColor(1, 1, 0, 0.5)
@@ -79,6 +83,8 @@ function Menu:render()
             end
         end
     end
+
+    self.renderSelector = false
 end
 
 function Menu:switch(index1, index2)

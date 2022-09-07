@@ -23,7 +23,10 @@ MENU_DEFS = {
         height = 100,
         title = 'Play',
         selections = {
-            Selection('New Game', function() gStateStack:push(WorldState({debug = false})) end),
+            Selection('New Game', function() 
+                gStateStack:pop()
+                gStateStack:push(WorldState({debug = false})) 
+            end),
             Selection('Load Game', function() gStateStack:push(MenuState(MENU_DEFS['choose_world'], {
                 selections = LoadWorldList()
             })) end),

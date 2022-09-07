@@ -109,6 +109,8 @@ function LoadWorldList()
 
     for i, world in ipairs(worlds) do
         table.insert(selections, Selection(world, function() 
+            gStateStack:pop()
+            gStateStack:pop()
             gStateStack:push(LoadState('worlds/' .. world))
         end))
     end
