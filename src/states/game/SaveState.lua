@@ -81,8 +81,6 @@ function SaveState:savePlayer(path)
         y = (self.player.y / 16) + 1
     }
 
-    --local off = self.player.off
-
     local def = {
         name = self.player.name,
         width = self.player.width,
