@@ -159,7 +159,7 @@ ANIMATION_DEFS = {
         },
         ['interact-left'] = {
             texture = 'skeleton',
-            frames = {10},
+            frames = {11},
             xScale = -1
         }
     },

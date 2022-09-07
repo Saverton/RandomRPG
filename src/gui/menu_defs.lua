@@ -286,5 +286,14 @@ MENU_DEFS = {
             end),
             Selection('Back', function(menuState) gStateStack:pop() end)
         }
+    },
+    ['level_up'] = {
+        x = VIRTUAL_WIDTH / 2 - 40,
+        y = MENU_Y + 20,
+        width = 80,
+        height = MENU_HEIGHT / 2 - 5,
+        title = 'Level Up',
+        selections = {},
+        selectors = {}
     }
 }

@@ -35,22 +35,24 @@ end
 
 function Menu:update(dt)
     local selector = self.selectors[self.selector]
-    if love.keyboard.wasPressed('w') or love.keyboard.wasPressed('up') then
-        love.audio.play(gSounds['menu_blip_1'])
-        selector.pos = (selector.pos + #self.selections - 2) % (#self.selections) + 1
-    elseif love.keyboard.wasPressed('s') or love.keyboard.wasPressed('down') then
-        love.audio.play(gSounds['menu_blip_1'])
-        selector.pos = (((selector.pos) % #self.selections) + 1)
-    end
+    if selector ~= nil then
+        if love.keyboard.wasPressed('w') or love.keyboard.wasPressed('up') then
+            love.audio.play(gSounds['menu_blip_1'])
+            selector.pos = (selector.pos + #self.selections - 2) % (#self.selections) + 1
+        elseif love.keyboard.wasPressed('s') or love.keyboard.wasPressed('down') then
+            love.audio.play(gSounds['menu_blip_1'])
+            selector.pos = (((selector.pos) % #self.selections) + 1)
+        end
 
-    if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
-        love.audio.play(gSounds['menu_select_1'])
-        selector.selected = true
-        if self.selector < #self.selectors then
-            self.selector = self.selector + 1
-            self.selectors[self.selector].pos = selector.pos
-        else
-            selector.onChoose(selector.pos, self)
+        if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+            love.audio.play(gSounds['menu_select_1'])
+            selector.selected = true
+            if self.selector < #self.selectors then
+                self.selector = self.selector + 1
+                self.selectors[self.selector].pos = selector.pos
+            else
+                selector.onChoose(selector.pos, self)
+            end
         end
     end
 
@@ -58,7 +60,9 @@ function Menu:update(dt)
         self.selector = 1
     end
 
-    self.renderSelector = true
+    if #self.selectors > 0 then
+        self.renderSelector = true
+    end
 end
 
 function Menu:render()
@@ -68,7 +72,9 @@ function Menu:render()
     love.graphics.printf(self.title, love.math.newTransform(self.x + SELECTION_MARGIN, self.y + SELECTION_MARGIN), (self.width - (2 *SELECTION_MARGIN)), 'center')
 
     love.graphics.setFont(gFonts['small'])
-    love.graphics.printf(self.selectors[self.selector].text, love.math.newTransform(self.x + SELECTION_MARGIN, self.y + SELECTION_MARGIN + 20), (self.width - (2 *SELECTION_MARGIN)), 'center')
+    if self.renderSelector then
+        love.graphics.printf(self.selectors[self.selector].text, love.math.newTransform(self.x + SELECTION_MARGIN, self.y + SELECTION_MARGIN + 20), (self.width - (2 *SELECTION_MARGIN)), 'center')
+    end
     for i, selection in ipairs(self.selections) do
         local x, y = self.x + SELECTION_MARGIN, self.y + (SELECTION_MARGIN * i) + (SELECTION_HEIGHT * i) + 30
         love.graphics.printf(selection.displayName, love.math.newTransform(x, y),
