@@ -41,8 +41,11 @@ function Enemy:update(dt)
     local removeIndex = {}
     for i, projectile in pairs(self.projectiles) do
         projectile:update(dt)
-        if projectile.type ~= 'none' and not self.target.invincible and Collide(projectile, self.target) then
-            projectile:hit(self.target, self.attackboost)
+
+        if PROJECTILE_DEFS[projectile.name].type ~= 'none' then
+            if not self.target.invincible and Collide(projectile, self.target) then
+                projectile:hit(self.target, self.attackboost)
+            end
         end
         if projectile.hits <= 0 or projectile.lifetime <= 0 or GetDistance(projectile, self.level.player) > DESPAWN_RANGE or 
             projectile:checkCollision(self.level.map) then

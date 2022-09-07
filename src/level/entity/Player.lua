@@ -67,9 +67,11 @@ function Player:update(dt)
     local removeIndex = {}
     for i, projectile in pairs(self.projectiles) do
         projectile:update(dt)
-        for i, entity in pairs(self.level.enemySpawner.entities) do
-            if projectile.type ~= 'none' and not entity.invincible and Collide(projectile, entity) then
-                projectile:hit(entity, self.attackboost)
+        if PROJECTILE_DEFS[projectile.name] ~= 'none' then
+            for i, entity in pairs(self.level.enemySpawner.entities) do
+                if not entity.invincible and Collide(projectile, entity) then
+                    projectile:hit(entity, self.attackboost)
+                end
             end
         end
         if projectile.hits <= 0 or projectile.lifetime <= 0 or GetDistance(projectile, self.level.player) > DESPAWN_RANGE or 
