@@ -128,8 +128,6 @@ function SaveState:savePlayer(path)
     end
     def.items = items
     for i, quest in ipairs(self.player.quests) do
-        print('saving a player\'s quest')
-        print('quest name = ' .. quest.name)
         table.insert(quests, {name = quest.name, flags = quest.flags})
     end
     def.quests = quests

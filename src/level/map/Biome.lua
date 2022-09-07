@@ -6,14 +6,8 @@
 
 Biome = Class{}
 
-function Biome:init(def)
-    self.id = def.id or 0
-    self.name = def.name
-    self.tiles = def.tiles or {}
-    self.enemies = def.enemies or {}
-    self.spawnRate = def.spawnRate
-    self.features = def.features or {}
-    self.featProc = def.featProc or 0
+function Biome:init(name)
+    self.name = name
 end
 
 function Biome:getTile()
@@ -22,10 +16,10 @@ function Biome:getTile()
     -- randomly determine a tile from the selection
     local num = math.random()
     local sum = 0
-    for i in pairs(self.tiles) do
-        sum = sum + self.tiles[i].proc 
+    for i in pairs(BIOME_DEFS[self.name].tiles) do
+        sum = sum + BIOME_DEFS[self.name].tiles[i].proc 
         if num < sum then
-            tile = self.tiles[i].tileType
+            tile = BIOME_DEFS[self.name].tiles[i].tileType
         end
     end
 

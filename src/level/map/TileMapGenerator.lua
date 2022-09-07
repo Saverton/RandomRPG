@@ -11,7 +11,7 @@ function GenerateBiomes(size)
     for col = 1, size, 1 do
         biomeMap[col] = {}
         for row = 1, size, 1 do
-            biomeMap[col][row] = Biome(BIOME_DEFS['grassland'])
+            biomeMap[col][row] = Biome('grassland')
         end
     end
 
@@ -21,17 +21,17 @@ function GenerateBiomes(size)
         local x, y= math.random(1, size - mtnSize), math.random(1, size - mtnSize)
         for col = x, x + mtnSize, 1 do
             for row = y, y + mtnSize, 1 do
-                biomeMap[col][row] = Biome(BIOME_DEFS['mountain'])
+                biomeMap[col][row] = Biome('mountain')
             end
         end
     end
 
     -- generate water around edges and a river that cuts through the world
     for i = 1, size, 1 do
-        biomeMap[1][i] = Biome(BIOME_DEFS['water'])
-        biomeMap[i][size] = Biome(BIOME_DEFS['water'])
-        biomeMap[size][i] = Biome(BIOME_DEFS['water'])
-        biomeMap[i][1] = Biome(BIOME_DEFS['water'])
+        biomeMap[1][i] = Biome('water')
+        biomeMap[i][size] = Biome('water')
+        biomeMap[size][i] = Biome('water')
+        biomeMap[i][1] = Biome('water')
     end
 
     --generate river
@@ -65,22 +65,22 @@ function GenerateBiomes(size)
         local length = math.random(2, 10)
         if dir == 1 then
             for i = 1, math.min(length, y - 1), 1 do
-                biomeMap[x][y - i] = Biome(BIOME_DEFS['water'])
+                biomeMap[x][y - i] = Biome('water')
             end
             y = y - length
         elseif dir == 2 then
             for i = 1, math.min(length, size - x - 1), 1 do
-                biomeMap[x + i][y] = Biome(BIOME_DEFS['water'])
+                biomeMap[x + i][y] = Biome('water')
             end
             x = x + length
         elseif dir == 3 then
             for i = 1, math.min(length, size - y - 1), 1 do
-                biomeMap[x][y + i] = Biome(BIOME_DEFS['water'])
+                biomeMap[x][y + i] = Biome('water')
             end
             y = y + length
         elseif dir == 4 then
             for i = 1, math.min(length, x - 1), 1 do
-                biomeMap[x - i][y] = Biome(BIOME_DEFS['water'])
+                biomeMap[x - i][y] = Biome('water')
             end
             x = x - length
         end

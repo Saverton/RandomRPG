@@ -64,10 +64,10 @@ function EnemySpawner:spawnEnemies()
                 goto continue
             end
             local biome = map.tileMap.biomes[col][row]
-            if #biome.enemies >= 1 and math.random() < biome.spawnRate then
+            if #BIOME_DEFS[biome.name].enemies >= 1 and math.random() < BIOME_DEFS[biome.name].spawnRate then
                 local num = math.random()
                 local sum = 0
-                for i, enemy in pairs(biome.enemies) do
+                for i, enemy in pairs(BIOME_DEFS[biome.name].enemies) do
                     sum = sum + enemy.proc 
                     if num < sum then
                         local entity = Enemy(

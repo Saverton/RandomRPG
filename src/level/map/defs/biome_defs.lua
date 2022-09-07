@@ -71,6 +71,7 @@ BIOME_DEFS = {
         },
         enemies = {},
         spawnRate = 0,
-        features = {}
+        features = {},
+        featProc = 0
     }
 }

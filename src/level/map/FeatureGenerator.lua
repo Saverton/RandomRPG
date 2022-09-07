@@ -9,12 +9,13 @@ function GenerateFeatures(size, tileMap)
     for col = 1, size, 1 do
         featureMap[col] = {}
         for row = 1, size, 1 do
+            local biome = tileMap.biomes[col][row]
             -- determine if we generate a feature in this tile
-            if math.random() < tileMap.biomes[col][row].featProc then
+            if math.random() < BIOME_DEFS[biome.name].featProc then
                 -- generate a feature
                 local num = math.random()
                 local sum = 0
-                for i, feature in pairs(tileMap.biomes[col][row].features) do
+                for i, feature in pairs(BIOME_DEFS[biome.name].features) do
                     sum = sum + feature.proc 
                     if num < sum then
                         if FEATURE_DEFS[feature.name].animated then

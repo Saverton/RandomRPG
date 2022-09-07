@@ -60,7 +60,7 @@ function LoadState:loadMap()
 
     for i, col in ipairs(biomes) do
         for j, biome in ipairs(col) do
-            biomes[i][j] = Biome(BIOME_DEFS[biome])
+            biomes[i][j] = Biome(biome)
         end
     end
 
