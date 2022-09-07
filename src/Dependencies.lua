@@ -28,6 +28,7 @@ require 'src/states/game/ConfirmState'
 require 'src/states/game/DeathAnimationState'
 require 'src/states/game/LoadState'
 require 'src/states/game/SaveState'
+require 'src/states/game/CreateWorldState'
 
 require 'src/states/entity/EntityBaseState' 
 require 'src/states/entity/EntityIdleState' 

@@ -7,7 +7,7 @@
 WorldState = Class{__includes = BaseState}
 
 function WorldState:init(defs)
-    self.level = defs.level or Level()
+    self.level = defs.level or Level(defs.name or 'my world')
 
     self.debug = defs.debug
 end

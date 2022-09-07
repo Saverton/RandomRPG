@@ -19,13 +19,15 @@ function love.load()
     gStateStack = StateStack()
     gStateStack:push(StartState())
     -- helps start game faster for testing
-    gStateStack:push(WorldState({debug = true}))
+    gStateStack:push(WorldState({debug = true, name = 'test'}))
 
     love.keyboard.keysPressed = {}
+    love.keyboard.setTextInput(false)
     mouseWheelMovement = {
         x = 0,
         y = 0
     }
+    inputtext = ''
 end
 
 function love.resize(w, h)

@@ -32,6 +32,7 @@ function LoadState:render()
 end
 
 function LoadState:loadWorld()
+    local name = string.sub(self.path, 8, string.len(self.path))
     local map = nil
     local player = nil
     local enemySpawner = nil
@@ -44,7 +45,7 @@ function LoadState:loadWorld()
     npcManager = self:loadNPCS()
     pickupManager = self:loadPickups()
 
-    return Level(map, player, enemySpawner, npcManager, pickupManager)
+    return Level(name ,map, player, enemySpawner, npcManager, pickupManager)
 end
 
 function LoadState:loadMap()

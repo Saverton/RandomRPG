@@ -1,7 +1,7 @@
 --[[
     Util class
 
-    Author: Colton Ogden
+    Author: Colton Ogden & Saverton
     cogden@cs50.harvard.edu
 
     Helper functions

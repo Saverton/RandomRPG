@@ -25,7 +25,7 @@ MENU_DEFS = {
         selections = {
             Selection('New Game', function() 
                 gStateStack:pop()
-                gStateStack:push(WorldState({debug = false})) 
+                gStateStack:push(CreateWorldState()) 
             end),
             Selection('Load Game', function() gStateStack:push(MenuState(MENU_DEFS['choose_world'], {
                 selections = LoadWorldList()
