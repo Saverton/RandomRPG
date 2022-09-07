@@ -27,7 +27,7 @@ end
 function EnemyWalkState:update(dt)
     EntityWalkState.update(self, dt) 
 
-    self.distanceTraveled = self.distanceTraveled + (self.entity.speed * dt) 
+    self.distanceTraveled = self.distanceTraveled + (self.entity:getSpeed() * dt) 
     
     if self.distanceTraveled > TILE_SIZE then
         self.distanceToTravel = math.max(0, self.distanceToTravel - 1)

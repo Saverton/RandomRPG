@@ -100,3 +100,20 @@ end
 function GetDistance(a, b)
     return (math.sqrt(math.pow(math.abs(a.x - b.x), 2) + math.pow(math.abs(a.y - b.y), 2)))
 end
+
+function LoadWorldList()
+    love.filesystem.setIdentity('random_rpg')
+
+    local worlds = love.filesystem.getDirectoryItems('worlds')
+    local selections = {}
+
+    for i, world in ipairs(worlds) do
+        table.insert(selections, Selection(world, function() 
+            gStateStack:push(LoadState('worlds/' .. world))
+        end))
+    end
+
+    table.insert(selections, Selection('Back', function() gStateStack:pop() end))
+
+    return selections
+end

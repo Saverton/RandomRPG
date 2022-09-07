@@ -24,9 +24,19 @@ MENU_DEFS = {
         title = 'Play',
         selections = {
             Selection('New Game', function() gStateStack:push(WorldState({debug = false})) end),
-            Selection('Load Game', function() gStateStack:push(LoadState('worlds/test')) end),
+            Selection('Load Game', function() gStateStack:push(MenuState(MENU_DEFS['choose_world'], {
+                selections = LoadWorldList()
+            })) end),
             Selection('Back', function() gStateStack:pop() end)
         }
+    },
+    ['choose_world'] = {
+        x = VIRTUAL_WIDTH / 2 - 50,
+        y = 100,
+        width = 100,
+        height = 100,
+        title = 'Choose World',
+        selections = {}
     },
     ['pause'] = {
         x = MENU_X,
