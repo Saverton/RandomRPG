@@ -24,6 +24,14 @@ function Quest:init(def, diff, npc)
     self.acceptText = def.acceptText or 'Thanks! Speak to me as soon as you are done!'
     self.refuseText = def.refuseText or 'Pity! Now I have to fade away into nothingness.'
     self.ongoingText = (def.ongoingText or 'Oh, it seems you already have my quest. Here is a reminder: ') .. self:stringQuest()
+
+    -- check if player has this quest, if so then add a reference to this quest
+    local player = self.npc.level.player
+    for i, quest in ipairs(player.quests) do
+        if quest.name == self.quest.name then
+            quest.questRef = self
+        end
+    end
 end
 
 function Quest:check(player)

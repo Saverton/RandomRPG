@@ -19,7 +19,7 @@ function WorldState:update(dt)
     if self.debug then
         -- reload level if pressed r
         if love.keyboard.wasPressed('r') then
-            self.level = Level()
+            self.level = Level('test')
         end
         -- give player items if pressed b
         if love.keyboard.wasPressed('b') then
