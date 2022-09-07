@@ -6,9 +6,14 @@
 NPCManager = Class{}
 
 function NPCManager:init(npcs, level)
-    self.npcs = npcs or {}
-
     self.level = level
+    self.npcs = {}
+    if npcs ~= nil then
+        for i, npc in pairs(npcs) do
+            local npcObject = NPC(npc.def, self.level, npc.pos, {x = 0, y = 0}, self)
+            table.insert(self.npcs, npcObject)
+        end
+    end
 
     self.cap = NPC_CAP
 

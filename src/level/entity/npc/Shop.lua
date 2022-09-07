@@ -17,23 +17,27 @@ function Shop:init(def, npc)
     local itemPool = def.itemPool or {}
     self.shopSize = def.size or math.min(3, #itemPool)
     self.inventory = {}
-    local indexesUsed = {}
-    for i = 1, self.shopSize, 1 do
-        local id = math.random(1, #itemPool)
-        while Contains(indexesUsed, id) do
-            id = math.random(1, #itemPool)
+    if def.inventory ~= nil then
+        self.inventory = def.inventory
+    else
+        local indexesUsed = {}
+        for i = 1, self.shopSize, 1 do
+            local id = math.random(1, #itemPool)
+            while Contains(indexesUsed, id) do
+                id = math.random(1, #itemPool)
+            end
+            local quantity = 1
+            if ITEM_DEFS[itemPool[id]].stackable then
+                quantity = math.random(3, 10)
+            end
+            local item = {
+                name = itemPool[id],
+                price = math.max(1, ITEM_DEFS[itemPool[id]].price.buy + math.random(-2, 2)),
+                quantity = quantity
+            }
+            table.insert(self.inventory, item) 
+            table.insert(indexesUsed, id)
         end
-        local quantity = 1
-        if ITEM_DEFS[itemPool[id]].stackable then
-            quantity = math.random(3, 10)
-        end
-        local item = {
-            name = itemPool[id],
-            price = math.max(1, ITEM_DEFS[itemPool[id]].price.buy + math.random(-2, 2)),
-            quantity = quantity
-        }
-        table.insert(self.inventory, item) 
-        table.insert(indexesUsed, id)
     end
 
     -- price differing from market sale price that the shop buys things with

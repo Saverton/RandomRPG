@@ -5,10 +5,15 @@
 
 PickupManager = Class{}
 
-function PickupManager:init(level)
+function PickupManager:init(level, pickups)
     self.level = level
 
     self.pickups = {}
+    if pickups ~= nil then
+        for i, index in ipairs(pickups) do
+            table.insert(self.pickups, Pickup(index.name, index.x, index.y, index.value))
+        end
+    end
 end
 
 function PickupManager:update(dt)

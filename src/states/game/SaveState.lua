@@ -10,6 +10,9 @@ function SaveState:init(level)
     self.name = level.name
     self.map = level.map
     self.player = level.player
+    self.enemySpawner = level.enemySpawner
+    self.pickupManager = level.pickupManager
+    self.npcManager = level.npcManager
 end
 
 function SaveState:update()
@@ -39,6 +42,9 @@ function SaveState:saveGame()
 
     self:saveMap('worlds/' .. self.name .. '/map_overworld')
     self:savePlayer('worlds/' .. self.name)
+    self:saveEntities('worlds/' .. self.name .. '/map_overworld')
+    self:saveNPCS('worlds/' .. self.name .. '/map_overworld')
+    self:savePickups('worlds/' .. self.name .. '/map_overworld')
 end
 
 function SaveState:saveMap(path)
@@ -83,6 +89,7 @@ function SaveState:savePlayer(path)
 
     local def = {
         name = self.player.name,
+        animName = self.player.animName,
         width = self.player.width,
         height = self.player.height,
         xOffset = self.player.xOffset,
@@ -102,7 +109,7 @@ function SaveState:savePlayer(path)
         magicboost = self.player.magicboost,
         currenthp = self.player.currenthp,
         currentmagic = self.player.currentmagic,
-        quests = self.player.quests,
+        quests = {},
         effects = {},
         immunities = self.player.immunities,
         inflictions = self.player.inflictions,
@@ -111,6 +118,7 @@ function SaveState:savePlayer(path)
 
     local effects = {}
     local items = {}
+    local quests = {}
     for i, effect in ipairs(self.player.effects) do
         table.insert(effects, {name = effect.name, duration = effect.duration})
     end
@@ -119,9 +127,139 @@ function SaveState:savePlayer(path)
         table.insert(items, {name = item.name, quantity = item.quantity})
     end
     def.items = items
+    for i, quest in ipairs(self.player.quests) do
+        table.insert(quests, {name = quest.name, flags = quest.flags})
+    end
 
     local player = {def = def, pos = pos}
 
-    print_r(player)
     love.filesystem.write(path .. '/player.lua', Serialize(player))
+end
+
+function SaveState:saveEntities(path)
+    local enemySpawner = {
+        entities = {},
+        entityCap = self.enemySpawner.entityCap
+    }
+
+    for i, entity in ipairs(self.enemySpawner) do
+        local pos = {
+            x = (entity.x / 16) + 1, 
+            y = (entity.y / 16) + 1
+        }
+    
+        local def = {
+            name = entity.name,
+            animName = entity.animName,
+            width = entity.width,
+            height = entity.height,
+            xOffset = entity.xOffset,
+            yOffset = entity.yOffset,
+            hp = entity.hp,
+            attack = entity.attack,
+            speed = entity.speed,
+            defense = entity.defense,
+            magic = entity.magic,
+            magicRegenRate = entity.magicRegenRate,
+            hpboost = entity.hpboost,
+            attackboost = entity.attackboost,
+            speedboost = entity.speedboost,
+            defenseboost = entity.defenseboost,
+            magicboost = entity.magicboost,
+            currenthp = entity.currenthp,
+            currentmagic = entity.currentmagic,
+            effects = {},
+            immunities = entity.immunities,
+            inflictions = entity.inflictions,
+            items = {},
+            agroDist = entity.agroDist,
+            color = entity.color
+        }
+    
+        local effects = {}
+        local items = {}
+        for i, effect in ipairs(entity.effects) do
+            table.insert(effects, {name = effect.name, duration = effect.duration})
+        end
+        def.effects = effects
+        for i, item in ipairs(entity.items) do
+            table.insert(items, {name = item.name, quantity = item.quantity})
+        end
+        def.items = items
+    
+        local entity = {def = def, pos = pos}
+        table.insert(enemySpawner.entities, entity)
+    end
+
+    love.filesystem.write(path .. '/entities.lua', Serialize(enemySpawner))
+end
+
+function SaveState:saveNPCS(path)
+    local npcs = {}
+
+    for i, entity in ipairs(self.npcManager.npcs) do
+        local pos = {
+            x = (entity.x / 16) + 1, 
+            y = (entity.y / 16) + 1
+        }
+    
+        local def = {
+            name = entity.name,
+            animName = entity.animName,
+            npcName = entity.npcName,
+            width = entity.width,
+            height = entity.height,
+            xOffset = entity.xOffset,
+            yOffset = entity.yOffset,
+            speed = entity.speed,
+            timesInteractedWith = entity.timesInteractedWith,
+            shop = {},
+            quest = {},
+            hasQuest = NPC_DEFS[entity.name].hasQuest
+        }
+        
+        if entity.shop ~= nil then
+            local shop = {
+                startText = entity.shop.startText,
+                endText = entity.shop.endtext, 
+                soldOutText = entity.shop.soldOutText,
+                notEnoughText = entity.shop.notEnoughText,
+                inventory = entity.shop.inventory,
+                sellDiff = entity.shop.sellDiff
+            }
+
+            def.shop = shop
+        elseif def.hasQuest then
+            print('saving quest')
+            local quest = {
+                rewards = entity.quest.rewards,
+                quest = {
+                    name = entity.quest.quest.name,
+                    flags = entity.quest.quest.flags
+                },
+                startText = entity.startText,
+                endText = entity.endText,
+                acceptText = entity.acceptText,
+                refuseText = entity.refuseText,
+                ongoingText = entity.ongoingText
+            }
+
+            def.quest = quest
+        end
+    
+        local entity = {def = def, pos = pos}
+        table.insert(npcs, entity)
+    end
+
+    love.filesystem.write(path .. '/npcs.lua', Serialize(npcs))
+end
+
+function SaveState:savePickups(path)
+    local pickups = {}
+
+    for i, pickup in ipairs(self.pickupManager.pickups) do
+        table.insert(pickups, pickup)
+    end
+
+    love.filesystem.write(path .. '/pickups.lua', Serialize(pickups))
 end

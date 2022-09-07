@@ -34,11 +34,17 @@ end
 function LoadState:loadWorld()
     local map = nil
     local player = nil
+    local enemySpawner = nil
+    local npcManager = nil
+    local pickupManager = nil
 
     map = self:loadMap()
     player = self:loadPlayer()
+    enemySpawner = self:loadEntities()
+    npcManager = self:loadNPCS()
+    pickupManager = self:loadPickups()
 
-    return Level(map, player)
+    return Level(map, player, enemySpawner, npcManager, pickupManager)
 end
 
 function LoadState:loadMap()
@@ -75,4 +81,16 @@ end
 
 function LoadState:loadPlayer()
     return loadstring(love.filesystem.read(self.path .. '/player.lua'))()
+end
+
+function LoadState:loadEntities()
+    return loadstring(love.filesystem.read(self.path .. '/map_overworld/entities.lua'))()
+end
+
+function LoadState:loadNPCS()
+    return loadstring(love.filesystem.read(self.path .. '/map_overworld/npcs.lua'))()
+end
+
+function LoadState:loadPickups()
+    return loadstring(love.filesystem.read(self.path .. '/map_overworld/pickups.lua'))()
 end

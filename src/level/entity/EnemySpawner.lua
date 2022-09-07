@@ -5,10 +5,16 @@
 ]]
 EnemySpawner = Class{}
 
-function EnemySpawner:init(level, entityCap)
+function EnemySpawner:init(level, entities, entityCap)
     self.level = level
 
     self.entities = {}
+    if entities ~= nil then
+        print('spawning entities')
+        for i, entity in ipairs(entities) do
+            table.insert(self.entities, Enemy(entity.def, self.level, entity.pos))
+        end
+    end
 
     self.entityCap = entityCap or DEFAULT_ENTITY_CAP
 

@@ -83,7 +83,7 @@ ENTITY_DEFS = {
 
 NPC_DEFS = {
     ['tips'] = {
-        name = 'test',
+        name = 'tips',
         animName = 'npc',
         displayName = 'Test NPC',
         width = 16,
@@ -106,6 +106,7 @@ NPC_DEFS = {
         width = 16,
         height = 16,
         startAnim = 'idle-down',
+        hasShop = true,
         shop = {
             size = 3,
             itemPool = {'ammo', 'health', 'sword', 'bow', 'battle_axe', 'hp_upgrade'}
@@ -125,7 +126,7 @@ NPC_DEFS = {
         width = 16,
         height = 16,
         startAnim = 'idle-down',
-        quest = true,
+        hasQuest = true,
         onInteract = function(player, npc)
             npc.quest:check(player)
         end,

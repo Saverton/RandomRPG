@@ -10,15 +10,15 @@ function NPC:init(def, level, pos, off, manager)
     self.npcName = NPC_NAMES[math.random(#NPC_NAMES)]
     self.speed = def.speed
 
-    self.onInteract = def.onInteract
+    self.onInteract = NPC_DEFS[self.name].onInteract
     self.timesInteractedWith = 0
-    self.isDespawnable = def.isDespawnable
+    self.isDespawnable = NPC_DEFS[self.name].isDespawnable
 
-    if def.shop ~= nil then
+    if NPC_DEFS[self.name].hasShop then
         self.shop = Shop(def.shop, self)
-    elseif def.quest then
+    elseif NPC_DEFS[self.name].hasQuest then
         local difficulty = math.random(1, 3)
-        self.quest = Quest({}, difficulty, self)
+        self.quest = Quest(def.quest or {}, difficulty, self)
     end
 
     self.stateMachine = StateMachine({

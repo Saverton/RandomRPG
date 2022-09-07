@@ -6,12 +6,15 @@
 
 Level = Class{}
 
-function Level:init(map, player, enemySpawner)
+function Level:init(map, player, enemySpawner, npcs, pickups)
     self.name = 'test'
     self.map = map or Map('my_map', DEFAULT_MAP_SIZE)
 
     if player == nil then
         player = {}
+    end
+    if enemySpawner == nil then
+        enemySpawner = {}
     end
     
     self.player = Player(player.def or ENTITY_DEFS['player'], self, player.pos or self:getPlayerSpawnSpace(), player.off or {x = PLAYER_SPAWN_X_OFFSET, y = PLAYER_SPAWN_Y_OFFSET})
@@ -22,13 +25,13 @@ function Level:init(map, player, enemySpawner)
     })
     self.player:changeState('idle')
 
-    self.enemySpawner = enemySpawner or EnemySpawner(self, DEFAULT_ENTITY_CAP)
+    self.enemySpawner = EnemySpawner(self, enemySpawner.entities or {}, enemySpawner.entityCap)
 
-    self.pickupManager = PickupManager(self)
+    self.pickupManager = PickupManager(self, pickups)
 
     self.camera = Camera(self.player, self)
 
-    self.npcManager = NPCManager({}, self)
+    self.npcManager = NPCManager(npcs, self)
 
     self.flags = {}
 

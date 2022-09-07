@@ -9,7 +9,13 @@ function Quest:init(def, diff, npc)
     self.npc = npc
 
     self.rewards = def.rewards or self:GenerateReward(diff)
-    self.quest = def.quest or self:GenerateQuest(diff)
+    if def.quest ~= nil then
+        self.quest = {
+            name = def.quest.name, flags = def.quest.flags, questRef = self
+        }
+    else
+        self.quest = self:GenerateQuest(diff)
+    end
     self.completed = false
     self.denied = false
 

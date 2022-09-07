@@ -21,7 +21,12 @@ function Player:init(def, level, pos, off)
     self.hpBar = ProgressBar(PLAYER_BAR_X, PLAYER_HP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {1, 0, 0, 1})
     self.magicBar = ProgressBar(PLAYER_BAR_X, PLAYER_MAGIC_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 0, 1, 1})
 
-    self.quests = def.quests or {}
+    self.quests = {}
+    if def.quests ~= nil then
+        for i, quest in ipairs(def.quests) do
+            table.insert(self.quests, {name = quest.name, flags = quest.flags})
+        end
+    end
 
     -- player is starting, give a wooden sword
     if #self.items == 0 then

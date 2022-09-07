@@ -6,10 +6,9 @@
 
 Enemy = Class{__includes = CombatEntity}
 
-function Enemy:init(def, level, x, y, target)
-    CombatEntity.init(self, def, level, x, y)
-
-    self.name = def.name
+function Enemy:init(def, level, pos, target)
+    CombatEntity.init(self, def, level, pos)
+    
     self.target = target or nil
     self.agroDist = def.agroDist or 0 -- 0 = not aggressive
 
