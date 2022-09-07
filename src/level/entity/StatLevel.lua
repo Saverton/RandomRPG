@@ -84,3 +84,14 @@ end
 function StatLevel:getExpRatio()
     return ((self.exp - math.pow(3, self.level - 1)) / (math.pow(3, self.level) - math.pow(3, self.level - 1)))
 end
+
+function StatLevel:getSaveData()
+    return {
+        level = self.level,
+        exp = self.exp,
+        hpbonus = self.hpbonus,
+        attackbonus = self.attackbonus,
+        defensebonus = self.defensebonus,
+        magicbonus = self.magicbonus
+    }
+end

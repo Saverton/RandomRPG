@@ -113,7 +113,8 @@ function SaveState:savePlayer(path)
         effects = {},
         immunities = self.player.immunities,
         inflictions = self.player.inflictions,
-        items = {}
+        items = {},
+        statLevel = self.player.statLevel:getSaveData()
     }
 
     local effects = {}
@@ -174,7 +175,8 @@ function SaveState:saveEntities(path)
             inflictions = entity.inflictions,
             items = {},
             agroDist = entity.agroDist,
-            color = entity.color
+            color = entity.color,
+            statLevel = entity.statLevel:getSaveData()
         }
     
         local effects = {}

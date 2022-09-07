@@ -15,7 +15,7 @@ function Enemy:init(def, level, pos, startLevel, target)
     end
     self.agroDist = def.agroDist or 0 -- 0 = not aggressive
 
-    self.color = def.color or ENEMY_COLORS[self.statLevel.level]
+    self.color = def.color or ENEMY_COLORS[math.min(#ENEMY_COLORS, self.statLevel.level)]
 
     self.hpBar = ProgressBar(self.x, self.y - 6, BAR_WIDTH, BAR_HEIGHT, {1, 0, 0, 1})
 end
@@ -61,6 +61,6 @@ end
 
 function Enemy:dies()
     self.level:throwFlags{'kill enemy'}
-    self.level.player.statLevel:expGain(self.statLevel.exp)
+    self.level.player.statLevel:expGain(self.statLevel.level * ENTITY_DEFS[self.name].exp)
     CombatEntity.dies(self)
 end

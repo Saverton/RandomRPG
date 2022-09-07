@@ -22,7 +22,6 @@ function DeathAnimationState:init(player, x, y)
                 [self] = {y = -30}
             }):finish(function()
                 gStateStack:push(GameOverState())
-                print('popped')
             end)
         end)
     end)
