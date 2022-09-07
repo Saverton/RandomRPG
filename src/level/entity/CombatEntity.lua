@@ -31,7 +31,7 @@ function CombatEntity:init(def, level, pos, off)
     self.immunities = def.immunities or {} -- effects that this entity is immune to being afflicted by
 
     -- reference to owned projectiles
-    self.projectiles = def.projectiles or {}
+    self.projectileManager = ProjectileManager(self, def.projectiles or {})
 
     self.onDeath = def.onDeath or function() end
 
@@ -52,6 +52,8 @@ end
 
 function CombatEntity:update(dt)
     Entity.update(self, dt)
+
+    self.projectileManager:update(dt)
 
     --update effects
     local removeEffect = {}
@@ -169,10 +171,8 @@ function CombatEntity:render(camera)
     -- render entity
     Entity.render(self, camera)
 
-    --draw the projectiles
-    for i, projectile in pairs(self.projectiles) do
-        projectile:render(camera)
-    end
+    -- draw projectiles
+    self.projectileManager:render(camera)
 
     -- draw effects
     for i, effect in pairs(self.effects) do

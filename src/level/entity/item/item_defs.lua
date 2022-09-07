@@ -21,9 +21,9 @@ ITEM_DEFS = {
         onUse = function(item, holder, target)
             love.audio.play(gSounds['sword_swing_1'])
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
-            local pos = GetStartPosition(holder)
+            local origin = {x = holder.x, y = holder.y, direction = holder.direction}
 
-            table.insert(holder.projectiles, Projectile('sword', pos))
+            holder.projectileManager:spawnProjectile('sword', origin)
         end
     },
     ['bow'] = {
@@ -44,10 +44,10 @@ ITEM_DEFS = {
         onUse = function(item, holder, target)
             love.audio.play(gSounds['hit_1'])
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
-            local pos = GetStartPosition(holder)
+            local origin = {x = holder.x, y = holder.y, direction = holder.direction}
 
-            table.insert(holder.projectiles, Projectile('bow', pos))
-            table.insert(holder.projectiles, Projectile('arrow', pos))
+            holder.projectileManager:spawnProjectile('bow', origin)
+            holder.projectileManager:spawnProjectile('arrow', origin)
         end
     },
     ['fire_tome'] = {
@@ -68,10 +68,10 @@ ITEM_DEFS = {
         onUse = function(item, holder, target)
             love.audio.play(gSounds['fire_hit_1'])
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
-            local pos = GetStartPosition(holder)
+            local origin = {x = holder.x, y = holder.y, direction = holder.direction}
 
-            table.insert(holder.projectiles, Projectile('tome', pos))
-            table.insert(holder.projectiles, Projectile('firebal', pos))
+            holder.projectileManager:spawnProjectile('tome', origin)
+            holder.projectileManager:spawnProjectile('fireball', origin)
         end
     },
     ['ammo'] = {
@@ -143,10 +143,10 @@ ITEM_DEFS = {
         onUse = function(item, holder, target)
             love.audio.play(gSounds['hit_1'])
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
-            local pos = GetStartPosition(holder)
+            local origin = {x = holder.x, y = holder.y, direction = holder.direction}
 
-            table.insert(holder.projectiles, Projectile('tome', pos))
-            table.insert(holder.projectiles, Projectile('ice', pos))
+            holder.projectileManager:spawnProjectile('tome', origin)
+            holder.projectileManager:spawnProjectile('ice', origin)
         end
     },
     ['wooden_sword'] = {
@@ -166,9 +166,8 @@ ITEM_DEFS = {
         onUse = function(item, holder, target)
             love.audio.play(gSounds['sword_swing_1'])
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
-            local pos = GetStartPosition(holder)
-
-            table.insert(holder.projectiles, Projectile('wooden_sword', pos))
+            local origin = {x = holder.x, y = holder.y, direction = holder.direction}
+            holder.projectileManager:spawnProjectile('wooden_sword', origin)
         end
     },
     ['battle_axe'] = {
@@ -188,9 +187,9 @@ ITEM_DEFS = {
         onUse = function(item, holder, target)
             love.audio.play(gSounds['sword_swing_1'])
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
-            local pos = GetStartPosition(holder)
+            local origin = {x = holder.x, y = holder.y, direction = holder.direction}
 
-            table.insert(holder.projectiles, Projectile('battle_axe', pos))
+            holder.projectileManager:spawnProjectile('battle_axe', origin)
         end
     },
     ['wood'] = {

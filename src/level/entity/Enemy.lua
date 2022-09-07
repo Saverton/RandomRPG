@@ -36,26 +36,6 @@ function Enemy:update(dt)
             self:loseTarget()
         end
     end
-
-    --update projectiles
-    local removeIndex = {}
-    for i, projectile in pairs(self.projectiles) do
-        projectile:update(dt)
-
-        if PROJECTILE_DEFS[projectile.name].type ~= 'none' then
-            if not self.target.invincible and Collide(projectile, self.target) then
-                projectile:hit(self.target, self.attackboost)
-            end
-        end
-        if projectile.hits <= 0 or projectile.lifetime <= 0 or GetDistance(projectile, self.level.player) > DESPAWN_RANGE or 
-            projectile:checkCollision(self.level.map) then
-            table.insert(removeIndex, i)
-        end
-    end
-    --remove dead projectiles
-    for i, index in pairs(removeIndex) do
-        table.remove(self.projectiles, index)
-    end
 end
 
 function Enemy:findTarget(entity)

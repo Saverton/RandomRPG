@@ -6,21 +6,17 @@
 
 Projectile = Class{}
 
-function Projectile:init(name, pos)
+function Projectile:init(name, origin)
     self.name = name
 
-    self.x = pos.x
-    self.y = pos.y
+    self.origin = origin
+    self:getPosition()
+
     self.width = PROJECTILE_DEFS[self.name].width
     self.height = PROJECTILE_DEFS[self.name].height
-    self.rotation = pos.rot
-    self.ox = pos.ox or 0
-    self.oy = pos.oy or 0
 
     self.animation = Animation('projectiles', self.name)
     
-    self.dx = pos.dx * PROJECTILE_DEFS[self.name].speed
-    self.dy = pos.dy * PROJECTILE_DEFS[self.name].speed
     self.lifetime = PROJECTILE_DEFS[self.name].lifetime
 
     self.damage = PROJECTILE_DEFS[self.name].damage
@@ -28,7 +24,7 @@ function Projectile:init(name, pos)
     self.hits = PROJECTILE_DEFS[self.name].hits
 end
 
-function Projectile:update(dt, map)
+function Projectile:update(dt)
     -- update animation
     self.animation:update(dt) 
 
@@ -40,16 +36,25 @@ function Projectile:update(dt, map)
     self.lifetime = self.lifetime - dt
 end
 
+function Projectile:updateOrigin(x, y)
+    self.origin.x = x
+    self.origin.y = y
+
+    self:getPosition()
+end
+
 -- target must be an entity
-function Projectile:hit(target, attackboost)
-    local boost = 1
-    for i, bonus in pairs(attackboost) do
-        if bonus.tag == PROJECTILE_DEFS[self.name].type or bonus.tag == 'any' then
-            boost = boost * bonus.num
+function Projectile:hit(target, attacker)
+    local damage = PROJECTILE_DEFS[self.name].damage
+    damage = damage * (attacker:getDamage() / math.max(attacker.attack, 1))
+    local inflictions = PROJECTILE_DEFS[self.name].inflictions
+    for i, inflict in pairs(attacker.inflictions) do
+        if not ContainsName(inflictions, inflict.name) then
+            table.insert(inflictions, inflict)
         end
     end
     
-    target:damage(PROJECTILE_DEFS[self.name].damage * boost, PROJECTILE_DEFS[self.name].push, self, PROJECTILE_DEFS[self.name].inflictions)
+    target:damage(damage, PROJECTILE_DEFS[self.name].push, self, inflictions)
     self.hits = self.hits - 1
 end
 
@@ -60,31 +65,38 @@ function Projectile:render(camera)
 end
 
 --gets the starting position of a projectile
-function GetStartPosition(holder)
-     -- calculate starting position and rotation of the sword
-     local pos = {x = holder.x, y = holder.y, dx = 0, dy = 0, rot = 0, ox = 0, oy = 0}
-     if holder.direction == 'up' then
-         pos.x = holder.x - 3
-         pos.y = holder.y - 18
-         pos.dy = -1
-     elseif holder.direction == 'right' then
-         pos.x = holder.x + 10
-         pos.ox = 16
-         pos.dx = 1
-     elseif holder.direction == 'down' then
-         pos.x = holder.x - 3
-         pos.y = holder.y + 10
-         pos.ox = 16
-         pos.oy = 16
-         pos.dy = 1
-     elseif holder.direction == 'left' then
-         pos.x = holder.x - 16
-         pos.oy = 16
-         pos.dx = -1
-     end
-     pos.rot = math.rad((DIRECTION_TO_NUM[holder.direction] - 1) * 90)
+function Projectile:getPosition()
+    -- calculate starting position and rotation of the sword
+    self.x = self.origin.x
+    self.y = self.origin.y
+    self.rotation = 0
+    self.ox = 0
+    self.oy = 0
+    self.dx = 0
+    self.dy = 0
+    if self.origin.direction == 'up' then
+        self.x = self.origin.x - 3
+        self.y = self.origin.y - 18
+        self.dy = -1
+    elseif self.origin.direction == 'right' then
+        self.x = self.origin.x + 10
+        self.ox = 16
+        self.dx = 1
+    elseif self.origin.direction == 'down' then
+        self.x = self.origin.x - 3
+        self.y = self.origin.y + 10
+        self.ox = 16
+        self.oy = 16
+        self.dy = 1
+    elseif self.origin.direction == 'left' then
+        self.x = self.origin.x - 16
+        self.oy = 16
+        self.dx = -1
+    end
+    self.rotation = math.rad((DIRECTION_TO_NUM[self.origin.direction] - 1) * 90)
 
-     return pos
+    self.dx = self.dx * PROJECTILE_DEFS[self.name].speed
+    self.dy = self.dy * PROJECTILE_DEFS[self.name].speed
 end
 
 function Projectile:checkCollision(map)

@@ -77,6 +77,7 @@ require 'src/level/entity/npc/Quest'
 
 require 'src/level/entity/projectile/projectile_defs'
 require 'src/level/entity/projectile/Projectile'
+require 'src/level/entity/projectile/ProjectileManager'
 
 require 'src/level/entity/item/item_defs'
 require 'src/level/entity/item/Item'

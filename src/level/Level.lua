@@ -8,7 +8,6 @@ Level = Class{}
 
 function Level:init(name, map, player, enemySpawner, npcs, pickups)
     self.name = name
-    print(self.name)
     self.map = map or Map('my_map', DEFAULT_MAP_SIZE)
 
     if player == nil then

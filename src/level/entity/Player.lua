@@ -30,7 +30,6 @@ function Player:init(def, level, pos, off)
 
     -- player is starting, give a wooden sword
     if #self.items == 0 then
-        print('gave sword')
         self:getItem(Item('wooden_sword', self, 1))
     end
 end
@@ -61,27 +60,6 @@ function Player:update(dt)
         elseif self:useHeldItem() then
         end
         self:interactWithMap(checkBox)
-    end
-
-    --update projectiles
-    local removeIndex = {}
-    for i, projectile in pairs(self.projectiles) do
-        projectile:update(dt)
-        if PROJECTILE_DEFS[projectile.name] ~= 'none' then
-            for i, entity in pairs(self.level.enemySpawner.entities) do
-                if not entity.invincible and Collide(projectile, entity) then
-                    projectile:hit(entity, self.attackboost)
-                end
-            end
-        end
-        if projectile.hits <= 0 or projectile.lifetime <= 0 or GetDistance(projectile, self.level.player) > DESPAWN_RANGE or 
-            projectile:checkCollision(self.level.map) then
-            table.insert(removeIndex, i)
-        end
-    end
-    --remove dead projectiles
-    for i, index in pairs(removeIndex) do
-        table.remove(self.projectiles, index)
     end
 end
 
