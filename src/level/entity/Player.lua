@@ -18,8 +18,9 @@ function Player:init(def, level, pos, off)
 
     self.renderPlayer = true
 
-    self.hpBar = ProgressBar(PLAYER_BAR_X, PLAYER_HP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {1, 0, 0, 1})
+    self.hpBar = ProgressBar(PLAYER_BAR_X, PLAYER_HP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_HP_BAR_HEIGHT, {1, 0, 0, 1})
     self.magicBar = ProgressBar(PLAYER_BAR_X, PLAYER_MAGIC_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 0, 1, 1})
+    self.expBar = ProgressBar(PLAYER_BAR_X, PLAYER_EXP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 1, 0, 1})
 
     self.quests = {}
     if def.quests ~= nil then
@@ -114,6 +115,7 @@ function Player:renderGui()
     --render health and magic bars
     self.hpBar:render((self.currenthp / self:getHp()))
     self.magicBar:render((self.currentmagic / self:getMagic()))
+    self.expBar:render(self.statLevel:getExpRatio())
 
     --print tiptext
     if #self.items > 0 then

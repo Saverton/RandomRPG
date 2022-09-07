@@ -97,7 +97,7 @@ function Entity:render(camera)
         love.graphics.setFont(gFonts['small'])
         local message = ''
         if self.currenthp ~= nil then
-            message = ENTITY_DEFS[self.name].displayName .. ': (' .. tostring(self.currenthp) .. ' / ' .. tostring(self:getHp()) .. ')'
+            message = ENTITY_DEFS[self.name].displayName .. ' LVL ' .. tostring(self.statLevel.level) .. ': (' .. tostring(self.currenthp) .. ' / ' .. tostring(self:getHp()) .. ')'
         elseif self.npcName ~= nil then
             message = self.npcName
         end

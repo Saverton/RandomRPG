@@ -47,6 +47,9 @@ end
 function Projectile:hit(target, attacker)
     local damage = PROJECTILE_DEFS[self.name].damage
     damage = damage * (attacker:getDamage() / math.max(attacker.attack, 1))
+    if PROJECTILE_DEFS[self.name].type ~= 'none' then
+        damage = damage + attacker:getDamage()
+    end
     local inflictions = PROJECTILE_DEFS[self.name].inflictions
     for i, inflict in pairs(attacker.inflictions) do
         if not ContainsName(inflictions, inflict.name) then

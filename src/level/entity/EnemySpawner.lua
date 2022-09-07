@@ -49,6 +49,7 @@ function EnemySpawner:render(camera)
 end
 
 function EnemySpawner:spawnEnemies()
+    local statLevelMax = self.level.player.statLevel.level
     local map = self.level.map
     local x, y = math.floor(self.level.player.x / TILE_SIZE),
         math.floor(self.level.player.y / TILE_SIZE)
@@ -76,7 +77,8 @@ function EnemySpawner:spawnEnemies()
                             {
                                 x = (col),
                                 y = (row)
-                            }
+                            },
+                            math.max(1, statLevelMax - math.random(0, 2))
                         )
                         entity.stateMachine = StateMachine({
                             ['idle'] = function() return EnemyIdleState(entity) end,

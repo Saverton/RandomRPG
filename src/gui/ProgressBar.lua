@@ -6,10 +6,10 @@
 ProgressBar = Class{}
 
 function ProgressBar:init(x, y, width, height, color)
-    self.x = x
-    self.y = y
-    self.width = width
-    self.height = height
+    self.x = math.floor(x)
+    self.y = math.floor(y)
+    self.width = math.floor(width)
+    self.height = math.floor(height)
     self.color = color or {1, 0, 0, 1}
     self.color[4] = 0.75
     self.ratio = 1

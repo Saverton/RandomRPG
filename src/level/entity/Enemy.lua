@@ -6,8 +6,8 @@
 
 Enemy = Class{__includes = CombatEntity}
 
-function Enemy:init(def, level, pos, target)
-    CombatEntity.init(self, def, level, pos)
+function Enemy:init(def, level, pos, startLevel, target)
+    CombatEntity.init(self, def, level, pos, nil, startLevel)
     
     self.target = target or nil
     if GetIndex(self.speedboost, 'agro') ~= -1 then
@@ -15,7 +15,7 @@ function Enemy:init(def, level, pos, target)
     end
     self.agroDist = def.agroDist or 0 -- 0 = not aggressive
 
-    self.color = def.color or ENEMY_COLORS[math.random(1, 8)]
+    self.color = def.color or ENEMY_COLORS[self.statLevel.level]
 
     self.hpBar = ProgressBar(self.x, self.y - 6, BAR_WIDTH, BAR_HEIGHT, {1, 0, 0, 1})
 end
@@ -61,5 +61,6 @@ end
 
 function Enemy:dies()
     self.level:throwFlags{'kill enemy'}
+    self.level.player.statLevel:expGain(self.statLevel.exp)
     CombatEntity.dies(self)
 end

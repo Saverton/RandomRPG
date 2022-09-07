@@ -69,6 +69,7 @@ require 'src/level/entity/EnemySpawner'
 require 'src/level/entity/Enemy'
 require 'src/level/entity/Effect'
 require 'src/level/entity/effect_defs'
+require 'src/level/entity/StatLevel'
 
 require 'src/level/entity/npc/NPC'
 require 'src/level/entity/npc/NPCManager'

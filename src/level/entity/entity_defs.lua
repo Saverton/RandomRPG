@@ -20,7 +20,13 @@ ENTITY_DEFS = {
         magic = PLAYER_BASE_MAGIC,
         magicRegenRate = 0.5,
         onDeath = function() love.audio.play(gSounds['player_dies_1']) end,
-        push = 16
+        push = 16,
+        statLevel = {
+            hpbonus = {chance = 0.5, bonus = 1},
+            atkbonus = {chance = 0.5, bonus = 1},
+            defbonus = {chance = 0.25, bonus = 1},
+            magicbonus = {chance = 0.25, bonus = 1}
+        }
     },
     ['goblin'] = {
         name = 'goblin',

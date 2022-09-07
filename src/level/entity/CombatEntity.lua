@@ -5,7 +5,7 @@
 
 CombatEntity = Class{__includes = Entity}
 
-function CombatEntity:init(def, level, pos, off)
+function CombatEntity:init(def, level, pos, off, startLevel)
     Entity.init(self, def, level, pos, off)
 
     -- combat statistics
@@ -47,7 +47,7 @@ function CombatEntity:init(def, level, pos, off)
     self.pushdy = 0
 
     -- level system
-    --self.statLevel = self.level.player.statLevel or 1
+    self.statLevel = StatLevel(self, def.statLevel or {level = startLevel or 1})
 end
 
 function CombatEntity:update(dt)

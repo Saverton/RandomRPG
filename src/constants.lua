@@ -92,10 +92,12 @@ PLAYER_SPAWN_Y_OFFSET = 3
 BAR_WIDTH = 16
 BAR_HEIGHT = 2
 PLAYER_BAR_X = 34
-PLAYER_BAR_HEIGHT = 6
+PLAYER_BAR_HEIGHT = 4
+PLAYER_HP_BAR_HEIGHT = 6
 PLAYER_BAR_WIDTH = 40
 PLAYER_HP_BAR_Y = 12
-PLAYER_MAGIC_BAR_Y = 12 + PLAYER_BAR_HEIGHT + 5
+PLAYER_MAGIC_BAR_Y = 12 + PLAYER_HP_BAR_HEIGHT + 4
+PLAYER_EXP_BAR_Y = 12 + (PLAYER_HP_BAR_HEIGHT + PLAYER_BAR_HEIGHT) + 8
 
 ATTACK_TIME = 0.3
 FLASH_FRAME = 4
@@ -108,7 +110,7 @@ PUSH_DECAY = 1.1
 START_AMMO = 10
 
 PLAYER_TEXT_POS_X = 34
-AMMO_TEXT_POS_Y = PLAYER_MAGIC_BAR_Y + PLAYER_BAR_HEIGHT + 5
+AMMO_TEXT_POS_Y = PLAYER_EXP_BAR_Y + PLAYER_BAR_HEIGHT + 4
 MONEY_TEXT_POS_Y = AMMO_TEXT_POS_Y + 8 + 2
 
 SELECTION_HEIGHT = 8
@@ -149,9 +151,9 @@ NPC_NAMES = {'Dorfinkle', 'Adronian', 'Quandale', 'Steve', 'Terrence', 'Dumbleda
 QUEST_LIMIT = 2
 
 TIPS = {
-    'There are three different weapons scattered across the world.',
+    'There are six different weapons found across the world.',
     'The Tome of Fire doesn\'t harm enemies directly, but it sets them on fire for a brief time.',
-    'There aren\' too many tips for me to give you, the game is still rather simple.',
+    'There aren\'t too many tips for me to give you, the game is still rather simple.',
     'You can chop down a tree using the Battle Axe...',
     'You can use wood to bridge across water...',
     'Watch out for skeletons! They have weapons!'
@@ -160,3 +162,8 @@ TIPS = {
 CHEST_ITEMS = {'sword', 'battle_axe', 'bow', 'fire_tome', 'ice_tome'}
 
 PROJECTILE_CAP = 5
+
+DEFAULT_BONUS = {
+    bonus = 1, 
+    chance = 1
+}
