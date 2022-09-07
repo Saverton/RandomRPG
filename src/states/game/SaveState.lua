@@ -9,6 +9,7 @@ function SaveState:init(level)
     print('save state loaded')
     self.name = level.name
     self.map = level.map
+    self.player = level.player
 end
 
 function SaveState:update()
@@ -37,6 +38,7 @@ function SaveState:saveGame()
     end
 
     self:saveMap('worlds/' .. self.name .. '/map_overworld')
+    self:savePlayer('worlds/' .. self.name)
 end
 
 function SaveState:saveMap(path)
@@ -71,4 +73,57 @@ function SaveState:saveMap(path)
     love.filesystem.write(path .. '/world_features.lua', Serialize(featureMap))
     love.filesystem.write(path .. '/world_tiles.lua', Serialize(tilesMap))
     love.filesystem.write(path .. '/world_biomes.lua', Serialize(biomeMap))
+end
+
+function SaveState:savePlayer(path)
+    local pos = {
+        x = (self.player.x / 16) + 1, 
+        y = (self.player.y / 16) + 1
+    }
+
+    --local off = self.player.off
+
+    local def = {
+        name = self.player.name,
+        width = self.player.width,
+        height = self.player.height,
+        xOffset = self.player.xOffset,
+        yOffset = self.player.yOffset,
+        money = self.player.money,
+        ammo = self.player.ammo,
+        hp = self.player.hp,
+        attack = self.player.attack,
+        speed = self.player.speed,
+        defense = self.player.defense,
+        magic = self.player.magic,
+        magicRegenRate = self.player.magicRegenRate,
+        hpboost = self.player.hpboost,
+        attackboost = self.player.attackboost,
+        speedboost = self.player.speedboost,
+        defenseboost = self.player.defenseboost,
+        magicboost = self.player.magicboost,
+        currenthp = self.player.currenthp,
+        currentmagic = self.player.currentmagic,
+        quests = self.player.quests,
+        effects = {},
+        immunities = self.player.immunities,
+        inflictions = self.player.inflictions,
+        items = {}
+    }
+
+    local effects = {}
+    local items = {}
+    for i, effect in ipairs(self.player.effects) do
+        table.insert(effects, {name = effect.name, duration = effect.duration})
+    end
+    def.effects = effects
+    for i, item in ipairs(self.player.items) do
+        table.insert(items, {name = item.name, quantity = item.quantity})
+    end
+    def.items = items
+
+    local player = {def = def, pos = pos}
+
+    print_r(player)
+    love.filesystem.write(path .. '/player.lua', Serialize(player))
 end

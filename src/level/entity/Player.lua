@@ -6,13 +6,13 @@
 Player = Class{__includes = CombatEntity}
 
 function Player:init(def, level, pos, off)
-    self.statLevel = def.statLevel or 1
+    --self.statLevel = def.statLevel or 1
 
     CombatEntity.init(self, def, level, pos, off)
 
-    self.pickupRange = 16
+    self.pickupRange = PICKUP_RANGE
 
-    self.money = 0
+    self.money = def.money or 0
 
     self.hotbar = self:getHotbar(3)
 
@@ -23,7 +23,9 @@ function Player:init(def, level, pos, off)
 
     self.quests = def.quests or {}
 
+    -- player is starting, give a wooden sword
     if #self.items == 0 then
+        print('gave sword')
         self:getItem(Item('wooden_sword', self, 1))
     end
 end

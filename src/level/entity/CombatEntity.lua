@@ -22,16 +22,16 @@ function CombatEntity:init(def, level, pos, off)
     self.defenseboost = def.defenseboost or {}
     self.magicboost = def.magicboost or {}
 
-    self.currenthp = self:getHp()
-    self.currentmagic = self:getMagic()
+    self.currenthp = def.currenthp or self:getHp()
+    self.currentmagic = def.currentmagic or self:getMagic()
 
     -- status effect management
-    self.effects = {} -- currently applied effects
+    self.effects = def.effects or {} -- currently applied effects
     self.inflictions = def.inflictions or {} -- effects that are inflicted upon attack
     self.immunities = def.immunities or {} -- effects that this entity is immune to being afflicted by
 
     -- reference to owned projectiles
-    self.projectiles = {}
+    self.projectiles = def.projectiles or {}
 
     self.onDeath = def.onDeath or function() end
 

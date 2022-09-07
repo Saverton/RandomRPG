@@ -9,8 +9,12 @@ Level = Class{}
 function Level:init(map, player, enemySpawner)
     self.name = 'test'
     self.map = map or Map('my_map', DEFAULT_MAP_SIZE)
+
+    if player == nil then
+        player = {}
+    end
     
-    self.player = player or Player(ENTITY_DEFS['player'], self, self:getPlayerSpawnSpace(), {x = PLAYER_SPAWN_X_OFFSET, y = PLAYER_SPAWN_Y_OFFSET})
+    self.player = Player(player.def or ENTITY_DEFS['player'], self, player.pos or self:getPlayerSpawnSpace(), player.off or {x = PLAYER_SPAWN_X_OFFSET, y = PLAYER_SPAWN_Y_OFFSET})
     self.player.stateMachine = StateMachine({
         ['idle'] = function() return PlayerIdleState(self.player) end,
         ['walk'] = function() return PlayerWalkState(self.player, self) end,

@@ -13,7 +13,7 @@ end
 
 function LoadState:update(dt)
     self.level = self:loadWorld()
-    
+
     gStateStack:pop()
     gStateStack:push(WorldState({
         level = self.level, 
@@ -33,10 +33,12 @@ end
 
 function LoadState:loadWorld()
     local map = nil
+    local player = nil
 
     map = self:loadMap()
+    player = self:loadPlayer()
 
-    return Level(map)
+    return Level(map, player)
 end
 
 function LoadState:loadMap()
@@ -69,4 +71,8 @@ function LoadState:loadMap()
     end
 
     return Map('map', size, tileMap, featureMap)
+end
+
+function LoadState:loadPlayer()
+    return loadstring(love.filesystem.read(self.path .. '/player.lua'))()
 end

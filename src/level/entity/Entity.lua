@@ -43,7 +43,7 @@ function Entity:init(def, level, pos, off)
         end
     end
     self.heldItem = 1
-    self.ammo = START_AMMO
+    self.ammo = def.ammo or START_AMMO
 end
 
 function Entity:update(dt)
