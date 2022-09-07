@@ -72,7 +72,11 @@ function LoadState:loadMap()
     for col = 1, size, 1 do
         for row = 1, size, 1 do
             if featureMap[col][row] ~= nil then
-                featureMap[col][row] = Feature(featureMap[col][row], col, row)
+                if FEATURE_DEFS[featureMap[col][row]].animated then
+                    featureMap[col][row] = AnimatedFeature(featureMap[col][row], col, row, Animation(featureMap[col][row], 'main'))
+                else
+                    featureMap[col][row] = Feature(featureMap[col][row], col, row)
+                end
             end
         end
     end

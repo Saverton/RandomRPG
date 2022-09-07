@@ -7,7 +7,7 @@ AnimatedTile = Class{__includes = Tile}
 
 function AnimatedTile:init(def, x, y, animator)
     Tile.init(self, def, x, y)
-    self.animator = animator
+    self.animator = animator or nil
 end
 
 function AnimatedTile:render(camx, camy)
