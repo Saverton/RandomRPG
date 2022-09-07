@@ -78,6 +78,7 @@ function Quest:reward(player)
     for i, reward in pairs(self.rewards) do
         player:getItem(Item(reward.name, player, reward.quantity))
     end
+    table.remove(player.quests, GetIndex(player.quests, self.quest.name))
 end
 
 function Quest:GenerateQuest(diff)
