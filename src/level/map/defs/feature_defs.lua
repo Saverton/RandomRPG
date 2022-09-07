@@ -22,7 +22,10 @@ FEATURE_DEFS = {
             if player.items[player.heldItem].name == 'battle_axe' then
                 featureMap[col][row] = nil
                 table.insert(player.level.pickupManager.pickups, Pickup('wood', (col - 1) * TILE_SIZE, (row - 1) * TILE_SIZE))
+                return true
             end
+
+            return false
         end,
         isSolid = false
     },

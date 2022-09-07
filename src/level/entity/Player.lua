@@ -31,7 +31,7 @@ function Player:init(def, level, pos, off)
 
     -- player is starting, give a wooden sword
     if #self.items == 0 then
-        self:getItem(Item('wooden_sword', self, 1))
+        self:getItem(Item('battle_axe', self, 1))
     end
 end
 
@@ -66,8 +66,10 @@ function Player:update(dt)
         }
         if self:interactWithNPC(checkBox) then
         elseif self:useHeldItem() then
+            self:interactWithMap(checkBox)
+        elseif self.items[self.heldItem] == nil then
+            self:interactWithMap(checkBox)
         end
-        self:interactWithMap(checkBox)
     end
 end
 
@@ -98,6 +100,9 @@ function Player:renderGui()
         slot:render(opa)
         if self.items[i] ~= nil then
             self.items[i]:render(slot.x + 2, slot.y + 2)
+            if self.items[i].quantity > 1 then
+                love.graphics.printf(self.items[i].quantity, slot.x, slot.y + 12, 18, "right")
+            end
         end
         if i == self.heldItem and self.items[self.heldItem] ~= nil then
             love.graphics.setColor(1, 1, 1, 0.25)
@@ -185,13 +190,19 @@ function Player:interactWithMap(checkBox)
             local feature = map.featureMap[col][row]
             local tile = map.tileMap.tiles[col][row]
             if feature ~= nil and Collide(checkBox, mapBox) then
-                FEATURE_DEFS[feature.name].onInteract(self, map, col, row)
+                if FEATURE_DEFS[feature.name].onInteract(self, map, col, row) then
+                    goto stop_checking
+                end
             end
             if Collide(checkBox, mapBox) then
-                TILE_DEFS[tile.name].onInteract(self, map, col, row)
+                if TILE_DEFS[tile.name].onInteract(self, map, col, row) then
+                    goto stop_checking
+                end
             end
         end
     end
+
+    ::stop_checking::
 end
 
 function Player:updateFlags(checkFlags)

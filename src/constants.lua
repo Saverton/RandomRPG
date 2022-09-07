@@ -145,18 +145,18 @@ PICKUP_RANGE = 16
 DESPAWN_TIMER = 2
 
 NPC_CAP = 3
-NPC_TYPES = {'quest'}
+NPC_TYPES = {'quest', 'shop', 'tips'}
 NPC_NAMES = {'Dorfinkle', 'Adronian', 'Quandale', 'Steve', 'Terrence', 'Dumbledalf', 'Frippin', 'Zink'}
 
 QUEST_LIMIT = 2
 
 TIPS = {
-    'There are six different weapons found across the world.',
-    'The Tome of Fire doesn\'t harm enemies directly, but it sets them on fire for a brief time.',
-    'There aren\'t too many tips for me to give you, the game is still rather simple.',
+    'Have you found six weapons?',
+    'The fireball sets enemies on fire.',
     'You can chop down a tree using the Battle Axe...',
     'You can use wood to bridge across water...',
-    'Watch out for skeletons! They have weapons!'
+    'Watch out for skeletons! They have weapons!',
+    'Enemies will get stronger as you do.'
 }
 
 CHEST_ITEMS = {'sword', 'battle_axe', 'bow', 'fire_tome', 'ice_tome'}
@@ -167,3 +167,6 @@ DEFAULT_BONUS = {
     bonus = 1, 
     chance = 1
 }
+
+-- text reveal speed chars/second
+TEXT_REVEAL_SPEED = 20

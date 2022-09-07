@@ -46,6 +46,7 @@ function Menu:update(dt)
 
         if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
             love.audio.play(gSounds['menu_select_1'])
+
             selector.selected = true
             if self.selector < #self.selectors then
                 self.selector = self.selector + 1
@@ -53,6 +54,10 @@ function Menu:update(dt)
             else
                 selector.onChoose(math.min(selector.pos, #self.selections), self)
             end
+        end
+    else
+        if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+            gStateStack:pop()
         end
     end
 

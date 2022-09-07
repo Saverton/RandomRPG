@@ -36,23 +36,22 @@ end
 
 function Quest:check(player)
     if not ContainsName(player.quests, self.quest.name) then
-        gStateStack:push(DialogueState(self.startText, self.npc.animator.texture, 1))
-        gStateStack:push(ConfirmState(MENU_DEFS['quest_confirm'], {
-            onConfirm = function() 
-                gStateStack:pop()
-                if player:giveQuest(self.quest) then
-                    gStateStack:push(DialogueState(self.acceptText, self.npc.animator.texture, 1))
-                else
-                    gStateStack:push(DialogueState('You can only have ' .. tostring(QUEST_LIMIT) .. ' active quests!', 
-                    self.npc.animator.texture, 1))
+        gStateStack:push(DialogueState(self.startText, self.npc.animator.texture, 1, function()
+            gStateStack:push(ConfirmState(MENU_DEFS['quest_confirm'], {
+                onConfirm = function() 
+                    if player:giveQuest(self.quest) then
+                        gStateStack:push(DialogueState(self.acceptText, self.npc.animator.texture, 1))
+                    else
+                        gStateStack:push(DialogueState('You can only have ' .. tostring(QUEST_LIMIT) .. ' active quests!', 
+                        self.npc.animator.texture, 1))
+                    end
+                end,
+                onDeny = function()
+                    self.denied = true
+                    gStateStack:push(DialogueState(self.refuseText, self.npc.animator.texture, 1))
                 end
-            end,
-            onDeny = function()
-                gStateStack:pop()
-                self.denied = true
-                gStateStack:push(DialogueState(self.refuseText, self.npc.animator.texture, 1))
-            end
-        }))
+            }))
+        end))
     elseif self:checkCompletion(player) then
         self:reward(player)
         self.completed = true

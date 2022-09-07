@@ -23,7 +23,10 @@ TILE_DEFS = {
                 item.quantity = math.max(0, item.quantity - 1)
                 tiles[col][row] = Tile('bridge', col, row)
                 player:updateInventory()
+                return true
             end
+
+            return false
         end
     },
     ['stone'] = {
