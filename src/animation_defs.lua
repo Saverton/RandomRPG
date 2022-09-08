@@ -66,6 +66,25 @@ ANIMATION_DEFS = {
             interval = 0.1
         }
     },
+    ['player_death'] = {
+        ['up'] = {
+            texture = 'player_death',
+            frames = {3}
+        },
+        ['right'] = {
+            texture = 'player_death',
+            frames = {1}
+        },
+        ['down'] = {
+            texture = 'player_death',
+            frames = {2}
+        },
+        ['left'] = {
+            texture = 'player_death',
+            frames = {1},
+            xScale = -1
+        }
+    },
     ['goblin'] = {
         ['idle-right'] = {
             texture = 'goblin',

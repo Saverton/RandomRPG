@@ -11,10 +11,13 @@ function DeathAnimationState:init(player, x, y)
     self.animation = player.animator
     self.backgroundOpacity = 0
     self.updateAnimation = false
+    self.renderPlayerExtra = true
+    self.extraAnimation = Animation('player_death', player.direction)
 
     Timer.after(1, function()
         self.animation:changeAnimation('spin')
         self.updateAnimation = true
+        self.renderPlayerExtra = false
         Timer.tween(2, {
             [self] = {backgroundOpacity = 1}
         }):finish(function()
@@ -38,4 +41,7 @@ function DeathAnimationState:render()
     love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
     love.graphics.setColor(1, 1, 1, 1)
     self.animation:render(self.x, self.y)
+    if self.renderPlayerExtra then
+        self.extraAnimation:render(self.x, self.y)
+    end
 end
