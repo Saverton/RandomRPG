@@ -6,13 +6,17 @@
 
 Map = Class{}
 
-function Map:init(name, size, tileMap, featureMap)
+function Map:init(name, size, tileMap, featureMap, gatewayMap)
     self.name = name or nil
     --size dimension of map
     self.size = size or DEFAULT_MAP_SIZE
     self.tileMap = tileMap or TileMap(self.size)
     self.featureMap = featureMap or GenerateFeatures(self.size, self.tileMap)
     self.animatedFeatures = GetAnimatedFeatures(self.featureMap)
+
+    for i, gateway in ipairs(gatewayMap or {}) do
+        self.featureMap[gateway.x][gateway.y] = GatewayFeature(gateway.name, gateway.x, gateway.y, gateway.destination, gateway.active)
+    end
 end
 
 function Map:update(dt)

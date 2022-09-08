@@ -131,10 +131,15 @@ function Entity:checkCollision()
         end
         local feature = self.level.map.featureMap[coord[1]][coord[2]]
         local tile = self.level.map.tileMap.tiles[coord[1]][coord[2]]
+
         if (feature ~= nil and FEATURE_DEFS[feature.name].isSolid) or tile.barrier then
             collide = true
             break
         end
+        if self.isPlayer and feature ~= nil and FEATURE_DEFS[feature.name].gateway and feature.active then
+            feature:onEnter(self.level)
+        end
+        
         ::continue::
     end
 

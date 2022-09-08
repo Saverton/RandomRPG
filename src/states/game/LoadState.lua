@@ -67,8 +67,8 @@ function LoadState:loadMap()
     local size = #tiles 
     local tileMap = TileMap(size, tiles, biomes)
     local featureMap = loadstring(love.filesystem.read(self.path .. '/map_overworld/world_features.lua'))()
+    local gatewayMap = loadstring(love.filesystem.read(self.path .. '/map_overworld/world_gateways.lua'))()
 
-    
     for col = 1, size, 1 do
         for row = 1, size, 1 do
             if featureMap[col][row] ~= nil then
@@ -81,7 +81,7 @@ function LoadState:loadMap()
         end
     end
 
-    return Map('map', size, tileMap, featureMap)
+    return Map('map', size, tileMap, featureMap, gatewayMap)
 end
 
 function LoadState:loadPlayer()

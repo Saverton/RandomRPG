@@ -5,7 +5,7 @@
 
 SaveState = Class{__includes = BaseState}
 
-function SaveState:init(level)
+function SaveState:init(level, loadnext)
     print('save state loaded')
     self.name = level.name
     self.map = level.map
@@ -13,13 +13,18 @@ function SaveState:init(level)
     self.enemySpawner = level.enemySpawner
     self.pickupManager = level.pickupManager
     self.npcManager = level.npcManager
+    self.loadnext = loadnext or nil
 end
 
 function SaveState:update()
     self:saveGame()
 
     gStateStack:pop()
-    gStateStack:pop()
+
+    if self.loadnext ~= nil then
+        gStateStack:push(LoadState('worlds/' .. self.loadnext))
+        gStateStack:pop()
+    end
 end
 
 function SaveState:render()
@@ -51,6 +56,7 @@ function SaveState:saveMap(path)
     local featureMap = {}
     local tilesMap = {}
     local biomeMap = {}
+    local gatewayMap = {}
 
     for col = 1, self.map.size, 1 do
         featureMap[col] = {}
@@ -58,6 +64,9 @@ function SaveState:saveMap(path)
             local feature = self.map.featureMap[col][row]
             if feature ~= nil then
                 featureMap[col][row] = feature.name
+                if FEATURE_DEFS[feature.name].gateway then
+                    table.insert(gatewayMap, {name = feature.name, x = col, y = row, destination = feature.destination, active = feature.active})
+                end
             end
         end
     end
@@ -79,6 +88,7 @@ function SaveState:saveMap(path)
     love.filesystem.write(path .. '/world_features.lua', Serialize(featureMap))
     love.filesystem.write(path .. '/world_tiles.lua', Serialize(tilesMap))
     love.filesystem.write(path .. '/world_biomes.lua', Serialize(biomeMap))
+    love.filesystem.write(path .. '/world_gateways.lua', Serialize(gatewayMap))
 end
 
 function SaveState:savePlayer(path)

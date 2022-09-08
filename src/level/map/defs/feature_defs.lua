@@ -81,5 +81,14 @@ FEATURE_DEFS = {
             return false
         end,
         isSolid = false
+    },
+    ['fortress'] = {
+        id = 5,
+        name = 'fortress',
+        texture = 'features',
+        frame = 9,
+        gateway = true,
+        onInteract = function() end,
+        isSolid = false
     }
 }

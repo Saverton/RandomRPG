@@ -30,6 +30,10 @@ function GenerateFeatures(size, tileMap)
         end
     end
 
+    local fortX, fortY = math.random(2, size - 1), math.random(2, size - 1)
+    print('fortress location: ' .. tostring(fortX) .. ', ' .. tostring(fortY))
+    featureMap[fortX][fortY] = GatewayFeature('fortress', fortX, fortY, 'map_overworld')
+
     return featureMap
 end
 

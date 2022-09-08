@@ -17,6 +17,7 @@ function Player:init(def, level, pos, off)
     self.hotbar = self:getHotbar(3)
 
     self.renderPlayer = true
+    self.isPlayer = true
 
     self.hpBar = ProgressBar(PLAYER_BAR_X, PLAYER_HP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_HP_BAR_HEIGHT, {1, 0, 0, 1})
     self.magicBar = ProgressBar(PLAYER_BAR_X, PLAYER_MAGIC_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 0, 1, 1})
