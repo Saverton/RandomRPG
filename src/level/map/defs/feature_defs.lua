@@ -56,5 +56,30 @@ FEATURE_DEFS = {
             end)
         end,
         isSolid = true
+    },
+    ['cactus'] = {
+        id = 4,
+        name = 'cactus',
+        texture = 'features',
+        frame = 8,
+        onInteract = function() end,
+        isSolid = false
+    },
+    ['snow_tree'] = {
+        id = 1,
+        name = 'snow_tree',
+        texture = 'features',
+        frame = 7,
+        onInteract = function(player, map, col, row) 
+            local featureMap = map.featureMap
+            if player.items[player.heldItem].name == 'battle_axe' then
+                featureMap[col][row] = nil
+                table.insert(player.level.pickupManager.pickups, Pickup('wood', (col - 1) * TILE_SIZE, (row - 1) * TILE_SIZE))
+                return true
+            end
+
+            return false
+        end,
+        isSolid = false
     }
 }

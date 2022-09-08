@@ -42,5 +42,19 @@ TILE_DEFS = {
         frame = 5,
         barrier = false,
         onInteract = function() end
+    },
+    ['sand'] = {
+        name = 'sand',
+        texture = 'tiles',
+        frame = 6,
+        barrier = false,
+        onInteract = function() end
+    },
+    ['snow'] = {
+        name = 'snow',
+        texture = 'tiles',
+        frame = 7,
+        barrier = false,
+        onInteract = function() end
     }
 }
