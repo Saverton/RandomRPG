@@ -97,8 +97,9 @@ function SaveState:savePlayer(path)
         y = (self.player.y / 16) + 1
     }
 
+    print('level name in save state = ' .. self.levelName)
+
     local def = {
-        currentLevel = self.levelName,
         name = self.player.name,
         animName = self.player.animName,
         width = self.player.width,
@@ -144,7 +145,7 @@ function SaveState:savePlayer(path)
     end
     def.quests = quests
 
-    local player = {def = def, pos = pos}
+    local player = {def = def, pos = pos, currentLevel = self.levelName}
 
     love.filesystem.write(path .. '/player.lua', Serialize(player))
 end

@@ -41,6 +41,7 @@ function LoadState:loadWorld()
 
     player = self:loadPlayer()
     if self.loadLevel == nil then
+        print('player current level = ' .. player.currentLevel)
         self.loadLevel = player.currentLevel or 'map_overworld'
     end
     self.path = self.path .. '/' .. self.loadLevel

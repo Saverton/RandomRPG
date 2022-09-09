@@ -8,7 +8,8 @@ GatewayFeature = Class{__includes = Feature}
 function GatewayFeature:init(name, x, y, destination, active)
     Feature.init(self, name, x, y) 
     self.destination = destination
-    self.active = active or true
+    self.active = false
+    Timer.after(2, function() self.active = true end)
 end
 
 function GatewayFeature:onEnter(level)
