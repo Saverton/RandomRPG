@@ -14,7 +14,6 @@ function SaveState:init(level, loadnext)
     self.pickupManager = level.pickupManager
     self.npcManager = level.npcManager
     self.loadnext = loadnext or nil
-    print('loadnext in save state = ' .. self.loadnext)
 end
 
 function SaveState:update()

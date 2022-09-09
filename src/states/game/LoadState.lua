@@ -43,7 +43,6 @@ function LoadState:loadWorld()
     if self.loadLevel == nil then
         self.loadLevel = player.currentLevel or 'map_overworld'
     end
-    print('load level 2 = ' .. self.loadLevel)
     self.path = self.path .. '/' .. self.loadLevel
     if not love.filesystem.getInfo(self.path) then
         return (Level(worldName, self.loadLevel, nil, player))

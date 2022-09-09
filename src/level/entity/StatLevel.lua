@@ -7,7 +7,7 @@ StatLevel = Class{}
 
 function StatLevel:init(entity, def)
     self.entity = entity
-    self.level = 0
+    self.level = def.level or 0
 
     -- bonus received on level up
     self.hpbonus = def.hpbonus or DEFAULT_BONUS

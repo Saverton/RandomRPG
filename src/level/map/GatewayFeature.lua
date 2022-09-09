@@ -13,6 +13,5 @@ end
 
 function GatewayFeature:onEnter(level)
     self.active = false
-    print('destination in practice = ' .. self.destination)
     gStateStack:push(SaveState(level, self.destination))
 end
