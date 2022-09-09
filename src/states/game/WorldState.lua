@@ -7,7 +7,9 @@
 WorldState = Class{__includes = BaseState}
 
 function WorldState:init(defs)
-    self.level = defs.level or Level(defs.name or 'my world')
+    self.name = defs.name or 'my world'
+
+    self.level = defs.level or Level(self.name, 'map_overworld')
 
     self.debug = defs.debug
 end

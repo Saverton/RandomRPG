@@ -6,9 +6,10 @@
 
 Level = Class{}
 
-function Level:init(name, map, player, enemySpawner, npcs, pickups)
-    self.name = name
-    self.map = map or Map('my_map', DEFAULT_MAP_SIZE)
+function Level:init(worldName, levelName, map, player, enemySpawner, npcs, pickups)
+    self.worldName = worldName
+    self.levelName = levelName
+    self.map = map or Map(self.levelName, DEFAULT_MAP_SIZE)
 
     if player == nil then
         player = {}
@@ -41,7 +42,7 @@ end
 function Level:getPlayerSpawnSpace()
     local x, y = self:getSpawnableCoord()
 
-    return {x = x, y = y}
+    return {x = 12, y = 12}
 end
 
 function Level:update(dt)

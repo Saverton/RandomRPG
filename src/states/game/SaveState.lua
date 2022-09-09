@@ -6,14 +6,15 @@
 SaveState = Class{__includes = BaseState}
 
 function SaveState:init(level, loadnext)
-    print('save state loaded')
-    self.name = level.name
+    self.worldName = level.worldName
+    self.levelName = level.levelName
     self.map = level.map
     self.player = level.player
     self.enemySpawner = level.enemySpawner
     self.pickupManager = level.pickupManager
     self.npcManager = level.npcManager
     self.loadnext = loadnext or nil
+    print('loadnext in save state = ' .. self.loadnext)
 end
 
 function SaveState:update()
@@ -22,8 +23,8 @@ function SaveState:update()
     gStateStack:pop()
 
     if self.loadnext ~= nil then
-        gStateStack:push(LoadState('worlds/' .. self.loadnext))
         gStateStack:pop()
+        gStateStack:push(LoadState('worlds/' .. self.worldName, self.loadnext))
     end
 end
 
@@ -41,15 +42,15 @@ function SaveState:saveGame()
     love.filesystem.setIdentity('random_rpg')
 
     -- save the world's map
-    if not love.filesystem.getInfo('worlds/' .. self.name .. '/map_overworld') then
-        love.filesystem.createDirectory('worlds/' .. self.name .. '/map_overworld')
+    if not love.filesystem.getInfo('worlds/' .. self.worldName .. '/' .. self.levelName) then
+        love.filesystem.createDirectory('worlds/' .. self.worldName .. '/' .. self.levelName)
     end
 
-    self:saveMap('worlds/' .. self.name .. '/map_overworld')
-    self:savePlayer('worlds/' .. self.name)
-    self:saveEntities('worlds/' .. self.name .. '/map_overworld')
-    self:saveNPCS('worlds/' .. self.name .. '/map_overworld')
-    self:savePickups('worlds/' .. self.name .. '/map_overworld')
+    self:saveMap('worlds/' .. self.worldName .. '/' .. self.levelName)
+    self:savePlayer('worlds/' .. self.worldName)
+    self:saveEntities('worlds/' .. self.worldName .. '/' .. self.levelName)
+    self:saveNPCS('worlds/' .. self.worldName .. '/' .. self.levelName)
+    self:savePickups('worlds/' .. self.worldName .. '/' .. self.levelName)
 end
 
 function SaveState:saveMap(path)
@@ -98,6 +99,7 @@ function SaveState:savePlayer(path)
     }
 
     local def = {
+        currentLevel = self.levelName,
         name = self.player.name,
         animName = self.player.animName,
         width = self.player.width,

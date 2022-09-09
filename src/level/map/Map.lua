@@ -13,6 +13,7 @@ function Map:init(name, size, tileMap, featureMap, gatewayMap)
     self.tileMap = tileMap or TileMap(self.size)
     self.featureMap = featureMap or GenerateFeatures(self.size, self.tileMap)
     self.animatedFeatures = GetAnimatedFeatures(self.featureMap)
+    GenerateFortress(self.featureMap, self.size, self.name)
 
     for i, gateway in ipairs(gatewayMap or {}) do
         self.featureMap[gateway.x][gateway.y] = GatewayFeature(gateway.name, gateway.x, gateway.y, gateway.destination, gateway.active)

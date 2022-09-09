@@ -15,7 +15,9 @@ function StatLevel:init(entity, def)
     self.defensebonus = def.defensebonus or DEFAULT_BONUS
     self.magicbonus = def.magicbonus or DEFAULT_BONUS
 
-    self:levelUp(def.level or 1)
+    if self.level == 0 then
+        self:levelUp(1)
+    end
     self.exp = def.exp or math.pow(3, self.level - 1)
 end
 

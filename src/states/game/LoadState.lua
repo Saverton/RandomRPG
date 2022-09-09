@@ -5,9 +5,10 @@
 
 LoadState = Class{__includes = BaseState}
  
-function LoadState:init(path, debug)
+function LoadState:init(path, loadLevel)
     love.filesystem.setIdentity('random_rpg')
     self.path = path
+    self.loadLevel = loadLevel or nil
     self.level = nil
 end
 
@@ -16,8 +17,7 @@ function LoadState:update(dt)
 
     gStateStack:pop()
     gStateStack:push(WorldState({
-        level = self.level, 
-        debug = debug
+        level = self.level
     }))
 end
 
@@ -32,25 +32,34 @@ function LoadState:render()
 end
 
 function LoadState:loadWorld()
-    local name = string.sub(self.path, 8, string.len(self.path))
+    local worldName = string.sub(self.path, 8, string.len(self.path))
     local map = nil
     local player = nil
     local enemySpawner = nil
     local npcManager = nil
     local pickupManager = nil
 
-    map = self:loadMap()
     player = self:loadPlayer()
+    if self.loadLevel == nil then
+        self.loadLevel = player.currentLevel or 'map_overworld'
+    end
+    print('load level 2 = ' .. self.loadLevel)
+    self.path = self.path .. '/' .. self.loadLevel
+    if not love.filesystem.getInfo(self.path) then
+        return (Level(worldName, self.loadLevel, nil, player))
+    end
+
+    map = self:loadMap()
     enemySpawner = self:loadEntities()
     npcManager = self:loadNPCS()
     pickupManager = self:loadPickups()
 
-    return Level(name ,map, player, enemySpawner, npcManager, pickupManager)
+    return Level(worldName, self.loadLevel, map, player, enemySpawner, npcManager, pickupManager)
 end
 
 function LoadState:loadMap()
-    local tiles = loadstring(love.filesystem.read(self.path .. '/map_overworld/world_tiles.lua'))()
-    local biomes = loadstring(love.filesystem.read(self.path .. '/map_overworld/world_biomes.lua'))()
+    local tiles = loadstring(love.filesystem.read(self.path .. '/world_tiles.lua'))()
+    local biomes = loadstring(love.filesystem.read(self.path .. '/world_biomes.lua'))()
 
     for i, col in ipairs(tiles) do
         for j, tile in ipairs(col) do
@@ -66,8 +75,8 @@ function LoadState:loadMap()
 
     local size = #tiles 
     local tileMap = TileMap(size, tiles, biomes)
-    local featureMap = loadstring(love.filesystem.read(self.path .. '/map_overworld/world_features.lua'))()
-    local gatewayMap = loadstring(love.filesystem.read(self.path .. '/map_overworld/world_gateways.lua'))()
+    local featureMap = loadstring(love.filesystem.read(self.path .. '/world_features.lua'))()
+    local gatewayMap = loadstring(love.filesystem.read(self.path .. '/world_gateways.lua'))()
 
     for col = 1, size, 1 do
         for row = 1, size, 1 do
@@ -81,7 +90,7 @@ function LoadState:loadMap()
         end
     end
 
-    return Map('map', size, tileMap, featureMap, gatewayMap)
+    return Map(self.loadLevel, size, tileMap, featureMap, gatewayMap)
 end
 
 function LoadState:loadPlayer()
@@ -89,13 +98,13 @@ function LoadState:loadPlayer()
 end
 
 function LoadState:loadEntities()
-    return loadstring(love.filesystem.read(self.path .. '/map_overworld/entities.lua'))()
+    return loadstring(love.filesystem.read(self.path .. '/entities.lua'))()
 end
 
 function LoadState:loadNPCS()
-    return loadstring(love.filesystem.read(self.path .. '/map_overworld/npcs.lua'))()
+    return loadstring(love.filesystem.read(self.path .. '/npcs.lua'))()
 end
 
 function LoadState:loadPickups()
-    return loadstring(love.filesystem.read(self.path .. '/map_overworld/pickups.lua'))()
+    return loadstring(love.filesystem.read(self.path .. '/pickups.lua'))()
 end
