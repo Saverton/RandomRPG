@@ -97,8 +97,6 @@ function SaveState:savePlayer(path)
         y = (self.player.y / 16) + 1
     }
 
-    print('level name in save state = ' .. self.levelName)
-
     local def = {
         name = self.player.name,
         animName = self.player.animName,
@@ -245,7 +243,6 @@ function SaveState:saveNPCS(path)
 
             def.shop = shop
         elseif def.hasQuest then
-            print('saving quest')
             local quest = {
                 rewards = entity.quest.rewards,
                 quest = {
