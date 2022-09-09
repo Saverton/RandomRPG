@@ -72,6 +72,10 @@ DIRECTION_COORDS = {
     {0, -1}, {1, 0}, {0, 1}, {-1, 0}
 }
 
+DIRECTION_COORDS_VARS = {
+    {x = 0, y = -1}, {x = 1, y = 0}, {x = 0, y = 1}, {x = -1, y = 0}
+}
+
 DEFAULT_ENEMY_AGRO_DIST = 5
 
 DEFAULT_ENTITY_CAP = 5

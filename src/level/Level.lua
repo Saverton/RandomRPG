@@ -10,7 +10,8 @@ function Level:init(worldName, levelName, map, player, enemySpawner, npcs, picku
     self.worldName = worldName
     self.levelName = levelName
     local splitIndex, _ = string.find(levelName, "-")
-    self.map = map or MapGenerator.generateMap(LEVEL_DEFS[string.sub(levelName, 0, splitIndex - 1)], self.levelName)
+    local levelType = string.sub(levelName, 0, splitIndex - 1)
+    self.map = map or MapGenerator.generateMap(LEVEL_DEFS[levelType], self.levelName)
 
     if player == nil then
         player = {}
@@ -26,6 +27,11 @@ function Level:init(worldName, levelName, map, player, enemySpawner, npcs, picku
         ['interact'] = function() return EntityInteractState(self.player) end
     })
     self.player:changeState('idle')
+    if LEVEL_DEFS[levelType].start ~= nil then
+        print('relocating player')
+        self.player.x = (LEVEL_DEFS[levelType].start.x - 1) * TILE_SIZE
+        self.player.y = (LEVEL_DEFS[levelType].start.y - 1) * TILE_SIZE
+    end
 
     self.enemySpawner = EnemySpawner(self, enemySpawner.entities or {}, enemySpawner.entityCap)
 
@@ -34,6 +40,9 @@ function Level:init(worldName, levelName, map, player, enemySpawner, npcs, picku
     self.camera = Camera(self.player, self)
 
     self.npcManager = NPCManager(npcs, self)
+    if LEVEL_DEFS[levelType].spawnNpcs then
+        self.npcManager:spawnNPCs()
+    end
 
     self.flags = {}
 

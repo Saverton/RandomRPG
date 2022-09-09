@@ -16,8 +16,6 @@ function NPCManager:init(npcs, level)
     end
 
     self.cap = NPC_CAP
-
-    self:spawnNPCs()
 end
 
 function NPCManager:update(dt)

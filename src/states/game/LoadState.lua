@@ -48,6 +48,10 @@ function LoadState:loadWorld()
     if not love.filesystem.getInfo(self.path) then
         return (Level(worldName, self.loadLevel, nil, player))
     end
+    
+    local playerPos = loadstring(love.filesystem.read(self.path .. '/player_pos.lua'))()
+    player.pos.x = playerPos.x
+    player.pos.y = playerPos.y
 
     map = self:loadMap()
     enemySpawner = self:loadEntities()

@@ -5,7 +5,7 @@
 
 MapGenerator = Class{}
 
-function MapGenerator.generateMap(def, name)
+function MapGenerator.generateMap(def, name, enterPos)
     local size = def.size
     local structureMap = {}
     local biomeMap = MapGenerator.generateBiomes(def, size, structureMap)
@@ -19,7 +19,7 @@ end
 function MapGenerator.generateBiomes(def, size, structureMap)
     local biomeMap = {}
     local numOfBiomes = math.random(def.minBiomes, def.maxBiomes)
-    local numOfRivers = math.random(def.minRivers, def.maxRivers)
+    local numOfPaths = math.random(def.minPaths, def.maxPaths)
     local biomes = def.biomes
 
     -- fill with base biome by default
@@ -52,9 +52,14 @@ function MapGenerator.generateBiomes(def, size, structureMap)
         end
     end
 
-    --generate rivers
-    for i = 1, numOfRivers, 1 do
-        GenerateRiver(biomeMap, size)
+    --generate paths
+    for i = 1, numOfPaths, 1 do
+        local start = def.start
+        if def.structureAtStart ~= nil then
+            table.insert(structureMap, {name = def.structureAtStart, col = start.x - math.floor(STRUCTURE_DEFS[def.structureAtStart]. width / 2), 
+                row = start.y - math.floor(STRUCTURE_DEFS[def.structureAtStart].height / 2)})
+        end
+        MapGenerator.generatePath(biomeMap, size, def, start, structureMap)
     end
     return biomeMap
 end
@@ -102,8 +107,13 @@ function MapGenerator.generateFeatures(biomeMap, size)
     return featureMap
 end
 
-function MapGenerator.generateRiver(biomeMap, size)
-    local riverLength = math.random(20, 50)
+function MapGenerator.generatePath(biomeMap, size, def, start, structureMap)
+    local pathBiome = def.pathBiome
+    local pathBorderBiome = def.pathBorderBiome
+    if start == nil then
+        start = {}
+    end
+    local pathLength = math.random(20, 50)
     local startDirection = {
         [1] = {
             x = math.random(2, size - 1),
@@ -127,65 +137,60 @@ function MapGenerator.generateRiver(biomeMap, size)
         }
     }
     local choice = math.random(1, 4)
-    local x = startDirection[choice].x
-    local y = startDirection[choice].y
-    local dir = startDirection[choice].dir
+    local x = start.x or startDirection[choice].x
+    local y = start.y or startDirection[choice].y
+    local dir = start.dir or startDirection[choice].dir
     while true do
-        local length = math.random(2, 10)
-        if dir == 1 then
-            for i = 1, math.min(length, y - 1), 1 do
-                biomeMap[x][y - i] = Biome('water')
-                if biomeMap[x - 1][y - i].name ~= 'water' and biomeMap[x - 1][y - i].name ~= 'mountain' then
-                    biomeMap[x - 1][y - i] = Biome('beach')
-                end if biomeMap[x + 1][y - i].name ~= 'water' and biomeMap[x + 1][y - i].name ~= 'mountain' then
-                    biomeMap[x + 1][y - i] = Biome('beach')
+        local length = math.random(def.minPathSegment, def.maxPathSegment)
+        local deltas = DIRECTION_COORDS_VARS[dir]
+        for i = 1, length, 1 do
+            local col = x + (deltas.x * i) 
+            local row = y + (deltas.y * i)
+            if col < 1 or col > size or row < 1 or row > size then
+                break
+            end
+            biomeMap[col][row] = Biome(pathBiome)
+            if deltas.x == 0 then
+                if col - 1 > 1 then
+                    biomeMap[col - 1][row] = Biome(pathBorderBiome)
+                end
+                if col + 1 < size then
+                    biomeMap[col + 1][row] = Biome(pathBorderBiome)
+                end
+            elseif deltas.y == 0 then
+                if row - 1 > 1 then
+                    biomeMap[col][row - 1] = Biome(pathBorderBiome)
+                end
+                if row + 1 < size then
+                    biomeMap[col][row + 1] = Biome(pathBorderBiome)
                 end
             end
-            y = y - length
-        elseif dir == 2 then
-            for i = 1, math.min(length, size - x - 1), 1 do
-                biomeMap[x + i][y] = Biome('water')
-                if biomeMap[x + i][y - 1].name ~= 'water' and biomeMap[x + i][y - 1].name ~= 'mountain' then
-                    biomeMap[x + i][y - 1] = Biome('beach')
-                end if biomeMap[x + i][y + 1].name ~= 'water' and biomeMap[x + i][y + 1].name ~= 'mountain' then
-                    biomeMap[x + i][y + 1] = Biome('beach')
-                end
-            end
-            x = x + length
-        elseif dir == 3 then
-            for i = 1, math.min(length, size - y - 1), 1 do
-                biomeMap[x][y + i] = Biome('water')
-                if biomeMap[x - 1][y + i].name ~= 'water' and biomeMap[x - 1][y + i].name ~= 'mountain' then
-                    biomeMap[x - 1][y + i] = Biome('beach')
-                end if biomeMap[x + 1][y + i].name ~= 'water' and biomeMap[x + 1][y + i].name ~= 'mountain' then
-                    biomeMap[x + 1][y + i] = Biome('beach')
-                end
-            end
-            y = y + length
-        elseif dir == 4 then
-            for i = 1, math.min(length, x - 1), 1 do
-                biomeMap[x - i][y] = Biome('water')
-                if biomeMap[x - i][y - 1].name ~= 'water' and biomeMap[x - i][y - 1].name ~= 'mountain' then
-                    biomeMap[x - i][y - 1] = Biome('beach')
-                end if biomeMap[x - i][y + 1].name ~= 'water' and biomeMap[x - i][y + 1].name ~= 'mountain' then
-                    biomeMap[x -  i][y + 1] = Biome('beach')
-                end
-            end
-            x = x - length
         end
+        x = x + deltas.x * length
+        y = y + deltas.y * length
 
         for i = math.max(1, x - 1), math.min(size, x + 1), 1 do
             for j = math.max(1, y - 1), math.min(size, y + 1), 1 do
-                if biomeMap[i][j].name ~= 'water' and biomeMap[i][j].name ~= 'desert' and biomeMap[i][j].name ~= 'mountain' then
-                    biomeMap[i][j] = Biome('beach')
+                if biomeMap[i][j].name ~= pathBiome then
+                    biomeMap[i][j] = Biome(pathBorderBiome)
                 end
             end
         end
 
-        riverLength = riverLength - length
+        if def.structureAtTurnChance ~= nil and math.random() < def.structureAtTurnChance then
+            local structName = def.structures[math.random(#def.structures)]
+            if STRUCTURE_DEFS[structName].width + x > size - 1 or STRUCTURE_DEFS[structName].height + y > size - 1 then
+                goto skip
+            end
+            table.insert(structureMap, {name = structName, col = x - math.floor(STRUCTURE_DEFS[structName].width / 2), 
+                row = y - math.floor(STRUCTURE_DEFS[structName].height / 2)})
+        end
+        ::skip::
+
+        pathLength = pathLength - length
 
         --check if out of map or out of river to generate
-        if x <= 1 or x >= size or y <= 1 or y >= size or riverLength <= 0 then
+        if x <= 1 or x >= size or y <= 1 or y >= size or pathLength <= 0 then
             break
         end
 
@@ -235,6 +240,9 @@ function MapGenerator.generateStructures(structureMap, biomeMap, tileMap, featur
         if sdef.border_tile ~= nil or sdef.bottom_tile ~= nil then
             for x = structure.col - 1, structure.col + sdef.width, 1 do 
                 for y = structure.row - 1, structure.row + sdef.height, 1 do
+                    if Contains(sdef.keepTiles, tileMap[x][y].name) then
+                        goto continue
+                    end
                     if sdef.border_tile ~= nil and (x == structure.col - 1 or x == structure.col + sdef.width or 
                     y == structure.row - 1 or y == structure.row + sdef.height) then
                         featureMap[x][y] = nil
@@ -242,6 +250,7 @@ function MapGenerator.generateStructures(structureMap, biomeMap, tileMap, featur
                     elseif sdef.bottom_tile ~= nil then
                         tileMap[x][y] = Tile(sdef.bottom_tile, x, y)
                     end
+                    ::continue::
                 end
             end
         end
@@ -253,7 +262,7 @@ function MapGenerator.generateStructures(structureMap, biomeMap, tileMap, featur
                     local col = x + structure.col - 1
                     local row = y + structure.row - 1
                     featureMap[col][row] = nil
-                    if (sdef.layout[x][y] ~= nil and sdef.layout[x][y] ~= 0) then
+                    if (sdef.layout[x] ~= nil and sdef.layout[x][y] ~= nil and sdef.layout[x][y] ~= 0) then
                         local feature = sdef.features[sdef.layout[x][y]]
                         if math.random() < feature.chance then
                             featureMap[col][row] = Feature(feature.name, col, row)

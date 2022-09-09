@@ -173,9 +173,9 @@ BIOME_DEFS = {
         features = {},
         featProc = 0
     },
-    ['fortress_wall'] = {
+    ['fortress_inside'] = {
         id = 7,
-        name = 'fortress_wall',
+        name = 'fortress_inside',
         tiles = {
             {
                 tileType = 'wall_inside',
@@ -187,8 +187,22 @@ BIOME_DEFS = {
         features = {},
         featProc = 0
     },
-    ['fortress_room'] = {
+    ['fortress_wall'] = {
         id = 8,
+        name = 'fortress_wall',
+        tiles = {
+            {
+                tileType = 'wall_edge',
+                proc = 1
+            }
+        },
+        enemies = {},
+        spawnRate = 0,
+        features = {},
+        featProc = 0
+    },
+    ['fortress_room'] = {
+        id = 9,
         name = 'fortress_room',
         tiles = {
             {
@@ -196,8 +210,13 @@ BIOME_DEFS = {
                 proc = 1
             }
         },
-        enemies = {},
-        spawnRate = 0,
+        enemies = {
+            {
+                name = 'skeleton',
+                proc = 1
+            }
+        },
+        spawnRate = 0.05,
         features = {},
         featProc = 0
     }
