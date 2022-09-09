@@ -38,10 +38,10 @@ function GenerateFortress(featureMap, size, levelName)
     print('fortress location: ' .. tostring(fortX) .. ', ' .. tostring(fortY))
 
     local destination = '' 
-    if (levelName == 'map_overworld') then
-        destination = 'fortress'
-    elseif (levelName == 'fortress') then
-        destination = 'map_overworld'
+    if (levelName == 'overworld-1') then
+        destination = 'fortress-1'
+    elseif (levelName == 'fortress-1') then
+        destination = 'overworld-1'
     end
 
     featureMap[10][10] = GatewayFeature('fortress', 10, 10, destination)

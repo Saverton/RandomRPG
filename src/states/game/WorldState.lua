@@ -9,7 +9,7 @@ WorldState = Class{__includes = BaseState}
 function WorldState:init(defs)
     self.name = defs.name or 'my world'
 
-    self.level = defs.level or Level(self.name, 'map_overworld')
+    self.level = defs.level or Level(self.name, 'overworld-1')
 
     self.debug = defs.debug
 end
@@ -21,7 +21,7 @@ function WorldState:update(dt)
     if self.debug then
         -- reload level if pressed r
         if love.keyboard.wasPressed('r') then
-            self.level = Level('test')
+            self.level = Level(self.name, 'overworld-1')
         end
         -- give player items if pressed b
         if love.keyboard.wasPressed('b') then

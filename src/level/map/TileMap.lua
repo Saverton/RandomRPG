@@ -12,7 +12,7 @@ function TileMap:init(size, tiles, biomes)
     self.size = size or DEFAULT_MAP_SIZE
     self.biomes = biomes or GenerateBiomes(size)
     self.tiles = tiles or GenerateTiles(size, self.biomes, self.tileAnimators)
-    self.edges = GenerateEdges(size, self.tiles)
+    self.edges = MapGenerator.generateEdges(size, self.tiles) 
 
     for row = 1, self.size, 1 do 
         for col = 1, self.size, 1 do

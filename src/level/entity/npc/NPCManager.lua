@@ -42,8 +42,11 @@ function NPCManager:render(camera)
 end
 
 function NPCManager:spawnNPCs()
-    while #self.npcs < self.cap do
+    local tries = 100
+    while #self.npcs < self.cap and tries > 0 do
+
         local x, y = self.level:getSpawnableCoord()
         table.insert(self.npcs, NPC(NPC_DEFS[NPC_TYPES[math.random(#NPC_TYPES)]], self.level, {x = x, y = y}, {x = 0, y = 0}, self))
+        
     end
 end

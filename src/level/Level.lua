@@ -9,7 +9,8 @@ Level = Class{}
 function Level:init(worldName, levelName, map, player, enemySpawner, npcs, pickups)
     self.worldName = worldName
     self.levelName = levelName
-    self.map = map or Map(self.levelName, DEFAULT_MAP_SIZE)
+    local splitIndex, _ = string.find(levelName, "-")
+    self.map = map or MapGenerator.generateMap(LEVEL_DEFS[string.sub(levelName, 0, splitIndex - 1)], self.levelName)
 
     if player == nil then
         player = {}
@@ -82,8 +83,10 @@ end
 
 function Level:getSpawnableCoord()
     local x, y = self:getRandomCoord()
-    while not self.map:isSpawnableSpace(x, y) do
+    local tries = 100
+    while not self.map:isSpawnableSpace(x, y) and tries > 0 do
         x, y= self:getRandomCoord()
+        tries = tries - 1
     end
     return x, y
 end

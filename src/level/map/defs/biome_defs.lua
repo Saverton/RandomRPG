@@ -172,5 +172,33 @@ BIOME_DEFS = {
         spawnRate = 0.05,
         features = {},
         featProc = 0
+    },
+    ['fortress_wall'] = {
+        id = 7,
+        name = 'fortress_wall',
+        tiles = {
+            {
+                tileType = 'wall_inside',
+                proc = 1
+            }
+        },
+        enemies = {},
+        spawnRate = 0,
+        features = {},
+        featProc = 0
+    },
+    ['fortress_room'] = {
+        id = 8,
+        name = 'fortress_room',
+        tiles = {
+            {
+                tileType = 'floor',
+                proc = 1
+            }
+        },
+        enemies = {},
+        spawnRate = 0,
+        features = {},
+        featProc = 0
     }
 }

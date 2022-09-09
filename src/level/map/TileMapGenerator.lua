@@ -141,39 +141,6 @@ function GenerateRiver(biomeMap, size)
 end
 
 function GenerateTiles(size, biomeMap, tileAnimators)
-    local tileMap = {}
-
-    for col = 1, size, 1 do
-        tileMap[col] = {}
-        for row = 1, size, 1 do
-            local name = biomeMap[col][row]:getTile()
-            if TILE_DEFS[name].animated then
-                tileMap[col][row] = AnimatedTile(name, col, row, tileAnimators[name])
-            else
-                tileMap[col][row] = Tile(name, col, row)
-            end
-        end
-    end
-
-    return tileMap
-end
-
-function GenerateEdges(size, tiles)
-    local edgeMap = {}
     
-    for col = 1, size, 1 do
-        edgeMap[col] = {}
-        for row = 1, size, 1 do
-            edgeMap[col][row] = {}
-            -- check all 4 sides
-            for i = 1, 4, 1 do
-                local x, y = col + DIRECTION_COORDS[i][1], row + DIRECTION_COORDS[i][2]
-                if x >= 1 and x <= size and y >= 1 and y <= size and tiles[x][y].name ~= tiles[col][row].name then
-                    table.insert(edgeMap[col][row], i)
-                end
-            end
-        end
-    end
-
-    return edgeMap
 end
+
