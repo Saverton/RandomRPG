@@ -49,7 +49,7 @@ function EnemySpawner:render(camera)
 end
 
 function EnemySpawner:spawnEnemies()
-    local statLevelMax = self.level.player.statLevel.level
+    local statLevelMax = self.level.player.statLevel.level or 1
     local map = self.level.map
     local x, y = math.floor(self.level.player.x / TILE_SIZE),
         math.floor(self.level.player.y / TILE_SIZE)

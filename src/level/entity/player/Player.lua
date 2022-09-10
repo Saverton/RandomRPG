@@ -61,8 +61,8 @@ function Player:update(dt)
 
     -- if space is pressed, use current item or interact with npcs/features
     if self.canUseItem and love.keyboard.wasPressed('space') then
-        local checkBox = {x = self.x + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]][1] * TILE_SIZE) - ((TILE_SIZE - self.width) / 2),
-            y = self.y + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]][2] * TILE_SIZE),
+        local checkBox = {x = self.x + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].x * TILE_SIZE) - ((TILE_SIZE - self.width) / 2),
+            y = self.y + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].y * TILE_SIZE),
             width = TILE_SIZE, height = TILE_SIZE
         }
         if self:interactWithNPC(checkBox) then
