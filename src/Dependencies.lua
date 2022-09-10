@@ -60,7 +60,6 @@ require 'src/level/map/generation/MapGenerator'
 require 'src/level/map/generation/DungeonGenerator'
 require 'src/level/map/structures/structure_defs'
 require 'src/level/map/Map' 
-require 'src/level/map/TileMap' 
 
 require 'src/level/entity/Entity' 
 require 'src/level/entity/entity_defs'

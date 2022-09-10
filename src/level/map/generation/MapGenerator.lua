@@ -11,9 +11,11 @@ function MapGenerator.generateMap(def, name, enterPos)
     local biomeMap = MapGenerator.generateBiomes(def, size, structureMap)
     local tileMap = MapGenerator.generateTiles(biomeMap, size)
     local featureMap = MapGenerator.generateFeatures(biomeMap, size)
+    -- generate the structures determined into the map itself
     MapGenerator.generateStructures(structureMap, biomeMap, tileMap, featureMap)
+    local gatewayMap = nil
 
-    return Map(name, size, TileMap(size, tileMap, biomeMap), featureMap, {})
+    return Map(name, size, tileMap, biomeMap, featureMap, gatewayMap)
 end
 
 function MapGenerator.generateBiomes(def, size, structureMap)

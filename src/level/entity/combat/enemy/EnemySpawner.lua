@@ -64,7 +64,7 @@ function EnemySpawner:spawnEnemies()
                 GetDistance(self.level.player, {x = col * TILE_SIZE, y = row * TILE_SIZE}) < SPAWN_MIN_RANGE * TILE_SIZE then
                 goto continue
             end
-            local biome = map.tileMap.biomes[col][row]
+            local biome = map.biomeMap[col][row]
             if #BIOME_DEFS[biome.name].enemies >= 1 and math.random() < BIOME_DEFS[biome.name].spawnRate then
                 local num = math.random()
                 local sum = 0

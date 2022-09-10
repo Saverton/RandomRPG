@@ -6,34 +6,36 @@
 
 Map = Class{}
 
-function Map:init(name, size, tileMap, featureMap, gatewayMap)
+function Map:init(name, size, tileMap, biomeMap, featureMap, gatewayMap)
     self.name = name or nil
-    --size dimension of map
     self.size = size or DEFAULT_MAP_SIZE
-    self.tileMap = tileMap or TileMap(self.size)
-    self.featureMap = featureMap or GenerateFeatures(self.size, self.tileMap)
+    self.tileAnimators = {
+        ['water'] = Animation('water', 'main')
+    }
+    self.biomeMap = biomeMap
+    self.tileMap = tileMap
+    -- set any animated tiles to the tileAnimator provided
+    self:linkAnimatedTiles()
+    self.edges = MapGenerator.generateEdges(size, self.tileMap) 
+    self.featureMap = featureMap
+    -- get a list of animated features to keep as a reference for updating animations
     self.animatedFeatures = MapGenerator.getAnimatedFeatures(self.featureMap)
-    if self.name ~= 'fortress-1' then
-        GenerateFortress(self.tileMap.tiles, self.featureMap, self.size, self.name)
-    end
     
+    -- make sure any gateways that haven't been properly initiated are initiated
     for i, gateway in ipairs(gatewayMap or {}) do
         self.featureMap[gateway.x][gateway.y] = GatewayFeature(gateway.name, gateway.x, gateway.y, gateway.destination, gateway.active)
     end
 end
 
 function Map:update(dt)
-    self.tileMap:update(dt) 
+    -- update any tile animations
+    for i, animator in pairs (self.tileAnimators) do
+        animator:update(dt)
+    end
 
     -- update feature animations
     for i, feature in pairs(self.animatedFeatures) do
         feature:update(dt)
-    end
-    -- update features
-    for i, col in pairs(self.featureMap) do
-        for j, feature in pairs(col) do
-            feature:update(dt)
-        end
     end
 end
 
@@ -43,19 +45,17 @@ function Map:render(camera)
     local yStart = math.floor(camera.cambox.y / TILE_SIZE)
     local yEnd = math.floor((camera.cambox.y + camera.cambox.height) / TILE_SIZE)
 
-    -- render tiles
-    
+    -- render tiles and edges
     for col = math.max(1, xStart), math.min(self.size, xEnd), 1 do
         for row = math.max(1, yStart), math.min(self.size, yEnd), 1 do
-            self.tileMap.tiles[col][row]:render(camera.x, camera.y)
-            for i, edge in pairs (self.tileMap.edges[col][row]) do
+            self.tileMap[col][row]:render(camera.x, camera.y)
+            for i, edge in pairs (self.edges[col][row]) do
                 love.graphics.draw(gTextures['edges'], gFrames['edges'][edge], ((col - 1) * TILE_SIZE - camera.x), ((row - 1) * TILE_SIZE - camera.y))
             end
         end
     end
 
     -- render features
-
     for col = math.max(1, xStart), math.min(self.size, xEnd), 1 do
         for row = math.max(1, yStart), math.min(self.size, yEnd), 1 do
             local feat = self.featureMap[col][row]
@@ -67,5 +67,15 @@ function Map:render(camera)
 end
 
 function Map:isSpawnableSpace(col, row)
-    return not (self.tileMap.tiles[col][row].barrier or (self.featureMap[col][row] ~= nil and FEATURE_DEFS[self.featureMap[col][row].name].isSolid))
+    return not (self.tileMap[col][row].barrier or (self.featureMap[col][row] ~= nil and FEATURE_DEFS[self.featureMap[col][row].name].isSolid))
+end
+
+function Map:linkAnimatedTiles()
+    for i, col in ipairs(self.tileMap) do
+        for j, tile in ipairs(col) do
+            if TILE_DEFS[tile.name].animated then
+                self.tileMap[i][j] = AnimatedTile(tile.name, i, j, self.tileAnimators[tile.name])
+            end
+        end
+    end
 end

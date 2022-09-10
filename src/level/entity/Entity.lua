@@ -44,6 +44,9 @@ function Entity:init(def, level, pos, off)
     end
     self.heldItem = 1
     self.ammo = def.ammo or START_AMMO
+
+    -- move speed
+    self.speed = def.speed or DEFAULT_SPEED
 end
 
 function Entity:update(dt)
@@ -110,33 +113,51 @@ end
 
 function Entity:checkCollision()
     local tilesToCheck = {}
-    -- add one to each to match feature map indexes
+    -- get the coordinates of the entity's top left and bottom right coords, convert to map coords, add one to each to match feature map indexes
     local mapX, mapY, mapXB, mapYB = math.floor((self.x) / TILE_SIZE) + 1, math.floor((self.y) / TILE_SIZE) + 1, 
         math.floor((self.x + self.width) / TILE_SIZE) + 1, math.floor((self.y + self.height) / TILE_SIZE) + 1
     local collide = false
 
-    if self.direction == 'up' then
-        tilesToCheck = {{mapX, mapY}, {mapXB, mapY} }
-    elseif self.direction == 'right' then
-        tilesToCheck = {{mapXB, mapY}, {mapXB, mapYB}}
-    elseif self.direction == 'down' then
-        tilesToCheck = {{mapX, mapYB}, {mapXB, mapYB}}
-    elseif self.direction == 'left' then
-        tilesToCheck = {{mapX, mapY}, {mapX, mapYB}}
+    -- create locals for the dx and dy values: if this is a combat entity, then check if it is pushed, then add the movement of the entity
+    local dx = 0
+    local dy = 0
+    if self.pushed then
+       dx = self.pushdx
+       dy = self.pushdy 
+    end
+    dx = dx + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].x * self:getSpeed())
+    dy = dy + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].y * self:getSpeed())
+
+    -- determine the map coordinates that need to be checked based on the movement direction
+    tilesToCheck = {}
+    if dy < 0 then
+        table.insert(tilesToCheck, {x = mapX, y = mapY})
+        table.insert(tilesToCheck, {x = mapXB, y = mapY})
+    end if dx > 0 then
+        table.insert(tilesToCheck, {x = mapXB, y = mapY})
+        table.insert(tilesToCheck, {x = mapXB, y = mapYB})
+    end if dy > 0 then
+        table.insert(tilesToCheck, {x = mapX, y = mapYB})
+        table.insert(tilesToCheck, {x = mapXB, y = mapYB})
+    end if dx < 0 then
+        table.insert(tilesToCheck, {x = mapX, y = mapY})
+        table.insert(tilesToCheck, {x = mapX, y = mapYB})
     end
 
     for i, coord in pairs(tilesToCheck) do
-        if coord[1] < 1 or coord[1] > self.level.map.size or coord[2] < 1 or coord[2] > self.level.map.size then
+        -- ensure that collision check coordinate is on the map
+        if coord.x < 1 or coord.x > self.level.map.size or coord.y < 1 or coord.y > self.level.map.size then
             goto continue
         end
-        local feature = self.level.map.featureMap[coord[1]][coord[2]]
-        local tile = self.level.map.tileMap.tiles[coord[1]][coord[2]]
-
+        local feature = self.level.map.featureMap[coord.x][coord.y]
+        local tile = self.level.map.tileMap[coord.x][coord.y]
+        -- determine if we collide with something that stops us
         if (feature ~= nil and FEATURE_DEFS[feature.name].isSolid) or tile.barrier then
             collide = true
             break
         end
-        if self.isPlayer and feature ~= nil and FEATURE_DEFS[feature.name].gateway and feature.active then
+        -- if this is a player and the feature is an active gateway, enter the gateway
+        if self.isPlayer and (feature ~= nil and FEATURE_DEFS[feature.name].gateway and feature.active) then
             feature:onEnter(self.level)
         end
         

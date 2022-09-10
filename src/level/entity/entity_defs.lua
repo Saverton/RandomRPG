@@ -55,7 +55,7 @@ ENTITY_DEFS = {
         agroDist = 7,
         exp = 1,
         drops = {},
-        --deathSound = 'enemy_dies_1',
+        deathSound = 'enemy_dies_1',
         push = 8
     },
     ['skeleton'] = {
@@ -73,7 +73,7 @@ ENTITY_DEFS = {
         agroDist = 7,
         exp = 3,
         drops = {},
-        --deathSound = 'enemy_dies_1',
+        deathSound = 'enemy_dies_1',
         push = 8,
         items = {
             {name = 'sword', quantity = 1}

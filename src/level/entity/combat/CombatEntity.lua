@@ -11,7 +11,6 @@ function CombatEntity:init(def, level, pos, off)
     -- combat statistics
     self.hp = def.hp or DEFAULT_HP
     self.attack = def.attack or DEFAULT_ATTACK
-    self.speed = def.speed or DEFAULT_SPEED
     self.defense = def.defense or DEFAULT_DEFENSE
     self.magic = def.magic or DEFAULT_MAGIC
     self.magicRegenRate = def.magicRegenRate or 0

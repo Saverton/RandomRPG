@@ -8,7 +8,6 @@ NPC = Class{__includes = Entity}
 function NPC:init(def, level, pos, off, manager)
     Entity.init(self, def, level, pos, off)
     self.npcName = NPC_NAMES[math.random(#NPC_NAMES)]
-    self.speed = def.speed
 
     self.onInteract = NPC_DEFS[self.name].onInteract
     self.timesInteractedWith = 0

@@ -54,7 +54,7 @@ end
 
 function SaveState:saveMap(path)
     local featureMap = {}
-    local tilesMap = {}
+    local tileMap = {}
     local biomeMap = {}
     local gatewayMap = {}
     local playerPos = {x = self.player.x, y = self.player.y}
@@ -72,14 +72,14 @@ function SaveState:saveMap(path)
         end
     end
 
-    for i, col in ipairs(self.map.tileMap.tiles) do
-        tilesMap[i] = {}
+    for i, col in ipairs(self.map.tileMap) do
+        tileMap[i] = {}
         for j, tile in ipairs(col) do
-            tilesMap[i][j] = tile.name
+            tileMap[i][j] = tile.name
         end
     end
 
-    for i, col in ipairs(self.map.tileMap.biomes) do
+    for i, col in ipairs(self.map.biomeMap) do
         biomeMap[i] = {}
         for j, biome in ipairs(col) do
             biomeMap[i][j] = biome.name
@@ -88,7 +88,7 @@ function SaveState:saveMap(path)
 
     love.filesystem.write(path .. '/player_pos.lua', Serialize(playerPos))
     love.filesystem.write(path .. '/world_features.lua', Serialize(featureMap))
-    love.filesystem.write(path .. '/world_tiles.lua', Serialize(tilesMap))
+    love.filesystem.write(path .. '/world_tiles.lua', Serialize(tileMap))
     love.filesystem.write(path .. '/world_biomes.lua', Serialize(biomeMap))
     love.filesystem.write(path .. '/world_gateways.lua', Serialize(gatewayMap))
 end

@@ -62,23 +62,22 @@ function LoadState:loadWorld()
 end
 
 function LoadState:loadMap()
-    local tiles = loadstring(love.filesystem.read(self.path .. '/world_tiles.lua'))()
-    local biomes = loadstring(love.filesystem.read(self.path .. '/world_biomes.lua'))()
+    local tileMap = loadstring(love.filesystem.read(self.path .. '/world_tiles.lua'))()
+    local biomeMap = loadstring(love.filesystem.read(self.path .. '/world_biomes.lua'))()
 
-    for i, col in ipairs(tiles) do
+    for i, col in ipairs(tileMap) do
         for j, tile in ipairs(col) do
-            tiles[i][j] = Tile(tile, i, j)
+            tileMap[i][j] = Tile(tile, i, j)
         end
     end
 
-    for i, col in ipairs(biomes) do
+    for i, col in ipairs(biomeMap) do
         for j, biome in ipairs(col) do
-            biomes[i][j] = Biome(biome)
+            biomeMap[i][j] = Biome(biome)
         end
     end
 
-    local size = #tiles 
-    local tileMap = TileMap(size, tiles, biomes)
+    local size = #tileMap 
     local featureMap = loadstring(love.filesystem.read(self.path .. '/world_features.lua'))()
     local gatewayMap = loadstring(love.filesystem.read(self.path .. '/world_gateways.lua'))()
 
@@ -94,7 +93,7 @@ function LoadState:loadMap()
         end
     end
 
-    return Map(self.loadLevel, size, tileMap, featureMap, gatewayMap)
+    return Map(self.loadLevel, size, tileMap, biomeMap, featureMap, gatewayMap)
 end
 
 function LoadState:loadPlayer()

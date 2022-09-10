@@ -39,7 +39,7 @@ end
 function Player:update(dt)
     --check for death
     if self.currenthp <= 0 then
-        self:onDeath()
+        self:dies()
         self.renderPlayer = false
         gStateStack:push(DeathAnimationState(self, self.x - self.level.camera.x + self.xOffset, self.y - self.level.camera.y + self.yOffset))
     end
@@ -189,7 +189,7 @@ function Player:interactWithMap(checkBox)
         for row = startRow, math.min(map.size, startRow + 3), 1 do
             local mapBox = {x = (col - 1) * TILE_SIZE, y = (row - 1) * TILE_SIZE, width = 16, height = 16}
             local feature = map.featureMap[col][row]
-            local tile = map.tileMap.tiles[col][row]
+            local tile = map.tileMap[col][row]
             if feature ~= nil and Collide(checkBox, mapBox) then
                 if FEATURE_DEFS[feature.name].onInteract(self, map, col, row) then
                     goto stop_checking
