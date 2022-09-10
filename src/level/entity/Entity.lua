@@ -7,21 +7,13 @@
 
 Entity = Class{}
 
-function Entity:init(def, level, pos, off)
+function Entity:init(def, level, pos)
     self.name = def.name
     self.animName = def.animName or self.name
 
-    --positioning
-    if off == nil then
-        off = {
-            x = 0,
-            y = 0
-        }
-    end
-    self.x = (((pos.x - 1) * TILE_SIZE) + (off.x))
-    self.y = (((pos.y - 1) * TILE_SIZE) + (off.y))
-    self.width = def.width or DEFAULT_ENTITY_WIDTH
-    self.height = def.height or DEFAULT_ENTITY_HEIGHT
+    --entity positioning
+    self.x = (((pos.x - 1) * TILE_SIZE) + (pos.ox))
+    self.y = (((pos.y - 1) * TILE_SIZE) + (pos.oy))
     self.direction = START_DIRECTION
     self.xOffset = def.xOffset or 0
     self.yOffset = def.yOffset or 0
@@ -43,19 +35,19 @@ function Entity:init(def, level, pos, off)
         end
     end
     self.heldItem = 1
-    self.ammo = def.ammo or START_AMMO
 
     -- move speed
     self.speed = def.speed or DEFAULT_SPEED
 end
 
 function Entity:update(dt)
+    -- update entity activity held in state machine
     self.stateMachine:update(dt)
 
     -- update frames
     self.animator:update(dt)
 
-    --update Item use timer
+    --update held item
     if self.items[self.heldItem] ~= nil then
         self.items[self.heldItem]:update(dt)
     end
@@ -80,35 +72,28 @@ function Entity:setHeldItem(index)
 end
 
 function Entity:render(camera)
-    -- determine the on screen x and y positions of the entity based on the camera, any
-    -- drawing manipulation, or offsets.
+    -- determine the on screen x and y positions of the entity based on the camera, any drawing manipulation, or offsets.
     local onScreenX = math.floor(self.x - camera.x + self.xOffset)
     local onScreenY = math.floor(self.y - camera.y + self.yOffset)
 
-    -- fix player sprite being off by 16 pixels
-
-    -- draw the entity at the specified x and y.
+    -- draw the entity at the specified x and y according to stateMachine behavior
     self.stateMachine:render(onScreenX, onScreenY)
+    -- set color back to default in case it was changed
     love.graphics.setColor(1, 1, 1, 1)
-
-    --debug: draw hitbox
-    --love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, self.width, self.height)
 
     --print simple string if showstats is true
     local mouseX, mouseY = push:toGame(love.mouse.getPosition())
     if (mouseX ~= nil and mouseY ~= nil) and Collide(self, {x = mouseX + camera.x, y = mouseY + camera.y, width = 1, height = 1}) then
         love.graphics.setFont(gFonts['small'])
-        local message = ''
-        if self.currenthp ~= nil then
-            message = ENTITY_DEFS[self.name].displayName .. ' LVL ' .. tostring(self.statLevel.level) .. ': (' .. tostring(self.currenthp) .. ' / ' .. tostring(self:getHp()) .. ')'
-        elseif self.npcName ~= nil then
-            message = self.npcName
-        end
+        local message = self:getDisplayMessage()
         love.graphics.setColor({0, 0, 0, 1})
         love.graphics.print(message, math.floor(self.x - camera.x + 1), math.floor(self.y - camera.y - 15 + 1))
         love.graphics.setColor({1, 1, 1, 1})
         love.graphics.print(message, math.floor(self.x - camera.x), math.floor(self.y - camera.y - 15))
     end
+
+    --debug: draw hitbox
+    --love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, self.width, self.height)
 end
 
 function Entity:checkCollision()
@@ -184,12 +169,13 @@ function Entity:getItem(item)
 end
 
 function Entity:useHeldItem()
-    if (self.heldItem > #self.items) then
-        return false
+    local used = false
+    if not (self.heldItem > #self.items) then
+        local item = self.items[self.heldItem]
+        if item ~= nil and item.useRate == 0 then
+            item:use()
+            used = true
+        end
     end
-    local item = self.items[self.heldItem]
-    if item ~= nil and item.useRate == 0 then
-        item:use()
-        return true
-    end
+    return used
 end

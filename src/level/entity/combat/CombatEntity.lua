@@ -45,6 +45,9 @@ function CombatEntity:init(def, level, pos, off)
 
     -- level system
     self.statLevel = StatLevel(self, def.statLevel or {level = 0})
+
+    -- ranged ammo
+    self.ammo = def.ammo or START_AMMO
 end
 
 function CombatEntity:update(dt)
@@ -240,6 +243,8 @@ function CombatEntity:dies()
     self.level:throwFlags({'kill entity', 'kill ' .. self.name})
 end
 
-function UpdateStats()
-    
+function CombatEntity:getDisplayMessage()
+    -- return a string with basic info about this entity
+    return ('LVL ' .. tostring(self.statLevel.level) .. ' ' .. ENTITY_DEFS[self.name].displayName .. 
+        ': (' .. tostring(self.currenthp) .. ' / ' .. tostring(self:getHp()) .. ')')
 end

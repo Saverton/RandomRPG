@@ -62,3 +62,8 @@ function NPC:render(camera)
     end
     Entity.render(self, camera)
 end
+
+function NPC:getDisplayMessage()
+    -- return a string with basic info about this entity
+    return (self.npcName .. ' the ' .. NPC_DEFS[self.name].displayName)
+end
