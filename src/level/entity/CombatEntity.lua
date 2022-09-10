@@ -47,7 +47,7 @@ function CombatEntity:init(def, level, pos, off, startLevel)
     self.pushdy = 0
 
     -- level system
-    self.statLevel = StatLevel(self, def.statLevel or {level = startLevel or 1})
+    self.statLevel = StatLevel(self, def.statLevel or {level = 0})
 end
 
 function CombatEntity:update(dt)

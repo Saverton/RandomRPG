@@ -26,6 +26,7 @@ ENTITY_DEFS = {
         xOffset = PLAYER_X_OFFSET,
         yOffset = PLAYER_Y_OFFSET,
         hp = PLAYER_BASE_HP,
+        attack = PLAYER_BASE_ATTACK,
         speed = PLAYER_BASE_SPEED,
         defense = PLAYER_BASE_DEFENSE,
         magic = PLAYER_BASE_MAGIC,

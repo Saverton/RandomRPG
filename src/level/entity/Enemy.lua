@@ -18,6 +18,8 @@ function Enemy:init(def, level, pos, startLevel, target)
     self.color = def.color or ENEMY_COLORS[math.min(#ENEMY_COLORS, self.statLevel.level)]
 
     self.hpBar = ProgressBar(self.x, self.y - 6, BAR_WIDTH, BAR_HEIGHT, {1, 0, 0, 1})
+
+    self.statLevel:levelUpTo(startLevel)
 end
 
 function Enemy:update(dt)

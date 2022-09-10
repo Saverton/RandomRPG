@@ -83,6 +83,10 @@ function StatLevel:levelUp(amount)
     return bonuses
 end
 
+function StatLevel:levelUpTo(level)
+    return self:levelUp(math.max(0, level - self.level))
+end
+
 function StatLevel:getExpRatio()
     return ((self.exp - math.pow(3, self.level - 1)) / (math.pow(3, self.level) - math.pow(3, self.level - 1)))
 end
