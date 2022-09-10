@@ -67,7 +67,7 @@ function LoadState:loadMap()
 
     for i, col in ipairs(tileMap) do
         for j, tile in ipairs(col) do
-            tileMap[i][j] = Tile(tile, i, j)
+            tileMap[i][j] = Tile(tile)
         end
     end
 
@@ -85,9 +85,9 @@ function LoadState:loadMap()
         for row = 1, size, 1 do
             if featureMap[col][row] ~= nil then
                 if FEATURE_DEFS[featureMap[col][row]].animated then
-                    featureMap[col][row] = AnimatedFeature(featureMap[col][row], col, row, Animation(featureMap[col][row], 'main'))
+                    featureMap[col][row] = AnimatedFeature(featureMap[col][row], Animation(featureMap[col][row], 'main'))
                 else
-                    featureMap[col][row] = Feature(featureMap[col][row], col, row)
+                    featureMap[col][row] = Feature(featureMap[col][row])
                 end
             end
         end

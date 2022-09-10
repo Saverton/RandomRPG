@@ -152,7 +152,7 @@ function Entity:checkCollision()
         local feature = self.level.map.featureMap[coord.x][coord.y]
         local tile = self.level.map.tileMap[coord.x][coord.y]
         -- determine if we collide with something that stops us
-        if (feature ~= nil and FEATURE_DEFS[feature.name].isSolid) or tile.barrier then
+        if (feature ~= nil and FEATURE_DEFS[feature.name].isSolid) or TILE_DEFS[tile.name].barrier then
             collide = true
             break
         end

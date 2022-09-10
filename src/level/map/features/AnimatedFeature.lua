@@ -5,8 +5,8 @@
 
 AnimatedFeature = Class{__includes = Feature}
 
-function AnimatedFeature:init(name, x, y, animation)
-    Feature.init(self, name, x, y) 
+function AnimatedFeature:init(name, animation)
+    Feature.init(self, name) 
     self.animation = animation
 end
 
@@ -14,8 +14,8 @@ function AnimatedFeature:update(dt)
     self.animation:update(dt)
 end
 
-function AnimatedFeature:render(camx, camy)
-    local x = ((self.mapX - 1) * TILE_SIZE) - camx
-    local y = ((self.mapY - 1) * TILE_SIZE) - camy
+function AnimatedFeature:render(camx, camy, posX, posY)
+    local x = ((posX - 1) * TILE_SIZE) - camx
+    local y = ((posY - 1) * TILE_SIZE) - camy
     self.animation:render(x, y)
 end

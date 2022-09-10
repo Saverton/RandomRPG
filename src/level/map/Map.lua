@@ -23,7 +23,7 @@ function Map:init(name, size, tileMap, biomeMap, featureMap, gatewayMap)
     
     -- make sure any gateways that haven't been properly initiated are initiated
     for i, gateway in ipairs(gatewayMap or {}) do
-        self.featureMap[gateway.x][gateway.y] = GatewayFeature(gateway.name, gateway.x, gateway.y, gateway.destination, gateway.active)
+        self.featureMap[gateway.x][gateway.y] = GatewayFeature(gateway.name, gateway.destination, gateway.active)
     end
 end
 
@@ -48,7 +48,7 @@ function Map:render(camera)
     -- render tiles and edges
     for col = math.max(1, xStart), math.min(self.size, xEnd), 1 do
         for row = math.max(1, yStart), math.min(self.size, yEnd), 1 do
-            self.tileMap[col][row]:render(camera.x, camera.y)
+            self.tileMap[col][row]:render(camera.x, camera.y, col, row)
             for i, edge in pairs (self.edges[col][row]) do
                 love.graphics.draw(gTextures['edges'], gFrames['edges'][edge], ((col - 1) * TILE_SIZE - camera.x), ((row - 1) * TILE_SIZE - camera.y))
             end
@@ -60,21 +60,21 @@ function Map:render(camera)
         for row = math.max(1, yStart), math.min(self.size, yEnd), 1 do
             local feat = self.featureMap[col][row]
             if feat ~= nil then
-                feat:render(camera.x, camera.y)
+                feat:render(camera.x, camera.y, col, row)
             end
         end
     end
 end
 
 function Map:isSpawnableSpace(col, row)
-    return not (self.tileMap[col][row].barrier or (self.featureMap[col][row] ~= nil and FEATURE_DEFS[self.featureMap[col][row].name].isSolid))
+    return not (TILE_DEFS[self.tileMap[col][row].name].barrier or (self.featureMap[col][row] ~= nil and FEATURE_DEFS[self.featureMap[col][row].name].isSolid))
 end
 
 function Map:linkAnimatedTiles()
     for i, col in ipairs(self.tileMap) do
         for j, tile in ipairs(col) do
             if TILE_DEFS[tile.name].animated then
-                self.tileMap[i][j] = AnimatedTile(tile.name, i, j, self.tileAnimators[tile.name])
+                self.tileMap[i][j] = AnimatedTile(tile.name, self.tileAnimators[tile.name])
             end
         end
     end

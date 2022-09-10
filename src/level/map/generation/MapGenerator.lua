@@ -66,49 +66,6 @@ function MapGenerator.generateBiomes(def, size, structureMap)
     return biomeMap
 end
 
-function MapGenerator.generateTiles(biomeMap, size)
-    local tileMap = {}
-
-    for col = 1, size, 1 do
-        tileMap[col] = {}
-        for row = 1, size, 1 do
-            tileMap[col][row] = Tile(biomeMap[col][row]:getTile(), col, row)
-        end
-    end
-
-    return tileMap
-end
-
-function MapGenerator.generateFeatures(biomeMap, size)
-    local featureMap = {}
-
-    for col = 1, size, 1 do
-        featureMap[col] = {}
-        for row = 1, size, 1 do
-            local biome = biomeMap[col][row]
-            -- determine if we generate a feature in this tile
-            if math.random() < BIOME_DEFS[biome.name].featProc then
-                -- generate a feature
-                local num = math.random()
-                local sum = 0
-                for i, feature in pairs(BIOME_DEFS[biome.name].features) do
-                    sum = sum + feature.proc 
-                    if num < sum then
-                        if FEATURE_DEFS[feature.name].animated then
-                            featureMap[col][row] = AnimatedFeature(feature.name, col, row, Animation(feature.name, 'main'))
-                        else
-                            featureMap[col][row] = Feature(feature.name, col, row)
-                        end
-                        break
-                    end
-                end
-            end
-        end
-    end
-
-    return featureMap
-end
-
 function MapGenerator.generatePath(biomeMap, size, def, start, structureMap)
     local pathBiome = def.pathBiome
     local pathBorderBiome = def.pathBorderBiome
@@ -213,6 +170,49 @@ function MapGenerator.generatePath(biomeMap, size, def, start, structureMap)
     end
 end
 
+function MapGenerator.generateTiles(biomeMap, size)
+    local tileMap = {}
+
+    for col = 1, size, 1 do
+        tileMap[col] = {}
+        for row = 1, size, 1 do
+            tileMap[col][row] = Tile(biomeMap[col][row]:getTile())
+        end
+    end
+
+    return tileMap
+end
+
+function MapGenerator.generateFeatures(biomeMap, size)
+    local featureMap = {}
+
+    for col = 1, size, 1 do
+        featureMap[col] = {}
+        for row = 1, size, 1 do
+            local biome = biomeMap[col][row]
+            -- determine if we generate a feature in this tile
+            if math.random() < BIOME_DEFS[biome.name].featProc then
+                -- generate a feature
+                local num = math.random()
+                local sum = 0
+                for i, feature in pairs(BIOME_DEFS[biome.name].features) do
+                    sum = sum + feature.proc 
+                    if num < sum then
+                        if FEATURE_DEFS[feature.name].animated then
+                            featureMap[col][row] = AnimatedFeature(feature.name, Animation(feature.name, 'main'))
+                        else
+                            featureMap[col][row] = Feature(feature.name)
+                        end
+                        break
+                    end
+                end
+            end
+        end
+    end
+
+    return featureMap
+end
+
 function MapGenerator.generateEdges(size, tiles)
     local edgeMap = {}
     
@@ -256,9 +256,9 @@ function MapGenerator.generateStructures(structureMap, biomeMap, tileMap, featur
                     if sdef.border_tile ~= nil and (x == structure.col - 1 or x == structure.col + sdef.width or 
                     y == structure.row - 1 or y == structure.row + sdef.height) then
                         featureMap[x][y] = nil
-                        tileMap[x][y] = Tile(sdef.border_tile, x, y)
+                        tileMap[x][y] = Tile(sdef.border_tile)
                     elseif sdef.bottom_tile ~= nil then
-                        tileMap[x][y] = Tile(sdef.bottom_tile, x, y)
+                        tileMap[x][y] = Tile(sdef.bottom_tile)
                     end
                     ::continue::
                 end
@@ -276,11 +276,11 @@ function MapGenerator.generateStructures(structureMap, biomeMap, tileMap, featur
                         local feature = sdef.features[sdef.layout[x][y]]
                         if math.random() < feature.chance then
                             if FEATURE_DEFS[feature.name].gateway then
-                                featureMap[col][row] = GatewayFeature(feature.name, col, row, feature.destination)
+                                featureMap[col][row] = GatewayFeature(feature.name, feature.destination)
                             elseif FEATURE_DEFS[feature.name].animated then
-                                featureMap[col][row] = AnimatedFeature(feature.name, col, row, Animation(feature.name, 'main'))
+                                featureMap[col][row] = AnimatedFeature(feature.name, Animation(feature.name, 'main'))
                             else
-                                featureMap[col][row] = Feature(feature.name, col, row)
+                                featureMap[col][row] = Feature(feature.name)
                             end
                         end
                     end

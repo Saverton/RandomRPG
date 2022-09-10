@@ -66,7 +66,7 @@ function SaveState:saveMap(path)
             if feature ~= nil then
                 featureMap[col][row] = feature.name
                 if FEATURE_DEFS[feature.name].gateway then
-                    table.insert(gatewayMap, {name = feature.name, x = col, y = row, destination = feature.destination, active = feature.active})
+                    table.insert(gatewayMap, {name = feature.name, destination = feature.destination, active = feature.active})
                 end
             end
         end
