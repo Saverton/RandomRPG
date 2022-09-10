@@ -5,7 +5,7 @@
 
 CombatEntity = Class{__includes = Entity}
 
-function CombatEntity:init(def, level, pos, off, startLevel)
+function CombatEntity:init(def, level, pos, off)
     Entity.init(self, def, level, pos, off)
 
     -- combat statistics
@@ -32,8 +32,6 @@ function CombatEntity:init(def, level, pos, off, startLevel)
 
     -- reference to owned projectiles
     self.projectileManager = ProjectileManager(self, def.projectiles or {})
-
-    self.onDeath = def.onDeath or function() end
 
     -- attack/defense management
     self.invincible = false
@@ -239,7 +237,7 @@ function CombatEntity:useMagic(amount)
 end
 
 function CombatEntity:dies()
-    self.onDeath(self, self.level)
+    love.audio.play(gSounds[ENTITY_DEFS[self.name].deathSound or 'enemy_dies_1'])
     self.level:throwFlags({'kill entity', 'kill ' .. self.name})
 end
 

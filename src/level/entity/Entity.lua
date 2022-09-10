@@ -111,8 +111,8 @@ end
 function Entity:checkCollision()
     local tilesToCheck = {}
     -- add one to each to match feature map indexes
-    local mapX, mapY, mapXB, mapYB = math.floor((self.x + PLAYER_HITBOX_X_OFFSET) / TILE_SIZE) + 1, math.floor((self.y + PLAYER_HITBOX_Y_OFFSET) / TILE_SIZE) + 1, 
-        math.floor((self.x + self.width + PLAYER_HITBOX_XB_OFFSET) / TILE_SIZE) + 1, math.floor((self.y + self.height + PLAYER_HITBOX_YB_OFFSET) / TILE_SIZE) + 1
+    local mapX, mapY, mapXB, mapYB = math.floor((self.x) / TILE_SIZE) + 1, math.floor((self.y) / TILE_SIZE) + 1, 
+        math.floor((self.x + self.width) / TILE_SIZE) + 1, math.floor((self.y + self.height) / TILE_SIZE) + 1
     local collide = false
 
     if self.direction == 'up' then

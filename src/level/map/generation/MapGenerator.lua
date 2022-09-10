@@ -142,7 +142,7 @@ function MapGenerator.generatePath(biomeMap, size, def, start, structureMap)
     local dir = start.dir or startDirection[choice].dir
     while true do
         local length = math.random(def.minPathSegment, def.maxPathSegment)
-        local deltas = DIRECTION_COORDS_VARS[dir]
+        local deltas = DIRECTION_COORDS[dir]
         for i = 1, length, 1 do
             local col = x + (deltas.x * i) 
             local row = y + (deltas.y * i)
@@ -220,7 +220,7 @@ function MapGenerator.generateEdges(size, tiles)
             edgeMap[col][row] = {}
             -- check all 4 sides
             for i = 1, 4, 1 do
-                local x, y = col + DIRECTION_COORDS[i][1], row + DIRECTION_COORDS[i][2]
+                local x, y = col + DIRECTION_COORDS[i].x, row + DIRECTION_COORDS[i].y
                 if x >= 1 and x <= size and y >= 1 and y <= size and tiles[x][y].name ~= tiles[col][row].name then
                     table.insert(edgeMap[col][row], i)
                 end

@@ -7,7 +7,7 @@
 Enemy = Class{__includes = CombatEntity}
 
 function Enemy:init(def, level, pos, startLevel, target)
-    CombatEntity.init(self, def, level, pos, nil, startLevel)
+    CombatEntity.init(self, def, level, pos, nil)
     
     self.target = target or nil
     if GetIndex(self.speedboost, 'agro') ~= -1 then

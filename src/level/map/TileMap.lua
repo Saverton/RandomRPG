@@ -10,8 +10,8 @@ function TileMap:init(size, tiles, biomes)
         ['water'] = Animation('water', 'main')
     }
     self.size = size or DEFAULT_MAP_SIZE
-    self.biomes = biomes or GenerateBiomes(size)
-    self.tiles = tiles or GenerateTiles(size, self.biomes, self.tileAnimators)
+    self.biomes = biomes
+    self.tiles = tiles
     self.edges = MapGenerator.generateEdges(size, self.tiles) 
 
     for row = 1, self.size, 1 do 

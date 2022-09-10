@@ -58,7 +58,7 @@ require 'src/level/map/generation/generation_defs'
 require 'src/level/map/generation/FeatureGenerator'
 require 'src/level/map/generation/MapGenerator'
 require 'src/level/map/generation/DungeonGenerator'
-require 'src/level/map/structure/structure_defs'
+require 'src/level/map/structures/structure_defs'
 require 'src/level/map/Map' 
 require 'src/level/map/TileMap' 
 

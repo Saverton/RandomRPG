@@ -31,8 +31,8 @@ ENTITY_DEFS = {
         defense = PLAYER_BASE_DEFENSE,
         magic = PLAYER_BASE_MAGIC,
         magicRegenRate = 0.5,
-        onDeath = function() love.audio.play(gSounds['player_dies_1']) end,
         push = 16,
+        deathSound = 'player_dies_1',
         statLevel = {
             hpbonus = {chance = 0.5, bonus = 1},
             atkbonus = {chance = 0.5, bonus = 1},
@@ -54,18 +54,8 @@ ENTITY_DEFS = {
         attack = 1,
         agroDist = 7,
         exp = 1,
-        onDeath = function(entity, level) 
-            love.audio.play(gSounds['enemy_dies_1'])
-            if math.random(1, 3) == 1 then
-                table.insert(level.pickupManager.pickups, Pickup('ammo', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height) - 8, math.random(2, 5)))
-            end
-            if math.random(1, 3) ~= 1 then
-                table.insert(level.pickupManager.pickups, Pickup('money', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height), math.random(1, 2)))
-            end
-            if math.random(1, 5) == 1 then
-                table.insert(level.pickupManager.pickups, Pickup('health', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height) - 8, 1))
-            end
-        end,
+        drops = {},
+        --deathSound = 'enemy_dies_1',
         push = 8
     },
     ['skeleton'] = {
@@ -82,18 +72,8 @@ ENTITY_DEFS = {
         attack = 1,
         agroDist = 7,
         exp = 3,
-        onDeath = function(entity, level) 
-            love.audio.play(gSounds['enemy_dies_1'])
-            if math.random(1, 3) == 1 then
-                table.insert(level.pickupManager.pickups, Pickup('ammo', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height) - 8, math.random(2, 5)))
-            end
-            if math.random(1, 3) ~= 1 then
-                table.insert(level.pickupManager.pickups, Pickup('money', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height), math.random(1, 2)))
-            end
-            if math.random(1, 5) == 1 then
-                table.insert(level.pickupManager.pickups, Pickup('health', entity.x + math.random(entity.width) - 8, entity.y + math.random(entity.height) - 8, 1))
-            end
-        end,
+        drops = {},
+        --deathSound = 'enemy_dies_1',
         push = 8,
         items = {
             {name = 'sword', quantity = 1}
