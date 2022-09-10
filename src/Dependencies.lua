@@ -62,7 +62,6 @@ require 'src/level/map/Map'
 require 'src/level/map/Tile' 
 require 'src/level/map/AnimatedTile'
 require 'src/level/map/TileMap' 
-require 'src/level/map/TileMapGenerator'
 require 'src/level/map/MapGenerator'
 
 require 'src/level/entity/Entity' 
