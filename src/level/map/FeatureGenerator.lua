@@ -33,9 +33,11 @@ function GenerateFeatures(size, tileMap)
     return featureMap
 end
 
-function GenerateFortress(featureMap, size, levelName)
+function GenerateFortress(tileMap, featureMap, size, levelName)
     local fortX, fortY = math.random(2, size - 1), math.random(2, size - 1)
-    print('fortress location: ' .. tostring(fortX) .. ', ' .. tostring(fortY))
+    while tileMap[fortX][fortY].name == 'water' do
+        fortX, fortY = math.random(2, size - 1), math.random(2, size - 1)
+    end
 
     local destination = '' 
     if (levelName == 'overworld-1') then
@@ -44,7 +46,7 @@ function GenerateFortress(featureMap, size, levelName)
         destination = 'overworld-1'
     end
 
-    featureMap[10][10] = GatewayFeature('fortress', 10, 10, destination)
+    featureMap[10][10] = GatewayFeature('fortress', fortX, fortY, destination)
 end
 
 function GetAnimatedFeatures(featureMap)

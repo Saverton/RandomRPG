@@ -48,7 +48,8 @@ LEVEL_DEFS = {
         pathBiome = 'fortress_room',
         pathBorderBiome = 'fortress_wall',
         spawnNpcs = false,
-        structureAtStart = 'fortress_room_3',
+        structureAtStart = 'fortress_exit',
+        structureAtEnd = 'fortress_treasure',
         structureAtTurnChance = 0.75
     }
 }

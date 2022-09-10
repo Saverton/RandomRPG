@@ -90,5 +90,14 @@ FEATURE_DEFS = {
         gateway = true,
         onInteract = function() end,
         isSolid = false
+    },
+    ['exit'] = {
+        id = 6,
+        name = 'exit',
+        texture = 'features',
+        frame = 10,
+        gateway = true,
+        onInteract = function() end,
+        isSolid = false
     }
 }

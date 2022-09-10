@@ -191,6 +191,14 @@ function MapGenerator.generatePath(biomeMap, size, def, start, structureMap)
 
         --check if out of map or out of river to generate
         if x <= 1 or x >= size or y <= 1 or y >= size or pathLength <= 0 then
+            if def.structureAtEnd ~= nil then
+                local structName = def.structureAtEnd
+                if STRUCTURE_DEFS[structName].width + x > size - 1 or STRUCTURE_DEFS[structName].height + y > size - 1 then
+                    goto skip
+                end
+                table.insert(structureMap, {name = structName, col = x - math.floor(STRUCTURE_DEFS[structName].width / 2), 
+                    row = y - math.floor(STRUCTURE_DEFS[structName].height / 2)})
+            end
             break
         end
 
@@ -265,11 +273,31 @@ function MapGenerator.generateStructures(structureMap, biomeMap, tileMap, featur
                     if (sdef.layout[x] ~= nil and sdef.layout[x][y] ~= nil and sdef.layout[x][y] ~= 0) then
                         local feature = sdef.features[sdef.layout[x][y]]
                         if math.random() < feature.chance then
-                            featureMap[col][row] = Feature(feature.name, col, row)
+                            if FEATURE_DEFS[feature.name].gateway then
+                                featureMap[col][row] = GatewayFeature(feature.name, col, row, feature.destination)
+                            elseif FEATURE_DEFS[feature.name].animated then
+                                featureMap[col][row] = AnimatedFeature(feature.name, col, row, Animation(feature.name, 'main'))
+                            else
+                                featureMap[col][row] = Feature(feature.name, col, row)
+                            end
                         end
                     end
                 end
             end
         end
     end
+end
+
+function MapGenerator.getAnimatedFeatures(featureMap)
+    local animatedFeatures = {}
+
+    for i, col in pairs(featureMap) do
+        for k, feature in pairs(col) do
+            if FEATURE_DEFS[feature.name].animated then
+                table.insert(animatedFeatures, feature)
+            end
+        end
+    end
+
+    return animatedFeatures
 end

@@ -12,9 +12,11 @@ function Map:init(name, size, tileMap, featureMap, gatewayMap)
     self.size = size or DEFAULT_MAP_SIZE
     self.tileMap = tileMap or TileMap(self.size)
     self.featureMap = featureMap or GenerateFeatures(self.size, self.tileMap)
-    self.animatedFeatures = GetAnimatedFeatures(self.featureMap)
-    GenerateFortress(self.featureMap, self.size, self.name)
-
+    self.animatedFeatures = MapGenerator.getAnimatedFeatures(self.featureMap)
+    if self.name == 'overworld-1' then
+        GenerateFortress(self.tileMap.tiles, self.featureMap, self.size, self.name)
+    end
+    
     for i, gateway in ipairs(gatewayMap or {}) do
         self.featureMap[gateway.x][gateway.y] = GatewayFeature(gateway.name, gateway.x, gateway.y, gateway.destination, gateway.active)
     end

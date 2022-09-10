@@ -50,8 +50,8 @@ function LoadState:loadWorld()
     end
     
     local playerPos = loadstring(love.filesystem.read(self.path .. '/player_pos.lua'))()
-    player.pos.x = playerPos.x
-    player.pos.y = playerPos.y
+    player.pos.x = math.floor(playerPos.x / TILE_SIZE)
+    player.pos.y = math.floor(playerPos.y / TILE_SIZE)
 
     map = self:loadMap()
     enemySpawner = self:loadEntities()

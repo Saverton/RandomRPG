@@ -28,7 +28,6 @@ function Level:init(worldName, levelName, map, player, enemySpawner, npcs, picku
     })
     self.player:changeState('idle')
     if LEVEL_DEFS[levelType].start ~= nil then
-        print('relocating player')
         self.player.x = (LEVEL_DEFS[levelType].start.x - 1) * TILE_SIZE
         self.player.y = (LEVEL_DEFS[levelType].start.y - 1) * TILE_SIZE
     end
@@ -52,7 +51,7 @@ end
 function Level:getPlayerSpawnSpace()
     local x, y = self:getSpawnableCoord()
 
-    return {x = 12, y = 12}
+    return {x = x, y = y}
 end
 
 function Level:update(dt)

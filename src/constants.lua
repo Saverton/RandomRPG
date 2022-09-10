@@ -156,11 +156,12 @@ QUEST_LIMIT = 2
 
 TIPS = {
     'Have you found six weapons?',
-    'The fireball sets enemies on fire.',
-    'You can chop down a tree using the Battle Axe...',
-    'You can use wood to bridge across water...',
-    'Watch out for skeletons! They have weapons!',
-    'Enemies will get stronger as you do.'
+    'Tomes inflict status effects.',
+    'A Battle Axe is not just a weapon...',
+    'We need more bridges...',
+    'Don\'t get too close to skeletons.',
+    'Enemies will get stronger too!',
+    'Have you found the castle?'
 }
 
 CHEST_ITEMS = {'sword', 'battle_axe', 'bow', 'fire_tome', 'ice_tome'}
