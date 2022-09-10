@@ -96,7 +96,9 @@ end
 function SaveState:savePlayer(path)
     local pos = {
         x = (self.player.x / 16) + 1, 
-        y = (self.player.y / 16) + 1
+        y = (self.player.y / 16) + 1,
+        ox = PLAYER_SPAWN_X_OFFSET,
+        oy = PLAYER_SPAWN_Y_OFFSET
     }
 
     local def = {
@@ -159,7 +161,9 @@ function SaveState:saveEntities(path)
     for i, entity in ipairs(self.enemySpawner.entities) do
         local pos = {
             x = (entity.x / 16) + 1, 
-            y = (entity.y / 16) + 1
+            y = (entity.y / 16) + 1,
+            ox = 0,
+            oy = 0
         }
     
         local def = {
@@ -215,7 +219,9 @@ function SaveState:saveNPCS(path)
     for i, entity in ipairs(self.npcManager.npcs) do
         local pos = {
             x = (entity.x / 16) + 1, 
-            y = (entity.y / 16) + 1
+            y = (entity.y / 16) + 1,
+            ox = 0,
+            oy = 0
         }
     
         local def = {

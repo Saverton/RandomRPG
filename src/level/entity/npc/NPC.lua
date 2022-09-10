@@ -5,8 +5,8 @@
 
 NPC = Class{__includes = Entity}
 
-function NPC:init(def, level, pos, off, manager)
-    Entity.init(self, def, level, pos, off)
+function NPC:init(def, level, pos, manager)
+    Entity.init(self, def, level, pos)
     self.npcName = NPC_NAMES[math.random(#NPC_NAMES)]
 
     self.onInteract = NPC_DEFS[self.name].onInteract

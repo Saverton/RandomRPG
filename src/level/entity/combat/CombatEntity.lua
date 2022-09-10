@@ -5,8 +5,8 @@
 
 CombatEntity = Class{__includes = Entity}
 
-function CombatEntity:init(def, level, pos, off)
-    Entity.init(self, def, level, pos, off)
+function CombatEntity:init(def, level, pos)
+    Entity.init(self, def, level, pos)
 
     -- combat statistics
     self.hp = def.hp or DEFAULT_HP

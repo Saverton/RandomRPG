@@ -14,6 +14,8 @@ function Entity:init(def, level, pos)
     --entity positioning
     self.x = (((pos.x - 1) * TILE_SIZE) + (pos.ox))
     self.y = (((pos.y - 1) * TILE_SIZE) + (pos.oy))
+    self.width = def.width or DEFAULT_ENTITY_WIDTH
+    self.height = def.height or DEFAULT_ENTITY_HEIGHT
     self.direction = START_DIRECTION
     self.xOffset = def.xOffset or 0
     self.yOffset = def.yOffset or 0

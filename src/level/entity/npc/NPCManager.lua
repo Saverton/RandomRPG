@@ -10,7 +10,7 @@ function NPCManager:init(npcs, level)
     self.npcs = {}
     if npcs ~= nil then
         for i, npc in pairs(npcs) do
-            local npcObject = NPC(npc.def, self.level, npc.pos, {x = 0, y = 0}, self)
+            local npcObject = NPC(npc.def, self.level, npc.pos, self)
             table.insert(self.npcs, npcObject)
         end
     end
@@ -42,9 +42,7 @@ end
 function NPCManager:spawnNPCs()
     local tries = 100
     while #self.npcs < self.cap and tries > 0 do
-
         local x, y = self.level:getSpawnableCoord()
-        table.insert(self.npcs, NPC(NPC_DEFS[NPC_TYPES[math.random(#NPC_TYPES)]], self.level, {x = x, y = y}, {x = 0, y = 0}, self))
-        
+        table.insert(self.npcs, NPC(NPC_DEFS[NPC_TYPES[math.random(#NPC_TYPES)]], self.level, {x = x, y = y, ox = 0, oy = 0}, self))
     end
 end

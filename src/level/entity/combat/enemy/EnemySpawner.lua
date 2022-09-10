@@ -74,10 +74,7 @@ function EnemySpawner:spawnEnemies()
                         local entity = Enemy(
                             ENTITY_DEFS[enemy.name],
                             self.level,
-                            {
-                                x = (col),
-                                y = (row)
-                            },
+                            {x = (col), y = (row), ox = 0, oy = 0},
                             math.max(1, statLevelMax - math.random(0, 2))
                         )
                         entity.stateMachine = StateMachine({

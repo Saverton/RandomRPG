@@ -20,7 +20,7 @@ function Level:init(worldName, levelName, map, player, enemySpawner, npcs, picku
         enemySpawner = {}
     end
     
-    self.player = Player(player.def or ENTITY_DEFS['player'], self, player.pos or self:getPlayerSpawnSpace(), player.off or {x = PLAYER_SPAWN_X_OFFSET, y = PLAYER_SPAWN_Y_OFFSET})
+    self.player = Player(player.def or ENTITY_DEFS['player'], self, player.pos or self:getPlayerSpawnSpace())
     self.player.stateMachine = StateMachine({
         ['idle'] = function() return PlayerIdleState(self.player) end,
         ['walk'] = function() return PlayerWalkState(self.player, self) end,
@@ -50,8 +50,7 @@ end
 
 function Level:getPlayerSpawnSpace()
     local x, y = self:getSpawnableCoord()
-
-    return {x = x, y = y}
+    return {x = x, y = y, ox = PLAYER_SPAWN_X_OFFSET, oy = PLAYER_SPAWN_Y_OFFSET}
 end
 
 function Level:update(dt)

@@ -5,10 +5,10 @@
 
 Player = Class{__includes = CombatEntity}
 
-function Player:init(def, level, pos, off)
+function Player:init(def, level, pos)
     --self.statLevel = def.statLevel or 1
 
-    CombatEntity.init(self, def, level, pos, off)
+    CombatEntity.init(self, def, level, pos)
 
     self.pickupRange = PICKUP_RANGE
 
