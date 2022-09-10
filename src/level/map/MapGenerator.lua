@@ -151,17 +151,17 @@ function MapGenerator.generatePath(biomeMap, size, def, start, structureMap)
             end
             biomeMap[col][row] = Biome(pathBiome)
             if deltas.x == 0 then
-                if col - 1 > 1 then
+                if col - 1 > 1 and biomeMap[col - 1][row] ~= pathBiome then
                     biomeMap[col - 1][row] = Biome(pathBorderBiome)
                 end
-                if col + 1 < size then
+                if col + 1 < size and biomeMap[col + 1][row] ~= pathBiome then
                     biomeMap[col + 1][row] = Biome(pathBorderBiome)
                 end
             elseif deltas.y == 0 then
-                if row - 1 > 1 then
+                if row - 1 > 1 and biomeMap[col][row - 1] ~= pathBiome then
                     biomeMap[col][row - 1] = Biome(pathBorderBiome)
                 end
-                if row + 1 < size then
+                if row + 1 < size and biomeMap[col][row + 1] ~= pathBiome then
                     biomeMap[col][row + 1] = Biome(pathBorderBiome)
                 end
             end
@@ -189,7 +189,7 @@ function MapGenerator.generatePath(biomeMap, size, def, start, structureMap)
 
         pathLength = pathLength - length
 
-        --check if out of map or out of river to generate
+        --check if out of map or out of path to generate
         if x <= 1 or x >= size or y <= 1 or y >= size or pathLength <= 0 then
             if def.structureAtEnd ~= nil then
                 local structName = def.structureAtEnd
