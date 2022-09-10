@@ -13,7 +13,7 @@ function Map:init(name, size, tileMap, featureMap, gatewayMap)
     self.tileMap = tileMap or TileMap(self.size)
     self.featureMap = featureMap or GenerateFeatures(self.size, self.tileMap)
     self.animatedFeatures = MapGenerator.getAnimatedFeatures(self.featureMap)
-    if self.name == 'overworld-1' then
+    if self.name ~= 'fortress-1' then
         GenerateFortress(self.tileMap.tiles, self.featureMap, self.size, self.name)
     end
     
