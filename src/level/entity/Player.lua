@@ -32,7 +32,7 @@ function Player:init(def, level, pos, off)
 
     -- player is starting, give a wooden sword
     if #self.items == 0 then
-        self:getItem(Item('battle_axe', self, 1))
+        self:getItem(Item('wooden_sword', self, 1))
     end
 end
 
