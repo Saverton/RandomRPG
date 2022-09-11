@@ -25,33 +25,17 @@ LEVEL_DEFS = {
         spawnNpcs = true,
         gateways = {{name = 'fortress', destination = 'fortress-1'}, {name = 'fortress', destination = 'fortress-2'}, 
             {name = 'fortress', destination = 'fortress-3'}}
-    },
+    }
+}
+
+DUNGEON_DEFS = {
     ['fortress'] = {
-        size = 100,
-        minBiomes = 0,
-        maxBiomes = 0,
-        minPaths = 1,
-        maxPaths = 1,
-        minPathLength = 100,
-        maxPathLength = 200,
-        minPathSegment = 10,
-        maxPathSegment = 15,
-        minBiomeSize = 0,
-        maxBiomeSize = 0,
         baseBiome = 'fortress_inside',
-        biomes = {},
-        generateBorder = false,
-        structures = {'fortress_room_1', 'fortress_room_2', 'fortress_room_3'},
-        start = {
-            x = 50,
-            y = 50,
-            dir = 1
-        },
-        pathBiome = 'fortress_room',
-        pathBorderBiome = 'fortress_wall',
-        spawnNpcs = false,
-        structureAtStart = 'fortress_exit',
-        structureAtEnd = 'fortress_treasure',
-        structureAtTurnChance = 0.75
+        rooms = {'fortress_room_1', 'fortress_room_2', 'fortress_room_3'},
+        floorTile = 'floor',
+        pathBorderTile = 'wall_edge',
+        insideTile = 'wall_inside',
+        startRoom = 'fortress_exit',
+        endRoom = 'fortress_treasure'
     }
 }

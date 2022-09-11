@@ -134,5 +134,6 @@ gSounds = {
     ['player_dies_1'] = love.audio.newSource('sounds/player_dies_1.wav', 'static'),
     ['enemy_dies_1'] = love.audio.newSource('sounds/enemy_dies_1.wav', 'static'),
     ['fire_hit_1'] = love.audio.newSource('sounds/fire_hit_1.wav', 'static'),
-    ['pickup_item'] = love.audio.newSource('sounds/pickup_item.wav', 'static')
+    ['pickup_item'] = love.audio.newSource('sounds/pickup_item.wav', 'static'),
+    ['dungeon_theme'] = love.audio.newSource('sounds/dungeon.mp3', 'stream')
 }
