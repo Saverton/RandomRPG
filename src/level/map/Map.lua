@@ -20,10 +20,11 @@ function Map:init(name, size, tileMap, biomeMap, featureMap, gatewayMap)
     self.featureMap = featureMap
     -- get a list of animated features to keep as a reference for updating animations
     self.animatedFeatures = MapGenerator.getAnimatedFeatures(self.featureMap)
-    
+
     -- make sure any gateways that haven't been properly initiated are initiated
     for i, gateway in ipairs(gatewayMap or {}) do
-        self.featureMap[gateway.x][gateway.y] = GatewayFeature(gateway.name, gateway.destination, gateway.active)
+        print('building gateway at x = ' .. tostring(gateway.x) .. ', y = ' .. tostring(gateway.y))
+        self.featureMap[gateway.x][gateway.y] = GatewayFeature(gateway.name, gateway.destination)
     end
 end
 

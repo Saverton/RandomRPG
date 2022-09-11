@@ -5,7 +5,7 @@
 
 GatewayFeature = Class{__includes = Feature}
 
-function GatewayFeature:init(name, destination, active)
+function GatewayFeature:init(name, destination)
     Feature.init(self, name) 
     self.destination = destination
     self.active = false

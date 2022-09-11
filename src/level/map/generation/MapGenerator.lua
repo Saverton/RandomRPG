@@ -13,7 +13,8 @@ function MapGenerator.generateMap(def, name, enterPos)
     local featureMap = MapGenerator.generateFeatures(biomeMap, size)
     -- generate the structures determined into the map itself
     MapGenerator.generateStructures(structureMap, biomeMap, tileMap, featureMap)
-    local gatewayMap = nil
+    -- mark positions to generate gateway features
+    local gatewayMap = MapGenerator.generateGateways(def, size, tileMap)
 
     return Map(name, size, tileMap, biomeMap, featureMap, gatewayMap)
 end
@@ -302,4 +303,30 @@ function MapGenerator.getAnimatedFeatures(featureMap)
     end
 
     return animatedFeatures
+end
+
+function MapGenerator.generateGateways(def, size, tileMap)
+    local gateways = {}
+    local gatewayDivider = {}
+    for x = 1, #def.gateways, 1 do
+        gatewayDivider[x] = {}
+        for y = 1, #def.gateways, 1 do
+            gatewayDivider[x][y] = {x = math.floor((size / #def.gateways) * (x - 1)),
+                y = math.floor((size / #def.gateways) * (y - 1)), filled = false, 
+                size = math.floor(size / #def.gateways)}
+        end
+    end
+    for i, gateway in ipairs(def.gateways) do
+        local location = gatewayDivider[math.random(#gatewayDivider)][math.random(#gatewayDivider)]
+        while (location.filled) do
+            location = gatewayDivider[math.random(#gatewayDivider)][math.random(#gatewayDivider)]
+        end
+        local spawnX, spawnY = math.random(location.x, location.x + location.size), math.random(location.y, location.y + location.size)
+        while (spawnX <= 1 or spawnX >= size or spawnY <= 1 or spawnY >= size or tileMap[spawnX][spawnY] == 'water') do
+            spawnX, spawnY = math.random(location.x, location.x + location.size), math.random(location.y, location.y + location.size)
+        end
+        print('spawning gateway at x = ' .. tostring(spawnX) .. ', y = ' .. tostring(spawnY))
+        table.insert(gateways, {name = gateway.name, x = spawnX, y = spawnY, destination = gateway.destination})
+    end
+    return gateways
 end

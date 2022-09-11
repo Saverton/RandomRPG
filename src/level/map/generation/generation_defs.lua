@@ -22,7 +22,9 @@ LEVEL_DEFS = {
         borderBiome = 'water',
         pathBiome = 'water',
         pathBorderBiome = 'beach',
-        spawnNpcs = true
+        spawnNpcs = true,
+        gateways = {{name = 'fortress', destination = 'fortress-1'}, {name = 'fortress', destination = 'fortress-2'}, 
+            {name = 'fortress', destination = 'fortress-3'}}
     },
     ['fortress'] = {
         size = 100,
