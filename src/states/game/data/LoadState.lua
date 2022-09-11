@@ -19,16 +19,13 @@ function LoadState:update(dt)
     gStateStack:push(WorldState({
         level = self.level
     }))
+    gStateStack:push(DivergePointState({x = self.level.player.x + self.level.player.width / 2 - self.level.camera.x, 
+        y = self.level.player.y + self.level.player.height / 2 - self.level.camera.y}, {0, 0, 0, 1}, 1.5))
 end
 
 function LoadState:render()
-    love.graphics.setColor(0, 0.5, 0, 1)
-    love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
-    love.graphics.setFont(gFonts['large'])
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.printf('Loading...', VIRTUAL_WIDTH / 2 - 30, VIRTUAL_HEIGHT / 2 - 10, 60, 'center')
     love.graphics.setColor(0, 0, 0, 1)
-    love.graphics.printf('Loading...', VIRTUAL_WIDTH / 2 - 30 + 1, VIRTUAL_HEIGHT / 2 - 10 + 1, 60, 'center')
+    love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
 end
 
 function LoadState:loadWorld()

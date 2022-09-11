@@ -30,11 +30,6 @@ end
 function SaveState:render()
     love.graphics.setColor(0, 0, 0.5, 1)
     love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
-    love.graphics.setFont(gFonts['large'])
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.printf('Saving...', VIRTUAL_WIDTH / 2 - 30, VIRTUAL_HEIGHT / 2 - 10, 60, 'center')
-    love.graphics.setColor(0, 0, 0, 1)
-    love.graphics.printf('Saving...', VIRTUAL_WIDTH / 2 - 30 + 1, VIRTUAL_HEIGHT / 2 - 10 + 1, 60, 'center')
 end
 
 function SaveState:saveGame()

@@ -1,0 +1,39 @@
+--[[
+    Diverge Point: 4 rectangles of a certain color diverge from a point to the edge of the screen
+    @author Saverton
+]]
+
+DivergePointState = Class{__includes = BaseState}
+
+function DivergePointState:init(point, color, time)
+    local sfx = love.audio.getActiveEffects()
+    for i, effect in ipairs(sfx) do
+        effect = gSounds[effect]
+    end
+    love.audio.pause(sfx)
+    self.rects = {
+        ['left'] = {x = 0, y = 0, width = point.x, height = VIRTUAL_HEIGHT},
+        ['top'] = {x = 0, y = 0, width = VIRTUAL_WIDTH, height = point.y},
+        ['right'] = {x = point.x, y = 0, width = VIRTUAL_WIDTH, height = VIRTUAL_HEIGHT},
+        ['bottom'] = {x = 0, y = point.y, width = VIRTUAL_WIDTH, height = VIRTUAL_HEIGHT},
+    }
+    self.color = color
+    Timer.tween(time, {
+        [self.rects['left']] = {width = 0},
+        [self.rects['top']] = {height = 0},
+        [self.rects['right']] = {x = VIRTUAL_WIDTH},
+        [self.rects['bottom']] = {y = VIRTUAL_HEIGHT}
+    }):finish(function()
+        Timer:clear()
+        gStateStack:pop()
+        love.audio.play(sfx)
+    end)
+end
+
+function DivergePointState:render()
+    love.graphics.setColor(self.color) 
+    for i, rect in pairs(self.rects) do
+        love.graphics.rectangle('fill', rect.x, rect.y, rect.width, rect.height)
+    end
+    love.graphics.setColor({1, 1, 1, 1})
+end

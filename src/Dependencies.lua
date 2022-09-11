@@ -29,6 +29,8 @@ require 'src/states/game/gui/QuestState'
 require 'src/states/game/gui/ConfirmState'
 require 'src/states/game/asthetic/DeathAnimationState'
 require 'src/states/game/asthetic/CameraShiftState'
+require 'src/states/game/asthetic/ConvergePointState'
+require 'src/states/game/asthetic/DivergePointState'
 require 'src/states/game/data/LoadState'
 require 'src/states/game/data/SaveState'
 

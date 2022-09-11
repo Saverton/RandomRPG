@@ -14,5 +14,7 @@ end
 
 function GatewayFeature:onEnter(level)
     self.active = false
-    gStateStack:push(SaveState(level, self.destination))
+    gStateStack:push(ConvergePointState({x = level.player.x + level.player.width / 2 - level.camera.x, 
+        y = level.player.y + level.player.height / 2 - level.camera.y},
+        {0, 0, 0, 1}, 1.5, function() gStateStack:push(SaveState(level, self.destination)) end))
 end
