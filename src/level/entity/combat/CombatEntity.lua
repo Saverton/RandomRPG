@@ -13,14 +13,9 @@ function CombatEntity:init(def, level, pos)
     self.attack = def.attack or DEFAULT_ATTACK
     self.defense = def.defense or DEFAULT_DEFENSE
     self.magic = def.magic or DEFAULT_MAGIC
-    self.magicRegenRate = def.magicRegenRate or 0
-
-    self.hpboost = def.hpboost or {}
-    self.attackboost = def.attackboost or {}
-    self.speedboost = def.speedboost or {}
-    self.defenseboost = def.defenseboost or {}
-    self.magicboost = def.magicboost or {}
-
+    -- stat boosts
+    self.boosts = def.boosts or {hp = {}, atk = {}, spd = {}, def = {}, mag = {}}
+    -- current values for depletable stats
     self.currenthp = def.currenthp or self:getHp()
     self.currentmagic = def.currentmagic or self:getMagic()
 
@@ -102,7 +97,7 @@ function CombatEntity:update(dt)
 
     --regen magic
     if self.currentmagic ~= self:getMagic() then
-        self.currentmagic = math.min(self:getMagic(), self.currentmagic + (self.magicRegenRate * dt))
+        self.currentmagic = math.min(self:getMagic(), self.currentmagic + ((ENTITY_DEFS[self.name].magicRegenRate or 0) * dt))
     end
 end
 
@@ -128,6 +123,13 @@ end
 
 function CombatEntity:heal(amount)
     self.currenthp = math.min(self:getHp(), math.floor(self.currenthp + amount))
+end
+
+function CombatEntity:revive()
+    local maxHp = self:getHp()
+    while self.currenthp ~= maxHp do
+        self:heal(1)
+    end
 end
 
 function CombatEntity:push(strength, from)
@@ -180,27 +182,25 @@ function CombatEntity:render(camera)
     end
 end
 
-function CombatEntity:getDamage()
-    local boost = 1
-    for i, bonus in pairs(self.attackboost) do
-        if bonus.tag == 'melee' or bonus.tag == 'normal' then
-            boost = boost * bonus.num
-        end
-    end
-    return self.attack * boost
-end
-
 function CombatEntity:getHp()
     local boost = 1
-    for i, bonus in pairs(self.hpboost) do
-        boost = boost * bonus
+    for i, bonus in pairs(self.boosts.hp) do
+        boost = boost * bonus.num
     end
     return math.floor(self.hp * boost)
 end
 
+function CombatEntity:getAttack()
+    local boost = 1
+    for i, bonus in pairs(self.boosts.atk) do
+        boost = boost * bonus.num
+    end
+    return self.attack * boost
+end
+
 function CombatEntity:getSpeed()
     local boost = 1
-    for i, bonus in pairs(self.speedboost) do
+    for i, bonus in pairs(self.boosts.spd) do
         boost = boost * bonus.num
     end
     return math.floor(self.speed * boost)
@@ -208,34 +208,36 @@ end
 
 function CombatEntity:getDefense()
     local boost = 1
-    for i, bonus in pairs(self.defenseboost) do
-        boost = boost * bonus
+    for i, bonus in pairs(self.boosts.atk) do
+        boost = boost * bonus.num
     end
     return math.floor(self.defense * boost)
 end
 
 function CombatEntity:getMagic()
     local boost = 1
-    for i, bonus in pairs(self.magicboost) do
-        boost = boost * bonus
+    for i, bonus in pairs(self.boosts.mag) do
+        boost = boost * bonus.num
     end
     return math.floor(self.magic * boost)
 end
 
 function CombatEntity:useAmmo(amount)
+    local haveEnough = false
     if (amount <= self.ammo) then
         self.ammo = self.ammo - amount
-        return true
+        haveEnough = true
     end
-    return false
+    return haveEnough
 end
 
 function CombatEntity:useMagic(amount)
+    local haveEnough = false
     if (amount <= math.floor(self.currentmagic)) then
         self.currentmagic = math.floor(self.currentmagic - amount)
-        return true
+        haveEnough = true
     end
-    return false
+    return haveEnough
 end
 
 function CombatEntity:dies()

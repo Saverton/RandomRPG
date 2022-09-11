@@ -54,7 +54,9 @@ ENTITY_DEFS = {
         attack = 1,
         agroDist = 7,
         exp = 1,
-        drops = {},
+        drops = {{name = 'ammo', chance = 0.5, min = 1, max = 3},
+            {name = 'health', chance = 0.25, min = 1, max = 1},
+            {name = 'money', chance = 0.75, min = 1, max = 3}},
         deathSound = 'enemy_dies_1',
         push = 8
     },
@@ -72,7 +74,9 @@ ENTITY_DEFS = {
         attack = 1,
         agroDist = 7,
         exp = 3,
-        drops = {},
+        drops = {{name = 'ammo', chance = 0.5, min = 2, max = 5},
+            {name = 'health', chance = 0.25, min = 1, max = 1},
+            {name = 'money', chance = 1, min = 2, max = 4}},
         deathSound = 'enemy_dies_1',
         push = 8,
         items = {

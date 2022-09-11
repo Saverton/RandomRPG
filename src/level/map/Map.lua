@@ -45,19 +45,13 @@ function Map:render(camera)
     local yStart = math.floor(camera.cambox.y / TILE_SIZE)
     local yEnd = math.floor((camera.cambox.y + camera.cambox.height) / TILE_SIZE)
 
-    -- render tiles and edges
+    -- render tiles, edges, and features
     for col = math.max(1, xStart), math.min(self.size, xEnd), 1 do
         for row = math.max(1, yStart), math.min(self.size, yEnd), 1 do
             self.tileMap[col][row]:render(camera.x, camera.y, col, row)
             for i, edge in pairs (self.edges[col][row]) do
                 love.graphics.draw(gTextures['edges'], gFrames['edges'][edge], ((col - 1) * TILE_SIZE - camera.x), ((row - 1) * TILE_SIZE - camera.y))
             end
-        end
-    end
-
-    -- render features
-    for col = math.max(1, xStart), math.min(self.size, xEnd), 1 do
-        for row = math.max(1, yStart), math.min(self.size, yEnd), 1 do
             local feat = self.featureMap[col][row]
             if feat ~= nil then
                 feat:render(camera.x, camera.y, col, row)

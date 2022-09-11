@@ -36,10 +36,6 @@ end
 
 function PickupManager:spawnPickups(items)
     for i, item in pairs(items) do
-        local x, y = self.level:getRandomCoord()
-        while not self.level.map:isSpawnableSpace(x, y) do
-            x, y = self.level:getRandomCoord()
-        end
-        table.insert(self.pickups, Pickup(item, (x - 1) * TILE_SIZE, (y - 1) * TILE_SIZE))
+        table.insert(self.pickups, Pickup(item.name, item.x, item.y, item.quantity))
     end
 end

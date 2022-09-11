@@ -27,7 +27,7 @@ EFFECT_DEFS = {
         frame = 2,
         effect = function(holder)
             --once slow move speed
-            table.insert(holder.speedboost, {name = 'freeze', num = 0.25})
+            table.insert(holder.boosts.spd, {name = 'freeze', num = 0.25})
         end,
         applied_every = 100,
         render = function(holder, texture, frame, camera) 
@@ -37,7 +37,7 @@ EFFECT_DEFS = {
             end
         end,
         afterEffect = function(holder)
-            table.remove(holder.speedboost, GetIndex(holder.speedboost, 'freeze'))
+            table.remove(holder.boosts.spd, GetIndex(holder.speedboost, 'freeze'))
         end
     }
 }

@@ -10,16 +10,16 @@ function Enemy:init(def, level, pos, startLevel, target)
     CombatEntity.init(self, def, level, pos)
     
     self.target = target or nil
-    if GetIndex(self.speedboost, 'agro') ~= -1 then
-        table.remove(self.speedboost, GetIndex(self.speedboost, 'agro'))
+    local agroBoostIndex = GetIndex(self.boosts.spd, 'agro')
+    if agroBoostIndex ~= -1 then
+        table.remove(self.speedboost, agroBoostIndex)
     end
-    self.agroDist = def.agroDist or 0 -- 0 = not aggressive
 
     self.color = def.color or ENEMY_COLORS[math.min(#ENEMY_COLORS, self.statLevel.level)]
 
     self.hpBar = ProgressBar(self.x, self.y - 6, BAR_WIDTH, BAR_HEIGHT, {1, 0, 0, 1})
 
-    self.statLevel:levelUpTo(startLevel)
+    self.statLevel:levelUpTo(startLevel or 0)
 end
 
 function Enemy:update(dt)
@@ -31,25 +31,25 @@ function Enemy:update(dt)
     else
         --check if damage target melee
         if Collide(self, self.target) then
-            self.target:damage(self:getDamage(), ENTITY_DEFS[self.name].push, self, self.inflictions)
+            self.target:damage(self:getAttack(), ENTITY_DEFS[self.name].push, self, self.inflictions)
         end
         -- check if target is out of agro Range
-        if GetDistance(self, self.target) > self.agroDist * TILE_SIZE then
+        if GetDistance(self, self.target) > ENTITY_DEFS[self.name].agroDist * TILE_SIZE then
             self:loseTarget()
         end
     end
 end
 
 function Enemy:findTarget(entity)
-    if GetDistance(self, entity) <= self.agroDist * TILE_SIZE then
+    if GetDistance(self, entity) <= ENTITY_DEFS[self.name].agroDist * TILE_SIZE then
         self.target = entity
-        table.insert(self.speedboost, {name = 'agro', num = ENTITY_DEFS[self.name].agroSpeedBoost})
+        table.insert(self.boosts.spd, {name = 'agro', num = ENTITY_DEFS[self.name].agroSpeedBoost})
     end 
 end
 
 function Enemy:loseTarget()
     self.target = nil
-    table.remove(self.speedboost, GetIndex(self.speedboost, 'agro'))
+    table.remove(self.boosts.spd, GetIndex(self.boosts.spd, 'agro'))
 end
 
 function Enemy:render(camera)
@@ -63,6 +63,17 @@ end
 
 function Enemy:dies()
     self.level:throwFlags{'kill enemy'}
+    self:dropItems()
     self.level.player.statLevel:expGain(self.statLevel.level * ENTITY_DEFS[self.name].exp)
     CombatEntity.dies(self)
+end
+
+function Enemy:dropItems()
+    local itemsToDrop = {}
+    for i, item in pairs(ENTITY_DEFS[self.name].drops) do
+        if math.random() < item.chance then
+            table.insert(itemsToDrop, {name = item.name, x = self.x, y = self.y, quantity = math.random(item.min, item.max)})
+        end
+    end
+    self.level.pickupManager:spawnPickups(itemsToDrop)
 end
