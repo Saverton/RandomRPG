@@ -99,9 +99,15 @@ STRUCTURE_DEFS = {
             [2] = {
                 name = 'chest',
                 chance = 1
+            },
+            [3] = {
+                name = 'exit',
+                chance = 1,
+                destination = 'overworld-1'
             }
         },
         layout = {
+            [1] = {0, 0, 0, 0, 3},
             [2] = {0, 1, 0, 1, 0},
             [3] = {0, 0, 2, 0, 0},
             [4] = {0, 1, 0, 1, 0}

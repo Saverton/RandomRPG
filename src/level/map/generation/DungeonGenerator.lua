@@ -14,7 +14,7 @@ function DungeonGenerator.generateDungeon(def, dunSize, name)
     DungeonGenerator.generatePath(dunGrid, landmarks, def, tileMap, size)
     DungeonGenerator.removeDeadRooms(dunGrid, def, tileMap, featureMap)
 
-    return Map(name, size, tileMap, biomeMap, featureMap, {})
+    return Map(name, size, tileMap, biomeMap, featureMap, {}, {x = ((landmarks.sx - 1) * 10) + 6, y =  ((landmarks.sy - 1) * 10) + 6})
 end
 
 function DungeonGenerator.generateDunGrid(dunSize)
@@ -44,10 +44,10 @@ function DungeonGenerator.generateRooms(def, dunGrid, dunSize)
                 row = ((y - 1) * 10) + (6 - math.floor(STRUCTURE_DEFS[name].height / 2))}
         end
     end
-    dunGrid[startX][startY].room = {name = def.startRoom, col = ((startX - 1) * 10) + (6 - math.floor(STRUCTURE_DEFS[def.startRoom].width / 2)),
-    row = ((startY - 1) * 10) + (6 - math.floor(STRUCTURE_DEFS[def.startRoom].height / 2))}
-    dunGrid[endX][endY].room = {name = def.endRoom, col = ((endX - 1) * 10) + (6 - math.floor(STRUCTURE_DEFS[def.endRoom].width / 2)),
-    row = ((endY - 1) * 10) + (6 - math.floor(STRUCTURE_DEFS[def.endRoom].height / 2))}
+    dunGrid[startX][startY] = {room = {name = def.startRoom, col = ((startX - 1) * 10) + (6 - math.floor(STRUCTURE_DEFS[def.startRoom].width / 2)),
+    row = ((startY - 1) * 10) + (6 - math.floor(STRUCTURE_DEFS[def.startRoom].height / 2))}, access = true}
+    dunGrid[endX][endY] = {room = {name = def.endRoom, col = ((endX - 1) * 10) + (6 - math.floor(STRUCTURE_DEFS[def.endRoom].width / 2)),
+    row = ((endY - 1) * 10) + (6 - math.floor(STRUCTURE_DEFS[def.endRoom].height / 2))}, access = true}
     return landmarks
 end
 
@@ -85,9 +85,11 @@ function DungeonGenerator.generatePath(dunGrid, landmarks, def, tileMap, size)
         local dir = math.random(4)
         -- check and see if the destination is in the map.
         local px, py = x + (DIRECTION_COORDS[dir].x * 10), y + (DIRECTION_COORDS[dir].y * 10)
-        while px < 1 or px > size or py < 1 or py > size do
+        local pdunX, pdunY = dunX + DIRECTION_COORDS[dir].x, dunY + DIRECTION_COORDS[dir].y
+        while (px < 1 or px > size or py < 1 or py > size) or (math.random() < 0.5 and dunGrid[pdunX][pdunY].access) do
             dir = math.random(4)
             px, py = x + (DIRECTION_COORDS[dir].x * 10), y + (DIRECTION_COORDS[dir].y * 10)
+            pdunX, pdunY = dunX + DIRECTION_COORDS[dir].x, dunY + DIRECTION_COORDS[dir].y
         end
         -- set new dungeon coordinates
         dunX, dunY = dunX + DIRECTION_COORDS[dir].x, dunY + DIRECTION_COORDS[dir].y
@@ -112,8 +114,8 @@ function DungeonGenerator.removeDeadRooms(dunGrid, def, tileMap, featureMap)
     for x, col in ipairs(dunGrid) do
         for y, space in ipairs(col) do
             if not space.access then
-                for rx = ((x - 1) * 10) + 1, ((x - 1) * 10) + 10, 1 do
-                    for ry = ((y - 1) * 10) + 1, ((y - 1) *  10) + 10, 1 do
+                for rx = ((x - 1) * 10) + 1, ((x - 1) * 10) + 11, 1 do
+                    for ry = ((y - 1) * 10) + 1, ((y - 1) *  10) + 11, 1 do
                         tileMap[rx][ry] = Tile(def.insideTile)
                         featureMap[rx][ry] = nil
                     end

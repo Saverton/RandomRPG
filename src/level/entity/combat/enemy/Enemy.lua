@@ -12,7 +12,7 @@ function Enemy:init(def, level, pos, startLevel, target)
     self.target = target or nil
     local agroBoostIndex = GetIndex(self.boosts.spd, 'agro')
     if agroBoostIndex ~= -1 then
-        table.remove(self.speedboost, agroBoostIndex)
+        table.remove(self.boosts.spd, agroBoostIndex)
     end
 
     self.color = def.color or ENEMY_COLORS[math.min(#ENEMY_COLORS, self.statLevel.level)]

@@ -25,6 +25,9 @@ LEVEL_DEFS = {
         spawnNpcs = true,
         gateways = {{name = 'fortress', destination = 'fortress-1'}, {name = 'fortress', destination = 'fortress-2'}, 
             {name = 'fortress', destination = 'fortress-3'}}
+    },
+    ['fortress'] = {
+        spawnNpcs = false
     }
 }
 

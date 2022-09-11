@@ -11,7 +11,17 @@ function Level:init(worldName, levelName, map, player, enemySpawner, npcs, picku
     self.levelName = levelName
     local splitIndex, _ = string.find(levelName, "-")
     local levelType = string.sub(levelName, 0, splitIndex - 1)
-    self.map = map or MapGenerator.generateMap(LEVEL_DEFS[levelType], self.levelName)
+    print('level type = \'' .. levelType .. '\'')
+    if levelType == 'overworld' then
+        print('generating overworld')
+        love.audio.stop(gSounds['dungeon_theme'])
+        self.map = map or MapGenerator.generateMap(LEVEL_DEFS[levelType], self.levelName)
+    elseif levelType == 'fortress' then
+        gSounds['dungeon_theme']:setLooping(true)
+        love.audio.play(gSounds['dungeon_theme'])
+        self.map = map or DungeonGenerator.generateDungeon(DUNGEON_DEFS[levelType], math.random(3, 7), self.levelName)
+    end
+    
 
     if player == nil then
         player = {}
@@ -27,9 +37,9 @@ function Level:init(worldName, levelName, map, player, enemySpawner, npcs, picku
         ['interact'] = function() return EntityInteractState(self.player) end
     })
     self.player:changeState('idle')
-    if LEVEL_DEFS[levelType].start ~= nil then
-        self.player.x = (LEVEL_DEFS[levelType].start.x - 1) * TILE_SIZE
-        self.player.y = (LEVEL_DEFS[levelType].start.y - 1) * TILE_SIZE
+    if self.map.startSpace ~= nil then
+        self.player.x = (self.map.startSpace.x - 1) * TILE_SIZE
+        self.player.y = (self.map.startSpace.y - 1) * TILE_SIZE
     end
 
     self.enemySpawner = EnemySpawner(self, enemySpawner.entities or {}, enemySpawner.entityCap)

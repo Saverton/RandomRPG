@@ -79,6 +79,7 @@ function LoadState:loadMap()
     local size = #tileMap 
     local featureMap = loadstring(love.filesystem.read(self.path .. '/world_features.lua'))()
     local gatewayMap = loadstring(love.filesystem.read(self.path .. '/world_gateways.lua'))()
+    local startSpace = loadstring(love.filesystem.read(self.path .. '/start_space.lua'))()
 
     for col = 1, size, 1 do
         for row = 1, size, 1 do
@@ -92,7 +93,7 @@ function LoadState:loadMap()
         end
     end
 
-    return Map(self.loadLevel, size, tileMap, biomeMap, featureMap, gatewayMap)
+    return Map(self.loadLevel, size, tileMap, biomeMap, featureMap, gatewayMap, startSpace)
 end
 
 function LoadState:loadPlayer()

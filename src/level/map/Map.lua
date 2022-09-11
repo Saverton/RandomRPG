@@ -6,7 +6,7 @@
 
 Map = Class{}
 
-function Map:init(name, size, tileMap, biomeMap, featureMap, gatewayMap)
+function Map:init(name, size, tileMap, biomeMap, featureMap, gatewayMap, startSpace)
     self.name = name or nil
     self.size = size or DEFAULT_MAP_SIZE
     self.tileAnimators = {
@@ -26,6 +26,9 @@ function Map:init(name, size, tileMap, biomeMap, featureMap, gatewayMap)
         print('building gateway at x = ' .. tostring(gateway.x) .. ', y = ' .. tostring(gateway.y))
         self.featureMap[gateway.x][gateway.y] = GatewayFeature(gateway.name, gateway.destination)
     end
+
+    -- if the player needs to start at a certain place, define it
+    self.startSpace = startSpace
 end
 
 function Map:update(dt)
