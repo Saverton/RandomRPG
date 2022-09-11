@@ -48,6 +48,8 @@ function Map:render(camera)
     local xEnd = math.floor((camera.cambox.x + camera.cambox.width) / TILE_SIZE)
     local yStart = math.floor(camera.cambox.y / TILE_SIZE)
     local yEnd = math.floor((camera.cambox.y + camera.cambox.height) / TILE_SIZE)
+    print('cambox width = ' .. tostring(camera.cambox.width))
+    print('cambox height = ' .. tostring(camera.cambox.height))
 
     -- render tiles, edges, and features
     for col = math.max(1, xStart), math.min(self.size, xEnd), 1 do

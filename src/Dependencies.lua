@@ -28,6 +28,7 @@ require 'src/states/game/gui/InventoryState'
 require 'src/states/game/gui/QuestState'
 require 'src/states/game/gui/ConfirmState'
 require 'src/states/game/asthetic/DeathAnimationState'
+require 'src/states/game/asthetic/CameraShiftState'
 require 'src/states/game/data/LoadState'
 require 'src/states/game/data/SaveState'
 
