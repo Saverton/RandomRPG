@@ -273,8 +273,8 @@ function MapGenerator.generateStructures(structureMap, biomeMap, tileMap, featur
                     local col = x + structure.col - 1
                     local row = y + structure.row - 1
                     featureMap[col][row] = nil
-                    if (sdef.layout[x] ~= nil and sdef.layout[x][y] ~= nil and sdef.layout[x][y] ~= 0) then
-                        local feature = sdef.features[sdef.layout[x][y]]
+                    if (sdef.layout[y] ~= nil and sdef.layout[y][x] ~= nil and sdef.layout[y][x] ~= 0) then
+                        local feature = sdef.features[sdef.layout[y][x]]
                         if math.random() < feature.chance then
                             if FEATURE_DEFS[feature.name].gateway then
                                 featureMap[col][row] = GatewayFeature(feature.name, feature.destination)

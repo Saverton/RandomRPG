@@ -47,8 +47,8 @@ function DungeonGenerator.generateRooms(def, dunGrid, dunSize)
     end
     dunGrid[startX][startY] = {room = {name = def.startRoom, col = ((startX - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[def.startRoom].width / 2)),
     row = ((startY - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[def.startRoom].height / 2))}, access = true}
-    dunGrid[endX][endY] = {room = {name = def.endRoom, col = ((startX - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[def.endRoom].width / 2)),
-    row = ((startY - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[def.endRoom].height / 2))}, access = true}
+    dunGrid[endX][endY] = {room = {name = def.endRoom, col = ((endX - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[def.endRoom].width / 2)),
+    row = ((endY - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[def.endRoom].height / 2))}, access = true}
     return landmarks
 end
 
@@ -88,7 +88,7 @@ function DungeonGenerator.generatePath(dunGrid, landmarks, def, tileMap, size)
         -- check and see if the destination is in the map.
         local px, py = x + (DIRECTION_COORDS[dir].x * ROOM_WIDTH), y + (DIRECTION_COORDS[dir].y * ROOM_HEIGHT)
         local pdunX, pdunY = dunX + DIRECTION_COORDS[dir].x, dunY + DIRECTION_COORDS[dir].y
-        while (pdunX < 1 or pdunX > #dunGrid or pdunY < 1 or pdunY > #dunGrid) or (math.random() < 0.5 and dunGrid[pdunX][pdunY].access) do
+        while (pdunX < 1 or pdunX > #dunGrid or pdunY < 1 or pdunY > #dunGrid) or (math.random() < 0.75 and dunGrid[pdunX][pdunY].access) do
             dir = math.random(4)
             px, py = x + (DIRECTION_COORDS[dir].x * ROOM_WIDTH), y + (DIRECTION_COORDS[dir].y * ROOM_HEIGHT)
             pdunX, pdunY = dunX + DIRECTION_COORDS[dir].x, dunY + DIRECTION_COORDS[dir].y
