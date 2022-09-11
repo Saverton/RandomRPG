@@ -46,7 +46,11 @@ function Level:init(worldName, levelName, map, player, enemySpawner, npcs, picku
 
     self.pickupManager = PickupManager(self, pickups)
 
-    self.camera = Camera(self.player, self)
+    if levelType == 'overworld' then
+        self.camera = Camera(self.player, self)
+    else
+        self.camera = DungeonCamera(self.player, self) 
+    end
 
     self.npcManager = NPCManager(npcs, self)
     if LEVEL_DEFS[levelType].spawnNpcs then

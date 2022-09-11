@@ -44,6 +44,7 @@ require 'src/states/entity/npc/NPCWalkState'
 
 require 'src/level/Level' 
 require 'src/level/Camera'
+require 'src/level/DungeonCamera'
 
 require 'src/level/map/biomes/biome_defs'
 require 'src/level/map/biomes/Biome'
