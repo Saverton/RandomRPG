@@ -11,7 +11,7 @@ EFFECT_DEFS = {
             --every second lose 1hp
             holder:hurt(1)
             --play burn sound
-            love.audio.play(gSounds['fire_hit_1'])
+            love.audio.play(gSounds['combat']['fire_hit_1'])
         end,
         applied_every = 1,
         render = function(holder, texture, frame, camera) 

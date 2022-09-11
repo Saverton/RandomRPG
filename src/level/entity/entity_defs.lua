@@ -32,7 +32,7 @@ ENTITY_DEFS = {
         magic = PLAYER_BASE_MAGIC,
         magicRegenRate = 0.5,
         push = 16,
-        deathSound = 'player_dies_1',
+        deathSound = 'player_dies',
         statLevel = {
             hpbonus = {chance = 0.5, bonus = 1},
             atkbonus = {chance = 0.5, bonus = 1},
@@ -57,7 +57,7 @@ ENTITY_DEFS = {
         drops = {{name = 'ammo', chance = 0.5, min = 1, max = 3},
             {name = 'health', chance = 0.25, min = 1, max = 1},
             {name = 'money', chance = 0.75, min = 1, max = 3}},
-        deathSound = 'enemy_dies_1',
+        deathSound = 'enemy_dies',
         push = 8
     },
     ['skeleton'] = {
@@ -77,7 +77,7 @@ ENTITY_DEFS = {
         drops = {{name = 'ammo', chance = 0.5, min = 2, max = 5},
             {name = 'health', chance = 0.25, min = 1, max = 1},
             {name = 'money', chance = 1, min = 2, max = 4}},
-        deathSound = 'enemy_dies_1',
+        deathSound = 'enemy_dies',
         push = 8,
         items = {
             {name = 'sword', quantity = 1}

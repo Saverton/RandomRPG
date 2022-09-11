@@ -20,6 +20,7 @@ TILE_DEFS = {
             local tiles = map.tileMap.tiles
             local item = player.items[player.heldItem]
             if item ~= nil and item.name == 'wood' and item.quantity > 0 then
+                gSounds['world']['bridge']:play()
                 item.quantity = math.max(0, item.quantity - 1)
                 tiles[col][row] = Tile('bridge', col, row)
                 player:updateInventory()

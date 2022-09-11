@@ -86,12 +86,14 @@ function Shop:transaction(index)
             if not ITEM_DEFS[item.name].stackable then
                 gStateStack:push(ConfirmState(MENU_DEFS['confirm'], {
                     onConfirm = function() 
+                        gSounds['gui']['shop_exchange']:play()
                         self.player.money = math.max(0, self.player.money - item.price)
                         self.player:getItem(Item(item.name, self.player, 1))
                         item.quantity = math.max(0, item.quantity - 1)
                     end
                 }))
             else
+                gSounds['gui']['shop_exchange']:play()
                 self.player.money = math.max(0, self.player.money)
                 self.player:getItem(Item(item.name, self.player, 1))
                 item.quantity = math.max(0, item.quantity - 1)

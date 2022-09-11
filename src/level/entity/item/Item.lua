@@ -36,6 +36,7 @@ function Item:use()
             goto noUse
         end
     end
+    gSounds['items'][ITEM_DEFS[self.name].useSound or 'hit']:play()
     item.onUse(self, self.holder)
     ::noUse::
 end

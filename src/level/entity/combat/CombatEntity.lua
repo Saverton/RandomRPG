@@ -109,7 +109,7 @@ end
 
 function CombatEntity:hurt(amount)
     if not self.invincible then
-        love.audio.play(gSounds['hit_1'])
+        love.audio.play(gSounds['combat'][ENTITY_DEFS[self.name].hitSound or 'hit'])
         local defense = self:getDefense()
         if defense >= amount then
             defense = math.max(amount - 1, 0)
@@ -122,6 +122,7 @@ function CombatEntity:hurt(amount)
 end
 
 function CombatEntity:heal(amount)
+    gSounds['items']['health']:play()
     self.currenthp = math.min(self:getHp(), math.floor(self.currenthp + amount))
 end
 
@@ -241,7 +242,7 @@ function CombatEntity:useMagic(amount)
 end
 
 function CombatEntity:dies()
-    love.audio.play(gSounds[ENTITY_DEFS[self.name].deathSound or 'enemy_dies_1'])
+    love.audio.play(gSounds['combat'][ENTITY_DEFS[self.name].deathSound or 'enemy_dies'])
     self.level:throwFlags({'kill entity', 'kill ' .. self.name})
 end
 

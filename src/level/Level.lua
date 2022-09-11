@@ -13,12 +13,8 @@ function Level:init(worldName, levelName, map, player, enemySpawner, npcs, picku
     local levelType = string.sub(levelName, 0, splitIndex - 1)
     print('level type = \'' .. levelType .. '\'')
     if levelType == 'overworld' then
-        print('generating overworld')
-        love.audio.stop(gSounds['dungeon_theme'])
         self.map = map or MapGenerator.generateMap(LEVEL_DEFS[levelType], self.levelName)
     elseif levelType == 'fortress' then
-        gSounds['dungeon_theme']:setLooping(true)
-        love.audio.play(gSounds['dungeon_theme'])
         self.map = map or DungeonGenerator.generateDungeon(DUNGEON_DEFS[levelType], math.random(3, 7), self.levelName)
     end
     

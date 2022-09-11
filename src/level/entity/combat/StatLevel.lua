@@ -24,6 +24,7 @@ end
 function StatLevel:expGain(amount)
     self.exp = self.exp + amount
     if self.exp >= math.pow(3, self.level) then
+        gSounds['gui']['level_up']:play()
         local oldStats = {
             hp = 'HP: ' .. tostring(self.entity.hp),
             atk = 'ATK: ' .. tostring(self.entity.attack),

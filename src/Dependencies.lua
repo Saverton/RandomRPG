@@ -131,13 +131,36 @@ gFonts = {
 }
 
 gSounds = {
-    ['menu_blip_1'] = love.audio.newSource('sounds/menu_blip_1.wav', 'static'),
-    ['menu_select_1'] = love.audio.newSource('sounds/menu_select_1.wav', 'static'),
-    ['hit_1'] = love.audio.newSource('sounds/hit_1.wav', 'static'),
-    ['sword_swing_1'] = love.audio.newSource('sounds/sword_swing_1.wav', 'static'),
-    ['player_dies_1'] = love.audio.newSource('sounds/player_dies_1.wav', 'static'),
-    ['enemy_dies_1'] = love.audio.newSource('sounds/enemy_dies_1.wav', 'static'),
-    ['fire_hit_1'] = love.audio.newSource('sounds/fire_hit_1.wav', 'static'),
-    ['pickup_item'] = love.audio.newSource('sounds/pickup_item.wav', 'static'),
-    ['dungeon_theme'] = love.audio.newSource('sounds/dungeon.mp3', 'stream')
+    ['gui'] = {
+        ['menu_blip_1'] = love.audio.newSource('sounds/menu_blip_1.wav', 'static'),
+        ['menu_select_1'] = love.audio.newSource('sounds/menu_select_1.wav', 'static'),
+        ['level_up'] = love.audio.newSource('sounds/level_up.wav', 'static'),
+        ['shop_exchange'] = love.audio.newSource('sounds/shop_exchange.wav', 'static'),
+    },
+    ['combat'] = {
+        ['hit'] = love.audio.newSource('sounds/hit.wav', 'static'),
+        ['player_dies'] = love.audio.newSource('sounds/player_dies_1.wav', 'static'),
+        ['enemy_dies'] = love.audio.newSource('sounds/enemy_dies.wav', 'static'),
+        ['fire_hit_1'] = love.audio.newSource('sounds/fire_hit_1.wav', 'static'),
+        ['target_found'] = love.audio.newSource('sounds/target_found.wav', 'static'),
+    },
+    ['items'] = {
+        ['sword_swing_1'] = love.audio.newSource('sounds/sword_swing_1.wav', 'static'),
+        ['pickup_item'] = love.audio.newSource('sounds/pickup_item.wav', 'static'),
+        ['battle_axe'] = love.audio.newSource('sounds/battle_axe.wav', 'static'),
+        ['bow_shot'] = love.audio.newSource('sounds/bow_shot.wav', 'static'),
+        ['health'] = love.audio.newSource('sounds/health.wav', 'static'),
+        ['money'] = love.audio.newSource('sounds/money.wav', 'static'),
+        ['special_item'] = love.audio.newSource('sounds/special_item.wav', 'static'),
+        ['use_magic'] = love.audio.newSource('sounds/use_magic.wav', 'static'),
+    },
+    ['world'] = {
+        ['bridge'] = love.audio.newSource('sounds/bridge.wav', 'static'),
+        ['enter_gateway'] = love.audio.newSource('sounds/enter_gateway.wav', 'static'),
+        ['open_chest'] = love.audio.newSource('sounds/open_chest.wav', 'static'),
+        ['tree_falls'] = love.audio.newSource('sounds/tree_falls.wav', 'static'),
+    },
+    ['music'] = {
+        ['dungeon_theme'] = love.audio.newSource('sounds/dungeon.mp3', 'stream')
+    }
 }

@@ -20,6 +20,7 @@ FEATURE_DEFS = {
         onInteract = function(player, map, col, row) 
             local featureMap = map.featureMap
             if player.items[player.heldItem].name == 'battle_axe' then
+                gSounds['world']['tree_falls']:play()
                 featureMap[col][row] = nil
                 table.insert(player.level.pickupManager.pickups, Pickup('wood', (col - 1) * TILE_SIZE, (row - 1) * TILE_SIZE))
                 return true
@@ -49,6 +50,7 @@ FEATURE_DEFS = {
                 return
             end
             featureMap[col][row].animation:changeAnimation('open')
+            gSounds['world']['open_chest']:play()
             Timer.after(1.5, function()
                 featureMap[col][row].animation:changeAnimation('main')
                 featureMap[col][row] = nil 
@@ -76,6 +78,7 @@ FEATURE_DEFS = {
         onInteract = function(player, map, col, row) 
             local featureMap = map.featureMap
             if player.items[player.heldItem].name == 'battle_axe' then
+                gSounds['world']['tree_falls']:play()
                 featureMap[col][row] = nil
                 table.insert(player.level.pickupManager.pickups, Pickup('wood', (col - 1) * TILE_SIZE, (row - 1) * TILE_SIZE))
                 return true

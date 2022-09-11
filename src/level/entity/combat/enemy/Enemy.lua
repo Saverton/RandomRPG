@@ -42,6 +42,7 @@ end
 
 function Enemy:findTarget(entity)
     if GetDistance(self, entity) <= ENTITY_DEFS[self.name].agroDist * TILE_SIZE then
+        gSounds['combat']['target_found']:play()
         self.target = entity
         table.insert(self.boosts.spd, {name = 'agro', num = ENTITY_DEFS[self.name].agroSpeedBoost})
     end 
@@ -59,6 +60,12 @@ function Enemy:render(camera)
     local onScreenX = math.floor(self.x - camera.x + self.xOffset)
     local onScreenY = math.floor(self.y - camera.y + self.yOffset - 4)
     self.hpBar:render((self.currenthp / self:getHp()), onScreenX, onScreenY)
+    if self.target ~= nil then
+        love.graphics.setFont(gFonts['small'])
+        love.graphics.setColor(1, 1, 0, 1)
+        love.graphics.print('!', onScreenX - 3, onScreenY)
+        love.graphics.setColor(1, 1, 1, 1)
+    end
 end
 
 function Enemy:dies()

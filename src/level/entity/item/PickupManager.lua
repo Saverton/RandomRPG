@@ -20,7 +20,7 @@ function PickupManager:update(dt)
     for i, pickup in pairs(self.pickups) do
         if GetDistance(self.level.player, pickup) < self.level.player.pickupRange then
             self.level.player:getItem(Item(pickup.name, self.level.player, pickup.value))
-            love.audio.play(gSounds['pickup_item'])
+            gSounds['item'][ITEM_DEFS[pickup.name].pickupSound or 'pickup_item']:play()
             table.remove(self.pickups, i)
         end
     end

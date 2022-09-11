@@ -11,7 +11,7 @@ end
 
 function GameOverState:update(dt) 
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
-        love.audio.play(gSounds['menu_select_1'])
+        love.audio.play(gSounds['gui']['menu_select_1'])
         gStateStack:pop()
         gStateStack:pop()
         gStateStack:pop()
@@ -25,6 +25,7 @@ function GameOverState:render()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setFont(gFonts['large'])
     love.graphics.printf('Game Over', love.math.newTransform(0, (VIRTUAL_HEIGHT / 2) - 20), VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('press \'enter\'', love.math.newTransform(0, (VIRTUAL_HEIGHT / 2) + 30), VIRTUAL_WIDTH, 'center')
 end
 
 function GameOverState:exit() end

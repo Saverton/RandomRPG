@@ -18,8 +18,9 @@ ITEM_DEFS = {
         },
         useRate = 0.4,
         useTime = 0.3,
+        useSound = 'sword_swing_1',
+        pickupSound = 'special_item',
         onUse = function(item, holder, target)
-            love.audio.play(gSounds['sword_swing_1'])
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
             local origin = {x = holder.x, y = holder.y, direction = holder.direction}
 
@@ -41,8 +42,9 @@ ITEM_DEFS = {
         },
         useRate = 0.5,
         useTime = 0.3,
+        useSound = 'bow_shot',
+        pickupSound = 'special_item',
         onUse = function(item, holder, target)
-            love.audio.play(gSounds['hit_1'])
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
             local origin = {x = holder.x, y = holder.y, direction = holder.direction}
 
@@ -65,8 +67,9 @@ ITEM_DEFS = {
         },
         useRate = 1,
         useTime = 0.5,
+        useSound = 'use_magic',
+        pickupSound = 'special_item',
         onUse = function(item, holder, target)
-            love.audio.play(gSounds['fire_hit_1'])
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
             local origin = {x = holder.x, y = holder.y, direction = holder.direction}
 
@@ -122,6 +125,7 @@ ITEM_DEFS = {
         },
         useRate = 0,
         useTime = 0,
+        pickupSound = 'money',
         onUse = function() end,
         onPickup = function(holder, quantity) holder.money = holder.money + quantity end
     },
@@ -140,8 +144,9 @@ ITEM_DEFS = {
         },
         useRate = 1,
         useTime = 0.5,
+        useSound = 'use_magic',
+        pickupSound = 'special_item',
         onUse = function(item, holder, target)
-            love.audio.play(gSounds['hit_1'])
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
             local origin = {x = holder.x, y = holder.y, direction = holder.direction}
 
@@ -163,8 +168,8 @@ ITEM_DEFS = {
         },
         useRate = 0.4,
         useTime = 0.3,
+        useSound = 'sword_swing_1',
         onUse = function(item, holder, target)
-            love.audio.play(gSounds['sword_swing_1'])
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
             local origin = {x = holder.x, y = holder.y, direction = holder.direction}
             holder.projectileManager:spawnProjectile('wooden_sword', origin)
@@ -184,8 +189,9 @@ ITEM_DEFS = {
         },
         useRate = 1.5,
         useTime = 0.5,
+        useSound = 'battle_axe',
+        pickupSound = 'special_item',
         onUse = function(item, holder, target)
-            love.audio.play(gSounds['sword_swing_1'])
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
             local origin = {x = holder.x, y = holder.y, direction = holder.direction}
 
@@ -225,7 +231,7 @@ ITEM_DEFS = {
         onUse = function() end,
         onPickup = function(holder, quantity) 
             holder.hp = holder.hp + 1 
-            holder.currenthp = holder.currenthp + 1
+            holder:heal(1)
         end
     }
 }

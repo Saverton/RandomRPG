@@ -14,9 +14,6 @@ function DeathAnimationState:init(player, x, y)
     self.renderPlayerExtra = true
     self.extraAnimation = Animation('player_death', player.direction)
 
-    -- temp
-    love.audio.stop(gSounds['dungeon_theme'])
-
     Timer.after(1, function()
         self.animation:changeAnimation('spin')
         self.updateAnimation = true
