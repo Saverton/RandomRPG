@@ -45,6 +45,9 @@ FEATURE_DEFS = {
         animated = true,
         onInteract = function(player, map, col, row)
             local featureMap = map.featureMap
+            if featureMap[col][row].animation.currentAnimation == 'open' then
+                return
+            end
             featureMap[col][row].animation:changeAnimation('open')
             Timer.after(1.5, function()
                 featureMap[col][row].animation:changeAnimation('main')
