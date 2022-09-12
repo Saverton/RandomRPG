@@ -20,6 +20,13 @@ function Enemy:init(def, level, pos, startLevel, target)
     self.hpBar = ProgressBar(self.x, self.y - 6, BAR_WIDTH, BAR_HEIGHT, {1, 0, 0, 1})
 
     self.statLevel:levelUpTo(startLevel or 0)
+
+    self.stateMachine = StateMachine({
+        ['idle'] = function() return EnemyIdleState(self) end,
+        ['walk'] = function() return EnemyWalkState(self, self.level) end,
+        ['interact'] = function() return EntityInteractState(self) end
+    }) -- give the enemy a stateMachine
+    self:changeState('idle')
 end
 
 function Enemy:update(dt)

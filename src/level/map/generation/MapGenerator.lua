@@ -214,17 +214,20 @@ function MapGenerator.generateFeatures(biomeMap, size)
     return featureMap
 end
 
-function MapGenerator.generateEdges(size, tiles)
+function MapGenerator.generateEdgeMap(tileMap)
     local edgeMap = {}
+    local width = #tileMap -- set the width and height of the tileMap to parse through
+    local height = 0
     
-    for col = 1, size, 1 do
+    for col = 1, width, 1 do
         edgeMap[col] = {}
-        for row = 1, size, 1 do
+        height = #tileMap[col]
+        for row = 1, height, 1 do
             edgeMap[col][row] = {}
             -- check all 4 sides
             for i = 1, 4, 1 do
                 local x, y = col + DIRECTION_COORDS[i].x, row + DIRECTION_COORDS[i].y
-                if x >= 1 and x <= size and y >= 1 and y <= size and tiles[x][y].name ~= tiles[col][row].name then
+                if x >= 1 and x <= width and y >= 1 and y <= height and tileMap[x][y].name ~= tileMap[col][row].name then
                     table.insert(edgeMap[col][row], i)
                 end
             end

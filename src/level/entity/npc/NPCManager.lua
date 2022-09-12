@@ -5,7 +5,7 @@
 
 NPCManager = Class{}
 
-function NPCManager:init(npcs, level)
+function NPCManager:init(level, npcs)
     self.level = level
     self.npcs = {}
     if npcs ~= nil then

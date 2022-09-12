@@ -78,8 +78,8 @@ DIRECTION_COORDS = {{x = 0, y = -1}, {x = 1, y = 0}, {x = 0, y = 1}, {x = -1, y 
 
 -- enemy
 DEFAULT_ENEMY_AGRO_DIST = 5
-SPAWN_MAX_RANGE = 25
-SPAWN_MIN_RANGE = 10
+MAX_SPAWN_RANGE = 20
+MIN_SPAWN_RANGE = 10
 DESPAWN_RANGE = 25 * TILE_SIZE
 
 -- gui

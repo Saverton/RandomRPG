@@ -16,7 +16,7 @@ BIOME_DEFS = {
         enemies = {
             {
                 name = 'goblin',
-                proc = 1
+                spawnChance = 1
             }
         },
         spawnRate = 0.02,
@@ -44,7 +44,7 @@ BIOME_DEFS = {
         enemies = {
             {
                 name = 'skeleton',
-                proc = 1
+                spawnChance = 1
             }
         },
         spawnRate = 0.05,
@@ -86,7 +86,7 @@ BIOME_DEFS = {
         enemies = {
             {
                 name = 'goblin',
-                proc = 1
+                spawnChance = 1
             }
         },
         spawnRate = 0.05,
@@ -114,7 +114,7 @@ BIOME_DEFS = {
         enemies = {
             {
                 name = 'goblin',
-                proc = 1
+                spawnChance = 1
             }
         },
         spawnRate = 0.02,
@@ -138,7 +138,7 @@ BIOME_DEFS = {
         enemies = {
             {
                 name = 'goblin',
-                proc = 1
+                spawnChance = 1
             }
         },
         spawnRate = 0.02,
@@ -166,7 +166,7 @@ BIOME_DEFS = {
         enemies = {
             {
                 name = 'goblin',
-                proc = 1
+                spawnChance = 1
             }
         },
         spawnRate = 0.05,

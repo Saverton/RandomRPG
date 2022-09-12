@@ -30,6 +30,14 @@ function Player:init(def, level, pos)
         end
     end
 
+    -- give the player a stateMachine to use
+    self.player.stateMachine = StateMachine({
+        ['idle'] = function() return PlayerIdleState(self) end,
+        ['walk'] = function() return PlayerWalkState(self, self.level) end,
+        ['interact'] = function() return EntityInteractState(self) end
+    })
+    self.player:changeState('idle')
+
     -- player is starting, give a wooden sword
     if #self.items == 0 then
         self:getItem(Item('wooden_sword', self, 1))
