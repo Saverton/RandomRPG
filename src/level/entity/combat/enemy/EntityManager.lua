@@ -53,7 +53,6 @@ end
 function EntityManager:spawnInOverworld()
     local map = self.level.map -- reference to the level's map
     local x, y = math.floor(self.level.player.x / TILE_SIZE), math.floor(self.level.player.y / TILE_SIZE) -- player x and y position on tile grid
-
     -- parse through each tile in spawn range
     for col = math.max(1, x - MAX_SPAWN_RANGE), math.min(map.width, x + MAX_SPAWN_RANGE), 1 do
         for row = math.max(1, y - MAX_SPAWN_RANGE), math.min(map.height, y + MAX_SPAWN_RANGE), 1 do
@@ -65,10 +64,7 @@ function EntityManager:spawnInOverworld()
             if not (math.abs(col - x) <= MIN_SPAWN_RANGE or math.abs(row - y) <= MIN_SPAWN_RANGE) or
                 not (math.random() < biome.spawnRate) or not (map.isSpawnableSpace(col, row)) then
                 local enemyName = self:chooseRandomEnemy(biome.enemies) -- choose an enemy from this biome's list
-                local playerLevel = self.level.player.statLevel.level -- reference to player's statLevel level
-                local startLevel = math.random(math.max(1, playerLevel - 2), playerLevel) -- determine the statLevel of this enemy
-                local position = {x = (col - 1) * TILE_SIZE, y = (row - 1) * TILE_SIZE, xOffset = 0, yOffset = 0} -- spawning position
-                table.insert(self.entities, Enemy(ENTITY_DEFS[enemyName], self.level, position, startLevel, nil)) -- spawn the enemy
+                self:spawnEnemy(enemyName, col, row)
             end
         end
     end
@@ -87,79 +83,31 @@ function EntityManager:chooseRandomEnemy(list)
     end
 end
 
+-- spawn an enemy given an enemy name at a coordinate col, row
+function EntityManager:spawnEnemy(enemyName, col, row)
+    local playerLevel = self.level.player.statLevel.level -- reference to player's statLevel level
+    local startLevel = math.random(math.max(1, playerLevel - 2), playerLevel) -- determine the statLevel of this enemy
+    local position = {x = (col - 1) * TILE_SIZE, y = (row - 1) * TILE_SIZE, xOffset = 0, yOffset = 0} -- spawning position
+    table.insert(self.entities, Enemy(ENTITY_DEFS[enemyName], self.level, position, startLevel, nil)) -- spawn the enemy
+end
+
 -- spawn enemies in a dungeon according to spawner feature positions
 function EntityManager:spawnInDungeon()
-
-end
-
-function EntityManager:spawnEnemies()
-    local statLevelMax = self.level.player.statLevel.level or 1
-    local map = self.level.map
-    local x, y = 
-
-    if #self.entities >= self.entityCap then
-        goto stop
-    end
-
-    for col = math.max(1, x - SPAWN_MAX_RANGE), math.min(map.size, x + SPAWN_MAX_RANGE), 1 do
-        for row = math.max(1, y -  SPAWN_MAX_RANGE), math.min(map.size, y + SPAWN_MAX_RANGE), 1 do
-            if self.level.map.featureMap[col][row] ~= nil and FEATURE_DEFS[self.level.map.featureMap[col][row].name].spawner and self.level.map.featureMap[col][row].active then
-                self.level.map.featureMap[col][row].active = false
-                local entity = Enemy(
-                    ENTITY_DEFS[self.level.map.featureMap[col][row].enemy],
-                    self.level,
-                    {x = (col), y = (row), ox = 0, oy = 0},
-                    math.max(1, statLevelMax - math.random(0, 2))
-                )
-                entity.stateMachine = StateMachine({
-                    ['idle'] = function() return EnemyIdleState(entity) end,
-                    ['walk'] = function() return EnemyWalkState(entity, self.level) end,
-                    ['interact'] = function() return EntityInteractState(entity) end
-                })
-                entity:changeState('idle')
-                table.insert(self.entities, entity)
-                goto continue
+    local map = self.level.map -- reference to the level's map
+    local camera = self.level.camera -- reference to the level's camera, which defines the bounds for spawning enemies
+    -- parse through each feature in the camera's bounds.
+    for col = math.floor(camera.cambox.x / TILE_SIZE), math.floor((camera.cambox.x + camera.cambox.width) / TILE_SIZE), 1 do
+        for row = math.floor(camera.cambox.y / TILE_SIZE), math.floor((camera.cambox.y + camera.cambox.height) / TILE_SIZE), 1 do
+            local feature = map.featureMap[col][row] -- the feature at this index
+            if (feature ~= nil) and (FEATURE_DEFS[feature.name].spawner) and (feature.active) then -- feature must be an active spawner
+                self:spawnEnemy(feature.enemy, col, row) -- spawn the spawner's enemy
             end
-            if not (map:isSpawnableSpace(col, row)) or
-                GetDistance(self.level.player, {x = col * TILE_SIZE, y = row * TILE_SIZE}) < SPAWN_MIN_RANGE * TILE_SIZE then
-                goto continue
-            end
-            local biome = map.biomeMap[col][row]
-            if #BIOME_DEFS[biome.name].enemies >= 1 and math.random() < BIOME_DEFS[biome.name].spawnRate then
-                local num = math.random()
-                local sum = 0
-                for i, enemy in pairs(BIOME_DEFS[biome.name].enemies) do
-                    sum = sum + enemy.proc 
-                    if num < sum then
-                        local entity = Enemy(
-                            ENTITY_DEFS[enemy.name],
-                            self.level,
-                            {x = (col), y = (row), ox = 0, oy = 0},
-                            math.max(1, statLevelMax - math.random(0, 2))
-                        )
-                        entity.stateMachine = StateMachine({
-                            ['idle'] = function() return EnemyIdleState(entity) end,
-                            ['walk'] = function() return EnemyWalkState(entity, self.level) end,
-                            ['interact'] = function() return EntityInteractState(entity) end
-                        })
-                        entity:changeState('idle')
-                        table.insert(self.entities, entity)
-                        break
-                    end
-                end
-            end
-
-            if #self.entities >= self.entityCap then
-                goto stop
-            end
-            ::continue::
         end
     end
-
-    ::stop::
 end
 
+-- clear the entity table then call the spawn function again, used when moving through rooms in a dungeon.
 function EntityManager:reset()
-    self.entities = {}
-    self:spawnEnemies()
+    self.entities = {} -- clear entity table
+    self:spawn() -- spawn new entities
 end
