@@ -11,7 +11,7 @@ function Item:init(name, holder, quantity)
 
     self.holder = holder
 
-    self.useRate = 0
+    self.useRate = ITEM_DEFS[self.name].useRate
 
     self.quantity = quantity or 1
 
@@ -24,21 +24,18 @@ function Item:update(dt)
     self.useRate = math.max(0, self.useRate - dt)
 end
 
+-- use this item
 function Item:use()
-    local item = ITEM_DEFS[self.name]
-    self.useRate = item.useRate
-    if item.type == 'ranged' then
-        if not self.holder:useAmmo(item.cost) then
-            goto noUse
-        end
-    elseif item.type == 'magic' then
-        if not self.holder:useMagic(item.cost) then
-            goto noUse
-        end
+    local successful = false -- track whether the item was used
+    local item = ITEM_DEFS[self.name] -- shortened reference to the item's definitions table
+    -- ensure that any ammo or magic requirements are met
+    if not (item.type == 'ranged' and self.holder:useAmmo(item.cost)) and not (item.type == 'magic' and self.holder:useMagic(item.cost)) then
+        gSounds['items'][ITEM_DEFS[self.name].useSound or 'hit']:play() -- play the item's use sound
+        item.onUse(self, self.holder) -- execute the items onUse behavior
+        self.useRate = item.useRate -- set the item's cooldown timer to the useRate
+        successful = true -- item was used successfully
     end
-    gSounds['items'][ITEM_DEFS[self.name].useSound or 'hit']:play()
-    item.onUse(self, self.holder)
-    ::noUse::
+    return successful
 end
 
 function Item:render(x, y)

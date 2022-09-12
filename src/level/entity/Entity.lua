@@ -1,183 +1,161 @@
 --[[
-    Base class for all entities in the game.
-    attributes: x, y, width, height, stateMachine, animations, hp, speed, defense, onDeath(), direction, currentFrame,
-        animationTimer
+    Entity Class: defines the behavior and attributes shared by all Entities in the game, this class is never instantiated on it's own.
     @author Saverton
 ]]
 
 Entity = Class{}
 
-function Entity:init(def, level, pos)
-    self.name = def.name
-    self.animName = def.animName or self.name
-
-    --entity positioning
-    self.x = (((pos.x - 1) * TILE_SIZE) + (pos.ox))
-    self.y = (((pos.y - 1) * TILE_SIZE) + (pos.oy))
-    self.width = def.width or DEFAULT_ENTITY_WIDTH
-    self.height = def.height or DEFAULT_ENTITY_HEIGHT
-    self.direction = START_DIRECTION
-    self.xOffset = def.xOffset or 0
-    self.yOffset = def.yOffset or 0
-
-    -- reference to level
-    self.level = level or nil
-    
-    -- owned stateMachine
-    self.stateMachine = nil
-
-    -- animations
-    self.animator = Animation(self.animName, def.startAnim or 'idle-right')
-
-    -- item management
-    self.items = {}
-    if def.items ~= nil then
-        for i, item in ipairs(def.items) do
-            table.insert(self.items, Item(item.name, self, item.quantity))
-        end
-    end
-    self.heldItem = 1
-
-    -- move speed
-    self.speed = def.speed or DEFAULT_SPEED
+function Entity:init(level, definitions, position)
+    self.level = level -- reference to the level this entity belongs in
+    self.name = definitions.name -- the name of this entity
+    self.animationName = definitions.animationName or self.name -- the name for this entity's animation
+    self.xOffset, self.yOffset = definitions.xOffset or 0, definitions.yOffset or 0 -- set the entity's offsets
+    self.width, self.height = definitions.width or DEFAULT_ENTITY_WIDTH, definitions.height or DEFAULT_ENTITY_HEIGHT -- set entity's width and height
+    self:setPosition(position) -- set the entity's spawning position
+    self.animator = Animation(self.animName, definitions.startAnim or 'idle-right') -- the animator used to display this entity
+    self:initiateInventory(definitions.items or {}) -- initiate the inventory of this entity
+    self.speed = definitions.speed or DEFAULT_SPEED -- set the move speed for this entity
 end
 
+-- update each of the components of this entity
 function Entity:update(dt)
-    -- update entity activity held in state machine
-    self.stateMachine:update(dt)
-
-    -- update frames
-    self.animator:update(dt)
-
-    --update held item
+    self.stateMachine:update(dt) -- update the entity's statemachine, where most activity is held
+    self.animator:update(dt) -- update the entity's animation
     if self.items[self.heldItem] ~= nil then
-        self.items[self.heldItem]:update(dt)
+        self.items[self.heldItem]:update(dt) --update held item's use timer
     end
 end
 
-function Entity:changeState(name, params)
-    self.stateMachine:change(name, params)
+-- render this entity
+function Entity:render(camera)
+    -- determine the on screen x and y positions of the entity based on the camera or offsets.
+    local onScreenX, onScreenY = math.floor(self.x - camera.x + self.xOffset), math.floor(self.y - camera.y + self.yOffset)
+    self.stateMachine:render(onScreenX, onScreenY) -- draw the entity at the specified x and y according to stateMachine behavior
+    love.graphics.setColor(1, 1, 1, 1) -- set color back to default white in case it was changed
+    local mouseX, mouseY = push:toGame(love.mouse.getPosition()) -- get mouse position
+    if (mouseX ~= nil and mouseY ~= nil) and Collide(self, {x = mouseX + camera.x, y = mouseY + camera.y, width = 1, height = 1}) then
+        self:printInfoTag(onScreenX, onScreenY)
+    end -- if the mouse collides with this entity, print an informational tag above the entity
 end
 
+-- set the entity's starting position and orientation according to a position table.
+function Entity:setPosition(position)
+    -- set the x and y position
+    self.x, self.y = (((position.x - 1) * TILE_SIZE) + (position.xOffset)), (((position.y - 1) * TILE_SIZE) + (position.yOffset))
+    self.direction = START_DIRECTION -- set the entity's direction to the default direction
+end
+
+-- initiate the inventory with a list of items.
+function Entity:initiateInventory(items)
+    self.items = {} -- set this entity's inventory to empty
+    for i, item in ipairs(items) do
+        Entity:getItem(Item(item.name, self, item.quantity)) -- add each item into inventory from items list
+    end
+    self.heldItem = 1 -- set the held Item to 1
+end
+
+-- change the state of this entity's stateMachine, pass parameters onward
+function Entity:changeState(name, parameters)
+    self.stateMachine:change(name, parameters)
+end
+
+-- change the animation of this entity's animator
 function Entity:changeAnimation(name)
     self.animator:changeAnimation(name)
 end
 
+-- return true if this entity collides with the target, false otherwise
 function Entity:collides(target)
     return Collide(self, target)
 end
 
+-- set this entity's currently held item to a new index
 function Entity:setHeldItem(index)
     if self.items[index] ~= nil then
         self.heldItem = index
     end
 end
 
-function Entity:render(camera)
-    -- determine the on screen x and y positions of the entity based on the camera, any drawing manipulation, or offsets.
-    local onScreenX = math.floor(self.x - camera.x + self.xOffset)
-    local onScreenY = math.floor(self.y - camera.y + self.yOffset)
-
-    -- draw the entity at the specified x and y according to stateMachine behavior
-    self.stateMachine:render(onScreenX, onScreenY)
-    -- set color back to default in case it was changed
-    love.graphics.setColor(1, 1, 1, 1)
-
-    --print simple string if showstats is true
-    local mouseX, mouseY = push:toGame(love.mouse.getPosition())
-    if (mouseX ~= nil and mouseY ~= nil) and Collide(self, {x = mouseX + camera.x, y = mouseY + camera.y, width = 1, height = 1}) then
-        love.graphics.setFont(gFonts['small'])
-        local message = self:getDisplayMessage()
-        love.graphics.setColor({0, 0, 0, 1})
-        love.graphics.print(message, math.floor(self.x - camera.x + 1), math.floor(self.y - camera.y - 15 + 1))
-        love.graphics.setColor({1, 1, 1, 1})
-        love.graphics.print(message, math.floor(self.x - camera.x), math.floor(self.y - camera.y - 15))
-    end
-
-    --debug: draw hitbox
-    --love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, self.width, self.height)
-end
-
-function Entity:checkCollision()
-    local tilesToCheck = {}
-    -- get the coordinates of the entity's top left and bottom right coords, convert to map coords, add one to each to match feature map indexes
-    local mapX, mapY, mapXB, mapYB = math.floor((self.x) / TILE_SIZE) + 1, math.floor((self.y) / TILE_SIZE) + 1, 
-        math.floor((self.x + self.width) / TILE_SIZE) + 1, math.floor((self.y + self.height) / TILE_SIZE) + 1
-    local collide = false
-
-    -- create locals for the dx and dy values: if this is a combat entity, then check if it is pushed, then add the movement of the entity
-    local dx = 0
-    local dy = 0
-    if self.pushed then
-       dx = self.pushdx
-       dy = self.pushdy 
-    end
-    dx = dx + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].x * self:getSpeed())
-    dy = dy + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].y * self:getSpeed())
-
-    -- determine the map coordinates that need to be checked based on the movement direction
-    tilesToCheck = {}
-    if dy < 0 then
-        table.insert(tilesToCheck, {x = mapX, y = mapY})
-        table.insert(tilesToCheck, {x = mapXB, y = mapY})
-    end if dx > 0 then
-        table.insert(tilesToCheck, {x = mapXB, y = mapY})
-        table.insert(tilesToCheck, {x = mapXB, y = mapYB})
-    end if dy > 0 then
-        table.insert(tilesToCheck, {x = mapX, y = mapYB})
-        table.insert(tilesToCheck, {x = mapXB, y = mapYB})
-    end if dx < 0 then
-        table.insert(tilesToCheck, {x = mapX, y = mapY})
-        table.insert(tilesToCheck, {x = mapX, y = mapYB})
-    end
-
-    for i, coord in pairs(tilesToCheck) do
-        -- ensure that collision check coordinate is on the map
-        if coord.x < 1 or coord.x > self.level.map.size or coord.y < 1 or coord.y > self.level.map.size then
-            goto continue
-        end
-        local feature = self.level.map.featureMap[coord.x][coord.y]
-        local tile = self.level.map.tileMap[coord.x][coord.y]
-        -- determine if we collide with something that stops us
-        if (feature ~= nil and FEATURE_DEFS[feature.name].isSolid) or TILE_DEFS[tile.name].barrier then
-            collide = true
-            break
-        end
-        -- if this is a player and the feature is an active gateway, enter the gateway
-        if self.isPlayer and (feature ~= nil and FEATURE_DEFS[feature.name].gateway and feature.active) then
-            feature:onEnter(self.level)
-        end
-        
-        ::continue::
-    end
-
-    return collide
-end
-
-function Entity:getItem(item)
-    local itemData = ITEM_DEFS[item.name]
-    if itemData.type ~= 'pickup' then
-        if itemData.stackable then
-            local insertIndex = GetIndex(self.items, item.name)
-            if insertIndex ~= -1 then
-                self.items[insertIndex].quantity = self.items[insertIndex].quantity + item.quantity
-            else
-                table.insert(self.items, item)
-            end
-        else
-            table.insert(self.items, item)
-        end
+-- insert a new item into the entity's inventory
+function Entity:giveItem(item)
+    local itemData = ITEM_DEFS[item.name] -- reference to item's definition table
+    if itemData.stackable then -- determine if the item is able to be stacked
+        self:giveStackableItem(item) -- add the item as a stackable
+    else -- add the new items as a new index if not stackable
+        table.insert(self.items, item)
     end
 end
 
+-- insert a new stackable item into the entity's inventory
+function Entity:giveStackableItem(item)
+    local insertIndex = GetIndex(self.items, item.name) -- find if the item already exists in the entity's inventory
+    if insertIndex ~= -1 then -- if it does, add the amount of new items to the existing quantity
+        self.items[insertIndex].quantity = self.items[insertIndex].quantity + item.quantity
+    else -- add the new item.
+        table.insert(self.items, item)
+    end
+end
+
+-- use the currently held item.
 function Entity:useHeldItem()
-    local used = false
-    if not (self.heldItem > #self.items) then
-        local item = self.items[self.heldItem]
-        if item ~= nil and item.useRate == 0 then
-            item:use()
-            used = true
-        end
+    local successful = false -- tracks if the item was successfully used or not
+    if not (self.heldItem > #self.items or self.heldItem == 0) then -- ensure that the held item exists
+        successful = self.items[self.heldItem]:use() -- use the item
     end
-    return used
+    return successful
+end
+
+-- return true if this entity's movement causes a collision with the map, false otherwise
+function Entity:checkCollisionWithMap()
+    local checkList = self:getCollisionCheckList() -- get a list of coordinates to check
+    local map = self.level.map -- reference to the entity's level's map
+    for i, coordinate in pairs(checkList) do
+        if coordinate.x < 1 or coordinate.x > map.width or coordinate.y < 1 or coordinate.y > map.height then
+            goto skipThisCoordinate -- skip this check if the coordinate is not on the map
+        end
+        local feature = map.featureMap[coordinate.x][coordinate.y] or Feature('empty') -- the feature in this coordinate
+        local tile = map.tileMap[coordinate.x][coordinate.y] -- definitions table for tile in this coordinate
+        if FEATURE_DEFS[feature.name].isSolid or TILE_DEFS[tile.name].barrier then
+            return true -- determine if the entity collides with something that stops it
+        end
+        FEATURE_DEFS[feature.name].onCollide(self, feature) -- if this feature has an onCollide function, call it
+        ::skipThisCoordinate:: -- go here if this coordinate should be skipped in checking
+    end
+    return false -- no collisions detected, return false
+end
+
+-- return a list of map coordinates to check for collision with.
+function Entity:getCollisionCheckList()
+    local leftCol, rightCol, topRow, bottomRow = (math.ceil(self.x / TILE_SIZE)), (math.ceil((self.x + self.width) / TILE_SIZE)), 
+        (math.ceil(self.y / TILE_SIZE)), (math.ceil((self.y + self.height) / TILE_SIZE)) -- get the map coordinates of each side of this entity
+    local dx, dy = self:getDirectionalVelocities() -- get entity's directional velocity
+    local checkList = {} -- the list of coordinates to be checked for collision
+    if dx < 0 or dy < 0 then
+        table.insert(checkList, {x = leftCol, y = topRow})
+    end if dx > 0 or dy < 0 then
+        table.insert(checkList, {x = rightCol, y = topRow})
+    end if dx > 0 or dy > 0 then
+        table.insert(checkList, {x = rightCol, y = bottomRow})
+    end if dx < 0 or dy > 0 then
+        table.insert(checkList, {x = leftCol, y = bottomRow})
+    end -- add in coordinates according to the entity's x and y velocity
+    return checkList
+end
+
+-- return the directional velocity for the x and y axis of this entity (dx = delta x, dy = delta y)
+function Entity:getDirectionalVelocities()
+    local dx, dy = 0, 0 -- set base velocity as 0
+    if self.pushed then
+       dx, dy = self.pushdx, self.pushdy -- add in push velocity
+    end
+    dx, dy = dx + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].x * self:getSpeed()), 
+        dy + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].y * self:getSpeed()) -- add in the entity's movement velocity
+    return dx, dy
+end
+
+-- print a message above the entity with information about it gathered according to its subclass
+function Entity:printInfoTag(x, y)
+    love.graphics.setFont(gFonts['small'])
+    local message = self:getDisplayMessage()
+    PrintWithShadow(message, x, y + INFO_TAG_Y_OFFSET)
 end

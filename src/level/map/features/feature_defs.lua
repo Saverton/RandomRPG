@@ -10,6 +10,7 @@ FEATURE_DEFS = {
         texture = 'empty',
         frame = 0,
         onInteract = function() end,
+        onCollide = function() end,
         isSolid = false
     },
     ['tree'] = {
@@ -28,6 +29,7 @@ FEATURE_DEFS = {
 
             return false
         end,
+        onCollide = function() end,
         isSolid = false
     },
     ['rock'] = {
@@ -36,6 +38,7 @@ FEATURE_DEFS = {
         texture = 'features',
         frame = 2,
         onInteract = function() end,
+        onCollide = function() end,
         isSolid = true
     },
     ['chest'] = {
@@ -60,6 +63,7 @@ FEATURE_DEFS = {
                     (col - 1) * TILE_SIZE, (row - 1) * TILE_SIZE, math.random(5, 10)))
             end)
         end,
+        onCollide = function() end,
         isSolid = true
     },
     ['cactus'] = {
@@ -68,6 +72,7 @@ FEATURE_DEFS = {
         texture = 'features',
         frame = 8,
         onInteract = function() end,
+        onCollide = function() end,
         isSolid = false
     },
     ['snow_tree'] = {
@@ -86,6 +91,7 @@ FEATURE_DEFS = {
 
             return false
         end,
+        onCollide = function() end,
         isSolid = false
     },
     ['fortress'] = {
@@ -95,6 +101,11 @@ FEATURE_DEFS = {
         frame = 9,
         gateway = true,
         onInteract = function() end,
+        onCollide = function(entity, feature)
+            if entity.isPlayer then
+                feature:onEnter(entity.level) -- if the entity that collides with this is a player, call the gateway function
+            end
+        end,
         isSolid = false
     },
     ['exit'] = {
@@ -104,6 +115,11 @@ FEATURE_DEFS = {
         frame = 10,
         gateway = true,
         onInteract = function() end,
+        onCollide = function(entity, feature)
+            if entity.isPlayer then
+                feature:onEnter(entity.level) -- if the entity that collides with this is a player, call the gateway function
+            end
+        end,
         isSolid = false
     },
     ['spawner'] = {
@@ -113,6 +129,7 @@ FEATURE_DEFS = {
         frame = 11,
         spawner = true,
         onInteract = function() end,
+        onCollide = function() end,
         isSolid = false
     }
 }
