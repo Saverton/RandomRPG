@@ -29,7 +29,7 @@ end
 -- render this entity
 function Entity:render(camera)
     -- determine the on screen x and y positions of the entity based on the camera or offsets.
-    local onScreenX, onScreenY = math.floor(self.x - camera.x + self.xOffset), math.floor(self.y - camera.y + self.yOffset)
+    local onScreenX, onScreenY = self:getOnScreenPosition(camera)
     self.stateMachine:render(onScreenX, onScreenY) -- draw the entity at the specified x and y according to stateMachine behavior
     love.graphics.setColor(1, 1, 1, 1) -- set color back to default white in case it was changed
     local mouseX, mouseY = push:toGame(love.mouse.getPosition()) -- get mouse position
@@ -106,8 +106,10 @@ function Entity:useHeldItem()
 end
 
 -- return true if this entity's movement causes a collision with the map, false otherwise
-function Entity:checkCollisionWithMap()
-    local checkList = self:getCollisionCheckList() -- get a list of coordinates to check
+function Entity:checkCollisionWithMap(x, y)
+    local checkX = x or self.x
+    local checkY = y or self.y
+    local checkList = self:getCollisionCheckList(checkX, checkY) -- get a list of coordinates to check
     local map = self.level.map -- reference to the entity's level's map
     for i, coordinate in pairs(checkList) do
         if coordinate.x < 1 or coordinate.x > map.width or coordinate.y < 1 or coordinate.y > map.height then
@@ -125,9 +127,9 @@ function Entity:checkCollisionWithMap()
 end
 
 -- return a list of map coordinates to check for collision with.
-function Entity:getCollisionCheckList()
-    local leftCol, rightCol, topRow, bottomRow = (math.ceil(self.x / TILE_SIZE)), (math.ceil((self.x + self.width) / TILE_SIZE)), 
-        (math.ceil(self.y / TILE_SIZE)), (math.ceil((self.y + self.height) / TILE_SIZE)) -- get the map coordinates of each side of this entity
+function Entity:getCollisionCheckList(x, y)
+    local leftCol, rightCol, topRow, bottomRow = (math.ceil(x / TILE_SIZE)), (math.ceil((x + self.width) / TILE_SIZE)), 
+        (math.ceil(y / TILE_SIZE)), (math.ceil((y + self.height) / TILE_SIZE)) -- get the map coordinates of each side of this entity
     local dx, dy = self:getDirectionalVelocities() -- get entity's directional velocity
     local checkList = {} -- the list of coordinates to be checked for collision
     if dx < 0 or dy < 0 then
@@ -145,8 +147,8 @@ end
 -- return the directional velocity for the x and y axis of this entity (dx = delta x, dy = delta y)
 function Entity:getDirectionalVelocities()
     local dx, dy = 0, 0 -- set base velocity as 0
-    if self.pushed then
-       dx, dy = self.pushdx, self.pushdy -- add in push velocity
+    if self.pushManager.isPushed then
+       dx, dy = self.pushManager.pushdx, self.pushManager.pushdy -- add in push velocity
     end
     dx, dy = dx + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].x * self:getSpeed()), 
         dy + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].y * self:getSpeed()) -- add in the entity's movement velocity
@@ -158,4 +160,9 @@ function Entity:printInfoTag(x, y)
     love.graphics.setFont(gFonts['small'])
     local message = self:getDisplayMessage()
     PrintWithShadow(message, x, y + INFO_TAG_Y_OFFSET)
+end
+
+-- return the onscreen position of this entity
+function Entity:getOnScreenPosition(camera)
+    return math.floor(self.x - camera.x + self.xOffset), math.floor(self.y - camera.y + self.yOffset)
 end

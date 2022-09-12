@@ -127,3 +127,12 @@ function PrintWithShadow(message, x , y)
     love.graphics.setColor({1, 1, 1, 1})
     love.graphics.print(message, math.floor(x), math.floor(y)) -- print the message in white
 end
+
+-- return the product of all boosts in a table
+function ProductOfBoosts(boostTable)
+    local totalBoost = 1
+    for i, boost in ipairs(boostTable) do
+        totalBoost = totalBoost * boost.bonus
+    end
+    return totalBoost
+end

@@ -17,7 +17,7 @@ function Effect:init(name, duration, holder)
 end
 
 function Effect:update(dt)
-    self.duration = self.duration - dt
+    self.duration = math.max(0, self.duration - dt)
     self.count = self.count + dt
 
     if self.count >= EFFECT_DEFS[self.name].applied_every then
