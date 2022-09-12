@@ -6,7 +6,7 @@
 
 Map = Class{}
 
-function Map:init(name, size, tileMap, biomeMap, featureMap, gatewayMap, startSpace)
+function Map:init(name, size, tileMap, biomeMap, featureMap, gatewayMap, spawnerMap, startSpace)
     self.name = name or nil
     self.size = size or DEFAULT_MAP_SIZE
     self.tileAnimators = {
@@ -25,6 +25,9 @@ function Map:init(name, size, tileMap, biomeMap, featureMap, gatewayMap, startSp
     for i, gateway in ipairs(gatewayMap or {}) do
         print('building gateway at x = ' .. tostring(gateway.x) .. ', y = ' .. tostring(gateway.y))
         self.featureMap[gateway.x][gateway.y] = GatewayFeature(gateway.name, gateway.destination)
+    end
+    for i, spawner in ipairs(spawnerMap or {}) do
+        self.featureMap[spawner.x][spawner.y] = SpawnFeature(spawner.name, spawner.enemy)
     end
 
     -- if the player needs to start at a certain place, define it

@@ -60,6 +60,23 @@ function EnemySpawner:spawnEnemies()
 
     for col = math.max(1, x - SPAWN_MAX_RANGE), math.min(map.size, x + SPAWN_MAX_RANGE), 1 do
         for row = math.max(1, y -  SPAWN_MAX_RANGE), math.min(map.size, y + SPAWN_MAX_RANGE), 1 do
+            if self.level.map.featureMap[col][row] ~= nil and FEATURE_DEFS[self.level.map.featureMap[col][row].name].spawner and self.level.map.featureMap[col][row].active then
+                self.level.map.featureMap[col][row].active = false
+                local entity = Enemy(
+                    ENTITY_DEFS[self.level.map.featureMap[col][row].enemy],
+                    self.level,
+                    {x = (col), y = (row), ox = 0, oy = 0},
+                    math.max(1, statLevelMax - math.random(0, 2))
+                )
+                entity.stateMachine = StateMachine({
+                    ['idle'] = function() return EnemyIdleState(entity) end,
+                    ['walk'] = function() return EnemyWalkState(entity, self.level) end,
+                    ['interact'] = function() return EntityInteractState(entity) end
+                })
+                entity:changeState('idle')
+                table.insert(self.entities, entity)
+                goto continue
+            end
             if not (map:isSpawnableSpace(col, row)) or
                 GetDistance(self.level.player, {x = col * TILE_SIZE, y = row * TILE_SIZE}) < SPAWN_MIN_RANGE * TILE_SIZE then
                 goto continue
@@ -97,4 +114,9 @@ function EnemySpawner:spawnEnemies()
     end
 
     ::stop::
+end
+
+function EnemySpawner:reset()
+    self.entities = {}
+    self:spawnEnemies()
 end

@@ -14,7 +14,7 @@ function DungeonGenerator.generateDungeon(def, dunSize, name)
     DungeonGenerator.generatePath(dunGrid, landmarks, def, tileMap, size)
     DungeonGenerator.removeDeadRooms(dunGrid, def, tileMap, featureMap)
 
-    return Map(name, size, tileMap, biomeMap, featureMap, {}, 
+    return Map(name, size, tileMap, biomeMap, featureMap, {}, {},
         {x = ((landmarks.sx - 1) * ROOM_WIDTH) + (ROOM_WIDTH / 2 + 1), y =  ((landmarks.sy - 1) * ROOM_HEIGHT) + (ROOM_HEIGHT / 2 + 1)})
 end
 

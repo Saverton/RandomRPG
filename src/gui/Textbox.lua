@@ -29,7 +29,7 @@ end
 function Textbox:update(dt)
     if self.revealed < self.revealLength then
         self.revealed = math.min(self.revealLength, self.revealed + (TEXT_REVEAL_SPEED * dt))
-        love.audio.play(gSounds['menu_blip_1'])
+        love.audio.play(gSounds['gui']['menu_blip_1'])
     end
     if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
         if self.revealed < self.revealLength then
@@ -41,7 +41,7 @@ function Textbox:update(dt)
 end
 
 function Textbox:next()
-    love.audio.play(gSounds['menu_blip_1'])
+    love.audio.play(gSounds['gui']['menu_blip_1'])
     if self.finishedText then
         self.onComplete()
     else

@@ -76,12 +76,14 @@ function LoadState:loadMap()
     local size = #tileMap 
     local featureMap = loadstring(love.filesystem.read(self.path .. '/world_features.lua'))()
     local gatewayMap = loadstring(love.filesystem.read(self.path .. '/world_gateways.lua'))()
+    local spawnerMap = loadstring(love.filesystem.read(self.path .. '/world_spawners.lua'))()
     local startSpace = loadstring(love.filesystem.read(self.path .. '/start_space.lua'))()
 
     for col = 1, size, 1 do
         for row = 1, size, 1 do
             if featureMap[col][row] ~= nil then
-                if FEATURE_DEFS[featureMap[col][row]].animated then
+                if FEATURE_DEFS[featureMap[col][row]].spawner then
+                elseif FEATURE_DEFS[featureMap[col][row]].animated then
                     featureMap[col][row] = AnimatedFeature(featureMap[col][row], Animation(featureMap[col][row], 'main'))
                 else
                     featureMap[col][row] = Feature(featureMap[col][row])
@@ -90,7 +92,7 @@ function LoadState:loadMap()
         end
     end
 
-    return Map(self.loadLevel, size, tileMap, biomeMap, featureMap, gatewayMap, startSpace)
+    return Map(self.loadLevel, size, tileMap, biomeMap, featureMap, gatewayMap, spawnerMap, startSpace)
 end
 
 function LoadState:loadPlayer()

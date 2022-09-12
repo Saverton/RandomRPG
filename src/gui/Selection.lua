@@ -16,6 +16,6 @@ function Selection:init(name, onSelect, index, displayName)
 end
 
 function Selection:select()
-    love.audio.play(gSounds['menu_select_1'])
+    love.audio.play(gSounds['gui']['menu_select_1'])
     self.onSelect()
 end

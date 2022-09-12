@@ -22,15 +22,15 @@ end
 function OrderMenu:update(dt)
     local selector = self.selectors[self.selector]
     if love.keyboard.wasPressed('w') or love.keyboard.wasPressed('up') then
-        love.audio.play(gSounds['menu_blip_1'])
+        love.audio.play(gSounds['gui']['menu_blip_1'])
         selector.pos = (selector.pos + #self.selections - 2) % (#self.selections) + 1
     elseif love.keyboard.wasPressed('s') or love.keyboard.wasPressed('down') then
-        love.audio.play(gSounds['menu_blip_1'])
+        love.audio.play(gSounds['gui']['menu_blip_1'])
         selector.pos = (((selector.pos) % #self.selections) + 1)
     end
 
     if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
-        love.audio.play(gSounds['menu_select_1'])
+        love.audio.play(gSounds['gui']['menu_select_1'])
         selector.selected = true
         if self.selector < #self.selectors then
             self.selector = self.selector + 1

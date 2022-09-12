@@ -52,6 +52,7 @@ function SaveState:saveMap(path)
     local tileMap = {}
     local biomeMap = {}
     local gatewayMap = {}
+    local spawnerMap = {}
     local playerPos = {x = self.player.x, y = self.player.y}
     local startSpace = self.map.startSpace
 
@@ -63,6 +64,8 @@ function SaveState:saveMap(path)
                 featureMap[col][row] = feature.name
                 if FEATURE_DEFS[feature.name].gateway then
                     table.insert(gatewayMap, {name = feature.name, destination = feature.destination, x = col, y = row})
+                elseif FEATURE_DEFS[feature.name].spawner then
+                    table.insert(spawnerMap, {name = feature.name, enemy = feature.enemy, x = col, y = row})
                 end
             end
         end
@@ -87,6 +90,7 @@ function SaveState:saveMap(path)
     love.filesystem.write(path .. '/world_tiles.lua', Serialize(tileMap))
     love.filesystem.write(path .. '/world_biomes.lua', Serialize(biomeMap))
     love.filesystem.write(path .. '/world_gateways.lua', Serialize(gatewayMap))
+    love.filesystem.write(path .. '/world_spawners.lua', Serialize(spawnerMap))
     love.filesystem.write(path .. '/start_space.lua', Serialize(startSpace))
 end
 

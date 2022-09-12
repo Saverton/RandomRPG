@@ -105,5 +105,14 @@ FEATURE_DEFS = {
         gateway = true,
         onInteract = function() end,
         isSolid = false
+    },
+    ['spawner'] = {
+        id = 7,
+        name = 'spawner',
+        texture = 'features',
+        frame = 11,
+        spawner = true,
+        onInteract = function() end,
+        isSolid = false
     }
 }

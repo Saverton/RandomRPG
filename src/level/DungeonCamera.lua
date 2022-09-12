@@ -33,6 +33,7 @@ function DungeonCamera:update()
         self.cambox.height = self.cambox.height * 2
     end
     if newX ~= self.x or newY ~= self.y then
+        self.level.enemySpawner:reset()
         gStateStack:push(CameraShiftState(self, {x = newX, y = newY}, 2))
     end 
 end
