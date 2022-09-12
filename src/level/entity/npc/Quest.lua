@@ -89,7 +89,7 @@ function Quest:GenerateQuest(diff)
     local numOfFlags = math.random(1, diff)
 
     for i = 1, numOfFlags, 1 do
-        table.insert(quest.flags, {flag = QUEST_FLAGS[math.random(#QUEST_FLAGS)], counter = math.random(2 * diff)})
+        table.insert(quest.flags, {name = QUEST_FLAGS[math.random(#QUEST_FLAGS)], counter = math.random(2 * diff)})
     end
 
     return quest

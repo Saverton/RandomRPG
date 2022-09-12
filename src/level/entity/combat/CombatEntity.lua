@@ -24,6 +24,12 @@ function CombatEntity:init(level, definitions, position)
     self.invincibilityManager = InvincibilityManager() -- manages invincibility after being hit
     self.pushManager = PushManager(self) -- manages pushes from attacks
     self.statLevel = StatLevel(self, definitions.statLevel or {level = 0}) -- manages the statLevel of this combatEntity
+    self.stateMachine = StateMachine({
+        ['idle'] = function() return PlayerIdleState(self) end,
+        ['walk'] = function() return PlayerWalkState(self, self.level) end,
+        ['interact'] = function() return EntityInteractState(self) end
+    }) -- initiate a state machine and set state to idle
+    self:changeState('idle')
 end
 
 -- update each of the components of this Combat Entity

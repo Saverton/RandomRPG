@@ -115,3 +115,12 @@ function Shop:getNumItems()
 
     return num
 end
+
+-- create a selection list for items that the player can sell
+function Shop:getPlayerInventorySelections(onSelectFunction)
+    local selections = self.player:getInventorySelections(onSelectFunction) -- get a list of selections for item inventory
+    for i, selection in ipairs(selections) do -- add a price onto each selection
+        selection.displayText = selection.displayText .. ' . . . ($' .. tostring(math.max(0, ITEM_DEFS[selection.name].price.sell + self.sellDiff)) .. ')'
+    end
+    return selections
+end

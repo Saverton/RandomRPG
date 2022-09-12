@@ -1,307 +1,225 @@
 --[[
-    Player Class: defines behavior of the player that the user controls.
-    attributes: x, y, width, height, onDeath()
+    Player Class: defines behavior of the player that the user controls, has money, a hotbar, guis for health, mana, and exp, a list of held quests.
+    @author Saverton
 ]]
 
 Player = Class{__includes = CombatEntity}
 
-function Player:init(def, level, pos)
-    --self.statLevel = def.statLevel or 1
-
-    CombatEntity.init(self, def, level, pos)
-
-    self.pickupRange = PICKUP_RANGE
-
-    self.money = def.money or 0
-
-    self.hotbar = self:getHotbar(3)
-
-    self.renderPlayer = true
-    self.isPlayer = true
-
-    self.hpBar = ProgressBar(PLAYER_BAR_X, PLAYER_HP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_HP_BAR_HEIGHT, {1, 0, 0, 1})
-    self.magicBar = ProgressBar(PLAYER_BAR_X, PLAYER_MAGIC_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 0, 1, 1})
-    self.expBar = ProgressBar(PLAYER_BAR_X, PLAYER_EXP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 1, 0, 1})
-
-    self.quests = {}
-    if def.quests ~= nil then
-        for i, quest in ipairs(def.quests) do
-            table.insert(self.quests, {name = quest.name, flags = quest.flags})
-        end
-    end
-
-    -- give the player a stateMachine to use
-    self.player.stateMachine = StateMachine({
-        ['idle'] = function() return PlayerIdleState(self) end,
-        ['walk'] = function() return PlayerWalkState(self, self.level) end,
-        ['interact'] = function() return EntityInteractState(self) end
-    })
-    self.player:changeState('idle')
-
-    -- player is starting, give a wooden sword
-    if #self.items == 0 then
+function Player:init(level, definitions, position)
+    CombatEntity.init(self, level, definitions, position) -- initiate a combat entity
+    self.money = definitions.money or 0 -- player's currency
+    self.questManager = QuestManager(definitions.quests) -- initiate a quest manager
+    self:initiateGuis() -- initiate all gui elements of the player display
+    if #self.items == 0 then -- if the player is starting, give him a wooden sword
         self:getItem(Item('wooden_sword', self, 1))
     end
 end
 
+-- update the player's components
 function Player:update(dt)
-    --check for death
-    if self.currenthp <= 0 then
+    CombatEntity.update(self, dt) -- update the player's combat statistics
+    if self.currentStats.hp <= 0 then --check for player's death
         self:dies()
-        self.renderPlayer = false
-        gStateStack:push(DeathAnimationState(self, self.x - self.level.camera.x + self.xOffset, self.y - self.level.camera.y + self.yOffset))
     end
-
-    CombatEntity.update(self, dt)
-
-    -- navigate between held items
-    local yScroll = GetYScroll()
-    if yScroll ~= 0 then
-        self:translateHeldItem(yScroll) 
-    end
-
-    for i = 1, #self.hotbar, 1 do
-        if love.keyboard.wasPressed(tostring(i)) then
-            self.heldItem = i
-        end
-    end
-
-
-    -- if space is pressed, use current item or interact with npcs/features
+    self:setHeldItem(self:switchItem()) -- switches held item if the mouse wheel is scrolled
     if self.canUseItem and love.keyboard.wasPressed('space') then
-        local checkBox = {x = self.x + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].x * TILE_SIZE) - ((TILE_SIZE - self.width) / 2),
-            y = self.y + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].y * TILE_SIZE),
-            width = TILE_SIZE, height = TILE_SIZE
-        }
-        if self:interactWithNPC(checkBox) then
-        elseif self:useHeldItem() then
-            self:interactWithMap(checkBox)
-        elseif self.items[self.heldItem] == nil then
-            self:interactWithMap(checkBox)
-        end
+        self:interact() -- if space is pressed, use current item or interact with npcs/features
     end
 end
 
+-- render the player
 function Player:render(camera)
-    if self.renderPlayer then
+    if self.renderPlayer then -- check to see if the player should be rendered
         CombatEntity.render(self, camera)
     end
-    -- debug: render player bounds
-    -- love.graphics.rectangle('line', self.x - camera.x, self.y - camera.y, PLAYER_WIDTH, PLAYER_HEIGHT
-
-    self:renderGui()
-
-    -- debug: render player interaction box
-    --local checkBox = {x = self.x + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]][1] * TILE_SIZE) - ((TILE_SIZE - self.width) / 2),
-    --    y = self.y + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]][2] * TILE_SIZE),
-    --    width = TILE_SIZE, height = TILE_SIZE
-    --}
-    --love.graphics.rectangle('line', checkBox.x - camera.x, checkBox.y - camera.y, checkBox.width, checkBox.height)
+    self:renderGui() -- render gui elements of player display
 end
 
+-- initiate all gui parts for the player
+function Player:initiateGuis()
+    self.hotbar = self:getHotbar(3) -- player's hotbar gui
+    self.hpBar = ProgressBar(PLAYER_BAR_X, PLAYER_HP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_HP_BAR_HEIGHT, {1, 0, 0, 1}) -- health bar
+    self.manaBar = ProgressBar(PLAYER_BAR_X, PLAYER_MAGIC_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 0, 1, 1}) -- mana bar
+    self.expBar = ProgressBar(PLAYER_BAR_X, PLAYER_EXP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 1, 0, 1}) -- exp bar
+end
+
+-- return the new heldItem after the scroll updates
+function Player:switchItem()
+    local yScroll = GetYScroll() -- navigate between held items
+    local newItem = self.heldItem
+    if yScroll ~= 0 then
+        gSounds['gui']['menu_blip_1']:play() -- play switch sound
+        newItem = (((self.heldItem - 1) - yScroll) % (#self.hotbar) + 1) -- set new held item
+    end
+    for i = 1, #self.hotbar, 1 do -- check if number keys were pressed
+        if love.keyboard.wasPressed(tostring(i)) then
+            newItem = i
+        end
+    end
+    return newItem
+end
+
+-- run the appropriate interact function based on the conditions of the player.
+function Player:interact()
+    local checkBox = {x = self.x + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].x * TILE_SIZE) - ((TILE_SIZE - self.width) / 2),
+            y = self.y + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].y * TILE_SIZE),
+            width = TILE_SIZE, height = TILE_SIZE} -- set checkbox to square in front of player
+    if self:interactWithNPC(checkBox) then -- interact with any npc in the checkbox
+    elseif self:useHeldItem() then  -- use the currently held item
+        self:interactWithMap(checkBox) -- interact with the map at selected coordinates
+    elseif self.items[self.heldItem] == nil then
+        self:interactWithMap(checkBox) -- interact with the map at selected coordinates
+    end 
+end
+
+-- render player gui elements
 function Player:renderGui()
-    --render Item Hotbar Panels
-    for i, slot in ipairs(self.hotbar) do
-        local opa = 0.5
-        if i == self.heldItem then
-            opa = 1
-        end
-        slot:render(opa)
-        if self.items[i] ~= nil then
-            self.items[i]:render(slot.x + 2, slot.y + 2)
-            if self.items[i].quantity > 1 then
-                love.graphics.printf(self.items[i].quantity, slot.x, slot.y + 12, 18, "right")
-            end
-        end
-        if i == self.heldItem and self.items[self.heldItem] ~= nil then
-            love.graphics.setColor(1, 1, 1, 0.25)
-            love.graphics.rectangle('fill', slot.x, slot.y + (((ITEM_DEFS[self.items[self.heldItem].name].useRate - self.items[self.heldItem].useRate) / ITEM_DEFS[self.items[self.heldItem].name].useRate) * slot.height), 
-                slot.width, slot.height * (self.items[self.heldItem].useRate / ITEM_DEFS[self.items[self.heldItem].name].useRate))
-            love.graphics.setColor(1, 1, 1, 1)
-        end
+    for i, slot in ipairs(self.hotbar) do --render each Item Hotbar Panel
+        self:renderHotbarSlot(slot, i)
     end
-
-    -- render ammo count
-    love.graphics.setFont(gFonts['small'])
-    love.graphics.setColor(0, 0, 0, 1)
-    love.graphics.print('Ammo: ' .. tostring(self.ammo), PLAYER_TEXT_POS_X + 1, AMMO_TEXT_POS_Y + 1)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print('Ammo: ' .. tostring(self.ammo), PLAYER_TEXT_POS_X, AMMO_TEXT_POS_Y)
-    -- render money amount
-    love.graphics.setColor(0, 0, 0, 1)
-    love.graphics.print('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X + 1, MONEY_TEXT_POS_Y + 1)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X, MONEY_TEXT_POS_Y)
-
-    --render health and magic bars
-    self.hpBar:render((self.currenthp / self:getHp()))
-    self.magicBar:render((self.currentmagic / self:getMagic()))
-    self.expBar:render(self.statLevel:getExpRatio())
-
-    --print tiptext
-    if #self.items > 0 then
-        love.graphics.setColor(0, 0, 0, 1)
-        love.graphics.print('\'i\' = Open Inventory', TIPTEXT_X + 1, TIPTEXT_Y + 1)
-        love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.print('\'i\' = Open Inventory', TIPTEXT_X, TIPTEXT_Y)
-    end
+    love.graphics.setFont(gFonts['small']) -- set font to small
+    PrintWithShadow('Ammo: ' .. tostring(self:getAmmoCount()), PLAYER_TEXT_POS_X, AMMO_TEXT_POS_Y) -- render ammo count
+    PrintWithShadow('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X,  MONEY_TEXT_POS_Y) -- render money amount
+    self.hpBar:render((self.currenthp / self:getHp())) -- render hp bar
+    self.manaBar:render((self.currentmagic / self:getMagic())) -- render mana bar
+    self.expBar:render(self.statLevel:getExpRatio()) -- render exp bar
+    PrintWithShadow('\'i\' = Open Inventory', TIPTEXT_X, TIPTEXT_Y) -- print inventory text
     if #self.quests > 0 then
-        love.graphics.setColor(0, 0, 0, 1)
-        love.graphics.print('\'q\' = Open Quests', TIPTEXT_X + 1, TIPTEXT_Y + 1 - 10)
-        love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.print('\'q\' = Open Quests', TIPTEXT_X, TIPTEXT_Y - 10)
+        PrintWithShadow('\'q\' = Open Quests', TIPTEXT_X, TIPTEXT_Y - 10) -- print quest text
     end
 end
 
-function Player:translateHeldItem(amount)
-    love.audio.stop(gSounds['menu_blip_1'])
-    love.audio.play(gSounds['menu_blip_1'])
-    self.heldItem = (((self.heldItem - 1) - amount) % (#self.hotbar) + 1)
+-- return the amount of ammo that the player has in his inventory
+function Player:getAmmoCount()
+    local ammoCount = 0
+    local ammoIndex = GetIndex(self.items, 'ammo') -- find index of ammo in inventory
+    if ammoIndex ~= -1 then -- determine if player has ammo
+        ammoCount = self.items[ammoIndex].quantity -- determine the quantity if the player has ammo
+    end
+    return ammoCount
 end
 
-function Player:getHotbar(size)
-    local hotbar = {}
+function Player:renderHotbarSlot(slot, index)
+    local opacity = 0.5 -- transparent by default
+    local item = self.items[index] -- reference to this slot's item
+    if index == self.heldItem then
+        opacity = 1 -- if this is the held item, set opacity to opaque
+    end
+    slot:render(opacity) -- render the panel
+    if item ~= nil then  -- make sure item exists
+        item:render(slot.x + 2, slot.y + 2) -- render the item
+        if item.quantity > 1 then
+            love.graphics.printf(self.items[index].quantity, slot.x, slot.y + 12, 18, "right") -- render item quantity
+        end
+    end
+    if index == self.heldItem and self.items[self.heldItem] ~= nil then -- check if this is the held item
+        love.graphics.setColor(1, 1, 1, 0.25) -- draw a mostly transparent rectangle to represent item use timer
+        love.graphics.rectangle('fill', slot.x, slot.y + (((ITEM_DEFS[self.items[self.heldItem].name].useRate - self.items[self.heldItem].useRate) / ITEM_DEFS[self.items[self.heldItem].name].useRate) * slot.height), 
+            slot.width, slot.height * (self.items[self.heldItem].useRate / ITEM_DEFS[self.items[self.heldItem].name].useRate))
+        love.graphics.setColor(1, 1, 1, 1) -- reset color to white
+    end
+end
 
-    for i = 1, size, 1 do
+-- create a hotbar for the player
+function Player:getHotbar(size)
+    local hotbar = {} -- set an empty hotbar
+    for i = 1, size, 1 do -- add <size> panels to the hotbar
         table.insert(hotbar, i, Panel(HOTBAR_X, HOTBAR_Y + ((i - 1) * (HOTBAR_MARGIN + HOTBAR_PANEL_SIZE)), HOTBAR_PANEL_SIZE, HOTBAR_PANEL_SIZE))
     end
-
     return hotbar
 end
 
+-- given an ordered list of item names and old item indexes, reorder the inventory to match the new order of the sort list
 function Player:sortInventory(sortList)
-    local newItems = {}
-
-    for i, slot in ipairs(sortList) do
-        table.insert(newItems, self.items[slot.oldIndex])
+    local newItems = {} -- table to be set as new inventory list
+    for i, slot in ipairs(sortList) do -- add the items into the new list in order based on the item in the oldIndex in the old inventory
+        table.insert(newItems, self.items[slot.oldIndex]) 
     end
-
     self.items = newItems
 end
 
+-- interact with any npcs that collide with the checkbox
 function Player:interactWithNPC(checkBox)
-    for i, npc in pairs(self.level.npcManager.npcs) do
-        if npc.despawnTimer == -1 and Collide(npc, checkBox) then
+    for i, npc in pairs(self.level.npcManager.npcs) do -- parse through each npc
+        if npc.despawnTimer == -1 and Collide(npc, checkBox) then -- if the npc is in the checkBox and the npc is not departing, interact
             npc:interact(self, npc)
-            return true
+            return true -- npc was interacted with
         end
     end
-    return false
+    return false -- npc was not interacted with
 end
 
+-- interact with the map features and tiles in the checkbox
 function Player:interactWithMap(checkBox)
-    local map = self.level.map
-    local startCol = math.max(1, math.floor(checkBox.x / 16) - 1)
-    local startRow = math.max(1, math.floor(checkBox.y / 16) - 1)
-    for col = startCol, math.min(map.size, startCol + 3), 1 do
-        for row = startRow, math.min(map.size, startRow + 3), 1 do
-            local mapBox = {x = (col - 1) * TILE_SIZE, y = (row - 1) * TILE_SIZE, width = 16, height = 16}
-            local feature = map.featureMap[col][row]
-            local tile = map.tileMap[col][row]
-            if feature ~= nil and Collide(checkBox, mapBox) then
-                if FEATURE_DEFS[feature.name].onInteract(self, map, col, row) then
-                    goto stop_checking
-                end
-            end
-            if Collide(checkBox, mapBox) then
-                if TILE_DEFS[tile.name].onInteract(self, map, col, row) then
-                    goto stop_checking
-                end
+    local map = self.level.map -- reference to map
+    local startCol, startRow = math.max(1, math.ceil(checkBox.x / TILE_SIZE)), math.max(1, math.ceil(checkBox.y / TILE_SIZE)) 
+        -- set the upper left corner of the checkbox as the starting point for the tile checks
+    for col = startCol, math.min(map.size, startCol + 1), 1 do
+        for row = startRow, math.min(map.size, startRow + 1), 1 do
+            local feature = map.featureMap[col][row] -- this index's feature
+            local tile = map.tileMap[col][row] -- this index's tile
+            if feature ~= nil and FEATURE_DEFS[feature.name].onInteract(self, map, col, row) then -- if a feature exists, interact with it
+                goto stop_checking -- if the interaction returns true, stop checking for things to interact with
+            elseif TILE_DEFS[tile.name].onInteract(self, map, col, row) then
+                goto stop_checking -- if the interaction returns true, stop checking for things to interact with
             end
         end
     end
-
-    ::stop_checking::
+    ::stop_checking:: -- label to jump to if an interaction executes properly
 end
 
-function Player:updateFlags(checkFlags)
-    for i, quest in pairs(self.quests) do
-        for j, flag in pairs(quest.flags) do
-            for k, check in pairs(checkFlags) do
-                if flag.flag == check then
-                    flag.counter = math.max(0, flag.counter - 1)
-                end
-            end
-        end
+-- returns a list of selections with their onSelect function set to the onSelectFunction parameter
+function Player:getInventorySelections(onSelectFunction)
+    local selectionList = {} -- set list as empty
+    for i, item in ipairs(self.items) do -- create an index for each item
+        local displayText = ITEM_DEFS[item.name].displayName .. item:getQuantityText() -- display text for selection
+        table.insert(selectionList, Selection(item.name, onSelectFunction, i, displayText)) -- add this selection to the list
     end
-end
-
-function Player:giveQuest(quest)
-    if #self.quests < QUEST_LIMIT then
-        table.insert(self.quests, quest)
-        return true
-    end
-    return false
-end
-
-function Player:stringQuestProgress(quest)
-    local string = ' ' 
-
-    for i, flag in pairs(quest.flags) do
-        if i > 1 then
-            string = string .. ', '
-        end
-        string = string .. flag.flag .. ' (' .. flag.counter .. ' remaining)'
-    end
-    string = string .. '.'
-
-    return string
-end
-
-function Player:getInventorySelections(fun, shop)
-    local selectionList = {}
-
-    for i, slot in ipairs(self.items) do
-        local displayText = ITEM_DEFS[slot.name].displayName .. slot:getQuantityText()
-        if shop ~= nil then
-            displayText = displayText .. ' . . . ($' .. tostring(math.max(0, ITEM_DEFS[slot.name].price.sell + shop.sellDiff)) .. ')'
-        end
-        table.insert(selectionList, Selection(slot.name, fun, i, displayText))
-    end
-
-    table.insert(selectionList, Selection('Close', function() gStateStack:pop() end))
-
+    table.insert(selectionList, Selection('Close', function() gStateStack:pop() end)) -- add a close index at the end
     return selectionList
 end
 
+-- remove any items from the inventory that have a quantity of 0
 function Player:updateInventory()
-    for i, item in pairs(self.items) do
-        if item.quantity <= 0 then
+    for i, item in pairs(self.items) do -- parse through all items
+        if item.quantity <= 0 then -- check item quantity
             table.remove(self.items, i)
         end
     end
 end
 
-function Player:sell(index, shop, menu)
-    local item = self.items[index]
-
-    if not item.stackable then
+-- try to sell the item at a certain index to a shop
+function Player:tryToSell(index, shop, menu) -- menu = reference to the menu used to select this
+    local item = self.items[index] -- item to be sold
+    if not ITEM_DEFS[item.name].stackable then
         gStateStack:push(ConfirmState(MENU_DEFS['confirm'], {
-            onConfirm = function() 
-                self.money = self.money + math.max(ITEM_DEFS[item.name].price.sell + shop.sellDiff, 0)
-                table.remove(self.items, index)
-                gStateStack:pop()
-                print(tostring(#self.items))
-                menu.selections = self:getInventorySelections(
-                    function(subMenuState, otherMenu)
-                        gStateStack:push(MenuState(MENU_DEFS['shop_sell_item'], {parent = {shop = subMenuState, menu = otherMenu}}))
-                    end,
-                    shop
-                )
-            end
+            onConfirm = function() self:sell(index, shop, menu) end -- ask to confirm sale
         }))
     else
-        self.money = self.money + math.max(item.price.sell + shop.sellDiff, 0)
-        item.quantity = item.quantity - 1
-        if item.quantity == 0 then
-            table.remove(self.items, index)
-            gStateStack:pop()
-            menu.selections = self:getInventorySelections(
-                function(subMenuState, otherMenu)
-                    gStateStack:push(MenuState(MENU_DEFS['shop_sell_item'], {parent = {shop = subMenuState, menu = otherMenu}}))
-                end,
-                shop
-            )
-        end
+        self:sell(index, shop, menu) -- sell without confimation
     end
+end
+
+-- actually make the selling transaction with a shop
+function Player:sell(index, shop, menu)
+    local item = self.items[index] -- reference to item
+    self.money = self.money + math.max(item.price.sell + shop.sellDiff, 0) -- give money for sell price
+    item.quantity = item.quantity - 1 -- remove item
+    if item.quantity == 0 then
+        self:updateInventory() -- update inventory to remove 0 quantity items
+        gStateStack:pop() -- remove shop sell item menu
+        menu.selections = shop:getPlayerInventorySelections( -- set new selection list for item sell list.
+            function(subMenuState, otherMenu) 
+                gStateStack:push(MenuState(MENU_DEFS['shop_sell_item'], {parent = {shop = subMenuState, menu = otherMenu}})) -- menu to open on selection
+            end
+        )
+    end
+end
+
+-- called when player dies, calls up to combatEntity
+function Player:dies()
+    CombatEntity.dies(self) -- call combat entity function
+    self.renderPlayer = false -- stop rendering player
+    gStateStack:push(DeathAnimationState(self, self.x - self.level.camera.x + self.xOffset, self.y - self.level.camera.y + self.yOffset))
+        -- play the player's death animation
 end
