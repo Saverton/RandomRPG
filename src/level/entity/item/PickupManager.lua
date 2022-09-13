@@ -33,6 +33,6 @@ end
 -- spawn new pickups into the level from a list of items
 function PickupManager:spawnPickups(items)
     for i, item in pairs(items) do
-        table.insert(self.pickups, Pickup(item.name, item.x, item.y, item.quantity)) -- add a new pickup
+        table.insert(self.pickups, Pickup(item.name, {x = item.x, y = item.y}, item.quantity)) -- add a new pickup
     end
 end

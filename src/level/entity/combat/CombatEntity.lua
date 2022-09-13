@@ -24,12 +24,6 @@ function CombatEntity:init(level, definitions, position)
     self.invincibilityManager = InvincibilityManager() -- manages invincibility after being hit
     self.pushManager = PushManager(self) -- manages pushes from attacks
     self.statLevel = StatLevel(self, definitions.statLevel) -- manages the statLevel of this combatEntity
-    self.stateMachine = StateMachine({
-        ['idle'] = function() return PlayerIdleState(self) end,
-        ['walk'] = function() return PlayerWalkState(self, self.level) end,
-        ['interact'] = function() return EntityInteractState(self) end
-    }) -- initiate a state machine and set state to idle
-    self:changeState('idle')
 end
 
 -- update each of the components of this Combat Entity
@@ -71,6 +65,8 @@ function CombatEntity:hurt(amount)
     if not self.invincibilityManager.invincible then
         love.audio.play(gSounds['combat'][ENTITY_DEFS[self.name].hitSound or 'hit']) -- play hit sound
         local defense = self:getStat('defense') -- get damage reduction from defense
+        print(tostring(defense))
+        print(tostring(amount))
         if defense >= amount then
             defense = math.max(amount - 1, 0) -- ensure that defense never reduces damage to 0
         end

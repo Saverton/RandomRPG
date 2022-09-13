@@ -46,12 +46,13 @@ function Projectile:getDamage(attacker)
     if PROJECTILE_DEFS[self.name].type ~= 'none' then
         damage = damage + attacker:getStat('attack') -- add attacker's damage
     end
+    return damage
 end
 
 -- get the projectile's inflictions
 function Projectile:getInflictions(attacker)
     local inflictions = PROJECTILE_DEFS[self.name].inflictions -- get the projectile's inflictions
-    for i, inflict in pairs(attacker.inflictions) do
+    for i, inflict in pairs(attacker.effectManager.inflictions) do
         if not ContainsName(inflictions, inflict.name) then
             table.insert(inflictions, inflict) -- add any of the attacker's inflictions
         end
@@ -111,4 +112,9 @@ function Projectile:getCollisionCheckList()
         table.insert(checkList, {x = leftCol, y = bottomRow})
     end -- add in coordinates according to the projectile's x and y velocity
     return checkList
+end
+
+-- return a table with collision information
+function Projectile:getCollisionTable()
+    return {x = self.x, y = self.y, width = PROJECTILE_DEFS[self.name].width, height = PROJECTILE_DEFS[self.name].height}
 end

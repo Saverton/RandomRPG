@@ -28,5 +28,5 @@ end
 -- push the entity with a strength and direction
 function PushManager:push(pushStrength, pushDirection)
     self.isPushed = true -- set the entity push flag to true
-    self.pushdx, self.pushdy = pushStrength * DIRECTION_COORDS[pushDirection].x, push.strength * DIRECTION_COORDS[pushDirection].y -- set the push velocities
+    self.pushdx, self.pushdy = pushStrength * DIRECTION_COORDS[DIRECTION_TO_NUM[pushDirection]].x, pushStrength * DIRECTION_COORDS[DIRECTION_TO_NUM[pushDirection]].y -- set the push velocities
 end

@@ -10,7 +10,14 @@ function Enemy:init(level, definition, position)
     self.target = nil -- target which the entity will seek out
     self.color = ENEMY_COLORS[math.min(#ENEMY_COLORS, self.statLevel.level)] -- color of the enemy, based on its level
     self.hpBar = ProgressBar({x = self.x, y = self.y - 6, width = BAR_WIDTH, height = BAR_HEIGHT}, {1, 0, 0, 0.75}) -- progress bar tracking health
+    self.hpBar:updateRatio(self.currentStats.hp / self:getStat('maxHp'))
     self.statLevel:levelUpTo(math.random(math.max(1, self.level.player.statLevel.level - 2), self.level.player.statLevel.level)) -- level up enemy
+    self.stateMachine = StateMachine({
+        ['idle'] = function() return EnemyIdleState(self) end,
+        ['walk'] = function() return EnemyWalkState(self, self.level) end,
+        ['interact'] = function() return EntityInteractState(self) end
+    }) -- initiate a state machine and set state to idle
+    self:changeState('idle')
 end
 
 -- update the enemy
@@ -25,9 +32,9 @@ function Enemy:seekTarget()
         self:findTarget(self.level.player) -- attempt to find a target player
     else
         if Collide(self, self.target) then --check if damage target by running into it
-            self.target:damage(self:getStat('attack'), ENTITY_DEFS[self.name].push, self, self.inflictions)
+            self.target:damage(self:getStat('attack'), {strength = ENTITY_DEFS[self.name].push, direction = self.direction}, self, self.inflictions)
         end
-        if GetDistance(self, self.target) > ENTITY_DEFS[self.name].agroDist * TILE_SIZE then
+        if GetDistance(self, self.target) > ENTITY_DEFS[self.name].aggressiveDistance * TILE_SIZE then
             self:loseTarget() -- check if target is out of agro Range, if so, lose target
         end
     end
@@ -38,23 +45,23 @@ function Enemy:render(camera)
     love.graphics.setColor(self.color) -- set the color to the enemy's color
     CombatEntity.render(self, camera) -- draw the entity onscreen
     local onScreenX, onScreenY = math.floor(self.x - camera.x + self.xOffset), math.floor(self.y - camera.y + self.yOffset - 4)
-    self.hpBar:render((self.currenthp / self:getStat('maxHp')), onScreenX, onScreenY) -- render the hp bar
+    self.hpBar:render(onScreenX, onScreenY) -- render the hp bar
     self:renderAggression(onScreenX, onScreenY) -- draw a little '!' if aggressive
 end
 
--- search for a target entity, if found, play a sound and set agressive speed boost
+-- search for a target entity, if found, play a sound and set aggressive speed boost
 function Enemy:findTarget(entity)
-    if GetDistance(self, entity) <= ENTITY_DEFS[self.name].agressiveDistance * TILE_SIZE then -- if the entity is within the aggressive range
-        gSounds['combat']['target_found']:play() -- play agressive sound
+    if GetDistance(self, entity) <= ENTITY_DEFS[self.name].aggressiveDistance * TILE_SIZE then -- if the entity is within the aggressive range
+        gSounds['combat']['target_found']:play() -- play aggressive sound
         self.target = entity
-        table.insert(self.boosts['speed'], {name = 'agressive', multiplier = ENTITY_DEFS[self.name].agressiveSpeedBoost})
+        table.insert(self.boosts['speed'], {name = 'aggressive', multiplier = ENTITY_DEFS[self.name].aggressiveSpeedBoost})
     end 
 end
 
 -- release the current target, remove speed boost
 function Enemy:loseTarget()
     self.target = nil -- target is now undefined
-    table.remove(self.boosts['speed'], GetIndex(self.boosts['speed'], 'agressive')) -- remove speed boost
+    table.remove(self.boosts['speed'], GetIndex(self.boosts['speed'], 'aggressive')) -- remove speed boost
 end
 
 -- draw an aggression marker if the enemy has a target at the specified x and y

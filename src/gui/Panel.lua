@@ -11,9 +11,9 @@ function Panel:init(x, y, width, height)
 end
 
 -- render a panel with a specified opacity
-function Panel:render(opacity)
+function Panel:render(opacity, x, y)
     love.graphics.setColor(0, 0, 0, opacity or 1) -- set color to black with specified opacity
-    love.graphics.rectangle('fill', self.x, self.y, self.width, self.height, 2, 2) -- draw inner rectangle
+    love.graphics.rectangle('fill', x or self.x, y or self.y, self.width, self.height, 2, 2) -- draw inner rectangle
     love.graphics.setColor(1, 1, 1, opacity or 1) -- set color to white with specified opacity
-    love.graphics.rectangle('line', self.x, self.y, self.width, self.height, 2, 2) -- draw outer rectangle
+    love.graphics.rectangle('line', x or self.x, y or self.y, self.width, self.height, 2, 2) -- draw outer rectangle
 end

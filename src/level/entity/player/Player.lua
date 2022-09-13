@@ -10,6 +10,12 @@ function Player:init(level, definitions, position)
     self.money = definitions.money or 0 -- player's currency
     self.questManager = QuestManager(definitions.quests) -- initiate a quest manager
     self:initiateGuis() -- initiate all gui elements of the player display
+    self.stateMachine = StateMachine({
+        ['idle'] = function() return PlayerIdleState(self) end,
+        ['walk'] = function() return PlayerWalkState(self, self.level) end,
+        ['interact'] = function() return EntityInteractState(self) end
+    }) -- initiate a state machine and set state to idle
+    self:changeState('idle')
     if #self.items == 0 then -- if the player is starting, give him a wooden sword
         self:giveItem(Item('wooden_sword', self, 1))
     end

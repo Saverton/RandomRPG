@@ -57,10 +57,9 @@ FEATURE_DEFS = {
             Timer.after(1.5, function()
                 featureMap[col][row].animation:changeAnimation('main')
                 featureMap[col][row] = nil 
-                table.insert(player.level.pickupManager.pickups, Pickup(CHEST_ITEMS[math.random(#CHEST_ITEMS)], 
-                (col - 1) * TILE_SIZE, (row - 1) * TILE_SIZE))
-                table.insert(player.level.pickupManager.pickups, Pickup('ammo', 
-                    (col - 1) * TILE_SIZE, (row - 1) * TILE_SIZE, math.random(5, 10)))
+                player.level.pickupManager:spawnPickups({
+                    {name = CHEST_ITEMS[math.random(#CHEST_ITEMS)], x = (col - 1) * TILE_SIZE, y = (row - 1) * TILE_SIZE},
+                    {name = 'ammo', x = (col - 1) * TILE_SIZE, y = (row - 1) * TILE_SIZE, quantity = math.random(5, 10)}})
             end)
         end,
         onCollide = function() end,

@@ -40,12 +40,12 @@ function ProjectileManager:checkProjectileCollision(projectile)
     if PROJECTILE_DEFS[projectile.name].type ~= 'none' then -- ensure that the projectile is actually damaging
         if self.entity.isPlayer then
             for k, target in pairs(self.entity.level.entityManager.entities) do -- check each entity in the entityManager
-                if not target.invincibilityManager.invincible and Collide(projectile, target) then
+                if not target.invincibilityManager.invincible and Collide(projectile:getCollisionTable(), target) then
                     projectile:hit(target, self.entity) -- if the collision occurs and the target is not invincibile, hit the target
                 end
             end
         else
-            if not self.entity.target.invincible and Collide(projectile, self.entity.level.player) then
+            if not self.entity.target.invincible and Collide(projectile:getCollisionTable(), self.entity.level.player) then
                 projectile:hit(self.entity.level.player, self.entity) -- if the collision occurs and the target is not invincibile, hit the target
             end
         end

@@ -8,14 +8,14 @@ StatLevel = Class{}
 
 function StatLevel:init(entity, definitions)
     self.entity = entity -- reference to owner entity
-    self.level = definitions.level or 1 -- starting level
-    self.bonuses  = definitions.bonuses or {
+    self.level = (definitions or {}).level or 1 -- starting level
+    self.bonuses  = (definitions or {}).bonuses or {
         ['maxHp'] = DEFAULT_BONUS,
         ['attack'] = DEFAULT_BONUS,
         ['defense'] = DEFAULT_BONUS,
         ['maxMana'] = DEFAULT_BONUS
     } -- potential bonuses for each level up
-    self.exp = definitions.exp or math.pow(3, self.level - 1) -- starting exp
+    self.exp = (definitions or {}).exp or math.pow(3, self.level - 1) -- starting exp
 end
 
 -- give the stat level expereince

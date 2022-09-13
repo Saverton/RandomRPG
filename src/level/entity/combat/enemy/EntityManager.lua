@@ -10,6 +10,8 @@ function EntityManager:init(level, definitions, type)
     self:getEntities(definitions.entities or {})
     self.type = type -- the type used to determine spawning
     self.entityCap = definitions.entityCap or DEFAULT_ENTITY_CAP -- the maximum amount of entities that this entity manager can hold, default = 5.
+    self:spawn() -- try to spawn enemies
+    Timer.every(10, function() self:spawn() end) -- try to spawn enemies every 10 seconds
 end
 
 -- update each of the entityManager's attributes
@@ -42,6 +44,7 @@ end
 
 -- call the appropriate spawn function
 function EntityManager:spawn()
+    print('attempting to spawn enemies')
     if self.type == 'overworld' then
         self:spawnInOverworld()
     elseif self.type == 'dungeon' then
@@ -61,10 +64,9 @@ function EntityManager:spawnInOverworld()
             end
             local biome = BIOME_DEFS[map.biomeMap[col][row].name] -- reference to biome definitions at this coordinate
             -- tile must be outside of min spawn rance (10), spawn chance must agree with spawn rate of biome, tile must be able to spawn entity.
-            if not (math.abs(col - x) <= MIN_SPAWN_RANGE or math.abs(row - y) <= MIN_SPAWN_RANGE) or
-                not (math.random() < biome.spawnRate) or not (map.isSpawnableSpace(col, row)) then
-                local enemyName = self:chooseRandomEnemy(biome.enemies) -- choose an enemy from this biome's list
-                self:spawnEnemy(enemyName, col, row)
+            if not (math.abs(col - x) <= MIN_SPAWN_RANGE or math.abs(row - y) <= MIN_SPAWN_RANGE) and
+                (math.random() < biome.spawnRate and map:isSpawnableSpace(col, row)) then
+                self:spawnRandomEnemy(biome.enemies, col, row) -- choose an enemy from this biome's list
             end
         end
     end
@@ -72,20 +74,20 @@ function EntityManager:spawnInOverworld()
 end
 
 -- choose a random enemy name from a list of enemies, each with their own spawn chance.
-function EntityManager:chooseRandomEnemy(list)
+function EntityManager:spawnRandomEnemy(list, col, row)
     local randomNumber = math.random() -- random number to determine enemy spawn
     local spawnChance = 0 -- the sum of all spawn chances, compared to randomNumber
     for i, enemy in ipairs(list) do
         spawnChance = spawnChance + enemy.spawnChance -- add the new probability to the spawnChance
         if randomNumber < spawnChance then
-            return enemy.name
+            self:spawnEnemy(enemy.name, col, row)
         end
     end
 end
 
 -- spawn an enemy given an enemy name at a coordinate col, row
 function EntityManager:spawnEnemy(enemyName, col, row)
-    local position = {x = (col - 1) * TILE_SIZE, y = (row - 1) * TILE_SIZE, xOffset = 0, yOffset = 0} -- spawning position
+    local position = {x = (col - 1), y = (row - 1), xOffset = 0, yOffset = 0} -- spawning position
     table.insert(self.entities, Enemy(self.level, ENTITY_DEFS[enemyName], position)) -- spawn the enemy
 end
 

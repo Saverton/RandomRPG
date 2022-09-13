@@ -21,7 +21,7 @@ end
 
 -- render the bar at either a specified x and y or at the bar's x and y
 function ProgressBar:render(x, y)
-    self.panel:render(self.opacity) -- render the background panel
+    self.panel:render(self.opacity, x, y) -- render the background panel
     love.graphics.setColor(self.color) -- render the colored ratio bar
     if self.ratio > 0 then -- only render if ratio exists to avoid ugly corners
         love.graphics.rectangle('fill', (x or self.x), (y or self.y), self.width * (self.ratio), self.height, 2, 2)
