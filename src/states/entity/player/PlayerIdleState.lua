@@ -1,14 +1,15 @@
 --[[
-    Idle State: when the player is standing still
+    Idle State: tracks input when the player is standing still
     @author Saverton
 ]]
 
 PlayerIdleState = Class{__includes = EntityIdleState}
 
 function PlayerIdleState:init(entity)
-    EntityIdleState.init(self, entity)
+    EntityIdleState.init(self, entity) -- call entity idle state
 end
 
+-- check for keyboard input to change player's direction and state
 function PlayerIdleState:update(dt)
     if love.keyboard.isDown('w') or love.keyboard.isDown('up') then
         self.entity.direction = 'up'

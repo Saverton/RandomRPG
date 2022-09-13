@@ -1,8 +1,7 @@
 --[[
     State Stack class, allows for multiple states to be managed in a stack format.
 
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
+    @author Saverton
 ]]
 
 StateStack = Class{}

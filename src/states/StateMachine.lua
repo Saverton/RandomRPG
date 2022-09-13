@@ -1,3 +1,9 @@
+--[[
+	State Machine: manages entity states by transferring between states
+
+	@author Saverton
+]]
+
 StateMachine = Class{}
 
 function StateMachine:init(states)
