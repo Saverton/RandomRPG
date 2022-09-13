@@ -11,6 +11,7 @@ function Camera:init(target, level)
     -- set the initial position of the camera to center on the target
     self.x = math.floor(self.target.x + (self.target.width / 2) - (CAMERA_WIDTH / 2)) 
     self.y = math.floor(self.target.y + (self.target.height / 2) - (CAMERA_HEIGHT / 2))
+    self.x, self.y = self:keepInMapBounds(self.x, self.y) -- keep camera within the map boundaries
 
     self.cambox = {
         x = self.x - OFFSCREEN_CAM_WIDTH,

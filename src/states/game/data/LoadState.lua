@@ -35,7 +35,7 @@ function LoadState:loadWorld()
         self.loadLevel = player.currentLevel or 'overworld-1'
     end
     self.path = self.path .. '/' .. self.loadLevel -- set path to level specific
-    self.levelType = string.sub(self.loadLevel, 0, string.find(self.loadLevel, "-")) -- type of the level being saved
+    self.levelType = string.sub(self.loadLevel, 0, string.find(self.loadLevel, "-") - 1) -- type of the level being saved
     if not love.filesystem.getInfo(self.path) then
         if self.levelType == 'overworld' then
             return Overworld(worldName, self.loadLevel, {player = player})

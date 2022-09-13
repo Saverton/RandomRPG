@@ -49,7 +49,7 @@ end
 function Entity:initiateInventory(items)
     self.items = {} -- set this entity's inventory to empty
     for i, item in ipairs(items) do
-        Entity:getItem(Item(item.name, self, item.quantity)) -- add each item into inventory from items list
+        self:giveItem(Item(item.name, self, item.quantity)) -- add each item into inventory from items list
     end
     self.heldItem = 1 -- set the held Item to 1
 end

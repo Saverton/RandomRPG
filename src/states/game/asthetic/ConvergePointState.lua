@@ -27,8 +27,8 @@ end
 -- render the converging rectangles
 function ConvergePointState:render()
     love.graphics.setColor(self.color) -- set to the color of the rectangles
-    for i, rect in pairs(self.rects) do
-        love.graphics.rectangle('fill', rect.x, rect.y, rect.width, rect.height) -- draw each rectangle
+    for i, rectancle in pairs(self.rectangles) do
+        love.graphics.rectangle('fill', rectancle.x, rectancle.y, rectancle.width, rectancle.height) -- draw each rectangle
     end
     love.graphics.setColor({1, 1, 1, 1}) -- reset color to default white
 end

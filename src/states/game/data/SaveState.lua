@@ -8,7 +8,7 @@ SaveState = Class{__includes = BaseState}
 function SaveState:init(level, loadnext)
     self.worldName = level.worldName -- name of the world save
     self.levelName = level.levelName -- name of the level being saved
-    self.levelType = string.sub(self.levelName, 0, string.find(self.levelName, "-")) -- type of the level being saved
+    self.levelType = string.sub(self.levelName, 0, string.find(self.levelName, "-") - 1) -- type of the level being saved
     self.map = level.map -- map in the level being saved
     self.player = level.player -- player in the level being saved
     self.entityManager = level.entityManager -- entityManager being saved
