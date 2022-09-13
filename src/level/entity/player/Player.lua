@@ -13,6 +13,7 @@ function Player:init(level, definitions, position)
     if #self.items == 0 then -- if the player is starting, give him a wooden sword
         self:giveItem(Item('wooden_sword', self, 1))
     end
+    self.isPlayer = true -- simple flag used to check if an entity is the player
 end
 
 -- update the player's components
@@ -22,7 +23,7 @@ function Player:update(dt)
         self:dies()
     end
     self:setHeldItem(self:switchItem()) -- switches held item if the mouse wheel is scrolled
-    if self.canUseItem and love.keyboard.wasPressed('space') then
+    if love.keyboard.wasPressed('space') then
         self:interact() -- if space is pressed, use current item or interact with npcs/features
     end
 end
@@ -152,8 +153,8 @@ function Player:interactWithMap(checkBox)
     local map = self.level.map -- reference to map
     local startCol, startRow = math.max(1, math.ceil(checkBox.x / TILE_SIZE)), math.max(1, math.ceil(checkBox.y / TILE_SIZE)) 
         -- set the upper left corner of the checkbox as the starting point for the tile checks
-    for col = startCol, math.min(map.size, startCol + 1), 1 do
-        for row = startRow, math.min(map.size, startRow + 1), 1 do
+    for col = startCol, math.min(map.width, startCol + 1), 1 do
+        for row = startRow, math.min(map.height, startRow + 1), 1 do
             local feature = map.featureMap[col][row] -- this index's feature
             local tile = map.tileMap[col][row] -- this index's tile
             if feature ~= nil and FEATURE_DEFS[feature.name].onInteract(self, map, col, row) then -- if a feature exists, interact with it

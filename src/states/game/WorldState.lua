@@ -20,12 +20,12 @@ function WorldState:update(dt)
             self.level = Overworld(self.name, self.level.levelName, {})
         end
         if love.keyboard.wasPressed('b') then -- give player items if pressed b
-            self.level.player:getItem(Item('sword', self.level.player, 1))
-            self.level.player:getItem(Item('bow', self.level.player, 1))
-            self.level.player:getItem(Item('fire_tome', self.level.player, 1))
+            self.level.player:giveItem(Item('sword', self.level.player, 1))
+            self.level.player:giveItem(Item('bow', self.level.player, 1))
+            self.level.player:giveItem(Item('fire_tome', self.level.player, 1))
         end
         if love.keyboard.wasPressed('m') then -- give player 10 money when press m
-            self.level.player:getItem(Item('money', self.level.player, 10))
+            self.level.player:giveItem(Item('money', self.level.player, 10))
         end
     end
     if love.keyboard.wasPressed('escape') then -- pause game if pressed escape

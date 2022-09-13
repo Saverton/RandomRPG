@@ -23,7 +23,7 @@ end
 
 -- render the projectile
 function Projectile:render(camera)
-    self.animation:render(self.x + self.ox - camera.x, self.y + self.oy - camera.y, self.rotation)
+    self.animation:render(self.x + self.offsetX - camera.x, self.y + self.offsetY - camera.y, self.rotation)
 end
 
 -- update attached projectiles to their new origin
@@ -83,7 +83,7 @@ end
 function Projectile:checkCollisionWithMap(map)
     local tilesToCheck = self:getCollisionCheckList() -- get a list of tiles to check for collision
     for i, coordinate in pairs(tilesToCheck) do
-        if coordinate.x < 1 or coordinate.y > map.size or coordinate.y < 1 or coordinate.y > map.size then
+        if coordinate.x < 1 or coordinate.x > map.width or coordinate.y < 1 or coordinate.y > map.height then
             goto skipThisCoordinate -- if the coordinate is out of map bounds, skip the check
         end
         local feature = map.featureMap[coordinate.x][coordinate.y]
@@ -97,8 +97,8 @@ end
 
 -- return a list of coordinates to check for a collision
 function Projectile:getCollisionCheckList()
-    local leftCol, rightCol, topRow, bottomRow = (math.ceil(self.x / TILE_SIZE)), (math.ceil((self.x + self.width) / TILE_SIZE)), 
-        (math.ceil(self.y / TILE_SIZE)), (math.ceil((self.y + self.height) / TILE_SIZE)) -- get the map coordinates of each side of this projectile
+    local leftCol, rightCol, topRow, bottomRow = (math.ceil(self.x / TILE_SIZE)), (math.ceil((self.x + PROJECTILE_DEFS[self.name].width) / TILE_SIZE)), 
+        (math.ceil(self.y / TILE_SIZE)), (math.ceil((self.y + PROJECTILE_DEFS[self.name].height) / TILE_SIZE)) -- get the map coordinates of each side of this projectile
     local dx, dy = self.dy, self.dy -- get projectile's directional velocity
     local checkList = {} -- the list of coordinates to be checked for collision
     if dx < 0 or dy < 0 then

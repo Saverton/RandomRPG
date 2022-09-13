@@ -18,7 +18,7 @@ function ProjectileManager:update(dt)
         if PROJECTILE_DEFS[projectile.name].attached and self.entity.pushManager.isPushed then
             projectile:updateOrigin(self.entity.x, self.entity.y)
         end -- if the entity is pushed, update a projectile if it is attached
-        self:checkProjectileCollisions() -- check the projectile's collisions with entities
+        self:checkProjectileCollision(projectile) -- check the projectile's collisions with entities
         if projectile.hits <= 0 or projectile.lifetime <= 0 or projectile:checkCollisionWithMap(self.entity.level.map) then
             table.insert(removeIndex, i) -- if the projectile is out of hits, has expired its lifetime, or hits a solid feature, add to despawn list
         end

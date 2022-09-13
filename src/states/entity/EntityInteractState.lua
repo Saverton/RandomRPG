@@ -10,6 +10,7 @@ function EntityInteractState:init(entity)
     self.waitTime = 0 -- time to wait before returning to idle state
     self.animate = false -- do not animate the entity in this state
     self.entity:changeAnimation('interact-' .. self.entity.direction) -- update animation
+    self.cantUseItems = true -- entities cant use items in the interact state
 end
 
 -- enter the entity interact state, set the wait time before returning to normal and don't allow entity to use items
