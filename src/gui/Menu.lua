@@ -10,7 +10,7 @@ function Menu:init(definitions, instance)
     self.title = definitions.title or 'Menu' -- title of the menu
     self.subtitle = definitions.subtitle -- the subtitle of the menu, often instructions or info about selections
     self.panel = Panel(self.x, self.y, self.width, self.height) -- panel that holds the menu
-    self.selctions = (instance or {}).selections or definitions.selections 
+    self:getSelections(definitions, instance)
         -- set the selections to the instance of this menu or the defined selections for this menu type in the definitions table
     self.parent = (instance or {}).parent -- reference to the parent menu for functions that require outside references
     self.selector = 1 -- the selector that is currently being modified
@@ -28,7 +28,7 @@ function Menu:update(dt)
             self:setSelectorPosition(selector, ((selector.position) % #self.selections) + 1) -- move down one selection
         elseif love.keyboard.wasPressed('space') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
             love.audio.play(gSounds['gui']['menu_select_1'])
-            selector.onChoose(math.max(math.min(selector.pos, #self.selections), 1), self) -- select this selection
+            selector.onChoose(math.max(math.min(selector.position, #self.selections), 1), self) -- select this selection
         end
     end
 end
@@ -38,6 +38,15 @@ function Menu:render()
     self.panel:render() -- render the background panel
     self:printTitleAndSubtitle() -- print the title and subtitle of the menu
     self:printSelections() -- print all the selections in the menu
+end
+
+-- retrieve the selections for this menu from the definitions or instance data
+function Menu:getSelections(definitions, instance)
+    if (instance or {}).selections == nil then
+        self.selections = definitions.selections
+    else
+        self.selections = instance.selections
+    end
 end
 
 -- print the title and subtitle of this menu

@@ -10,6 +10,7 @@ MENU_DEFS = {
         width = 100,
         height = 100,
         title = 'Options',
+        subtitle = '',
         selections = {
             Selection('Play', function() gStateStack:push(MenuState(Menu(MENU_DEFS['play']), {})) end),
             Selection('Debug', function() gStateStack:push(WorldState({debug = true})) end),
@@ -22,6 +23,7 @@ MENU_DEFS = {
         width = 100,
         height = 100,
         title = 'Play',
+        subtitle = '',
         selections = {
             Selection('New Game', function() 
                 gStateStack:pop()
@@ -39,6 +41,7 @@ MENU_DEFS = {
         width = 100,
         height = 100,
         title = 'Choose World',
+        subtitle = '',
         selections = {}
     },
     ['pause'] = {
@@ -47,6 +50,7 @@ MENU_DEFS = {
         width = MENU_WIDTH,
         height = MENU_HEIGHT,
         title = 'Pause',
+        subtitle = '',
         selections = {
             Selection('Resume', function() gStateStack:pop() end),
             Selection('Save Game', function(level) 
@@ -74,6 +78,7 @@ MENU_DEFS = {
         width = MENU_WIDTH,
         height = MENU_HEIGHT,
         title = 'Inventory',
+        subtitle = '',
         selections = {},
         selectors = {{pos = 1, selected = false, text = '\'esc\' to exit', 
             onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}}
@@ -84,6 +89,7 @@ MENU_DEFS = {
         width = 50,
         height = 100,
         title = 'Item',
+        subtitle = '',
         selections = {
             Selection('About', function(menuState) 
                 local item = ITEM_DEFS[menuState.menu.selections[menuState.menu.selectors[menuState.menu.selector].pos].name]
@@ -119,6 +125,7 @@ MENU_DEFS = {
         width = MENU_WIDTH,
         height = MENU_HEIGHT,
         title = 'Quests',
+        subtitle = '',
         selections = {},
         selectors = {{pos = 1, selected = false, text = '\'esc\' to exit', 
             onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}}
@@ -129,6 +136,7 @@ MENU_DEFS = {
         width = 75,
         height = 100,
         title = 'Quest',
+        subtitle = '',
         selections = {
             Selection('Info', function(menuState) 
                 local menu = menuState.menu
@@ -157,6 +165,7 @@ MENU_DEFS = {
         width = 80,
         height = 80,
         title = 'Confirm?',
+        subtitle = '',
         selections = {
             Selection('Yes', function(menuState) 
                 gStateStack:pop()
@@ -176,6 +185,7 @@ MENU_DEFS = {
         width = 80,
         height = 80,
         title = 'Accept?',
+        subtitle = '',
         selections = {
             Selection('Yes', function(menuState) 
                 gStateStack:pop()
@@ -195,6 +205,7 @@ MENU_DEFS = {
         width = 80,
         height = MENU_HEIGHT / 2 - 5,
         title = 'Shop',
+        subtitle = '',
         selections = {
             Selection('Buy', function(menuState)
                 gStateStack:push(MenuState(MENU_DEFS['shop_buy'], {parent = menuState, 
@@ -222,6 +233,7 @@ MENU_DEFS = {
         width = MENU_WIDTH,
         height = MENU_HEIGHT,
         title = 'Shop',
+        subtitle = '',
         selectors = {
             {pos = 1, selected = false, text = 'Pick an item',
                 onChoose = function(pos, menu)
@@ -236,6 +248,7 @@ MENU_DEFS = {
         width = MENU_WIDTH,
         height = MENU_HEIGHT,
         title = 'Shop',
+        subtitle = '',
         selectors = {
             {pos = 1, selected = false, text = 'Pick an item',
                 onChoose = function(pos, menu)
@@ -250,6 +263,7 @@ MENU_DEFS = {
         width = 75,
         height = 100,
         title = 'Item',
+        subtitle = '',
         selections = {
             Selection('Buy', function(menuState)
                 local menu = menuState.menu
@@ -272,6 +286,7 @@ MENU_DEFS = {
         width = 75,
         height = 100,
         title = 'Item',
+        subtitle = '',
         selections = {
             Selection('Sell', function(menuState)
                 local player = menuState.shop.player
@@ -293,6 +308,7 @@ MENU_DEFS = {
         width = 80,
         height = MENU_HEIGHT / 2 - 5,
         title = 'Level Up',
+        subtitle = '',
         selections = {},
         selectors = {}
     }

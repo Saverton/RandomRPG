@@ -27,9 +27,8 @@ end
 
 -- render edges around a single tile at position x, y on screen
 function OverworldMap:renderEdges(col, row, camera)
-    local x = ((col - 1) * TILE_SIZE) - camera.x
-    local y = ((row - 1) * TILE_SIZE) - camera.y -- determine the x and y position on screen at which the edges are to be drawn
-    for i in pairs(self.edgeMap[col][row]) do
-        love.graphics.draw(gTextures['edges'], gFrames['edges'][i], x, y)
+    local x, y = ((col - 1) * TILE_SIZE) - camera.x, ((row - 1) * TILE_SIZE) - camera.y -- determine the x and y position on screen at which the edges are to be drawn
+    for i, edge in pairs(self.edgeMap[col][row]) do
+        love.graphics.draw(gTextures['edges'], gFrames['edges'][edge], x, y)
     end
 end

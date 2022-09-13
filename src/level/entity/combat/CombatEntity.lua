@@ -44,7 +44,7 @@ end
 
 -- render the combatEntity
 function CombatEntity:render(camera)
-    local onScreenX, onScreenY = self:getOnScreenPosition()
+    local onScreenX, onScreenY = self:getOnScreenPosition(camera)
     love.graphics.setColor(self.invincibilityManager:getCurrentColor()) -- sets opacity to reflect flash counter
     Entity.render(self, camera) -- render entity
     self.projectileManager:render(camera) -- render owned projectiles
@@ -99,7 +99,6 @@ end
 
 -- return this entity's combat statistic with boosts
 function CombatEntity:getStat(statName)
-    print('getting stat ' .. tostring(statName))
     return math.floor(self.combatStats[statName] * ProductOfBoosts(self.boosts[statName]))
 end
 -- return this entity's speed with boosts

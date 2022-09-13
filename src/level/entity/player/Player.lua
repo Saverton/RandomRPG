@@ -29,9 +29,7 @@ end
 
 -- render the player
 function Player:render(camera)
-    if self.renderPlayer then -- check to see if the player should be rendered
-        CombatEntity.render(self, camera)
-    end
+    CombatEntity.render(self, camera) -- render the entity of the player
     self:renderGui() -- render gui elements of player display
 end
 
@@ -84,7 +82,7 @@ function Player:renderGui()
     self.manaBar:render() -- render mana bar
     self.expBar:render() -- render exp bar
     PrintWithShadow('\'i\' = Open Inventory', TIPTEXT_X, TIPTEXT_Y) -- print inventory text
-    if #self.quests > 0 then
+    if #self.questManager.quests > 0 then
         PrintWithShadow('\'q\' = Open Quests', TIPTEXT_X, TIPTEXT_Y - 10) -- print quest text
     end
 end
