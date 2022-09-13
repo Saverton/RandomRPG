@@ -1,30 +1,33 @@
 --[[
-    Item class: defines behavior for all items in the game.
-    attributes: market price (buy/sell), name, texture, frame, onUse(), holder (reference), useRate
+    Item class: defines behavior for all items in the game. Items have a name, a reference to their holder/owner, a use rate timer, and
+    a quantity
     @author Saverton
 ]]
 
 Item = Class{}
 
 function Item:init(name, holder, quantity)
-    self.name = name
-
-    self.holder = holder
-
-    self.useRate = ITEM_DEFS[self.name].useRate
-
-    self.quantity = quantity or 1
-
-    if ITEM_DEFS[self.name].type == 'pickup' then
+    self.name = name -- name of the item
+    self.holder = holder -- reference to the holder
+    self.useRate = ITEM_DEFS[self.name].useRate -- timer that tracks when the item is in cooldown
+    self.quantity = quantity or 1 -- the quantity of this item
+    if ITEM_DEFS[self.name].type == 'pickup' then -- if the item is a pickup, call its onPickup function
         ITEM_DEFS[self.name].onPickup(self.holder, quantity)
     end
 end
 
+-- update item useRate timer
 function Item:update(dt)
     self.useRate = math.max(0, self.useRate - dt)
 end
 
--- use this item
+-- draw the item, used in inventory
+function Item:render(x, y)
+    local definition = ITEM_DEFS[self.name]
+    love.graphics.draw(gTextures[definition.texture], gFrames[definition.texture][definition.frame], x, y)
+end
+
+-- use the item, return true if successfully used, false otherwise
 function Item:use()
     local successful = false -- track whether the item was used
     local item = ITEM_DEFS[self.name] -- shortened reference to the item's definitions table
@@ -38,14 +41,10 @@ function Item:use()
     return successful
 end
 
-function Item:render(x, y)
-    local def = ITEM_DEFS[self.name]
-    love.graphics.draw(gTextures[def.texture], gFrames[def.texture][def.frame], x, y)
-end
-
+-- return a string with the quantity of the item
 function Item:getQuantityText()
     local text = ''
-    if self.quantity > 1 then
+    if self.quantity > 1 then -- only display text if the quantity is greater than 1
         text = ' ... (' .. tostring(self.quantity) .. ')'
     end
     return text

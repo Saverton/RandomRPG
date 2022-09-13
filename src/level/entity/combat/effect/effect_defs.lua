@@ -7,37 +7,24 @@ EFFECT_DEFS = {
     ['burn'] = {
         texture = 'effects',
         frame = 1,
-        effect = function(holder) 
-            --every second lose 1hp
-            holder:hurt(1)
-            --play burn sound
-            love.audio.play(gSounds['combat']['fire_hit_1'])
+        onApply = function() end,
+        applyEvery = function(holder) 
+            holder:hurt(1) -- lose 1hp
+            love.audio.play(gSounds['combat']['fire_hit_1']) -- play burn sound
         end,
-        applied_every = 1,
-        render = function(holder, texture, frame, camera) 
-            for i = 1, 2, 1 do
-                love.graphics.draw(gTextures[texture], gFrames[texture][frame], math.floor((holder.x - 4) + (math.random(0, holder.width))) - camera.x, 
-                    math.floor((holder.y - 4) + (math.random(0, holder.height))) - camera.y)
-            end
-        end,
-        afterEffect = function() end
+        afterEffect = function() end,
+        applied_every = 1
     },
     ['freeze'] = {
         texture = 'effects',
         frame = 2,
-        effect = function(holder)
-            --once slow move speed
-            table.insert(holder.boosts.spd, {name = 'freeze', num = 0.25})
+        onApply = function(holder)
+            table.insert(holder.boosts.spd, {name = 'freeze', num = 0.25}) -- slow move speed
         end,
-        applied_every = 100,
-        render = function(holder, texture, frame, camera) 
-            for i = 1, 2, 1 do
-                love.graphics.draw(gTextures[texture], gFrames[texture][frame], math.floor((holder.x - 4) + (math.random(0, holder.width))) - camera.x, 
-                    math.floor((holder.y - 4) + (math.random(0, holder.height))) - camera.y)
-            end
-        end,
+        applyEvery = function() end,
         afterEffect = function(holder)
-            table.remove(holder.boosts.spd, GetIndex(holder.speedboost, 'freeze'))
-        end
+            table.remove(holder.boosts.spd, GetIndex(holder.speedboost, 'freeze')) -- remove freeze effect
+        end,
+        applied_every = 100
     }
 }
