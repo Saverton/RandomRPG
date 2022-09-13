@@ -9,10 +9,10 @@ CombatEntity = Class{__includes = Entity}
 function CombatEntity:init(level, definitions, position)
     Entity.init(self, level, definitions, position) -- initiate an entity
     self.combatStats = {
-        ['maxHp'] = definitions.combatStats.maxHp or DEFAULT_HP, -- the default maximum health points
-        ['attack'] = definitions.combatStats.attack or DEFAULT_ATTACK, -- the default attack damage caused by this combatEntity
-        ['defense'] = definitions.combatStats.defense or DEFAULT_DEFENSE, -- the default damage resistance
-        ['maxMana'] = definitions.combatStats.maxMana or DEFAULT_MAGIC -- the default maximum mana
+        ['maxHp'] = definitions.combatStats['maxHp'] or DEFAULT_HP, -- the default maximum health points
+        ['attack'] = definitions.combatStats['attack'] or DEFAULT_ATTACK, -- the default attack damage caused by this combatEntity
+        ['defense'] = definitions.combatStats['defense'] or DEFAULT_DEFENSE, -- the default damage resistance
+        ['maxMana'] = definitions.combatStats['maxMana'] or DEFAULT_MAGIC -- the default maximum mana
     } -- combatEntity's combat statistics
     self.boosts = {['maxHp'] = {}, ['attack'] = {}, ['speed'] = {}, ['defense'] = {}, ['maxMana'] = {}} -- combatEntity's stat boost table, starts as empty
     self.currentStats = {

@@ -9,7 +9,7 @@ Textbox = Class{}
 function Textbox:init(position, text, onComplete)
     self.x, self.y, self.width, self.height = position.x, position.y, position.width, position.height
     self.panel = Panel(self.x, self.y, self.width, self.height) -- panel that backdrops the text box
-    _, self.textChunks = self.font:getWrap(text, self.width - (2 * TEXTBOX_MARGIN)) -- breaks the text into chunks that fit in the width of the panel
+    _, self.textChunks = love.graphics.getFont():getWrap(text, self.width - (2 * TEXTBOX_MARGIN)) -- breaks the text into chunks that fit in the width of the panel
     self.displayingChunks = {} -- table with up to 3 chunks that can display on one panel
     self.currentChunk = 1 -- currentChunk indexed to be displayed next
     self.revealed = 0 -- amount of text revealed in a panel
@@ -45,7 +45,7 @@ function Textbox:render()
             s = string.sub(s, 0, revealed)
         end
         revealed = revealed - string.len(s) -- subtract this string's length from the amount to still be revealed
-        local y = self.y + (TEXTBOX_MARGIN * i) + (self.font:getHeight() * (i - 1)) -- get the height of this line
+        local y = self.y + (TEXTBOX_MARGIN * i) + (love.graphics.getFont():getHeight() * (i - 1)) -- get the height of this line
         love.graphics.print(s, love.math.newTransform(math.floor(x), math.floor(y))) -- print the line
         if revealed <= 0 then -- if all that is to be revealed this frame is revealed, stop rendering text.
             break

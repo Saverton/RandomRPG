@@ -54,9 +54,6 @@ MENU_DEFS = {
         selections = {
             Selection('Resume', function() gStateStack:pop() end),
             Selection('Save Game', function(level) 
-                if level == nil then
-                    print('level passed as nil')
-                end
                 gStateStack:push(SaveState(level)) 
             end),
             Selection('Exit to Title', function() 
@@ -67,9 +64,6 @@ MENU_DEFS = {
                     end
                 }))
             end)
-        },
-        selectors = {
-            {pos = 1, selected = false, text = '', onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}
         }
     },
     ['inventory'] = {
@@ -78,10 +72,8 @@ MENU_DEFS = {
         width = MENU_WIDTH,
         height = MENU_HEIGHT,
         title = 'Inventory',
-        subtitle = '',
-        selections = {},
-        selectors = {{pos = 1, selected = false, text = '\'esc\' to exit', 
-            onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}}
+        subtitle = 'Select an Item',
+        selections = {}
     },
     ['inventory_item'] = {
         x = MENU_X + MENU_WIDTH + 5,
@@ -92,13 +84,13 @@ MENU_DEFS = {
         subtitle = '',
         selections = {
             Selection('About', function(menuState) 
-                local item = ITEM_DEFS[menuState.menu.selections[menuState.menu.selectors[menuState.menu.selector].pos].name]
+                local item = ITEM_DEFS[menuState.menu.selections[menuState.menu.selectors[menuState.menu.selector].position].name]
                 gStateStack:push(DialogueState(item.displayName .. ': ' .. item.description, item.texture, item.frame)) 
             end),
             Selection('Switch', function(menuState)
-                table.insert(menuState.menu.selectors, {pos = 1, selected = false, text = 'select item to switch', 
+                table.insert(menuState.menu.selectors, {position = 1, selected = false, text = 'select item to switch', 
                     onChoose = function() 
-                        menuState.menu:switch(menuState.menu.selectors[1].pos, menuState.menu.selectors[2].pos) 
+                        menuState.menu:switch(menuState.menu.selectors[1].position, menuState.menu.selectors[2].position) 
                         menuState:updateInventory()
                         table.remove(menuState.menu.selectors, 2)
                         menuState.menu.selector = 1
@@ -110,7 +102,7 @@ MENU_DEFS = {
             Selection('Delete', function(menuState) 
                 gStateStack:push(ConfirmState(MENU_DEFS['confirm'], {
                     onConfirm = function() 
-                        table.remove(menuState.menu.selections, menuState.menu.selectors[menuState.menu.selector].pos)
+                        table.remove(menuState.menu.selections, menuState.menu.selectors[menuState.menu.selector].position)
                         menuState:updateInventory()
                         gStateStack:pop()
                     end
@@ -126,9 +118,7 @@ MENU_DEFS = {
         height = MENU_HEIGHT,
         title = 'Quests',
         subtitle = '',
-        selections = {},
-        selectors = {{pos = 1, selected = false, text = '\'esc\' to exit', 
-            onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}}
+        selections = {}
     },
     ['quest_item'] = {
         x = MENU_X + MENU_WIDTH + 5,
@@ -140,7 +130,7 @@ MENU_DEFS = {
         selections = {
             Selection('Info', function(menuState) 
                 local menu = menuState.menu
-                local playerQuest = menuState.player.quests[GetIndex(menuState.player.quests, menu.selections[menu.selectors[menu.selector].pos].name)]
+                local playerQuest = menuState.player.quests[GetIndex(menuState.player.quests, menu.selections[menu.selectors[menu.selector].position].name)]
                 local quest = playerQuest.questRef
                 gStateStack:push(DialogueState('Progress: ' .. menuState.player:stringQuestProgress(playerQuest)))
                 gStateStack:push(DialogueState(quest.quest.name .. ': ' .. quest:stringQuest() .. '\nRewards: ' .. quest:stringReward())) 
@@ -149,9 +139,9 @@ MENU_DEFS = {
                 gStateStack:push(ConfirmState(MENU_DEFS['confirm'], {
                     onConfirm = function() 
                         local menu = menuState.menu
-                        local quest = menuState.player.quests[GetIndex(menuState.player.quests, menu.selections[menu.selectors[menu.selector].pos].name)]
+                        local quest = menuState.player.quests[GetIndex(menuState.player.quests, menu.selections[menu.selectors[menu.selector].position].name)]
                         table.remove(menuState.player.quests, GetIndex(menuState.player.quests, quest.name))
-                        table.remove(menu.selections, menu.selectors[menu.selector].pos)
+                        table.remove(menu.selections, menu.selectors[menu.selector].position)
                         gStateStack:pop()
                     end
                 }))
@@ -175,9 +165,7 @@ MENU_DEFS = {
                 gStateStack:pop()
                 menuState.onDeny()
             end)
-        },
-        selectors = {{pos = 1, selected = false, text = '\'esc\' = No', 
-            onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}}
+        }
     },
     ['quest_confirm'] = {
         x = VIRTUAL_WIDTH / 2 - 40,
@@ -185,7 +173,7 @@ MENU_DEFS = {
         width = 80,
         height = 80,
         title = 'Accept?',
-        subtitle = '',
+        subtitle = 'Accept this quest?',
         selections = {
             Selection('Yes', function(menuState) 
                 gStateStack:pop()
@@ -195,9 +183,7 @@ MENU_DEFS = {
                 gStateStack:pop()
                 menuState.onDeny()
             end)
-        },
-        selectors = {{pos = 1, selected = false, text = 'Accept this quest?', 
-            onChoose = function(pos, menu) menu.selections[pos].onSelect(menu.parent) end}}
+        }
     },
     ['shop_main'] = {
         x = VIRTUAL_WIDTH / 2 - 40,
@@ -235,9 +221,9 @@ MENU_DEFS = {
         title = 'Shop',
         subtitle = '',
         selectors = {
-            {pos = 1, selected = false, text = 'Pick an item',
-                onChoose = function(pos, menu)
-                    menu.selections[pos].onSelect(menu)
+            {position = 1, selected = false, text = 'Pick an item',
+                onChoose = function(position, menu)
+                    menu.selections[position].onSelect(menu)
                 end
             }
         }
@@ -250,9 +236,9 @@ MENU_DEFS = {
         title = 'Shop',
         subtitle = '',
         selectors = {
-            {pos = 1, selected = false, text = 'Pick an item',
-                onChoose = function(pos, menu)
-                    menu.selections[pos].onSelect(menu.parent, menu)
+            {position = 1, selected = false, text = 'Pick an item',
+                onChoose = function(position, menu)
+                    menu.selections[position].onSelect(menu.parent, menu)
                 end
             }
         }
@@ -269,12 +255,12 @@ MENU_DEFS = {
                 local menu = menuState.menu
                 local shop = menuState.shop
                 print(#shop.inventory)
-                shop:transaction(GetIndex(shop.inventory, menu.selections[menu.selectors[menu.selector].pos].name))
+                shop:transaction(GetIndex(shop.inventory, menu.selections[menu.selectors[menu.selector].position].name))
                 menu.selections = shop:getSelections()
             end),
             Selection('About', function(menuState) 
                 local menu = menuState.menu
-                local item = ITEM_DEFS[menu.selections[menu.selectors[menu.selector].pos].name]
+                local item = ITEM_DEFS[menu.selections[menu.selectors[menu.selector].position].name]
                     gStateStack:push(DialogueState(item.displayName .. ': ' .. item.description, item.texture, item.frame)) 
             end),
             Selection('Back', function(menuState) gStateStack:pop() end)
@@ -291,11 +277,11 @@ MENU_DEFS = {
             Selection('Sell', function(menuState)
                 local player = menuState.shop.player
                 local menu = menuState.menu
-                player:sell(GetIndex(player.items, menu.selections[menu.selectors[menu.selector].pos].name), menuState.shop, menu)
+                player:sell(GetIndex(player.items, menu.selections[menu.selectors[menu.selector].position].name), menuState.shop, menu)
             end),
             Selection('About', function(menuState) 
                 local menu = menuState.menu
-                local item = ITEM_DEFS[menu.selections[menu.selectors[menu.selector].pos].name]
+                local item = ITEM_DEFS[menu.selections[menu.selectors[menu.selector].position].name]
                     gStateStack:push(DialogueState(item.displayName .. ': ' .. item.description .. '\nSale Price: $' .. tostring(math.max(item.price.sell + menuState.shop.sellDiff, 0)),
                         item.texture, item.frame)) 
             end),

@@ -23,6 +23,8 @@ end
 function ProgressBar:render(x, y)
     self.panel:render(self.opacity) -- render the background panel
     love.graphics.setColor(self.color) -- render the colored ratio bar
-    love.graphics.rectangle('fill', (x or self.x), (y or self.y), self.width * (self.ratio), self.height, 2, 2)
+    if self.ratio > 0 then -- only render if ratio exists to avoid ugly corners
+        love.graphics.rectangle('fill', (x or self.x), (y or self.y), self.width * (self.ratio), self.height, 2, 2)
+    end
     love.graphics.setColor(1, 1, 1, 1) -- set color back to default white
 end

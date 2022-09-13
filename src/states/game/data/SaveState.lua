@@ -111,7 +111,7 @@ function SaveState:savePlayer(path)
         currentStats = self.player.currentStats,
         speed = self.player.speed,
         quests = {},
-        effectManager = self.player.effectManger:getSaveData(),
+        effectManager = self.player.effectManager:getSaveData(),
         items = {},
         statLevel = self.player.statLevel:getSaveData()
     }
@@ -121,7 +121,7 @@ function SaveState:savePlayer(path)
         table.insert(items, {name = item.name, quantity = item.quantity})
     end
     definitions.items = items
-    for i, quest in ipairs(self.player.quests) do
+    for i, quest in ipairs(self.player.questManager.quests) do
         table.insert(quests, {name = quest.name, flags = quest.flags})
     end
     definitions.quests = quests
@@ -136,7 +136,7 @@ function SaveState:saveEntities(path)
         entityCap = self.entityManager.entityCap
     }
 
-    for i, entity in ipairs(self.enemySpawner.entities) do
+    for i, entity in ipairs(self.entityManager.entities) do
         local position = {
             x = (entity.x / 16) + 1, y = (entity.y / 16) + 1, xOffset = 0, yOffset = 0
         }

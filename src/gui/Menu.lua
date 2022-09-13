@@ -12,9 +12,9 @@ function Menu:init(definitions, instance)
     self.panel = Panel(self.x, self.y, self.width, self.height) -- panel that holds the menu
     self:getSelections(definitions, instance)
         -- set the selections to the instance of this menu or the defined selections for this menu type in the definitions table
-    self.parent = (instance or {}).parent -- reference to the parent menu for functions that require outside references
+    self.parent = (instance or {}).parent or self -- reference to the parent menu for functions that require outside references
     self.selector = 1 -- the selector that is currently being modified
-    self.selectors = definitions.selectors or {{position = 1, onChoose = function(pos, menu) self.selections[pos].onSelect(self.parent) end}}
+    self.selectors = definitions.selectors or {{position = 1, onChoose = function(position, menu) self.selections[position].onSelect(menu.parent) end}}
         -- the selectors that will navigate this menu, by default executes the selection's onSelect function.
 end
 
