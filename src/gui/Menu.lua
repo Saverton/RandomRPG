@@ -1,103 +1,87 @@
 --[[
-    Menu Class: a menu in a gui panel
+    Menu Class: A menu gui has a list of selections and may have selectors that are used to select an option.
     @author Saverton
 ]]
 
 Menu = Class{}
 
-function Menu:init(def, inst)
-    if inst == nil then
-        inst = {}
-    end
-    self.x = def.x
-    self.y = def.y
-    self.width = def.width
-    self.height = def.height
-    self.title = def.title or 'Menu'
-
-    self.panel = Panel(self.x, self.y, self.width, self.height)
-
-    if inst.selections == nil then
-        self.selections = def.selections
-    else
-        self.selections = inst.selections
-    end
-
-    self.parent = inst.parent
-
-    self.selector = 1
-    self.selectors = def.selectors or {
-        {pos = 1, selected = false, text = '', onChoose = function(pos, menu) self.selections[pos].onSelect(self.parent) end}
-    }
-
-    self.renderSelector = false
+function Menu:init(definitions, instance)
+    self.x, self.y, self.width, self.height = definitions.x, definitions.y, definitions.width, definitions.height -- position of the menu
+    self.title = definitions.title or 'Menu' -- title of the menu
+    self.subtitle = definitions.subtitle -- the subtitle of the menu, often instructions or info about selections
+    self.panel = Panel(self.x, self.y, self.width, self.height) -- panel that holds the menu
+    self.selctions = instance.selections or definitions.selections 
+        -- set the selections to the instance of this menu or the defined selections for this menu type in the definitions table
+    self.parent = instance.parent -- reference to the parent menu for functions that require outside references
+    self.selector = 1 -- the selector that is currently being modified
+    self.selectors = definitions.selectors or {{position = 1, onChoose = function(pos, menu) self.selections[pos].onSelect(self.parent) end}}
+        -- the selectors that will navigate this menu, by default executes the selection's onSelect function.
 end
 
+-- update the menu each frame
 function Menu:update(dt)
-    local selector = self.selectors[self.selector]
+    local selector = self.selectors[self.selector] -- reference to the current selector
     if selector ~= nil then
         if love.keyboard.wasPressed('w') or love.keyboard.wasPressed('up') then
-            love.audio.play(gSounds['gui']['menu_blip_1'])
-            selector.pos = (selector.pos + #self.selections - 2) % (#self.selections) + 1
+            self:setSelectorPosition(selector, (selector.position + #self.selections - 2) % (#self.selections) + 1) -- move up one selection
         elseif love.keyboard.wasPressed('s') or love.keyboard.wasPressed('down') then
-            love.audio.play(gSounds['gui']['menu_blip_1'])
-            selector.pos = (((selector.pos) % #self.selections) + 1)
-        end
-
-        if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+            self:setSelectorPosition(selector, ((selector.position) % #self.selections) + 1) -- move down one selection
+        elseif love.keyboard.wasPressed('space') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
             love.audio.play(gSounds['gui']['menu_select_1'])
-
-            selector.selected = true
-            if self.selector < #self.selectors then
-                self.selector = self.selector + 1
-                self.selectors[self.selector].pos = selector.pos
-            else
-                selector.onChoose(math.min(selector.pos, #self.selections), self)
-            end
+            selector.onChoose(math.max(math.min(selector.pos, #self.selections), 1), self) -- select this selection
         end
-    else
-        if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
-            gStateStack:pop()
-        end
-    end
-
-    if self.selector > #self.selectors then
-        self.selector = 1
-    end
-
-    if #self.selectors > 0 then
-        self.renderSelector = true
     end
 end
 
+-- render this menu
 function Menu:render()
-    self.panel:render()
+    self.panel:render() -- render the background panel
+    self:printTitleAndSubtitle() -- print the title and subtitle of the menu
+    self:printSelections() -- print all the selections in the menu
+end
 
-    love.graphics.setFont(gFonts['medium'])
-    love.graphics.printf(self.title, love.math.newTransform(self.x + SELECTION_MARGIN, self.y + SELECTION_MARGIN), (self.width - (2 *SELECTION_MARGIN)), 'center')
+-- print the title and subtitle of this menu
+function Menu:printTitleAndSubtitle()
+    love.graphics.setFont(gFonts['medium']) -- medium font for title
+    love.graphics.printf(self.title, love.math.newTransform(self.x + SELECTION_MARGIN, self.y + SELECTION_MARGIN), 
+        (self.width - (2 *SELECTION_MARGIN)), 'center') -- print the title
+    love.graphics.setFont(gFonts['small']) -- small font for subtitle
+    love.graphics.printf(self.subtitle, love.math.newTransform(self.x + SELECTION_MARGIN, self.y + SELECTION_MARGIN + 20), 
+        (self.width - (2 *SELECTION_MARGIN)), 'center') -- print the subtitle
+end
 
-    love.graphics.setFont(gFonts['small'])
-    if self.renderSelector then
-        love.graphics.printf(self.selectors[self.selector].text, love.math.newTransform(self.x + SELECTION_MARGIN, self.y + SELECTION_MARGIN + 20), (self.width - (2 *SELECTION_MARGIN)), 'center')
-    end
+-- navigate the selector to a new index
+function Menu:setSelectorPosition(selector, position)
+    selector.position = position
+    gSounds['gui']['menu_blip_1']:play() -- play menu blip sound
+end
+
+-- print each selection in the menu
+function Menu:printSelections()
     for i, selection in ipairs(self.selections) do
-        local x, y = self.x + SELECTION_MARGIN, self.y + (SELECTION_MARGIN * i) + (SELECTION_HEIGHT * i) + 30
-        love.graphics.printf(selection.displayName, love.math.newTransform(x, y),
-            self.width - (2 * SELECTION_MARGIN), 'left')
+        local x, y = self.x + SELECTION_MARGIN, self.y + (SELECTION_MARGIN * i) + (SELECTION_HEIGHT * i) + 30 -- x and y positions of the selection
+        selection:render(x, y, self.width - (2 * SELECTION_MARGIN)) -- render the selection
         for k, selector in pairs(self.selectors) do
-            if (k == self.selector or selector.selected) and selector.pos == i and self.renderSelector then
-                love.graphics.draw(gTextures['selector'], gFrames['selector'][1], x - 20, y - 4)
-                love.graphics.draw(gTextures['selector'], gFrames['selector'][1], x + self.width + 20 - (2 * SELECTION_MARGIN), y - 4, 0, -1, 1)
-                love.graphics.setColor(1, 1, 0, 0.5)
-                love.graphics.rectangle('line', math.floor(x), math.floor(y), self.width - (2 * SELECTION_MARGIN), SELECTION_HEIGHT)
-                love.graphics.setColor(1, 1, 1, 1)
+            if selector.position == i then
+                self:renderSelector(x, y, k) -- render any selectors on this position
             end
         end
     end
-
-    self.renderSelector = false
 end
 
+-- render a selector at an x and y position
+function Menu:renderSelector(x, y, index)
+    if self.selector == index then
+        love.graphics.setColor(1, 1, 0, 1) -- set color to yellow for current selector
+    end
+    love.graphics.draw(gTextures['selector'], gFrames['selector'][1], x - 20, y - 4) -- draw left selector
+    love.graphics.draw(gTextures['selector'], gFrames['selector'][1], 
+        x + self.width + 20 - (2 * SELECTION_MARGIN), y - 4, 0, -1, 1) -- draw right selector
+    love.graphics.rectangle('line', math.floor(x), math.floor(y), self.width - (2 * SELECTION_MARGIN), SELECTION_HEIGHT) -- draw selection box
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
+-- swap two indexes in the selections list
 function Menu:switch(index1, index2)
     local temp = self.selections[index1]
     self.selections[index1] = self.selections[index2]

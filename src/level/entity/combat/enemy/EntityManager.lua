@@ -17,7 +17,7 @@ function EntityManager:update(dt)
     -- update all entities in the entities table
     for i, entity in pairs(self.entities) do
         entity:update(dt) -- update the entity
-        if GetDistance(self.level.player, entity) > DESPAWN_RANGE or entity.currenthp <= 0 then
+        if GetDistance(self.level.player, entity) > DESPAWN_RANGE or entity.currentStats.hp <= 0 then
             table.remove(self.entities, i)  -- remove the entity if it is past the despawn range or dead
         end
     end
@@ -85,10 +85,8 @@ end
 
 -- spawn an enemy given an enemy name at a coordinate col, row
 function EntityManager:spawnEnemy(enemyName, col, row)
-    local playerLevel = self.level.player.statLevel.level -- reference to player's statLevel level
-    local startLevel = math.random(math.max(1, playerLevel - 2), playerLevel) -- determine the statLevel of this enemy
     local position = {x = (col - 1) * TILE_SIZE, y = (row - 1) * TILE_SIZE, xOffset = 0, yOffset = 0} -- spawning position
-    table.insert(self.entities, Enemy(ENTITY_DEFS[enemyName], self.level, position, startLevel, nil)) -- spawn the enemy
+    table.insert(self.entities, Enemy(self.level, ENTITY_DEFS[enemyName], position)) -- spawn the enemy
 end
 
 -- spawn enemies in a dungeon according to spawner feature positions

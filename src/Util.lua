@@ -132,7 +132,7 @@ end
 function ProductOfBoosts(boostTable)
     local totalBoost = 1
     for i, boost in ipairs(boostTable) do
-        totalBoost = totalBoost * boost.bonus
+        totalBoost = totalBoost * boost.multiplier
     end
     return totalBoost
 end

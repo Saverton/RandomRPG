@@ -1,104 +1,80 @@
 --[[
-    Stat Level class: determines the stats of a combat entity based on its level.
+    Stat Level class: leveling system for combat entities, keeps track of the entity's level, exp amount, and the bonuses received upon leveling
+    up.
     @author Saverton
 ]]
 
 StatLevel = Class{}
 
-function StatLevel:init(entity, def)
-    self.entity = entity
-    self.level = def.level or 0
-
-    -- bonus received on level up
-    self.hpbonus = def.hpbonus or DEFAULT_BONUS
-    self.attackbonus = def.attackbonus or DEFAULT_BONUS
-    self.defensebonus = def.defensebonus or DEFAULT_BONUS
-    self.magicbonus = def.magicbonus or DEFAULT_BONUS
-
-    if self.level == 0 then
-        self:levelUp(1)
-    end
-    self.exp = def.exp or math.pow(3, self.level - 1)
+function StatLevel:init(entity, definitions)
+    self.entity = entity -- reference to owner entity
+    self.level = definitions.level or 1 -- starting level
+    self.bonuses  = definitions.bonuses or {
+        ['maxHp'] = DEFAULT_BONUS,
+        ['attack'] = DEFAULT_BONUS,
+        ['defense'] = DEFAULT_BONUS,
+        ['maxMana'] = DEFAULT_BONUS
+    } -- potential bonuses for each level up
+    self.exp = definitions.exp or math.pow(3, self.level - 1) -- starting exp
 end
 
+-- give the stat level expereince
 function StatLevel:expGain(amount)
-    self.exp = self.exp + amount
+    self.exp = self.exp + amount -- add new exp
     if self.exp >= math.pow(3, self.level) then
-        gSounds['gui']['level_up']:play()
-        local oldStats = {
-            hp = 'HP: ' .. tostring(self.entity.hp),
-            atk = 'ATK: ' .. tostring(self.entity.attack),
-            def = 'DEF: ' .. tostring(self.entity.defense),
-            magic = 'MAGIC: ' .. tostring(self.entity.magic)
-        }
-        local bonuses = self:levelUp(1)
-        local newStats = {
-            hp = self.entity.hp,
-            atk = self.entity.attack,
-            def = self.entity.defense,
-            magic = self.entity.magic
-        }
-        local selections = {
-            Selection(oldStats.hp .. ' + ' .. tostring(bonuses.hp) .. ' = ' .. tostring(newStats.hp)),
-            Selection(oldStats.atk .. ' + ' .. tostring(bonuses.atk) .. ' = ' .. tostring(newStats.atk)),
-            Selection(oldStats.def .. ' + ' .. tostring(bonuses.def) .. ' = ' .. tostring(newStats.def)),
-            Selection(oldStats.magic .. ' + ' .. tostring(bonuses.magic) .. ' = ' .. tostring(newStats.magic))
-        }
-        gStateStack:push(MenuState(MENU_DEFS['level_up'], {selections = selections}))
+        self:playerLevelUp() -- if this is enough to level up, call the player level up function
         return true
     end
+    self.entity.expbar:updateRatio(self:getExpRatio())
     return false
 end
 
-function StatLevel:levelUp(amount)
-    local bonuses = {
-        hp = 0,
-        atk = 0,
-        def = 0,
-        magic = 0
-    }
+-- level up an enemy, auto upgrades each bonus accordingly
+function StatLevel:enemyLevelUp(amount)
     for i = 1, amount, 1 do
-        self.level = self.level + 1
-        local hpnum = math.random()
-        local atknum = math.random()
-        local defnum = math.random()
-        local magicnum = math.random()
-        if hpnum < self.hpbonus.chance then
-            self.entity.hp = self.entity.hp + self.hpbonus.bonus
-            bonuses.hp = self.hpbonus.bonus
-        end
-        if atknum < self.attackbonus.chance then
-            self.entity.attack = self.entity.attack + self.attackbonus.bonus
-            bonuses.atk = self.attackbonus.bonus
-        end
-        if defnum < self.defensebonus.chance then
-            self.entity.defense = self.entity.defense + self.defensebonus.bonus
-            bonuses.def = self.defensebonus.bonus
-        end
-        if magicnum < self.magicbonus.chance then
-            self.entity.magic = self.entity.magic + self.magicbonus.bonus
-            bonuses.magic = self.magicbonus.bonus
-        end
-        self.entity.currenthp = self.entity:getHp()
+        self.level = self.level + 1 -- add one level
+        self:upgradeStat('maxHp')
+        self:upgradeStat('attack')
+        self:upgradeStat('defense')
+        self:upgradeStat('maxMana')
+        self.entity.currentStats.hp = self.entity:getStat('maxHp') -- add all bonuses and set current hp to the new max hp
+        self.entity.hpBar:updateRatio(self.entity.currentStats.hp / self.entity:getStat('maxHp')) -- update the health bar
     end
-    return bonuses
 end
 
+-- level up a player, allows choice of stat upgrades
+function StatLevel:playerLevelUp()
+    gSounds['gui']['level_up']:play() -- play level up sound
+    local selections = {
+        Selection('HP + ' .. self.bonuses['hp'], self:upgradeStat('maxHp')),
+        Selection('Attack + ' .. self.bonuses['attack'], self:upgradeStat('attack')),
+        Selection('Defense + ' .. self.bonuses['defense'], self:upgradeStat('defense')),
+        Selection('Mana + ' .. self.bonuses['maxMana'], self:upgradeStat('maxMana')),
+    }
+    gStateStack:push(MenuState(MENU_DEFS['level_up'], {selections = selections}))
+    self.entity.expBar:updateRatio(self:getExpRatio()) -- update exp bar
+end
+
+-- level up an enemy to a certain level, used when initiating an enemy to a level higher than 1
 function StatLevel:levelUpTo(level)
-    return self:levelUp(math.max(0, level - self.level))
+    return self:enemyLevelUp(math.max(0, level - self.level))
 end
 
+-- upgrade a specific stat
+function StatLevel:upgradeStat(statName)
+    self.entity.combatStats[statName] = self.entity.combatStats[statName] + self.bonuses[statName]
+end
+
+-- get the ratio of current exp to the exp needed for the next level
 function StatLevel:getExpRatio()
     return ((self.exp - math.pow(3, self.level - 1)) / (math.pow(3, self.level) - math.pow(3, self.level - 1)))
 end
 
+-- return a table with the necessary save data
 function StatLevel:getSaveData()
     return {
         level = self.level,
         exp = self.exp,
-        hpbonus = self.hpbonus,
-        attackbonus = self.attackbonus,
-        defensebonus = self.defensebonus,
-        magicbonus = self.magicbonus
+        bonuses = self.bonuses
     }
 end

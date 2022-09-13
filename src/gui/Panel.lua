@@ -6,17 +6,14 @@
 Panel = Class{}
 
 function Panel:init(x, y, width, height)
-    self.x = math.floor(x)
-    self.y = math.floor(y)
-    self.width = math.floor(width)
-    self.height = math.floor(height)
+    self.x, self.y, self.width, self.height = math.floor(x), math.floor(y), math.floor(width), math.floor(height)
+        -- x, y, width, and height position of panel
 end
 
-function Panel:render(opa)
-    --draw main rectangle
-    love.graphics.setColor(0, 0, 0, opa or 1)
-    love.graphics.rectangle('fill', self.x, self.y, self.width, self.height, 2, 2)
-    --draw outer rectangle
-    love.graphics.setColor(1, 1, 1, opa or 1)
-    love.graphics.rectangle('line', self.x, self.y, self.width, self.height, 2, 2)
+-- render a panel with a specified opacity
+function Panel:render(opacity)
+    love.graphics.setColor(0, 0, 0, opacity or 1) -- set color to black with specified opacity
+    love.graphics.rectangle('fill', self.x, self.y, self.width, self.height, 2, 2) -- draw inner rectangle
+    love.graphics.setColor(1, 1, 1, opacity or 1) -- set color to white with specified opacity
+    love.graphics.rectangle('line', self.x, self.y, self.width, self.height, 2, 2) -- draw outer rectangle
 end

@@ -44,7 +44,7 @@ end
 function Projectile:getDamage(attacker)
     local damage = PROJECTILE_DEFS[self.name].damage -- get the projectile's damage
     if PROJECTILE_DEFS[self.name].type ~= 'none' then
-        damage = damage + attacker:getAttack() -- add attacker's damage
+        damage = damage + attacker:getStat('attack') -- add attacker's damage
     end
 end
 

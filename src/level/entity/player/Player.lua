@@ -38,9 +38,9 @@ end
 -- initiate all gui parts for the player
 function Player:initiateGuis()
     self.hotbar = self:getHotbar(3) -- player's hotbar gui
-    self.hpBar = ProgressBar(PLAYER_BAR_X, PLAYER_HP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_HP_BAR_HEIGHT, {1, 0, 0, 1}) -- health bar
-    self.manaBar = ProgressBar(PLAYER_BAR_X, PLAYER_MAGIC_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 0, 1, 1}) -- mana bar
-    self.expBar = ProgressBar(PLAYER_BAR_X, PLAYER_EXP_BAR_Y, PLAYER_BAR_WIDTH, PLAYER_BAR_HEIGHT, {0, 1, 0, 1}) -- exp bar
+    self.hpBar = ProgressBar({x = PLAYER_BAR_X, y = PLAYER_HP_BAR_Y, width = PLAYER_BAR_WIDTH, height = PLAYER_HP_BAR_HEIGHT}, {1, 0, 0, 1}) -- health bar
+    self.manaBar = ProgressBar({x = PLAYER_BAR_X, y = PLAYER_MANA_BAR_Y, width = PLAYER_BAR_WIDTH, height = PLAYER_BAR_HEIGHT}, {0, 0, 1, 1}) -- mana bar
+    self.expBar = ProgressBar({x = PLAYER_BAR_X, y = PLAYER_EXP_BAR_Y, width = PLAYER_BAR_WIDTH, height = PLAYER_BAR_HEIGHT}, {0, 1, 0, 1}) -- exp bar
 end
 
 -- return the new heldItem after the scroll updates
@@ -80,9 +80,9 @@ function Player:renderGui()
     love.graphics.setFont(gFonts['small']) -- set font to small
     PrintWithShadow('Ammo: ' .. tostring(self:getAmmoCount()), PLAYER_TEXT_POS_X, AMMO_TEXT_POS_Y) -- render ammo count
     PrintWithShadow('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X,  MONEY_TEXT_POS_Y) -- render money amount
-    self.hpBar:render((self.currenthp / self:getHp())) -- render hp bar
-    self.manaBar:render((self.currentmagic / self:getMagic())) -- render mana bar
-    self.expBar:render(self.statLevel:getExpRatio()) -- render exp bar
+    self.hpBar:render() -- render hp bar
+    self.manaBar:render() -- render mana bar
+    self.expBar:render() -- render exp bar
     PrintWithShadow('\'i\' = Open Inventory', TIPTEXT_X, TIPTEXT_Y) -- print inventory text
     if #self.quests > 0 then
         PrintWithShadow('\'q\' = Open Quests', TIPTEXT_X, TIPTEXT_Y - 10) -- print quest text
@@ -173,7 +173,7 @@ function Player:getInventorySelections(onSelectFunction)
     local selectionList = {} -- set list as empty
     for i, item in ipairs(self.items) do -- create an index for each item
         local displayText = ITEM_DEFS[item.name].displayName .. item:getQuantityText() -- display text for selection
-        table.insert(selectionList, Selection(item.name, onSelectFunction, i, displayText)) -- add this selection to the list
+        table.insert(selectionList, Selection(item.name, onSelectFunction, displayText, i)) -- add this selection to the list
     end
     table.insert(selectionList, Selection('Close', function() gStateStack:pop() end)) -- add a close index at the end
     return selectionList
