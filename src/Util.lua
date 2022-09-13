@@ -121,11 +121,19 @@ function LoadWorldList()
 end
 
 -- print a message in white with a shadow rendered one pixel to the right and down
-function PrintWithShadow(message, x , y)
+function PrintWithShadow(message, x, y)
     love.graphics.setColor({0, 0, 0, 0.5})
     love.graphics.print(message, math.floor(x + 1), math.floor(y + 1)) -- print the shadow in transparent black
     love.graphics.setColor({1, 1, 1, 1})
     love.graphics.print(message, math.floor(x), math.floor(y)) -- print the message in white
+end
+
+-- print a message in white with a shadow rendered one pixel to the right and down, allows for printf inputs
+function PrintFWithShadow(message, x, y, limit, orientation)
+    love.graphics.setColor({0, 0, 0, 0.5})
+    love.graphics.printf(message, math.floor(x + 1), math.floor(y + 1), limit, orientation) -- print the shadow in transparent black
+    love.graphics.setColor({1, 1, 1, 1})
+    love.graphics.printf(message, math.floor(x), math.floor(y), limit, orientation) -- print the message in white
 end
 
 -- return the product of all boosts in a table

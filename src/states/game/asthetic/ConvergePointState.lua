@@ -6,28 +6,29 @@
 ConvergePointState = Class{__includes = BaseState}
 
 function ConvergePointState:init(point, color, time, onFinish)
-    self.rects = {
+    self.rectangles = {
         ['left'] = {x = 0, y = 0, width = 0, height = VIRTUAL_HEIGHT},
         ['top'] = {x = 0, y = 0, width = VIRTUAL_WIDTH, height = 0},
         ['right'] = {x = VIRTUAL_WIDTH, y = 0, width = VIRTUAL_WIDTH, height = VIRTUAL_HEIGHT},
         ['bottom'] = {x = 0, y = VIRTUAL_HEIGHT, width = VIRTUAL_WIDTH, height = VIRTUAL_HEIGHT}
-    }
-    self.color = color
-    Timer.tween(time, {
-        [self.rects['left']] = {width = point.x},
-        [self.rects['top']] = {height = point.y},
-        [self.rects['right']] = {x = point.x},
-        [self.rects['bottom']] = {y = point.y}
-    }):finish(function()
+    } -- rectangles that will converge
+    self.color = color -- color of the rectangles
+    Timer.tween(time, { -- tween rectangles to converge on the point
+        [self.rectangles['left']] = {width = point.x},
+        [self.rectangles['top']] = {height = point.y},
+        [self.rectangles['right']] = {x = point.x},
+        [self.rectangles['bottom']] = {y = point.y}
+    }):finish(function() -- on finish, close this state and execute the onFinish function
         gStateStack:pop()
         onFinish()
     end)
 end
 
+-- render the converging rectangles
 function ConvergePointState:render()
-    love.graphics.setColor(self.color) 
+    love.graphics.setColor(self.color) -- set to the color of the rectangles
     for i, rect in pairs(self.rects) do
-        love.graphics.rectangle('fill', rect.x, rect.y, rect.width, rect.height)
+        love.graphics.rectangle('fill', rect.x, rect.y, rect.width, rect.height) -- draw each rectangle
     end
-    love.graphics.setColor({1, 1, 1, 1})
+    love.graphics.setColor({1, 1, 1, 1}) -- reset color to default white
 end

@@ -1,14 +1,13 @@
 --[[
-    Confirm state: player is asked to confirm an action
+    Confirm state: inherits from menu, player is asked to confirm an action.
     @author Saverton
 ]]
 
 ConfirmState = Class{__includes = MenuState}
 
-function ConfirmState:init(def, inst)
-    MenuState.init(self, def, inst)
-
-    self.onConfirm = inst.onConfirm or function() end
-    self.onDeny = inst.onDeny or function() end
-    self.menu.parent = self
+function ConfirmState:init(definitions, instance)
+    MenuState.init(self, definitions, instance)
+    self.onConfirm = instance.onConfirm or function() end -- executes on selecting 'yes'
+    self.onDeny = instance.onDeny or function() end -- executes on selecting 'no'
+    self.menu.parent = self -- parent of the menu
 end

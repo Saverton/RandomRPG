@@ -5,27 +5,23 @@
 
 GameOverState = Class{__includes = BaseState}
 
-function GameOverState:init() 
-
-end
-
+-- check for input to return to title screen
 function GameOverState:update(dt) 
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
-        love.audio.play(gSounds['gui']['menu_select_1'])
-        gStateStack:pop()
+        love.audio.play(gSounds['gui']['menu_select_1']) -- play select sound
+        gStateStack:pop() -- destroy game states back to title
         gStateStack:pop()
         gStateStack:pop()
     end
-
 end
 
+-- render game over screen
 function GameOverState:render() 
     love.graphics.setColor(0.5, 0, 0, 1)
-    love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
+    love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT) -- fill background rectangle
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setFont(gFonts['large'])
-    love.graphics.printf('Game Over', love.math.newTransform(0, (VIRTUAL_HEIGHT / 2) - 20), VIRTUAL_WIDTH, 'center')
-    love.graphics.printf('press \'enter\'', love.math.newTransform(0, (VIRTUAL_HEIGHT / 2) + 30), VIRTUAL_WIDTH, 'center')
+    PrintFWithShadow('Game Over', love.math.newTransform(0, (VIRTUAL_HEIGHT / 2) - 20), VIRTUAL_WIDTH, 'center') -- print game over text
+    love.graphics.setFont(gFonts['medium'])
+    PrintFWithShadow('press \'enter\'', love.math.newTransform(0, (VIRTUAL_HEIGHT / 2) + 30), VIRTUAL_WIDTH, 'center') -- print directions text
 end
-
-function GameOverState:exit() end
