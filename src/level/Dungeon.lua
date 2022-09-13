@@ -18,6 +18,5 @@ end
 -- initiate player, spawn it at the designated spawn space
 function Dungeon:spawnPlayer(definitions)
     Level.spawnPlayer(self, definitions)
-    self.player.x = (self.map.startSpace.x - 1) * TILE_SIZE
-    self.player.y = (self.map.startSpace.y - 1) * TILE_SIZE
+    self.player.x, self.player.y = (self.map.start.x - 1) * TILE_SIZE, (self.map.start.y - 1) * TILE_SIZE
 end

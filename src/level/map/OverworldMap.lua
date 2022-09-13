@@ -9,7 +9,7 @@ OverworldMap = Class{__includes = Map}
 function OverworldMap:init(dimensions, definitions)
     Map.init(self, dimensions, definitions) -- initiate the Map's base features
     self.biomeMap = definitions.biomeMap -- initiate the biomeMap, which determines enemy spawning.
-    self.edgeMap = MapGenerator.generateEdgeMap(self.tileMap) -- generate the edge map, which has edges to be drawn over different neighboring tiles
+    self.edgeMap = OverworldGenerator.generateEdgeMap(self.tileMap) -- generate the edge map, which has edges to be drawn over different neighboring tiles
 end
 
 -- render all map objects, including edges between different tiles

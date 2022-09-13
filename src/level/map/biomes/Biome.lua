@@ -22,3 +22,15 @@ function Biome:getTile()
     end
     return tile
 end
+
+-- return a feature that this biome spawns
+function Biome:getFeature()
+    local number = math.random() -- random number to determine which feature to spawn
+    local sum = 0
+    for i, feature in pairs(BIOME_DEFS[self.name].features) do
+        sum = sum + feature.chance -- go through each feature, if the total chance is greater than the random number, generate that feature
+        if number < sum then
+            return feature.name
+        end
+    end
+end

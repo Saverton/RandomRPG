@@ -33,7 +33,6 @@ LEVEL_DEFS = {
 
 DUNGEON_DEFS = {
     ['fortress'] = {
-        baseBiome = 'fortress_inside',
         rooms = {'fortress_room_skeletons', 'fortress_room_goblins', 'fortress_room_empty'},
         floorTile = 'floor',
         pathBorderTile = 'wall_edge',

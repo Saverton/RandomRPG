@@ -1,125 +1,176 @@
 --[[
-    Dungeon Generator class: generates a dungeon based on my super secret process!!!
+    Dungeon Generator class: generates a dungeon with a grid of rooms 
     @author Saverton
 ]]
 
 DungeonGenerator = Class{}
 
-function DungeonGenerator.generateDungeon(def, dunSize, name)
-    local size = (dunSize * ROOM_WIDTH) + 1
-    local dunGrid = DungeonGenerator.generateDunGrid(dunSize)
-    local landmarks = DungeonGenerator.generateRooms(def, dunGrid, dunSize)
-    local biomeMap, tileMap, featureMap = DungeonGenerator.generateFill(def, size)
-    MapGenerator.generateStructures(DungeonGenerator.getStructureMap(dunGrid), biomeMap, tileMap, featureMap)
-    DungeonGenerator.generatePath(dunGrid, landmarks, def, tileMap, size)
-    DungeonGenerator.removeDeadRooms(dunGrid, def, tileMap, featureMap)
+function DungeonGenerator.generateDungeon(definitions, dungeonSize)
+    local dimensions = {width = (dungeonSize * ROOM_WIDTH) + 1, height = (dungeonSize * ROOM_HEIGHT) + 1} -- set width and height of map
+    local dungeonGrid = DungeonGenerator.generateDunGrid(dungeonSize) -- create grid of rooms
+    local landmarks = DungeonGenerator.generateRooms(definitions, dungeonGrid, dungeonSize) -- generate rooms, return a table with the starting and ending x and y
+    local tileMap, featureMap = DungeonGenerator.generateFill(definitions, dimensions) -- generate the tiles and features of the dungeon
+    DungeonGenerator.generateStructures(DungeonGenerator.getStructureMap(dungeonGrid), tileMap, featureMap) -- generate the structures of the dungeon (rooms)
+    DungeonGenerator.generatePath(dungeonGrid, landmarks, definitions, tileMap) -- generate a path through the dungeon
+    DungeonGenerator.removeDeadRooms(dungeonGrid, definitions, tileMap, featureMap) -- remove any rooms that do not have access via paths
 
-    return Map(name, size, tileMap, biomeMap, featureMap, {}, {},
-        {x = ((landmarks.sx - 1) * ROOM_WIDTH) + (ROOM_WIDTH / 2 + 1), y =  ((landmarks.sy - 1) * ROOM_HEIGHT) + (ROOM_HEIGHT / 2 + 1)})
+    return DungeonMap(dimensions, {tileMap = tileMap, featureMap = featureMap, gatewayMap = {}, start = {
+        x = ((landmarks.startX - 1) * ROOM_WIDTH) + (ROOM_WIDTH / 2 + 1), y =  ((landmarks.startY - 1) * ROOM_HEIGHT) + (ROOM_HEIGHT / 2 + 1)
+    }}) -- create a new dungeon map
 end
 
-function DungeonGenerator.generateDunGrid(dunSize)
-    local dunGrid = {}
-    for x = 1, dunSize, 1 do
-        dunGrid[x] = {}
-        for y = 1, dunSize, 1 do
-            dunGrid[x][y] = {
+-- create a grid of empty rooms in the dungeonGrid
+function DungeonGenerator.generateDunGrid(dungeonSize)
+    local dungeonGrid = {}
+    for x = 1, dungeonSize, 1 do
+        dungeonGrid[x] = {}
+        for y = 1, dungeonSize, 1 do
+            dungeonGrid[x][y] = {
                 room = nil,
                 access = false
-            }
+            } -- create an empty room slot
         end
     end
-    return dunGrid
+    return dungeonGrid
 end
 
-function DungeonGenerator.generateRooms(def, dunGrid, dunSize)
+-- generate the rooms that will be placed in the dungeon
+function DungeonGenerator.generateRooms(definitions, dungeonGrid, dungeonSize)
     local startX, startY, endX, endY = 1, 1, 1, 1
     while startX == endX or startY == endY do
-        startX, startY, endX, endY = math.random(dunSize), math.random(dunSize), math.random(dunSize), math.random(dunSize)
-    end
-    local landmarks = {sx = startX, sy = startY, ex = endX, ey = endY}
-    for x = 1, dunSize, 1 do
-        for y = 1, dunSize, 1 do
-            local name = def.rooms[math.random(#def.rooms)]
-            dunGrid[x][y].room = {name = name, col = ((x - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[name].width / 2)),
-                row = ((y - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[name].height / 2))}
+        startX, startY, endX, endY = math.random(dungeonSize), math.random(dungeonSize), math.random(dungeonSize), math.random(dungeonSize)
+    end -- choose the start and end room positions
+    local landmarks = {startX = startX, startY = startY, endX = endX, endY = endY}
+    for x = 1, dungeonSize, 1 do
+        for y = 1, dungeonSize, 1 do
+            local name = definitions.rooms[math.random(#definitions.rooms)] -- choose a room name
+            local col, row = ((x - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[name].width / 2)),
+                ((y - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[name].height / 2)) -- define tile coordinates for the room
+            dungeonGrid[x][y].room = {name = name, col = col, row = row} -- set the room
         end
     end
-    dunGrid[startX][startY] = {room = {name = def.startRoom, col = ((startX - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[def.startRoom].width / 2)),
-    row = ((startY - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[def.startRoom].height / 2))}, access = true}
-    dunGrid[endX][endY] = {room = {name = def.endRoom, col = ((endX - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[def.endRoom].width / 2)),
-    row = ((endY - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[def.endRoom].height / 2))}, access = true}
-    return landmarks
+    dungeonGrid[startX][startY] = {room = {name = definitions.startRoom, col = ((startX - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[definitions.startRoom].width / 2)),
+    row = ((startY - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[definitions.startRoom].height / 2))}, access = true}
+        -- create the start room flag as accessible
+    dungeonGrid[endX][endY] = {room = {name = definitions.endRoom, col = ((endX - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[definitions.endRoom].width / 2)),
+    row = ((endY - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[definitions.endRoom].height / 2))}, access = true}
+        -- create the end room, flag as accessible
+    return landmarks -- the list containing the starting and ending room x and y positions on the dungeon grid
 end
 
-function DungeonGenerator.generateFill(def, size)
-    local biomeMap, tileMap, featureMap = {}, {}, {}
-    for x = 1, size, 1 do
-        biomeMap[x] = {}
+-- generate spaces for features and fill tiles with the default inside wall tile
+function DungeonGenerator.generateFill(definitions, dimensions)
+    local tileMap, featureMap = {}, {}
+    for x = 1, dimensions.width, 1 do
         tileMap[x] = {}
         featureMap[x] = {}
-        for y = 1, size, 1 do
-            biomeMap[x][y] = Biome(def.baseBiome)
-            tileMap[x][y] = Tile(biomeMap[x][y]:getTile())
-            featureMap[x][y] = nil
+        for y = 1, dimensions.height, 1 do
+            tileMap[x][y] = Tile(definitions.insideTile) -- set tile to inside wall
+            featureMap[x][y] = nil -- set feature to empty
         end
     end
-    return biomeMap, tileMap, featureMap
+    return tileMap, featureMap -- return the updated tile and feature map
 end
 
-function DungeonGenerator.getStructureMap(dunGrid)
+-- create a structure map using the dungeon grid and room needs
+function DungeonGenerator.getStructureMap(dungeonGrid)
     local structureMap = {}
-    for x, col in ipairs(dunGrid) do
+    for x, col in ipairs(dungeonGrid) do
         for y, space in ipairs(col) do
-            table.insert(structureMap, space.room)
+            table.insert(structureMap, space.room) -- add structures for each room
         end
     end
     return structureMap
 end
 
-function DungeonGenerator.generatePath(dunGrid, landmarks, def, tileMap, size)
-    local staX, staY, finX, finY = ((landmarks.sx - 1) * ROOM_WIDTH) + (ROOM_WIDTH / 2 + 1), ((landmarks.sy - 1) * ROOM_HEIGHT) + (ROOM_HEIGHT / 2 + 1), 
-        ((landmarks.ex - 1) * ROOM_WIDTH) + (ROOM_WIDTH / 2 + 1), ((landmarks.ey - 1) * ROOM_HEIGHT) + (ROOM_HEIGHT / 2 + 1)
-    local x, y = staX, staY
-    local dunX, dunY = landmarks.sx, landmarks.sy
-    while x ~= finX or y ~= finY do
-        -- pick a random direction
-        local dir = math.random(4)
-        -- check and see if the destination is in the map.
-        local px, py = x + (DIRECTION_COORDS[dir].x * ROOM_WIDTH), y + (DIRECTION_COORDS[dir].y * ROOM_HEIGHT)
-        local pdunX, pdunY = dunX + DIRECTION_COORDS[dir].x, dunY + DIRECTION_COORDS[dir].y
-        while (pdunX < 1 or pdunX > #dunGrid or pdunY < 1 or pdunY > #dunGrid) or (math.random() < 0.75 and dunGrid[pdunX][pdunY].access) do
+-- generate a path through the dungeon that connects the start room to the end room.
+function DungeonGenerator.generatePath(dungeonGrid, landmarks, definitions, tileMap)
+    local startX, startY, finishX, finishY = ((landmarks.startX - 1) * ROOM_WIDTH) + (ROOM_WIDTH / 2 + 1), ((landmarks.startY - 1) * ROOM_HEIGHT) + (ROOM_HEIGHT / 2 + 1), 
+        ((landmarks.endX - 1) * ROOM_WIDTH) + (ROOM_WIDTH / 2 + 1), ((landmarks.endY - 1) * ROOM_HEIGHT) + (ROOM_HEIGHT / 2 + 1) -- start and finish locations of the dungeon
+    local x, y = startX, startY -- set the starting x and y for the path
+    local dungeonX, dungeonY = landmarks.startX, landmarks.startY -- set starting dungeon grid coordinates
+    while x ~= finishX or y ~= finishY do
+        local dir = math.random(4)  -- pick a random direction
+        local potentialDungeonX, potentialDungeonY = dungeonX + DIRECTION_COORDS[dir].x, dungeonY + DIRECTION_COORDS[dir].y
+        while (potentialDungeonX < 1 or potentialDungeonX > #dungeonGrid or potentialDungeonY < 1 or potentialDungeonY > #dungeonGrid) or 
+            (math.random() < 0.75 and dungeonGrid[potentialDungeonX][potentialDungeonY].access) do -- keep changng direction until result is in the map
             dir = math.random(4)
-            px, py = x + (DIRECTION_COORDS[dir].x * ROOM_WIDTH), y + (DIRECTION_COORDS[dir].y * ROOM_HEIGHT)
-            pdunX, pdunY = dunX + DIRECTION_COORDS[dir].x, dunY + DIRECTION_COORDS[dir].y
+            potentialDungeonX, potentialDungeonY = dungeonX + DIRECTION_COORDS[dir].x, dungeonY + DIRECTION_COORDS[dir].y
         end
-        -- set new dungeon coordinates
-        dunX, dunY = dunX + DIRECTION_COORDS[dir].x, dunY + DIRECTION_COORDS[dir].y
-        dunGrid[dunX][dunY].access = true
-        -- carve out a path in this direction
+        dungeonX, dungeonY = dungeonX + DIRECTION_COORDS[dir].x, dungeonY + DIRECTION_COORDS[dir].y -- set new dungeon coordinates
+        dungeonGrid[dungeonX][dungeonY].access = true -- set this room as accessible
         for i = 1, math.abs(DIRECTION_COORDS[dir].x * ROOM_WIDTH) + math.abs(DIRECTION_COORDS[dir].y * ROOM_HEIGHT), 1 do
-            local cx, cy = x + (DIRECTION_COORDS[dir].x * i), y + (DIRECTION_COORDS[dir].y * i)
-            tileMap[cx][cy] = Tile(def.floorTile)
-            for lx = cx - 1, cx + 1, 1 do
-                for ly = cy - 1, cy + 1, 1 do
-                    if tileMap[lx][ly] == def.insideTile then
-                        tileMap[lx][ly] = def.pathBorderTile
+            local carveX, carveY = x + (DIRECTION_COORDS[dir].x * i), y + (DIRECTION_COORDS[dir].y * i) -- carve out a path to this new room
+            tileMap[carveX][carveY] = Tile(definitions.floorTile)
+            for borderX = carveX - 1, carveX + 1, 1 do
+                for borderY = carveY - 1, carveY + 1, 1 do
+                    if tileMap[borderX][borderY].name == definitions.insideTile then
+                        tileMap[borderX][borderY] = Tile(definitions.pathBorderTile) -- replace any inside tiles with border tiles around path.
                     end
                 end
             end
         end
         x, y = x + (DIRECTION_COORDS[dir].x * ROOM_WIDTH), y + (DIRECTION_COORDS[dir].y * ROOM_HEIGHT)
+            -- set x and y position of path to new x and y of room center
     end
 end
 
-function DungeonGenerator.removeDeadRooms(dunGrid, def, tileMap, featureMap)
-    for x, col in ipairs(dunGrid) do
+-- remove any rooms that are not accessible using the path
+function DungeonGenerator.removeDeadRooms(dungeonGrid, definitions, tileMap, featureMap)
+    for x, col in ipairs(dungeonGrid) do
         for y, space in ipairs(col) do
-            if not space.access then
+            if not space.access then -- check if room has access
                 for rx = ((x - 1) * ROOM_WIDTH) + 1, ((x - 1) * ROOM_WIDTH) + ROOM_WIDTH, 1 do
                     for ry = ((y - 1) * ROOM_HEIGHT) + 1, ((y - 1) *  ROOM_HEIGHT) + ROOM_HEIGHT, 1 do
-                        tileMap[rx][ry] = Tile(def.insideTile)
-                        featureMap[rx][ry] = nil
+                        tileMap[rx][ry] = Tile(definitions.insideTile) -- fill room with inside tile
+                        featureMap[rx][ry] = nil -- remove all features
+                    end
+                end
+            end
+        end
+    end
+end
+
+-- generate structures onto the map using the structure map
+function DungeonGenerator.generateStructures(structureMap, tileMap, featureMap)
+    for i, structure in pairs(structureMap) do
+        local structureDefinitions = STRUCTURE_DEFS[structure.name] -- reference to structure's definitions table
+        if structureDefinitions.border_tile ~= nil or structureDefinitions.bottom_tile ~= nil then
+            for x = structure.col - 1, structure.col + structureDefinitions.width, 1 do 
+                for y = structure.row - 1, structure.row + structureDefinitions.height, 1 do -- set structure's tiles
+                    if Contains(structureDefinitions.keepTiles, tileMap[x][y].name) then
+                        goto continue -- if this tile is flagged as one to keep, don't override
+                    end
+                    if structureDefinitions.border_tile ~= nil and (x == structure.col - 1 or x == structure.col + structureDefinitions.width or 
+                        y == structure.row - 1 or y == structure.row + structureDefinitions.height) then
+                        featureMap[x][y] = nil -- build a structure border on outside tiles
+                        tileMap[x][y] = Tile(structureDefinitions.border_tile)
+                    elseif structureDefinitions.bottom_tile ~= nil then
+                        tileMap[x][y] = Tile(structureDefinitions.bottom_tile)
+                    end
+                    ::continue::
+                end
+            end
+        end
+        if structureDefinitions.layouts ~= nil then -- check for a feature layout map
+            local layout = LAYOUT_DEFS[structureDefinitions.layouts[math.random(#structureDefinitions.layouts)]] -- reference to the layout
+            for x = 1, structureDefinitions.width, 1 do 
+                for y = 1, structureDefinitions.height, 1 do
+                    local col, row = x + structure.col - 1, y + structure.row - 1 -- set the location of this feature
+                    featureMap[col][row] = nil -- remove any existing features
+                    if (layout[y] ~= nil and layout[y][x] ~= nil and layout[y][x] ~= 0 and layout[y][x] <= #structureDefinitions.features) then
+                        local feature = structureDefinitions.features[layout[y][x]] -- feature at this coordinate
+                        if math.random() < feature.chance then -- determine if this feature generates based on its defined chance
+                            if FEATURE_DEFS[feature.name].gateway then
+                                featureMap[col][row] = GatewayFeature(feature.name, feature.destination)
+                            elseif FEATURE_DEFS[feature.name].spawner then
+                                featureMap[col][row] = SpawnFeature(feature.name, feature.enemy)
+                            elseif FEATURE_DEFS[feature.name].animated then
+                                featureMap[col][row] = AnimatedFeature(feature.name, Animation(feature.name, 'main'))
+                            else
+                                featureMap[col][row] = Feature(feature.name)
+                            end -- spawn the appropriate feature
+                        end
                     end
                 end
             end

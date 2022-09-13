@@ -12,7 +12,7 @@ function Map:init(dimensions, definitions)
     self.tileMap = definitions.tileMap -- tiles that make the base of the world
     self:linkAnimatedTiles() -- set any animated tiles to the tileAnimator provided
     self.featureMap = definitions.featureMap
-    self.animatedFeatures = MapGenerator.getAnimatedFeatures(self.featureMap) 
+    self.animatedFeatures = OverworldGenerator.getAnimatedFeatures(self.featureMap) 
         -- get a list of animated features to keep as a reference for updating animations
     -- make sure all gateway features are properly initiated.
     for i, gateway in ipairs(definitions.gatewayMap or {}) do
