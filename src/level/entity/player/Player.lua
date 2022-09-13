@@ -11,7 +11,7 @@ function Player:init(level, definitions, position)
     self.questManager = QuestManager(definitions.quests) -- initiate a quest manager
     self:initiateGuis() -- initiate all gui elements of the player display
     if #self.items == 0 then -- if the player is starting, give him a wooden sword
-        self:getItem(Item('wooden_sword', self, 1))
+        self:giveItem(Item('wooden_sword', self, 1))
     end
 end
 

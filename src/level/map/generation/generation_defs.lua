@@ -5,7 +5,8 @@
 
 LEVEL_DEFS = {
     ['overworld'] = {
-        size = DEFAULT_MAP_SIZE,
+        width = DEFAULT_MAP_SIZE,
+        height = DEFAULT_MAP_SIZE,
         minBiomes = 15,
         maxBiomes = 25,
         minPaths = 3,

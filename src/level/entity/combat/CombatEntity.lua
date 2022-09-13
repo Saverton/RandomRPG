@@ -16,8 +16,8 @@ function CombatEntity:init(level, definitions, position)
     } -- combatEntity's combat statistics
     self.boosts = {['maxHp'] = {}, ['attack'] = {}, ['speed'] = {}, ['defense'] = {}, ['maxMana'] = {}} -- combatEntity's stat boost table, starts as empty
     self.currentStats = {
-        hp = definitions.currentStats.hp or self.combatStats['maxHp'], -- the current hp value, starts at max by default
-        mana = definitions.currentStats.mana or self.combatStats['maxMana'] -- the current mana, starts at max by default
+        hp = (definitions.currentStats or {}).hp or self.combatStats['maxHp'], -- the current hp value, starts at max by default
+        mana = (definitions.currentStats or {}).mana or self.combatStats['maxMana'] -- the current mana, starts at max by default
     } -- combatEntity's current Stats for depletable statistics
     self.effectManager = EffectManager(self, definitions.effectManager or {}) -- status effect manager
     self.projectileManager = ProjectileManager(self) -- manager for all owned projectiles
@@ -53,7 +53,7 @@ end
 
 -- if the current mana level is below the maximum, regenerate mana
 function CombatEntity:regenMana(dt)
-    if self.currentStats.mana ~= self:getStat() then
+    if self.currentStats.mana ~= self:getStat('maxMana') then
         self.currentStats.mana = math.min(self:getStat('maxMana'), self.currentStats.mana + ((ENTITY_DEFS[self.name].manaRegenRate or 0) * dt))
         self.manaBar:updateRatio(self.currentStats.mana / self:getStat('maxMana'))
     end
@@ -99,6 +99,7 @@ end
 
 -- return this entity's combat statistic with boosts
 function CombatEntity:getStat(statName)
+    print('getting stat ' .. tostring(statName))
     return math.floor(self.combatStats[statName] * ProductOfBoosts(self.boosts[statName]))
 end
 -- return this entity's speed with boosts

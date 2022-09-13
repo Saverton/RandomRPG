@@ -28,8 +28,8 @@ function Camera:update()
     self.cambox = {
         x = self.x - OFFSCREEN_CAM_WIDTH,
         y = self.y - OFFSCREEN_CAM_HEIGHT,
-        width = self.width + (2 * OFFSCREEN_CAM_WIDTH),
-        height = self.height + (2 * OFFSCREEN_CAM_HEIGHT)
+        width = CAMERA_WIDTH + (2 * OFFSCREEN_CAM_WIDTH),
+        height = CAMERA_HEIGHT + (2 * OFFSCREEN_CAM_HEIGHT)
     } -- reset the cambox with the new camera position
 end
 

@@ -58,7 +58,7 @@ end
 function OverworldGenerator.generatePath(biomeMap, dimensions, definitions)
     local pathBiome = definitions.pathBiome -- the biome that makes up the path itself
     local pathBorderBiome = definitions.pathBorderBiome -- the biome that borders the path
-    local pathLength = math.random(definitions.pathMinLength, definitions.pathMaxLength) -- pick a length for the path
+    local pathLength = math.random(definitions.minPathLength, definitions.maxPathLength) -- pick a length for the path
     local x, y = 0, 0 -- start position of path
     local direction = math.random(4) -- starting direction of the path
     if direction == 1 then

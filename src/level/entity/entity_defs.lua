@@ -25,12 +25,14 @@ ENTITY_DEFS = {
         height = PLAYER_HEIGHT,
         xOffset = PLAYER_X_OFFSET,
         yOffset = PLAYER_Y_OFFSET,
-        hp = PLAYER_BASE_HP,
-        attack = PLAYER_BASE_ATTACK,
+        combatStats = {
+            ['maxHp'] = PLAYER_BASE_HP,
+            ['attack'] = PLAYER_BASE_ATTACK,
+            ['defense'] = PLAYER_BASE_DEFENSE,
+            ['maxMana'] = PLAYER_BASE_MANA
+        },
         speed = PLAYER_BASE_SPEED,
-        defense = PLAYER_BASE_DEFENSE,
-        magic = PLAYER_BASE_MANA,
-        magicRegenRate = 0.5,
+        manaRegenRate = 0.5,
         push = 16,
         deathSound = 'player_dies',
         statLevel = {
@@ -47,11 +49,14 @@ ENTITY_DEFS = {
         height = 12,
         xOffset = -2,
         yOffset = -4,
-        hp = 5,
+        combatStats = {
+            ['maxHp'] = 3,
+            ['attack'] = 1,
+            ['defense'] = 1,
+            ['maxMana'] = 0
+        },
         speed = 16,
         agroSpeedBoost = 2,
-        defense = 1,
-        attack = 1,
         agroDist = 7,
         exp = 1,
         drops = {{name = 'ammo', chance = 0.5, min = 1, max = 3},
