@@ -5,7 +5,7 @@
 
 Selection = Class{}
 
-function Selection:init(name, onSelect, index, displayName)
+function Selection:init(name, onSelect, displayName, index)
     self.name = name
 
     self.onSelect = onSelect

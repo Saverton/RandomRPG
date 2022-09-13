@@ -142,7 +142,7 @@ end
 function Player:interactWithNPC(checkBox)
     for i, npc in pairs(self.level.npcManager.npcs) do -- parse through each npc
         if npc.despawnTimer == -1 and Collide(npc, checkBox) then -- if the npc is in the checkBox and the npc is not departing, interact
-            npc:interact(self, npc)
+            npc:interact(self)
             return true -- npc was interacted with
         end
     end
