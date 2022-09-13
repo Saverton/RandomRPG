@@ -10,7 +10,7 @@ BIOME_DEFS = {
         tiles = {
             {
                 tileType = 'grass',
-                proc = 1
+                chance = 1
             }
         },
         enemies = {
@@ -23,11 +23,11 @@ BIOME_DEFS = {
         features = {
             {
                 name = 'tree', 
-                proc = 0.9
+                chance = 0.9
             },
             {
                 name = 'rock', 
-                proc = 0.1
+                chance = 0.1
             }
         },
         featProc = 0.05
@@ -38,7 +38,7 @@ BIOME_DEFS = {
         tiles = {
             {
                 tileType = 'stone',
-                proc = 1
+                chance = 1
             }
         },
         enemies = {
@@ -51,11 +51,11 @@ BIOME_DEFS = {
         features = {
             {
                 name = 'rock', 
-                proc = 0.995
+                chance = 0.995
             },
             {
                 name = 'chest',
-                proc = 0.005
+                chance = 0.005
             }
         },
         featProc = 0.5
@@ -66,7 +66,7 @@ BIOME_DEFS = {
         tiles = {
             {
                 tileType = 'water',
-                proc = 1
+                chance = 1
             }
         },
         enemies = {},
@@ -80,7 +80,7 @@ BIOME_DEFS = {
         tiles = {
             {
                 tileType = 'sand',
-                proc = 1
+                chance = 1
             }
         },
         enemies = {
@@ -93,11 +93,11 @@ BIOME_DEFS = {
         features = {
             {
                 name = 'cactus',
-                proc = 0.95
+                chance = 0.95
             },
             {
                 name = 'rock',
-                proc = 0.05
+                chance = 0.05
             }
         },
         featProc = 0.1
@@ -108,7 +108,7 @@ BIOME_DEFS = {
         tiles = {
             {
                 tileType = 'snow',
-                proc = 1
+                chance = 1
             }
         },
         enemies = {
@@ -121,7 +121,7 @@ BIOME_DEFS = {
         features = {
             {
                 name = 'snow_tree',
-                proc = 1
+                chance = 1
             }
         },
         featProc = 0.25
@@ -132,7 +132,7 @@ BIOME_DEFS = {
         tiles = {
             {
                 tileType = 'snow',
-                proc = 1
+                chance = 1
             }
         },
         enemies = {
@@ -145,11 +145,11 @@ BIOME_DEFS = {
         features = {
             {
                 name = 'snow_tree',
-                proc = 0.5
+                chance = 0.5
             },
             {
                 name = 'rock',
-                proc = 0.5
+                chance = 0.5
             }
         },
         featProc = 0.025
@@ -160,7 +160,7 @@ BIOME_DEFS = {
         tiles = {
             {
                 tileType = 'sand',
-                proc = 1
+                chance = 1
             }
         },
         enemies = {
@@ -179,7 +179,7 @@ BIOME_DEFS = {
         tiles = {
             {
                 tileType = 'wall_inside',
-                proc = 1
+                chance = 1
             }
         },
         enemies = {},
@@ -193,7 +193,7 @@ BIOME_DEFS = {
         tiles = {
             {
                 tileType = 'wall_edge',
-                proc = 1
+                chance = 1
             }
         },
         enemies = {},
@@ -207,7 +207,7 @@ BIOME_DEFS = {
         tiles = {
             {
                 tileType = 'floor',
-                proc = 1
+                chance = 1
             }
         },
         enemies = {},

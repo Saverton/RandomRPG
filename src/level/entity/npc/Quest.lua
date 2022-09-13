@@ -98,7 +98,7 @@ function Quest:GenerateQuest(difficulty)
     local quest = {
         name = self.npc.npcName .. '\'s ' .. QUEST_TITLES[math.random(#QUEST_TITLES)], -- generate a random name for the quest
         flags = {},
-        questRef = self -- reference to the actual quest object
+        questRef = self -- reference to the quest object
     }
     local numOfFlags = math.random(1, difficulty) -- choose number of requirements based on difficulty
     for i = 1, numOfFlags, 1 do -- insert randomly generated flags to the quest requirements with counters based on difficulty
