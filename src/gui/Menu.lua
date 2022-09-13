@@ -10,9 +10,9 @@ function Menu:init(definitions, instance)
     self.title = definitions.title or 'Menu' -- title of the menu
     self.subtitle = definitions.subtitle -- the subtitle of the menu, often instructions or info about selections
     self.panel = Panel(self.x, self.y, self.width, self.height) -- panel that holds the menu
-    self.selctions = instance.selections or definitions.selections 
+    self.selctions = (instance or {}).selections or definitions.selections 
         -- set the selections to the instance of this menu or the defined selections for this menu type in the definitions table
-    self.parent = instance.parent -- reference to the parent menu for functions that require outside references
+    self.parent = (instance or {}).parent -- reference to the parent menu for functions that require outside references
     self.selector = 1 -- the selector that is currently being modified
     self.selectors = definitions.selectors or {{position = 1, onChoose = function(pos, menu) self.selections[pos].onSelect(self.parent) end}}
         -- the selectors that will navigate this menu, by default executes the selection's onSelect function.

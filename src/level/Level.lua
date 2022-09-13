@@ -32,8 +32,8 @@ function Level:render()
 end
 
 -- Initiate the player
-function Level:spawnPlayer(definitions)
-    self.player = Player(definitions or ENTITY_DEFS['player'], self, definitions.position or {x = 10, y = 10})
+function Level:spawnPlayer(playerDefinitions)
+    self.player = Player(self, (playerDefinitions or {}).definitions or ENTITY_DEFS['player'], (playerDefinitions or {}).position or {x = 10, y = 10})
 end
 
 -- throw a list of flags into the level's tracker that are checked at the end of the update cycle

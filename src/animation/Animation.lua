@@ -7,7 +7,6 @@ Animation = Class{}
 
 function Animation:init(name, startAnim)
     self.name = name
-
     self.currentAnimation = startAnim
     self.texture = ANIMATION_DEFS[self.name][self.currentAnimation].texture
     self.frames = ANIMATION_DEFS[self.name][self.currentAnimation].frames

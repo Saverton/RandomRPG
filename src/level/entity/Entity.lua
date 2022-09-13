@@ -12,7 +12,7 @@ function Entity:init(level, definitions, position)
     self.xOffset, self.yOffset = definitions.xOffset or 0, definitions.yOffset or 0 -- set the entity's offsets
     self.width, self.height = definitions.width or DEFAULT_ENTITY_WIDTH, definitions.height or DEFAULT_ENTITY_HEIGHT -- set entity's width and height
     self:setPosition(position) -- set the entity's spawning position
-    self.animator = Animation(self.animName, definitions.startAnim or 'idle-right') -- the animator used to display this entity
+    self.animator = Animation(self.animationName, definitions.startAnimation or 'idle-right') -- the animator used to display this entity
     self:initiateInventory(definitions.items or {}) -- initiate the inventory of this entity
     self.speed = definitions.speed or DEFAULT_SPEED -- set the move speed for this entity
 end
@@ -41,7 +41,7 @@ end
 -- set the entity's starting position and orientation according to a position table.
 function Entity:setPosition(position)
     -- set the x and y position
-    self.x, self.y = (((position.x - 1) * TILE_SIZE) + (position.xOffset)), (((position.y - 1) * TILE_SIZE) + (position.yOffset))
+    self.x, self.y = (((position.x - 1) * TILE_SIZE) + (position.xOffset or 0)), (((position.y - 1) * TILE_SIZE) + (position.yOffset or 0))
     self.direction = START_DIRECTION -- set the entity's direction to the default direction
 end
 

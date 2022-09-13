@@ -8,7 +8,7 @@ WorldState = Class{__includes = BaseState}
 
 function WorldState:init(definitions)
     self.name = definitions.name or 'my world' -- world name
-    self.level = definitions.level -- level to start in
+    self.level = definitions.level or Overworld(self.name, 'overworld-1', {}) -- level to start in
     self.debug = definitions.debug -- true: debug features on, false: debug features off
 end
 

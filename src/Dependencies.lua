@@ -62,7 +62,7 @@ require 'src/level/map/tiles/tile_defs'
 require 'src/level/map/tiles/Tile' 
 require 'src/level/map/tiles/AnimatedTile'
 require 'src/level/map/generation/generation_defs'
-require 'src/level/map/generation/MapGenerator'
+require 'src/level/map/generation/OverworldGenerator'
 require 'src/level/map/generation/DungeonGenerator'
 require 'src/level/map/structures/structure_defs'
 require 'src/level/map/Map'
@@ -73,9 +73,12 @@ require 'src/level/entity/Entity'
 require 'src/level/entity/entity_defs'
 require 'src/level/entity/combat/CombatEntity'
 require 'src/level/entity/combat/StatLevel'
+require 'src/level/entity/combat/PushManager'
+require 'src/level/entity/combat/InvincibilityManager'
 require 'src/level/entity/combat/enemy/EntityManager'
 require 'src/level/entity/combat/enemy/Enemy'
 require 'src/level/entity/combat/effect/Effect'
+require 'src/level/entity/combat/effect/EffectManager'
 require 'src/level/entity/combat/effect/effect_defs'
 require 'src/level/entity/combat/projectile/projectile_defs'
 require 'src/level/entity/combat/projectile/Projectile'
@@ -89,13 +92,13 @@ require 'src/level/entity/item/Item'
 require 'src/level/entity/item/Pickup'
 require 'src/level/entity/item/PickupManager'
 require 'src/level/entity/player/Player' 
+require 'src/level/entity/player/QuestManager'
 
 require 'src/gui/Panel'
 require 'src/gui/Textbox'
 require 'src/gui/Selection'
 require 'src/gui/Menu'
 require 'src/gui/menu_defs'
-require 'src/gui/OrderMenu'
 require 'src/gui/Imagebox'
 require 'src/gui/ProgressBar'
 
@@ -167,6 +170,6 @@ gSounds = {
     },
     ['music'] = {
         ['dungeon_theme'] = love.audio.newSource('sounds/dungeon.mp3', 'stream'),
-        ['fortress'] = love.audio.newSource('sounds/fortress.mid', 'stream')
+        --['fortress'] = love.audio.newSource('sounds/fortress.mid', 'stream')
     }
 }
