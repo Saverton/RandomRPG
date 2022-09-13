@@ -32,7 +32,7 @@ function Enemy:seekTarget()
         self:findTarget(self.level.player) -- attempt to find a target player
     else
         if Collide(self, self.target) then --check if damage target by running into it
-            self.target:damage(self:getStat('attack'), {strength = ENTITY_DEFS[self.name].push, direction = self.direction}, self, self.inflictions)
+            self.target:damage(self:getStat('attack'), {strength = ENTITY_DEFS[self.name].push, direction = self.direction}, self.effectManager.inflictions)
         end
         if GetDistance(self, self.target) > ENTITY_DEFS[self.name].aggressiveDistance * TILE_SIZE then
             self:loseTarget() -- check if target is out of agro Range, if so, lose target

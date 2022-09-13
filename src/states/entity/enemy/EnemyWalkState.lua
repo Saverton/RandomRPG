@@ -17,7 +17,7 @@ function EnemyWalkState:enter(params)
     if params == nil then -- ensure params exists
         params = {}
     end
-    self.tilesToTravel = params.distance or math.random(1, 5) -- set a distance to travel
+    self.tilesToTravel = params.tiles or math.random(1, 5) -- set a distance to travel
     self.pixelsTraveled = 0 -- entity has traveled 0 pixels
 end
 

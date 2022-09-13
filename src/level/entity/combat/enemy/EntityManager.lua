@@ -44,7 +44,6 @@ end
 
 -- call the appropriate spawn function
 function EntityManager:spawn()
-    print('attempting to spawn enemies')
     if self.type == 'overworld' then
         self:spawnInOverworld()
     elseif self.type == 'dungeon' then

@@ -33,7 +33,9 @@ end
 
 -- Initiate the player
 function Level:spawnPlayer(playerDefinitions)
-    self.player = Player(self, (playerDefinitions or {}).definitions or ENTITY_DEFS['player'], (playerDefinitions or {}).position or {x = 10, y = 10})
+    local col, row = self.map:getSpawnableCoord() -- spawnable coordiante to place player
+    self.player = Player(self, (playerDefinitions or {}).definitions or ENTITY_DEFS['player'], (playerDefinitions or {}).position or 
+        {x = col, y = row, xOffset = PLAYER_SPAWN_X_OFFSET, yOffset = PLAYER_SPAWN_Y_OFFSET})
 end
 
 -- throw a list of flags into the level's tracker that are checked at the end of the update cycle

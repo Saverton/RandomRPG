@@ -65,8 +65,6 @@ function CombatEntity:hurt(amount)
     if not self.invincibilityManager.invincible then
         love.audio.play(gSounds['combat'][ENTITY_DEFS[self.name].hitSound or 'hit']) -- play hit sound
         local defense = self:getStat('defense') -- get damage reduction from defense
-        print(tostring(defense))
-        print(tostring(amount))
         if defense >= amount then
             defense = math.max(amount - 1, 0) -- ensure that defense never reduces damage to 0
         end

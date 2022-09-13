@@ -81,7 +81,7 @@ ITEM_DEFS = {
         name = 'ammo',
         displayName = 'Ammo',
         description = 'Ammunition for ranged weapons.',
-        type = 'pickup',
+        type = 'item',
         stackable = true,
         texture = 'projectiles',
         frame = 8,
@@ -91,8 +91,7 @@ ITEM_DEFS = {
         },
         useRate = 0,
         useTime = 0,
-        onUse = function() end,
-        onPickup = function(holder, quantity) holder.ammo = holder.ammo + quantity end
+        onUse = function() end
     },
     ['health'] = {
         name = 'health',

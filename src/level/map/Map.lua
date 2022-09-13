@@ -74,6 +74,15 @@ function Map:isSpawnableSpace(col, row)
     return not (TILE_DEFS[self.tileMap[col][row].name].barrier or (self.featureMap[col][row] ~= nil and FEATURE_DEFS[self.featureMap[col][row].name].isSolid))
 end
 
+-- return a spawnable set of random coordinates on the map
+function Map:getSpawnableCoord()
+    local col, row = math.random(2, self.width - 1), math.random(2, self.height - 1)
+    while not self:isSpawnableSpace(col, row) do -- choose random spaces until the space is spawnable
+        col, row = math.random(2, self.width - 1), math.random(2, self.height - 1)
+    end
+    return col, row -- return the coordinate
+end
+
 -- constant table with references for animations for any animated Tiles
 TILE_ANIMATORS = {
     ['water'] = Animation('water', 'main'),
