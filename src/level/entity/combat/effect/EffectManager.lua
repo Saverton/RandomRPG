@@ -45,3 +45,12 @@ function EffectManager:inflict(effectsToInflict)
         end
     end
 end
+
+-- return a table of save data
+function EffectManager:getSaveData()
+    local saveEffects = {}
+    for i, effect in ipairs(self.effects) do
+        table.insert(saveEffects, effect:getSaveData())
+    end
+    return {effects = saveEffects, immunities = self.immunities, inflictions = self.inflictions} -- get the save data table for the effect manager
+end

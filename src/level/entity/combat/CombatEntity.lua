@@ -20,7 +20,7 @@ function CombatEntity:init(level, definitions, position)
         mana = definitions.currentStats.mana or self.combatStats['maxMana'] -- the current mana, starts at max by default
     } -- combatEntity's current Stats for depletable statistics
     self.effectManager = EffectManager(self, definitions.effectManager or {}) -- status effect manager
-    self.projectileManager = ProjectileManager(self, definitions.projectiles or {}) -- manager for all owned projectiles
+    self.projectileManager = ProjectileManager(self) -- manager for all owned projectiles
     self.invincibilityManager = InvincibilityManager() -- manages invincibility after being hit
     self.pushManager = PushManager(self) -- manages pushes from attacks
     self.statLevel = StatLevel(self, definitions.statLevel) -- manages the statLevel of this combatEntity

@@ -33,7 +33,7 @@ end
 
 -- Initiate the player
 function Level:spawnPlayer(definitions)
-    self.player = Player(definitions or ENTITY_DEFS['player'], self, definitions.pos or {x = 10, y = 10})
+    self.player = Player(definitions or ENTITY_DEFS['player'], self, definitions.position or {x = 10, y = 10})
 end
 
 -- throw a list of flags into the level's tracker that are checked at the end of the update cycle

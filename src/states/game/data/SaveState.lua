@@ -6,59 +6,56 @@
 SaveState = Class{__includes = BaseState}
 
 function SaveState:init(level, loadnext)
-    self.worldName = level.worldName
-    self.levelName = level.levelName
-    self.map = level.map
-    self.player = level.player
-    self.enemySpawner = level.enemySpawner
-    self.pickupManager = level.pickupManager
-    self.npcManager = level.npcManager
-    self.loadnext = loadnext or nil
+    self.worldName = level.worldName -- name of the world save
+    self.levelName = level.levelName -- name of the level being saved
+    self.levelType = string.sub(self.levelName, 0, string.find(self.levelName, "-")) -- type of the level being saved
+    self.map = level.map -- map in the level being saved
+    self.player = level.player -- player in the level being saved
+    self.entityManager = level.entityManager -- entityManager being saved
+    self.pickupManager = level.pickupManager -- pickupManager being saved
+    self.npcManager = level.npcManager -- npcManager being saved
+    self.loadnext = loadnext or nil -- next level to load on completion of save
 end
 
 function SaveState:update()
-    self:saveGame()
-
-    gStateStack:pop()
-
-    if self.loadnext ~= nil then
-        gStateStack:pop()
-        gStateStack:push(LoadState('worlds/' .. self.worldName, self.loadnext))
+    self:saveGame() -- save the game
+    gStateStack:pop() -- drop the save state
+    if self.loadnext ~= nil then -- load a new world if set to load next
+        gStateStack:pop() -- destroy existing world
+        gStateStack:push(LoadState('worlds/' .. self.worldName, self.loadnext)) -- load new world
     end
 end
 
+-- render the save state screen
 function SaveState:render()
     love.graphics.setColor(0, 0, 0.5, 1)
     love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
 end
 
 function SaveState:saveGame()
-    love.filesystem.setIdentity('random_rpg')
-
-    -- save the world's map
+    love.filesystem.setIdentity('random_rpg') -- set the save file destination
     if not love.filesystem.getInfo('worlds/' .. self.worldName .. '/' .. self.levelName) then
-        love.filesystem.createDirectory('worlds/' .. self.worldName .. '/' .. self.levelName)
+        love.filesystem.createDirectory('worlds/' .. self.worldName .. '/' .. self.levelName) -- save the world's map
     end
-
     self:saveMap('worlds/' .. self.worldName .. '/' .. self.levelName)
     self:savePlayer('worlds/' .. self.worldName)
     self:saveEntities('worlds/' .. self.worldName .. '/' .. self.levelName)
-    self:saveNPCS('worlds/' .. self.worldName .. '/' .. self.levelName)
     self:savePickups('worlds/' .. self.worldName .. '/' .. self.levelName)
+    if self.levelType == 'overworld' then
+        self:saveNPCS('worlds/' .. self.worldName .. '/' .. self.levelName)
+    end
 end
 
+-- save a map
 function SaveState:saveMap(path)
     local featureMap = {}
     local tileMap = {}
-    local biomeMap = {}
     local gatewayMap = {}
     local spawnerMap = {}
-    local playerPos = {x = self.player.x, y = self.player.y}
-    local startSpace = self.map.startSpace
-
-    for col = 1, self.map.size, 1 do
+    local start = self.map.start
+    for col = 1, self.map.width, 1 do
         featureMap[col] = {}
-        for row = 1, self.map.size, 1 do
+        for row = 1, self.map.height, 1 do
             local feature = self.map.featureMap[col][row]
             if feature ~= nil then
                 featureMap[col][row] = feature.name
@@ -70,154 +67,117 @@ function SaveState:saveMap(path)
             end
         end
     end
-
     for i, col in ipairs(self.map.tileMap) do
         tileMap[i] = {}
         for j, tile in ipairs(col) do
             tileMap[i][j] = tile.name
         end
     end
-
-    for i, col in ipairs(self.map.biomeMap) do
-        biomeMap[i] = {}
-        for j, biome in ipairs(col) do
-            biomeMap[i][j] = biome.name
-        end
-    end
-
-    love.filesystem.write(path .. '/player_pos.lua', Serialize(playerPos))
     love.filesystem.write(path .. '/world_features.lua', Serialize(featureMap))
     love.filesystem.write(path .. '/world_tiles.lua', Serialize(tileMap))
-    love.filesystem.write(path .. '/world_biomes.lua', Serialize(biomeMap))
     love.filesystem.write(path .. '/world_gateways.lua', Serialize(gatewayMap))
-    love.filesystem.write(path .. '/world_spawners.lua', Serialize(spawnerMap))
-    love.filesystem.write(path .. '/start_space.lua', Serialize(startSpace))
+    if self.levelType == 'overworld' then
+        local playerPosition = {x = self.player.x, y = self.player.y} -- player's position saved if it is overworld
+        local biomeMap = {} -- empty biome map
+        for i, col in ipairs(self.map.biomeMap) do
+            biomeMap[i] = {}
+            for j, biome in ipairs(col) do
+                biomeMap[i][j] = biome.name
+            end
+        end
+        love.filesystem.write(path .. '/world_biomes.lua', Serialize(biomeMap))
+        love.filesystem.write(path .. '/player_position.lua', Serialize(playerPosition))
+    elseif self.levelType == 'dungeon' then
+        love.filesystem.write(path .. '/world_spawners.lua', Serialize(spawnerMap))
+        love.filesystem.write(path .. '/start.lua', Serialize(start))
+    end
 end
 
+-- save a player
 function SaveState:savePlayer(path)
-    local pos = {
-        x = (self.player.x / 16) + 1, 
-        y = (self.player.y / 16) + 1,
-        ox = PLAYER_SPAWN_X_OFFSET,
-        oy = PLAYER_SPAWN_Y_OFFSET
+    local position = {
+        x = (self.player.x / 16) + 1, y = (self.player.y / 16) + 1, xOffset = PLAYER_SPAWN_X_OFFSET, yOffset = PLAYER_SPAWN_Y_OFFSET
     }
-
-    local def = {
+    local definitions = {
         name = self.player.name,
-        animName = self.player.animName,
+        animationName = self.player.animationName,
         width = self.player.width,
         height = self.player.height,
         xOffset = self.player.xOffset,
         yOffset = self.player.yOffset,
         money = self.player.money,
-        ammo = self.player.ammo,
-        hp = self.player.hp,
-        attack = self.player.attack,
-        speed = self.player.speed,
-        defense = self.player.defense,
-        magic = self.player.magic,
+        combatStats = self.player.combatStats,
         boosts = self.player.boosts,
-        currenthp = self.player.currenthp,
-        currentmagic = self.player.currentmagic,
+        currentStats = self.player.currentStats,
+        speed = self.player.speed,
         quests = {},
-        effects = {},
-        immunities = self.player.immunities,
-        inflictions = self.player.inflictions,
+        effectManager = self.player.effectManger:getSaveData(),
         items = {},
         statLevel = self.player.statLevel:getSaveData()
     }
-
-    local effects = {}
     local items = {}
     local quests = {}
-    for i, effect in ipairs(self.player.effects) do
-        table.insert(effects, {name = effect.name, duration = effect.duration})
-    end
-    def.effects = effects
     for i, item in ipairs(self.player.items) do
         table.insert(items, {name = item.name, quantity = item.quantity})
     end
-    def.items = items
+    definitions.items = items
     for i, quest in ipairs(self.player.quests) do
         table.insert(quests, {name = quest.name, flags = quest.flags})
     end
-    def.quests = quests
-
-    local player = {def = def, pos = pos, currentLevel = self.levelName}
-
+    definitions.quests = quests
+    local player = {definitions = definitions, position = position, currentLevel = self.levelName} -- create player table holding all player data
     love.filesystem.write(path .. '/player.lua', Serialize(player))
 end
 
+-- save all entities
 function SaveState:saveEntities(path)
-    local enemySpawner = {
+    local entityManager = {
         entities = {},
-        entityCap = self.enemySpawner.entityCap
+        entityCap = self.entityManager.entityCap
     }
 
     for i, entity in ipairs(self.enemySpawner.entities) do
-        local pos = {
-            x = (entity.x / 16) + 1, 
-            y = (entity.y / 16) + 1,
-            ox = 0,
-            oy = 0
+        local position = {
+            x = (entity.x / 16) + 1, y = (entity.y / 16) + 1, xOffset = 0, yOffset = 0
         }
     
-        local def = {
+        local definitions = {
             name = entity.name,
-            animName = entity.animName,
+            animationName = entity.animationName,
             width = entity.width,
             height = entity.height,
             xOffset = entity.xOffset,
             yOffset = entity.yOffset,
-            hp = entity.hp,
-            attack = entity.attack,
+            combatStats = entity.combatStats,
             speed = entity.speed,
-            defense = entity.defense,
-            magic = entity.magic,
             boosts = entity.boosts,
-            currenthp = entity.currenthp,
-            currentmagic = entity.currentmagic,
-            effects = {},
-            immunities = entity.immunities,
-            inflictions = entity.inflictions,
+            currentStats = entity.currentStats,
+            effectManager = entity.effectManager:getSaveData(),
             items = {},
-            agroDist = entity.agroDist,
+            aggressiveDistance = entity.aggressiveDistance,
             color = entity.color,
             statLevel = entity.statLevel:getSaveData()
         }
-    
-        local effects = {}
         local items = {}
-        for i, effect in ipairs(entity.effects) do
-            table.insert(effects, {name = effect.name, duration = effect.duration})
-        end
-        def.effects = effects
-        for i, item in ipairs(entity.items) do
+        for k, item in ipairs(entity.items) do
             table.insert(items, {name = item.name, quantity = item.quantity})
         end
-        def.items = items
-    
-        local entity = {def = def, pos = pos}
-        table.insert(enemySpawner.entities, entity)
+        definitions.items = items
+        local entityTable = {definitions = definitions, position = position}
+        table.insert(entityManager.entities, entityTable)
     end
-
-    love.filesystem.write(path .. '/entities.lua', Serialize(enemySpawner))
+    love.filesystem.write(path .. '/entities.lua', Serialize(entityManager))
 end
 
 function SaveState:saveNPCS(path)
     local npcs = {}
-
     for i, entity in ipairs(self.npcManager.npcs) do
-        local pos = {
-            x = (entity.x / 16) + 1, 
-            y = (entity.y / 16) + 1,
-            ox = 0,
-            oy = 0
+        local position = {
+            x = (entity.x / 16) + 1, y = (entity.y / 16) + 1, xOffset = 0, yOffset = 0
         }
-    
-        local def = {
+        local definitions = {
             name = entity.name,
-            animName = entity.animName,
+            animationName = entity.animationName,
             npcName = entity.npcName,
             width = entity.width,
             height = entity.height,
@@ -229,48 +189,21 @@ function SaveState:saveNPCS(path)
             quest = {},
             hasQuest = NPC_DEFS[entity.name].hasQuest
         }
-        
         if entity.shop ~= nil then
-            local shop = {
-                startText = entity.shop.startText,
-                endText = entity.shop.endtext, 
-                soldOutText = entity.shop.soldOutText,
-                notEnoughText = entity.shop.notEnoughText,
-                inventory = entity.shop.inventory,
-                sellDiff = entity.shop.sellDiff
-            }
-
-            def.shop = shop
-        elseif def.hasQuest then
-            local quest = {
-                rewards = entity.quest.rewards,
-                quest = {
-                    name = entity.quest.quest.name,
-                    flags = entity.quest.quest.flags
-                },
-                startText = entity.startText,
-                endText = entity.endText,
-                acceptText = entity.acceptText,
-                refuseText = entity.refuseText,
-                ongoingText = entity.ongoingText
-            }
-
-            def.quest = quest
+            definitions.shop = entity.shop:getSaveData()
+        elseif entity.quest ~= nil then
+            definitions.quest = entity.quest:getSaveData()
         end
-    
-        local entity = {def = def, pos = pos}
-        table.insert(npcs, entity)
+        local entityTable = {definitions = definitions, position = position}
+        table.insert(npcs, entityTable)
     end
-
     love.filesystem.write(path .. '/npcs.lua', Serialize(npcs))
 end
 
 function SaveState:savePickups(path)
     local pickups = {}
-
     for i, pickup in ipairs(self.pickupManager.pickups) do
-        table.insert(pickups, pickup)
+        table.insert(pickups, pickup) -- add each pickup to the save file
     end
-
     love.filesystem.write(path .. '/pickups.lua', Serialize(pickups))
 end

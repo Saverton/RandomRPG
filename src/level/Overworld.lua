@@ -9,7 +9,7 @@ Overworld = Class{__includes = Level}
 function Overworld:init(worldName, levelName, definitions)
     Level.init(self, worldName, levelName, definitions) -- initiate a level
     self.map = OverworldMap() -- carries and manages all data for the level's map (biomes, tiles, features)
-    self.player = self:spawnPlayer(definitions) -- initiate, set stateMachine, and spawn a player.
+    self.player = self:spawnPlayer(definitions.player) -- initiate, set stateMachine, and spawn a player.
     self.entityManager = EntityManager(self, definitions.entityManager or {}, 'overworld')
         -- initiate an entityManager with a reference to this class, the entities that are loaded in or an empty set of entities, and the spawning type.
     self.npcManager = NPCManager(self, definitions.npcs or {}) -- initiate an NPC Manager with a list of loaded npcs.

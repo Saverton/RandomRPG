@@ -119,3 +119,8 @@ function Shop:getPlayerInventorySelections(onSelectFunction)
     end
     return selections
 end
+
+-- return a table with save data for a shop
+function Shop:getSaveData()
+    return {text = self.text, sellDifference = self.sellDifference, inventory = self.inventory} -- table of save data
+end

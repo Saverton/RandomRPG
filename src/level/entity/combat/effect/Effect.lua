@@ -35,3 +35,8 @@ function Effect:render(camera)
         love.graphics.draw(gTextures[texture], gFrames[texture][frame], x, y) -- draw the particle
     end
 end
+
+-- return a table with save data on this efffect
+function Effect:getSaveData()
+    return {name = self.name, duration = self.duration}
+end

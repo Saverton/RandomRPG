@@ -21,7 +21,7 @@ function Quest:init(definitions, difficulty, npc)
 end
 
 -- generate or load in the existing quest requirements for this quest
-function Quest:getQuest(definitions, difficulty)
+function Quest:getRequirements(definitions, difficulty)
     if definitions.quest ~= nil then -- load in existing requirements
         self.quest = {name = definitions.quest.name, flags = definitions.quest.flags, questRef = self}
         -- if the player has undertaken this quest already, it needs a reference to this quest being loaded in
@@ -146,6 +146,15 @@ function Quest:getRewardString()
     end
     string = string .. '.'
     return string
+end
+
+-- return a table of necessary save data for a quest
+function Quest:getSaveData()
+    local requirements = {}
+    for i, requirement in ipairs(self.quest.flags) do
+        table.insert(requirements, requirement) -- get all requirements
+    end
+    return {text = self.text, rewards = self.rewards, quest = {name = self.quest.name, flags = requirements}} -- return the quest sava data
 end
 
 -- list of potential flags to mark a quest
