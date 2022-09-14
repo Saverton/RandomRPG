@@ -113,6 +113,7 @@ gTextures = {
     ['selector'] = love.graphics.newImage('graphics/gui/selector.png'),
     ['skeleton'] = love.graphics.newImage('graphics/entities/enemies/skeleton.png'),
     ['goblin'] = love.graphics.newImage('graphics/entities/enemies/goblin.png'),
+    ['wizard'] = love.graphics.newImage('graphics/entities/enemies/wizard.png'),
     ['projectiles'] = love.graphics.newImage('graphics/entities/projectiles.png'),
     ['player_death'] = love.graphics.newImage('graphics/entities/player_death.png')
 }
@@ -121,13 +122,14 @@ gFrames = {
     ['player'] = GenerateQuads(gTextures['player'], 16, 16),
     ['tiles'] = GenerateQuads(gTextures['tiles'], TILE_SIZE, TILE_SIZE),
     ['features'] = GenerateQuads(gTextures['features'], FEATURE_SIZE, FEATURE_SIZE),
-    ['goblin'] = GenerateQuads(gTextures['goblin'], 16, 16),
     ['effects'] = GenerateQuads(gTextures['effects'], 8, 8),
     ['items'] = GenerateQuads(gTextures['items'], 16, 16),
     ['edges'] = GenerateQuads(gTextures['edges'], 16, 16),
     ['npc'] = GenerateQuads(gTextures['npc'], 16, 16),
     ['selector'] = GenerateQuads(gTextures['selector'], 16, 16),
     ['skeleton'] = GenerateQuads(gTextures['skeleton'], 16, 16),
+    ['goblin'] = GenerateQuads(gTextures['goblin'], 16, 16),
+    ['wizard'] = GenerateQuads(gTextures['wizard'], 16, 16),
     ['projectiles'] = GenerateQuads(gTextures['projectiles'], 16, 16),
     ['player_death'] = GenerateQuads(gTextures['player_death'], 16, 16)
 }

@@ -94,3 +94,8 @@ function Enemy:dropItems()
     end
     self.level.pickupManager:spawnPickups(itemsToDrop) -- create pickups with each of the dropped items
 end
+
+-- update all progress bars
+function Enemy:updateBars()
+    self.hpBar:updateRatio(self.currentStats.hp / self:getStat('maxHp')) -- update hp bar
+end

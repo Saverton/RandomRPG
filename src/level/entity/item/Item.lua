@@ -31,7 +31,7 @@ function Item:use()
     local item = ITEM_DEFS[self.name] -- shortened reference to the item's definitions table
     -- ensure that any ammo or magic requirements are met and that the use rate is 0
     if self.useRate == 0 and not (item.type == 'ranged' and not self.holder:useAmmo(item.cost)) and 
-        not (item.type == 'magic' and not self.holder:useMagic(item.cost)) then
+        not (item.type == 'magic' and not self.holder:useMana(item.cost)) then
         gSounds['items'][ITEM_DEFS[self.name].useSound or 'bow_shot']:play() -- play the item's use sound
         item.onUse(self, self.holder) -- execute the items onUse behavior
         self.useRate = item.useRate -- set the item's cooldown timer to the useRate

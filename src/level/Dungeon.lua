@@ -8,7 +8,7 @@ Dungeon = Class{__includes = Level}
 
 function Dungeon:init(worldName, levelName, definitions)
     Level.init(self, worldName, levelName, definitions) -- initiate a level
-    self.map = definitions.map or DungeonGenerator.generateDungeon(DUNGEON_DEFS['dungeon'], math.random(3, 5)) -- carries and manages all data for the level's map (tiles, features)
+    self.map = definitions.map or DungeonGenerator.generateDungeon(DUNGEON_DEFS['dungeon'], math.random(3, 3)) -- carries and manages all data for the level's map (tiles, features)
     self:spawnPlayer(definitions.player or {}) -- initiate, set stateMachine, and spawn in the player
     self.camera = DungeonCamera(self.player, self) -- create a dungeon camera with a reference to the player as its target and this level.
     self.entityManager = EntityManager(self, definitions.entityManager or {}, 'dungeon') 

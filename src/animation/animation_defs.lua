@@ -182,6 +182,63 @@ ANIMATION_DEFS = {
             xScale = -1
         }
     },
+    ['wizard'] = {
+        ['idle-right'] = {
+            texture = 'wizard',
+            frames = {1}
+        },
+        ['idle-down'] = {
+            texture = 'wizard',
+            frames = {4}
+        },
+        ['idle-left'] = {
+            texture = 'wizard',
+            frames = {1},
+            xScale = -1
+        },
+        ['idle-up'] = {
+            texture = 'wizard',
+            frames = {7}
+        },
+        ['walk-right'] = {
+            texture = 'wizard',
+            frames = {1, 2, 1, 3},
+            interval = DEFAULT_ANIMATION_SPEED
+        },
+        ['walk-down'] = {
+            texture = 'wizard',
+            frames = {4, 5, 4, 6},
+            interval = DEFAULT_ANIMATION_SPEED
+        },
+        ['walk-left'] = {
+            texture = 'wizard',
+            frames = {1, 2, 1, 3},
+            interval = DEFAULT_ANIMATION_SPEED,
+            xScale = -1
+        },
+        ['walk-up'] = {
+            texture = 'wizard',
+            frames = {7, 8, 7, 9},
+            interval = DEFAULT_ANIMATION_SPEED
+        },
+        ['interact-down'] = {
+            texture = 'wizard',
+            frames = {11}
+        },
+        ['interact-right'] = {
+            texture = 'wizard',
+            frames = {10}
+        },
+        ['interact-up'] = {
+            texture = 'wizard',
+            frames = {12}
+        },
+        ['interact-left'] = {
+            texture = 'wizard',
+            frames = {10},
+            xScale = -1
+        }
+    },
     ['npc'] = {
         ['idle-down'] = {
             texture = 'npc',

@@ -91,7 +91,36 @@ ENTITY_DEFS = {
         push = 8,
         items = {
             {name = 'sword', quantity = 1}
-        }
+        },
+        attackDistance = 2,
+    },
+    ['wizard'] = {
+        name = 'wizard',
+        displayName = 'Wizard',
+        width = 12,
+        height = 12,
+        xOffset = -2,
+        yOffset = -4,
+        combatStats = {
+            ['maxHp'] = 10,
+            ['attack'] = 2,
+            ['defense'] = 1,
+            ['maxMana'] = 3
+        },
+        speed = 16,
+        aggressiveSpeedBoost = 2,
+        aggressiveDistance = 9,
+        exp = 10,
+        manaRegenRate = 1,
+        drops = {{name = 'health', chance = 1, min = 1, max = 1},
+            {name = 'money', chance = 1, min = 5, max = 10},
+            {name = 'health_upgrade', chance = 1, min = 1, max = 1}},
+        deathSound = 'enemy_dies',
+        push = 8,
+        items = {
+            {name = 'fire_tome', quantity = 1}
+        },
+        attackDistance = 5
     }
 }
 
