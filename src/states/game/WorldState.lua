@@ -41,8 +41,3 @@ end
 function WorldState:render()
     self.level:render()
 end
-
--- leave the world, reset timer
-function WorldState:exit()
-    Timer.clear()
-end

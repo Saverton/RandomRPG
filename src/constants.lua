@@ -16,6 +16,7 @@ FEATURE_SIZE = 16
 MAP_OFFSET_X = 0
 MAP_OFFSET_Y = 0
 DEFAULT_MAP_SIZE = 100
+OVERWORLD_TYPES = {'classic', 'wasteland', 'winter_wonderland', 'winter_wasteland'}
 
 -- dungeon generation
 ROOM_WIDTH = 24
@@ -116,8 +117,8 @@ CHEST_ITEMS = {'sword', 'battle_axe', 'bow', 'fire_tome', 'ice_tome'}
 
 -- npcs
 DESPAWN_TIMER = 2
-NPC_CAP = 6
-NPC_TYPES = {'quest'}
+NPC_CAP = 3
+NPC_TYPES = {'quest', 'shop', 'tips'}
 NPC_NAMES = {'Dorfinkle', 'Adronian', 'Quandale', 'Steve', 'Terrence', 'Dumbledalf', 'Frippin', 'Zink'}
 QUEST_LIMIT = 2
 TIPS = {'Have you found six weapons?', 'Tomes inflict status effects.', 'A Battle Axe is not just a weapon...',

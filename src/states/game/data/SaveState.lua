@@ -21,8 +21,6 @@ function SaveState:update()
     self:saveGame() -- save the game
     gStateStack:pop() -- drop the save state
     if self.loadnext ~= nil then -- load a new world if set to load next
-        gStateStack:pop() -- destroy existing world
-        gStateStack:pop() -- destroy the intro
         gStateStack:push(LoadState('worlds/' .. self.worldName, self.loadnext)) -- load new world
     end
 end
@@ -89,6 +87,7 @@ function SaveState:saveMap(path)
         love.filesystem.write(path .. '/world_biomes.lua', Serialize(biomeMap))
         love.filesystem.write(path .. '/player_position.lua', Serialize(playerPosition))
     elseif self.levelType == 'dungeon' then
+        start.color = self.map.color
         love.filesystem.write(path .. '/world_spawners.lua', Serialize(spawnerMap))
         love.filesystem.write(path .. '/start.lua', Serialize(start))
     end

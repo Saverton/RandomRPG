@@ -19,7 +19,6 @@ function DivergePointState:init(point, color, time)
         [self.rectangles['right']] = {x = VIRTUAL_WIDTH},
         [self.rectangles['bottom']] = {y = VIRTUAL_HEIGHT}
     }):finish(function() -- after finished, pop this game state
-        Timer:clear()
         gStateStack:pop()
     end)
 end

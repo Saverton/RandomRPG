@@ -19,7 +19,7 @@ function ConvergePointState:init(point, color, time, onFinish)
         [self.rectangles['right']] = {x = point.x},
         [self.rectangles['bottom']] = {y = point.y}
     }):finish(function() -- on finish, close this state and execute the onFinish function
-        gStateStack:pop()
+        gStateStack:pop() -- close this state
         onFinish()
     end)
 end

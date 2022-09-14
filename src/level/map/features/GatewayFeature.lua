@@ -18,5 +18,8 @@ function GatewayFeature:onEnter(level)
     gSounds['world']['enter_gateway']:play()
     gStateStack:push(ConvergePointState({x = level.player.x + level.player.width / 2 - level.camera.x, 
         y = level.player.y + level.player.height / 2 - level.camera.y},
-        {0, 0, 0, 1}, 1.5, function() gStateStack:push(SaveState(level, self.destination)) end))
+        {0, 0, 0, 1}, 1.5, function() 
+            gStateStack:pop() -- remove existing world
+            gStateStack:push(SaveState(level, self.destination)) 
+        end))
 end
