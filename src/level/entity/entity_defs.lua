@@ -36,10 +36,12 @@ ENTITY_DEFS = {
         push = 16,
         deathSound = 'player_dies',
         statLevel = {
-            hpbonus = {chance = 0.5, bonus = 1},
-            atkbonus = {chance = 0.5, bonus = 1},
-            defbonus = {chance = 0.25, bonus = 1},
-            magicbonus = {chance = 0.25, bonus = 1}
+            bonuses = {
+                ['maxHp'] = 1,
+                ['attack'] = 1,
+                ['defense'] = 1,
+                ['maxMana'] = 1
+            }
         }
     },
     ['goblin'] = {

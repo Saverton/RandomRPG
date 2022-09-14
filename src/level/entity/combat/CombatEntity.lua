@@ -69,6 +69,9 @@ function CombatEntity:hurt(amount)
             defense = math.max(amount - 1, 0) -- ensure that defense never reduces damage to 0
         end
         self.currentStats.hp = math.max(0, self.currentStats.hp - (amount - defense))
+        if self.currentStats.hp <= 0 then
+            self:dies() -- call death function
+        end
         self.invincibilityManager:goInvincible()
         self.hpBar:updateRatio(self.currentStats.hp / self:getStat('maxHp')) -- update the health bar
         return true -- return that the entity is hurt

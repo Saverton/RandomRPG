@@ -11,9 +11,7 @@ function Item:init(name, holder, quantity)
     self.holder = holder -- reference to the holder
     self.useRate = ITEM_DEFS[self.name].useRate -- timer that tracks when the item is in cooldown
     self.quantity = quantity or 1 -- the quantity of this item
-    if ITEM_DEFS[self.name].type == 'pickup' then -- if the item is a pickup, call its onPickup function
-        ITEM_DEFS[self.name].onPickup(self.holder, quantity)
-    end
+    self:checkForPickup() -- check if this item is just a pickup
 end
 
 -- update item useRate timer
@@ -34,7 +32,7 @@ function Item:use()
     -- ensure that any ammo or magic requirements are met and that the use rate is 0
     if self.useRate == 0 and not (item.type == 'ranged' and not self.holder:useAmmo(item.cost)) and 
         not (item.type == 'magic' and not self.holder:useMagic(item.cost)) then
-        gSounds['items'][ITEM_DEFS[self.name].useSound or 'hit']:play() -- play the item's use sound
+        gSounds['items'][ITEM_DEFS[self.name].useSound or 'bow_shot']:play() -- play the item's use sound
         item.onUse(self, self.holder) -- execute the items onUse behavior
         self.useRate = item.useRate -- set the item's cooldown timer to the useRate
         successful = true -- item was used successfully
@@ -49,4 +47,11 @@ function Item:getQuantityText()
         text = ' ... (' .. tostring(self.quantity) .. ')'
     end
     return text
+end
+
+-- if this item is a pickup, just call its onPickup function
+function Item:checkForPickup()
+    if ITEM_DEFS[self.name].type == 'pickup' then
+        ITEM_DEFS[self.name].onPickup(self.holder, self.quantity)
+    end
 end

@@ -25,7 +25,7 @@ function StatLevel:expGain(amount)
         self:playerLevelUp() -- if this is enough to level up, call the player level up function
         return true
     end
-    self.entity.expbar:updateRatio(self:getExpRatio())
+    self.entity.expBar:updateRatio(self:getExpRatio())
     return false
 end
 
@@ -45,11 +45,24 @@ end
 -- level up a player, allows choice of stat upgrades
 function StatLevel:playerLevelUp()
     gSounds['gui']['level_up']:play() -- play level up sound
+    self.level = self.level + 1
     local selections = {
-        Selection('HP + ' .. self.bonuses['hp'], self:upgradeStat('maxHp')),
-        Selection('Attack + ' .. self.bonuses['attack'], self:upgradeStat('attack')),
-        Selection('Defense + ' .. self.bonuses['defense'], self:upgradeStat('defense')),
-        Selection('Mana + ' .. self.bonuses['maxMana'], self:upgradeStat('maxMana')),
+        Selection('HP + ' .. self.bonuses['maxHp'], function() 
+            self:upgradeStat('maxHp') 
+            gStateStack:pop()
+        end),
+        Selection('Attack + ' .. self.bonuses['attack'], function() 
+            self:upgradeStat('attack')
+            gStateStack:pop()
+        end),
+        Selection('Defense + ' .. self.bonuses['defense'], function() 
+            self:upgradeStat('defense') 
+            gStateStack:pop()
+        end),
+        Selection('Mana + ' .. self.bonuses['maxMana'], function() 
+            self:upgradeStat('maxMana') 
+            gStateStack:pop()
+        end),
     }
     gStateStack:push(MenuState(MENU_DEFS['level_up'], {selections = selections}))
     self.entity.expBar:updateRatio(self:getExpRatio()) -- update exp bar
@@ -63,6 +76,7 @@ end
 -- upgrade a specific stat
 function StatLevel:upgradeStat(statName)
     self.entity.combatStats[statName] = self.entity.combatStats[statName] + self.bonuses[statName]
+    self.entity:updateBars() -- update stat bars
 end
 
 -- get the ratio of current exp to the exp needed for the next level

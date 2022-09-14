@@ -14,7 +14,10 @@ end
 function PickupManager:update(dt)
     for i, pickup in pairs(self.pickups) do
         if GetDistance(self.level.player, pickup) < PICKUP_RANGE then
-            self.level.player:giveItem(Item(pickup.name, self.level.player, pickup.quantity))
+            local item = Item(pickup.name, self.level.player, pickup.quantity) -- item made from pickup
+            if ITEM_DEFS[item.name].type ~= 'pickup' then -- add to player inventory if not a pickup
+                self.level.player:giveItem(item)
+            end
             gSounds['items'][ITEM_DEFS[pickup.name].pickupSound or 'pickup_item']:play() -- play pickup sound
             table.remove(self.pickups, i) -- remove this pickup
         end

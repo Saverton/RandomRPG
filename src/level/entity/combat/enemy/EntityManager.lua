@@ -86,7 +86,7 @@ end
 
 -- spawn an enemy given an enemy name at a coordinate col, row
 function EntityManager:spawnEnemy(enemyName, col, row)
-    local position = {x = (col - 1), y = (row - 1), xOffset = 0, yOffset = 0} -- spawning position
+    local position = {x = col, y = row, xOffset = 0, yOffset = 0} -- spawning position
     table.insert(self.entities, Enemy(self.level, ENTITY_DEFS[enemyName], position)) -- spawn the enemy
 end
 

@@ -124,7 +124,4 @@ TIPS = {'Have you found six weapons?', 'Tomes inflict status effects.', 'A Battl
     'Don\'t get too close to skeletons.', 'Enemies will get stronger too!', 'Have you found the castle?'}
 
 -- leveling
-DEFAULT_BONUS = {
-    bonus = 1, 
-    chance = 1
-}
+DEFAULT_BONUS = 1

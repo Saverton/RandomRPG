@@ -105,7 +105,7 @@ FEATURE_DEFS = {
                 feature:onEnter(entity.level) -- if the entity that collides with this is a player, call the gateway function
             end
         end,
-        isSolid = true
+        isSolid = false
     },
     ['exit'] = {
         id = 6,

@@ -294,8 +294,7 @@ MENU_DEFS = {
         width = 80,
         height = MENU_HEIGHT / 2 - 5,
         title = 'Level Up',
-        subtitle = '',
-        selections = {},
-        selectors = {}
+        subtitle = 'choose stat to upgrade:',
+        selections = {}
     }
 }

@@ -21,7 +21,7 @@ function GameOverState:render()
     love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT) -- fill background rectangle
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setFont(gFonts['large'])
-    PrintFWithShadow('Game Over', love.math.newTransform(0, (VIRTUAL_HEIGHT / 2) - 20), VIRTUAL_WIDTH, 'center') -- print game over text
+    PrintFWithShadow('Game Over', 0, (VIRTUAL_HEIGHT / 2) - 20, VIRTUAL_WIDTH, 'center') -- print game over text
     love.graphics.setFont(gFonts['medium'])
-    PrintFWithShadow('press \'enter\'', love.math.newTransform(0, (VIRTUAL_HEIGHT / 2) + 30), VIRTUAL_WIDTH, 'center') -- print directions text
+    PrintFWithShadow('press \'enter\'', 0, (VIRTUAL_HEIGHT / 2) + 30, VIRTUAL_WIDTH, 'center') -- print directions text
 end

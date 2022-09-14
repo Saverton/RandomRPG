@@ -46,9 +46,7 @@ function Player:initiateGuis()
     self.hpBar = ProgressBar({x = PLAYER_BAR_X, y = PLAYER_HP_BAR_Y, width = PLAYER_BAR_WIDTH, height = PLAYER_HP_BAR_HEIGHT}, {1, 0, 0, 1}) -- health bar
     self.manaBar = ProgressBar({x = PLAYER_BAR_X, y = PLAYER_MANA_BAR_Y, width = PLAYER_BAR_WIDTH, height = PLAYER_BAR_HEIGHT}, {0, 0, 1, 1}) -- mana bar
     self.expBar = ProgressBar({x = PLAYER_BAR_X, y = PLAYER_EXP_BAR_Y, width = PLAYER_BAR_WIDTH, height = PLAYER_BAR_HEIGHT}, {0, 1, 0, 1}) -- exp bar
-    self.hpBar:updateRatio(self.currentStats.hp / self:getStat('maxHp'))
-    self.manaBar:updateRatio(self.currentStats.mana / self:getStat('maxMana'))
-    self.expBar:updateRatio(self.statLevel:getExpRatio())
+    self:updateBars() -- update stat bars
 end
 
 -- return the new heldItem after the scroll updates
@@ -224,10 +222,17 @@ function Player:sell(index, shop, menu)
     end
 end
 
+-- update all three stat bars
+function Player:updateBars()
+    self.hpBar:updateRatio(self.currentStats.hp / self:getStat('maxHp'))
+    self.manaBar:updateRatio(self.currentStats.mana / self:getStat('maxMana'))
+    self.expBar:updateRatio(self.statLevel:getExpRatio())
+end
+
 -- called when player dies, calls up to combatEntity
 function Player:dies()
     CombatEntity.dies(self) -- call combat entity function
-    self.renderPlayer = false -- stop rendering player
+    self.level.deadPlayer = true -- player is now flagged dead
     gStateStack:push(DeathAnimationState(self, self.x - self.level.camera.x + self.xOffset, self.y - self.level.camera.y + self.yOffset))
         -- play the player's death animation
 end
