@@ -170,6 +170,6 @@ gSounds = {
     },
     ['music'] = {
         ['dungeon_theme'] = love.audio.newSource('sounds/dungeon.mp3', 'stream'),
-        --['fortress'] = love.audio.newSource('sounds/fortress.mid', 'stream')
+        ['fortress'] = love.audio.newSource('sounds/fortress.mp3', 'stream')
     }
 }
