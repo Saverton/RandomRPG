@@ -130,17 +130,17 @@ MENU_DEFS = {
         selections = {
             Selection('Info', function(menuState) 
                 local menu = menuState.menu
-                local playerQuest = menuState.player.quests[GetIndex(menuState.player.quests, menu.selections[menu.selectors[menu.selector].position].name)]
+                local questManager = menuState.player.questManager
+                local playerQuest = questManager.quests[GetIndex(questManager.quests, menu.selections[menu.selectors[menu.selector].position].name)]
                 local quest = playerQuest.questRef
-                gStateStack:push(DialogueState('Progress: ' .. menuState.player:stringQuestProgress(playerQuest)))
-                gStateStack:push(DialogueState(quest.quest.name .. ': ' .. quest:stringQuest() .. '\nRewards: ' .. quest:stringReward())) 
+                gStateStack:push(DialogueState(quest.quest.name .. ' Progress: ' .. questManager:getProgressString(playerQuest) .. '\nRewards: ' .. quest:getRewardString())) 
             end),
             Selection('Abandon', function(menuState) 
                 gStateStack:push(ConfirmState(MENU_DEFS['confirm'], {
                     onConfirm = function() 
                         local menu = menuState.menu
-                        local quest = menuState.player.quests[GetIndex(menuState.player.quests, menu.selections[menu.selectors[menu.selector].position].name)]
-                        table.remove(menuState.player.quests, GetIndex(menuState.player.quests, quest.name))
+                        local quest = menuState.player.questManager.quests[GetIndex(menuState.player.questManager.quests, menu.selections[menu.selectors[menu.selector].position].name)]
+                        table.remove(menuState.player.questManager.quests, GetIndex(menuState.player.questManager.quests, quest.name))
                         table.remove(menu.selections, menu.selectors[menu.selector].position)
                         gStateStack:pop()
                     end

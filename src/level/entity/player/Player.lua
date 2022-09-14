@@ -237,7 +237,9 @@ end
 -- called when player dies, calls up to combatEntity
 function Player:dies()
     CombatEntity.dies(self) -- call combat entity function
+    if not self.dead then
+        gStateStack:push(DeathAnimationState(self, self.x - self.level.camera.x + self.xOffset, self.y - self.level.camera.y + self.yOffset))
+            -- play the player's death animations
+    end
     self.dead = true -- player is now flagged dead
-    gStateStack:push(DeathAnimationState(self, self.x - self.level.camera.x + self.xOffset, self.y - self.level.camera.y + self.yOffset))
-        -- play the player's death animation
 end

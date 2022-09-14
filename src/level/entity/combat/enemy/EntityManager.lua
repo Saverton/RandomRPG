@@ -7,7 +7,6 @@ EntityManager = Class{}
 
 function EntityManager:init(level, definitions, type)
     self.level = level -- reference to the level that owns this EntityManager
-    print_r(definitions.entities)
     self:getEntities(definitions.entities or {})
     self.type = type -- the type used to determine spawning
     self.entityCap = definitions.entityCap or DEFAULT_ENTITY_CAP -- the maximum amount of entities that this entity manager can hold, default = 5.

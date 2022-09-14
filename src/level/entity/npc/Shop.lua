@@ -116,7 +116,8 @@ function Shop:getPlayerInventorySelections(onSelectFunction)
     local selections = self.player:getInventorySelections(onSelectFunction) -- get a list of selections for item inventory
     for i, selection in ipairs(selections) do -- add a price onto each selection
         if i ~= #selections then
-            selection.displayText = selection.displayText .. ' . . . ($' .. tostring(math.max(0, ITEM_DEFS[selection.name].price.sell + self.sellDifference)) .. ')'
+            print_r(selection)
+            selection.displayName = selection.displayName .. ' . . . ($' .. tostring(math.max(0, ITEM_DEFS[selection.name].price.sell + self.sellDifference)) .. ')'
         end
     end
     return selections

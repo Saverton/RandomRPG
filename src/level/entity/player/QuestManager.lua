@@ -43,7 +43,7 @@ function QuestManager:getProgressString(quest)
         if i > 1 then -- add a comma separator if this is not the first item
             string = string .. ', '
         end
-        string = string .. flag.flag .. ' (' .. flag.counter .. ' remaining)' -- add each flag and its counter to the string
+        string = string .. flag.name .. ' (' .. flag.counter .. ' remaining)' -- add each flag and its counter to the string
     end
     return string .. '.'
 end

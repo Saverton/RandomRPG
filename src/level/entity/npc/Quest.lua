@@ -38,7 +38,7 @@ end
 
 -- check for the status of the quest with the player
 function Quest:check(player)
-    if self.npc.timesInteractedWith == 0 then
+    if not ContainsName(player.questManager.quests, self.quest.name) then
         self:introduce(player) -- introduce player to quest
     elseif self:checkCompletion(player) then
         self:reward(player) -- player has completed, reward and set as complete
@@ -77,7 +77,7 @@ function Quest:reward(player)
     for i, reward in pairs(self.rewards) do -- give each of the rewards to the player.
         player:giveItem(Item(reward.name, player, reward.quantity))
     end
-    table.remove(player.quests, GetIndex(player.quests, self.quest.name)) -- remove the quest from the player's quest list.
+    table.remove(player.questManager.quests, GetIndex(player.questManager.quests, self.quest.name)) -- remove the quest from the player's quest list.
     self.completed = true -- set the quest as complete
     gStateStack:push(DialogueState(self.text.finish .. self:getRewardString(), self.npc.animator.texture, 1)) -- show finishtext
 end

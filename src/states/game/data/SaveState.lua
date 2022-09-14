@@ -22,6 +22,7 @@ function SaveState:update()
     gStateStack:pop() -- drop the save state
     if self.loadnext ~= nil then -- load a new world if set to load next
         gStateStack:pop() -- destroy existing world
+        gStateStack:pop() -- destroy the intro
         gStateStack:push(LoadState('worlds/' .. self.worldName, self.loadnext)) -- load new world
     end
 end
