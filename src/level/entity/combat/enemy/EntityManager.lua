@@ -7,11 +7,14 @@ EntityManager = Class{}
 
 function EntityManager:init(level, definitions, type)
     self.level = level -- reference to the level that owns this EntityManager
+    print_r(definitions.entities)
     self:getEntities(definitions.entities or {})
     self.type = type -- the type used to determine spawning
     self.entityCap = definitions.entityCap or DEFAULT_ENTITY_CAP -- the maximum amount of entities that this entity manager can hold, default = 5.
     self:spawn() -- try to spawn enemies
-    Timer.every(10, function() self:spawn() end) -- try to spawn enemies every 10 seconds
+    if type == 'overworld' then
+        Timer.every(10, function() self:spawn() end) -- try to spawn enemies every 10 seconds
+    end
 end
 
 -- update each of the entityManager's attributes
@@ -37,7 +40,7 @@ function EntityManager:getEntities(entities)
     self.entities = {} -- create an empty entities table
     -- populate every predefined entity into the entities table
     for i, entity in ipairs(entities) do
-        local thisEntity = Enemy(entity.definitions, self.level, entity.position)
+        local thisEntity = Enemy(self.level, entity.definitions, entity.position)
         table.insert(self.entities, thisEntity)
     end
 end
@@ -95,8 +98,8 @@ function EntityManager:spawnInDungeon()
     local map = self.level.map -- reference to the level's map
     local camera = self.level.camera -- reference to the level's camera, which defines the bounds for spawning enemies
     -- parse through each feature in the camera's bounds.
-    for col = math.floor(camera.cambox.x / TILE_SIZE), math.floor((camera.cambox.x + camera.cambox.width) / TILE_SIZE), 1 do
-        for row = math.floor(camera.cambox.y / TILE_SIZE), math.floor((camera.cambox.y + camera.cambox.height) / TILE_SIZE), 1 do
+    for col = math.max(1, math.floor(camera.cambox.x / TILE_SIZE)), math.min(map.width, math.floor((camera.cambox.x + camera.cambox.width) / TILE_SIZE)), 1 do
+        for row = math.max(1, math.floor(camera.cambox.y / TILE_SIZE)), math.min(map.height, math.floor((camera.cambox.y + camera.cambox.height) / TILE_SIZE)), 1 do
             local feature = map.featureMap[col][row] -- the feature at this index
             if (feature ~= nil) and (FEATURE_DEFS[feature.name].spawner) and (feature.active) then -- feature must be an active spawner
                 self:spawnEnemy(feature.enemy, col, row) -- spawn the spawner's enemy

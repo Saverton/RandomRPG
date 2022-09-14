@@ -13,7 +13,7 @@ function StatLevel:init(entity, definitions)
         ['maxHp'] = DEFAULT_BONUS,
         ['attack'] = DEFAULT_BONUS,
         ['defense'] = DEFAULT_BONUS,
-        ['maxMana'] = DEFAULT_BONUS
+        ['maxMana'] = 0
     } -- potential bonuses for each level up
     self.exp = (definitions or {}).exp or math.pow(3, self.level - 1) -- starting exp
 end
@@ -65,7 +65,7 @@ function StatLevel:playerLevelUp()
         end),
     }
     gStateStack:push(MenuState(MENU_DEFS['level_up'], {selections = selections}))
-    self.entity.expBar:updateRatio(self:getExpRatio()) -- update exp bar
+    self.entity:updateBars() -- update stat bars
 end
 
 -- level up an enemy to a certain level, used when initiating an enemy to a level higher than 1
@@ -76,7 +76,6 @@ end
 -- upgrade a specific stat
 function StatLevel:upgradeStat(statName)
     self.entity.combatStats[statName] = self.entity.combatStats[statName] + self.bonuses[statName]
-    self.entity:updateBars() -- update stat bars
 end
 
 -- get the ratio of current exp to the exp needed for the next level

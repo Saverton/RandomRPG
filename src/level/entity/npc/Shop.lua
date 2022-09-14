@@ -8,11 +8,11 @@ Shop = Class{}
 
 function Shop:init(definitions, npc)
     self.npc = npc -- reference to shop owner
-    self.text = {
-        start = definitions.text.start or 'Hello, welcome to my shop.', -- when player opens shop
-        finish = definitions.text.finish or 'Thank you for shopping, goodbye.', -- when player leaves shop
-        soldOut = definitions.text.soldOut or 'Sorry, we\'re out of that.', -- when shop is sold out of an item
-        notEnough = definitions.text.notEnough or 'Sorry, you can\'t afford that.' -- when player doesn't have enough money
+    self.text = definitions.text or {
+        start = 'Hello, welcome to my shop.', -- when player opens shop
+        finish = 'Thank you for shopping, goodbye.', -- when player leaves shop
+        soldOut = 'Sorry, we\'re out of that.', -- when shop is sold out of an item
+        notEnough = 'Sorry, you can\'t afford that.' -- when player doesn't have enough money
     }
     self:generateInventory(definitions) -- get the shop's inventory
     self.sellDifference = definitions.sellDifference or math.random(-2, 2) -- price differing from market sale price that applies to selling prices from player
@@ -50,7 +50,7 @@ end
 -- called when interacted with, sets player reference to the opening entity, pushes the start dialogue and the main shop menu
 function Shop:open(player)
     self.player = player -- set player reference to interacting entity
-    gStateStack:push(DialogueState(self.startText, self.npc.animator.texture, 1, function() gStateStack:push(
+    gStateStack:push(DialogueState(self.text.start, self.npc.animator.texture, 1, function() gStateStack:push(
         MenuState(MENU_DEFS['shop_main'], {parent = self})) end))
 end
 
@@ -115,7 +115,9 @@ end
 function Shop:getPlayerInventorySelections(onSelectFunction)
     local selections = self.player:getInventorySelections(onSelectFunction) -- get a list of selections for item inventory
     for i, selection in ipairs(selections) do -- add a price onto each selection
-        selection.displayText = selection.displayText .. ' . . . ($' .. tostring(math.max(0, ITEM_DEFS[selection.name].price.sell + self.sellDifference)) .. ')'
+        if i ~= #selections then
+            selection.displayText = selection.displayText .. ' . . . ($' .. tostring(math.max(0, ITEM_DEFS[selection.name].price.sell + self.sellDifference)) .. ')'
+        end
     end
     return selections
 end

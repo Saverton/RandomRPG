@@ -147,7 +147,7 @@ end
 -- return the directional velocity for the x and y axis of this entity (dx = delta x, dy = delta y)
 function Entity:getDirectionalVelocities()
     local dx, dy = 0, 0 -- set base velocity as 0
-    if self.pushManager.isPushed then
+    if self.pushManager ~= nil and self.pushManager.isPushed then
        dx, dy = self.pushManager.pushdx, self.pushManager.pushdy -- add in push velocity
     end
     dx, dy = dx + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].x * self:getSpeed()), 

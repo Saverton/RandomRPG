@@ -98,7 +98,7 @@ ENTITY_DEFS = {
 NPC_DEFS = {
     ['tips'] = {
         name = 'tips',
-        animName = 'npc',
+        animationName = 'npc',
         displayName = 'Advisor',
         width = 16,
         height = 16,
@@ -115,7 +115,7 @@ NPC_DEFS = {
     },
     ['shop'] = {
         name = 'shop',
-        animName = 'npc',
+        animationName = 'npc',
         displayName = 'Shopkeeper',
         width = 16,
         height = 16,
@@ -129,13 +129,13 @@ NPC_DEFS = {
             npc.shop:open(player)
         end,
         isDespawnable = function(npc)
-            return (npc.shop:getNumItems() == 0 or npc.timesInteractedWith >= 5)
+            return (npc.shop:getNumberOfItems() == 0 or npc.timesInteractedWith >= 5)
         end,
         speed = 16,
     },
     ['quest'] = {
         name = 'quest',
-        animName = 'npc',
+        animationName = 'npc',
         displayName = 'Questgiver',
         width = 16,
         height = 16,

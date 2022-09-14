@@ -52,7 +52,7 @@ function Quest:introduce(player)
     gStateStack:push(DialogueState(self.text.start .. self:getRequirementString(), self.npc.animator.texture, 1, function()
         gStateStack:push(ConfirmState(MENU_DEFS['quest_confirm'], { -- ask to confirm acceptance of this quest
             onConfirm = function() 
-                if player:giveQuest(self.quest) then -- give the player the quest, show accept text
+                if player.questManager:giveQuest(self.quest) then -- give the player the quest, show accept text
                     gStateStack:push(DialogueState(self.text.accept, self.npc.animator.texture, 1))
                 else -- player can't take any more quests, auto deny but no despawn
                     gStateStack:push(DialogueState('You can only have ' .. tostring(QUEST_LIMIT) .. ' active quests!', 
@@ -75,7 +75,7 @@ end
 -- reward the player for completing the quest, set as complete, and display finish text
 function Quest:reward(player)
     for i, reward in pairs(self.rewards) do -- give each of the rewards to the player.
-        player:getItem(Item(reward.name, player, reward.quantity))
+        player:giveItem(Item(reward.name, player, reward.quantity))
     end
     table.remove(player.quests, GetIndex(player.quests, self.quest.name)) -- remove the quest from the player's quest list.
     self.completed = true -- set the quest as complete
@@ -129,7 +129,7 @@ function Quest:getRequirementString()
         if i > 1 then
             string = string .. ', ' -- add comma if not first index
         end
-        string = string .. flag.flag .. ' ' .. flag.counter .. ' times' -- ex: kill goblin 3 times
+        string = string .. flag.name .. ' ' .. flag.counter .. ' times' -- ex: kill goblin 3 times
     end
     string = string .. '.'
     return string

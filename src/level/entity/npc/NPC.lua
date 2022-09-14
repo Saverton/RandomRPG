@@ -49,7 +49,7 @@ function NPC:updateDespawn(dt)
         self.despawnTimer = math.max(self.despawnTimer - dt, 0)
     elseif self.despawnTimer == 0 then -- clear from manager if despawn timer is done
         self.manager:clearDespawned()
-    elseif self.isDespawnable() then -- otherwise check if it is despawnable
+    elseif NPC_DEFS[self.name].isDespawnable(self) then -- otherwise check if it is despawnable
         self:despawn()
     end
 end

@@ -120,8 +120,8 @@ NPC_CAP = 3
 NPC_TYPES = {'quest', 'shop', 'tips'}
 NPC_NAMES = {'Dorfinkle', 'Adronian', 'Quandale', 'Steve', 'Terrence', 'Dumbledalf', 'Frippin', 'Zink'}
 QUEST_LIMIT = 2
-TIPS = {'Have you found six weapons?', 'Tomes inflict status effects.', 'A Battle Axe is not just a weapon...', 'We need more bridges...',
-    'Don\'t get too close to skeletons.', 'Enemies will get stronger too!', 'Have you found the castle?'}
+TIPS = {'Have you found six weapons?', 'Tomes inflict status effects.', 'A Battle Axe is not just a weapon...',
+    'Don\'t get too close to skeletons.', 'Enemies will get stronger too!', 'Have you visited a dungeon?'}
 
 -- leveling
 DEFAULT_BONUS = 1

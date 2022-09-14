@@ -20,6 +20,7 @@ function Player:init(level, definitions, position)
         self:giveItem(Item('wooden_sword', self, 1))
     end
     self.isPlayer = true -- simple flag used to check if an entity is the player
+    self.dead = false -- flags player as dead, doesn't render player
 end
 
 -- update the player's components
@@ -36,8 +37,10 @@ end
 
 -- render the player
 function Player:render(camera)
-    CombatEntity.render(self, camera) -- render the entity of the player
-    self:renderGui() -- render gui elements of player display
+    if not self.dead then
+        CombatEntity.render(self, camera) -- render the entity of the player
+        self:renderGui() -- render gui elements of player displays
+    end
 end
 
 -- initiate all gui parts for the player
@@ -146,10 +149,12 @@ end
 
 -- interact with any npcs that collide with the checkbox
 function Player:interactWithNPC(checkBox)
-    for i, npc in pairs(self.level.npcManager.npcs) do -- parse through each npc
-        if npc.despawnTimer == -1 and Collide(npc, checkBox) then -- if the npc is in the checkBox and the npc is not departing, interact
-            npc:interact(self)
-            return true -- npc was interacted with
+    if self.level.npcManager ~= nil then
+        for i, npc in pairs(self.level.npcManager.npcs) do -- parse through each npc
+            if npc.despawnTimer == -1 and Collide(npc, checkBox) then -- if the npc is in the checkBox and the npc is not departing, interact
+                npc:interact(self)
+                return true -- npc was interacted with
+            end
         end
     end
     return false -- npc was not interacted with
@@ -209,10 +214,10 @@ end
 -- actually make the selling transaction with a shop
 function Player:sell(index, shop, menu)
     local item = self.items[index] -- reference to item
-    self.money = self.money + math.max(item.price.sell + shop.sellDiff, 0) -- give money for sell price
+    self.money = self.money + math.max(ITEM_DEFS[item.name].price.sell + shop.sellDifference, 0) -- give money for sell price
     item.quantity = item.quantity - 1 -- remove item
+    self:updateInventory() -- update inventory to remove 0 quantity items
     if item.quantity == 0 then
-        self:updateInventory() -- update inventory to remove 0 quantity items
         gStateStack:pop() -- remove shop sell item menu
         menu.selections = shop:getPlayerInventorySelections( -- set new selection list for item sell list.
             function(subMenuState, otherMenu) 
@@ -232,7 +237,7 @@ end
 -- called when player dies, calls up to combatEntity
 function Player:dies()
     CombatEntity.dies(self) -- call combat entity function
-    self.level.deadPlayer = true -- player is now flagged dead
+    self.dead = true -- player is now flagged dead
     gStateStack:push(DeathAnimationState(self, self.x - self.level.camera.x + self.xOffset, self.y - self.level.camera.y + self.yOffset))
         -- play the player's death animation
 end

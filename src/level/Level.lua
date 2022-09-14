@@ -11,7 +11,6 @@ function Level:init(worldName, levelName, definitions)
     self.levelName = levelName -- the name of the folder in which this level's data is stored, format <level_type>-<level_number>
     self.pickupManager = PickupManager(self, definitions.pickups) -- initiate a pickupManager with a reference to this class and any pickups that are loaded in.
     self.flags = {} -- used to track thrown flags by actions in the Level.
-    self.deadPlayer = false -- flags player as dead, doesn't render player
 end
 
 -- update each of the level's components
@@ -29,9 +28,7 @@ function Level:render()
     self.map:render(self.camera)
     self.pickupManager:render(self.camera)
     self.entityManager:render(self.camera)
-    if not self.deadPlayer then -- only render player if alive
-        self.player:render(self.camera)
-    end
+    self.player:render(self.camera)
 end
 
 -- Initiate the player

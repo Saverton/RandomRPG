@@ -5,9 +5,9 @@
 
 Animation = Class{}
 
-function Animation:init(name, startAnim)
+function Animation:init(name, startAnimation)
     self.name = name
-    self.currentAnimation = startAnim
+    self.currentAnimation = startAnimation
     self.texture = ANIMATION_DEFS[self.name][self.currentAnimation].texture
     self.frames = ANIMATION_DEFS[self.name][self.currentAnimation].frames
     self.interval = ANIMATION_DEFS[self.name][self.currentAnimation].interval or 1

@@ -9,6 +9,7 @@ function NPCManager:init(level, definitions)
     self.level = level
     self:getNpcs(definitions.npcs or {})
     self.cap = definitions.cap or NPC_CAP -- set max amount of npcs
+    self:spawnNPCs() -- spawn npcs to fill cap
 end
 
 -- update the npcs
@@ -46,8 +47,8 @@ end
 -- attempt to spawn npcs in this map
 function NPCManager:spawnNPCs()
     while #self.npcs < self.cap do
-        local x, y = self.level:getSpawnableCoord() -- find a place to spawn the npc
-        table.insert(self.npcs, NPC(NPC_DEFS[NPC_TYPES[math.random(#NPC_TYPES)]], self.level, {x = x, y = y, xOffset = 0, yOffset = 0}, self))
+        local x, y = self.level.map:getSpawnableCoord() -- find a place to spawn the npc
+        table.insert(self.npcs, NPC(self.level, NPC_DEFS[NPC_TYPES[math.random(#NPC_TYPES)]], {x = x, y = y, xOffset = 0, yOffset = 0}, self))
             -- insert a random npc in at this location
     end
 end
