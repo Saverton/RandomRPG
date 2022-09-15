@@ -38,7 +38,7 @@ function EffectManager:inflict(effectsToInflict)
     for i, effect in pairs(effectsToInflict) do
         if not Contains(self.immunities, effect.name) then -- if this entity is immune, don't inflict
             if not ContainsName(self.effects, effect.name) then -- if this entity already has this effect, just reset duration
-                table.insert(self.effects, Effect(effect.name, effect.duration, self)) -- add new effect
+                table.insert(self.effects, Effect(effect.name, effect.duration, self.entity)) -- add new effect
             else
                 self.effects[GetIndex(self.effects, effect.name)].duration = effect.duration --reset duration
             end

@@ -18,6 +18,7 @@ ITEM_DEFS = {
         },
         useRate = 0.4,
         useTime = 0.3,
+        useRange = 2,
         useSound = 'sword_swing_1',
         pickupSound = 'special_item',
         onUse = function(item, holder, target)
@@ -42,6 +43,7 @@ ITEM_DEFS = {
         },
         useRate = 0.5,
         useTime = 0.3,
+        useRange = 9,
         useSound = 'bow_shot',
         pickupSound = 'special_item',
         onUse = function(item, holder, target)
@@ -67,6 +69,7 @@ ITEM_DEFS = {
         },
         useRate = 1,
         useTime = 0.5,
+        useRange = 5,
         useSound = 'use_magic',
         pickupSound = 'special_item',
         onUse = function(item, holder, target)
@@ -143,6 +146,7 @@ ITEM_DEFS = {
         },
         useRate = 1,
         useTime = 0.5,
+        useRange = 5,
         useSound = 'use_magic',
         pickupSound = 'special_item',
         onUse = function(item, holder, target)
@@ -167,6 +171,7 @@ ITEM_DEFS = {
         },
         useRate = 0.4,
         useTime = 0.3,
+        useRange = 2,
         useSound = 'sword_swing_1',
         onUse = function(item, holder, target)
             holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
@@ -188,6 +193,7 @@ ITEM_DEFS = {
         },
         useRate = 1.5,
         useTime = 0.5,
+        useRange = 2,
         useSound = 'battle_axe',
         pickupSound = 'special_item',
         onUse = function(item, holder, target)

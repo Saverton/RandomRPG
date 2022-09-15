@@ -45,8 +45,8 @@ function EnemyWalkState:processAI()
         self.pixelsTraveled = 0 -- reset pixelsTraveled
         self.entity:changeAnimation('walk-' .. self.entity.direction) -- update walk animation
     elseif self.entity.target ~= nil and self.pixelsTraveled >= self.tilesToTravel then -- update pursuit of target
-        if #self.entity.items > 0 and GetDistance(self.entity, self.entity.target) <= ENTITY_DEFS[self.entity.name].attackDistance * TILE_SIZE then -- if close to target and has an item
-            self.entity:useHeldItem() -- use the held item
+        if self.entity:getHeldItem() ~= nil and GetDistance(self.entity, self.entity.target) <= ITEM_DEFS[self.entity:getHeldItem().name].useRange * TILE_SIZE then
+            self.entity:useHeldItem() -- if the entity has an item and is within its use range, use the held item
         else
             local targetXDif, targetYDif = self.entity.x - self.entity.target.x, self.entity.y - self.entity.target.y -- update target relative position
             if math.abs(targetXDif) > math.abs(targetYDif) then -- choose to move on the axis that the entity is furthest from

@@ -90,9 +90,8 @@ ENTITY_DEFS = {
         deathSound = 'enemy_dies',
         push = 8,
         items = {
-            {name = 'sword', quantity = 1}
-        },
-        attackDistance = 2,
+            {name = 'wooden_sword', quantity = 1}
+        }
     },
     ['wizard'] = {
         name = 'wizard',
@@ -119,8 +118,7 @@ ENTITY_DEFS = {
         push = 8,
         items = {
             {name = 'fire_tome', quantity = 1}
-        },
-        attackDistance = 5
+        }
     }
 }
 

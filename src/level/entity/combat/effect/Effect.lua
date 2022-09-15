@@ -27,12 +27,12 @@ function Effect:update(dt)
 end
 
 -- render the effect on the entity
-function Effect:render(camera)
+function Effect:render(x, y)
     local texture, frame = EFFECT_DEFS[self.name].texture, EFFECT_DEFS[self.name].frame -- get the texture and frame for this effect
     for i = 1, 2, 1 do -- draw two of the effect particles at random spots.
-        local x, y = math.floor((self.holder.x - 4) + (math.random(0, self.holder.width))) - camera.x, 
-            math.floor((self.holder.y - 4) + (math.random(0, self.holder.height))) - camera.y -- get a random x, y position on the holder
-        love.graphics.draw(gTextures[texture], gFrames[texture][frame], x, y) -- draw the particle
+        local renderX, renderY = math.floor(x - 4 + (math.random(0, self.holder.width))), 
+            math.floor(y - 4 + (math.random(0, self.holder.height))) -- get a random x, y position on the holder
+        love.graphics.draw(gTextures[texture], gFrames[texture][frame], renderX, renderY) -- draw the particle
     end
 end
 

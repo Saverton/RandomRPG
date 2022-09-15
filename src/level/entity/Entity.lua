@@ -166,3 +166,8 @@ end
 function Entity:getOnScreenPosition(camera)
     return math.floor(self.x - camera.x + self.xOffset), math.floor(self.y - camera.y + self.yOffset)
 end
+
+-- return the entity's held item
+function Entity:getHeldItem()
+    return self.items[self.heldItem] -- returns held item or nil if none
+end
