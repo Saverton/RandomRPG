@@ -235,8 +235,8 @@ ITEM_DEFS = {
         useTime = 0,
         onUse = function() end,
         onPickup = function(holder, quantity) 
-            holder.hp = holder.hp + 1 
-            holder:heal(1)
+            holder.combatStats['maxHp'] = holder.combatStats['maxHp'] + 1 
+            holder:totalHeal() -- totally heal the entity
         end
     }
 }

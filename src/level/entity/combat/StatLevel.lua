@@ -49,6 +49,7 @@ function StatLevel:playerLevelUp()
     local selections = {
         Selection('HP + ' .. self.bonuses['maxHp'], function() 
             self:upgradeStat('maxHp') 
+            self.entity:totalHeal() -- bring player back to full health
             gStateStack:pop()
         end),
         Selection('Attack + ' .. self.bonuses['attack'], function() 
@@ -76,6 +77,7 @@ end
 -- upgrade a specific stat
 function StatLevel:upgradeStat(statName)
     self.entity.combatStats[statName] = self.entity.combatStats[statName] + self.bonuses[statName]
+    self.entity:updateBars()
 end
 
 -- get the ratio of current exp to the exp needed for the next level

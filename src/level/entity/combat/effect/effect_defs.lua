@@ -19,11 +19,11 @@ EFFECT_DEFS = {
         texture = 'effects',
         frame = 2,
         onApply = function(holder)
-            table.insert(holder.boosts.spd, {name = 'freeze', num = 0.25}) -- slow move speed
+            table.insert(holder.boosts['speed'], {name = 'freeze', multiplier = 0.25}) -- slow move speed
         end,
         applyEvery = function() end,
         afterEffect = function(holder)
-            table.remove(holder.boosts.spd, GetIndex(holder.speedboost, 'freeze')) -- remove freeze effect
+            table.remove(holder.boosts['speed'], GetIndex(holder.boosts['speed'], 'freeze')) -- remove freeze effect
         end,
         applied_every = 100
     }

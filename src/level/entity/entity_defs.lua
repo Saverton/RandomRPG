@@ -113,7 +113,7 @@ ENTITY_DEFS = {
         manaRegenRate = 1,
         drops = {{name = 'health', chance = 1, min = 1, max = 1},
             {name = 'money', chance = 1, min = 5, max = 10},
-            {name = 'health_upgrade', chance = 1, min = 1, max = 1}},
+            {name = 'hp_upgrade', chance = 1, min = 1, max = 1}},
         deathSound = 'enemy_dies',
         push = 8,
         items = {
