@@ -11,19 +11,26 @@ function EntityManager:init(level, definitions, type)
     self.type = type -- the type used to determine spawning
     self.entityCap = definitions.entityCap or DEFAULT_ENTITY_CAP -- the maximum amount of entities that this entity manager can hold, default = 5.
     self:spawn() -- try to spawn enemies
+    self.spawnTimer = {} -- timers for the entity manager
+    self.removeList = {} -- list of entities to be removed at any given frame
     if type == 'overworld' then
-        Timer.every(10, function() self:spawn() end) -- try to spawn enemies every 10 seconds
+        Timer.every(10, function() self:spawn() end):group(self.spawnTimer) -- try to spawn enemies every 10 seconds
     end
 end
 
 -- update each of the entityManager's attributes
 function EntityManager:update(dt)
-    -- update all entities in the entities table
-    for i, entity in pairs(self.entities) do
+    Timer.update(dt, self.spawnTimer) -- update the spawn timer
+    for i, entity in pairs(self.entities) do -- update all entities in the entities table
         entity:update(dt) -- update the entity
-        if GetDistance(self.level.player, entity) > DESPAWN_RANGE or entity.currentStats.hp <= 0 then
-            table.remove(self.entities, i)  -- remove the entity if it is past the despawn range or dead
+        if GetDistance(self.level.player, entity) > DESPAWN_RANGE then
+            if not Contains(self.removeList, i) then -- avoid adding already existing entities into the list
+                table.insert(self.removeList, i)
+            end
         end
+    end
+    if #self.removeList > 0 then
+        self:removeEntitiesFromList() -- remove entities if there are entities to remove
     end
 end
 
@@ -89,7 +96,7 @@ end
 -- spawn an enemy given an enemy name at a coordinate col, row
 function EntityManager:spawnEnemy(enemyName, col, row)
     local position = {x = col, y = row, xOffset = -1 * ENTITY_DEFS[enemyName].xOffset, yOffset = -1 * ENTITY_DEFS[enemyName].yOffset} -- spawning position
-    table.insert(self.entities, Enemy(self.level, ENTITY_DEFS[enemyName], position)) -- spawn the enemy
+    table.insert(self.entities, Enemy(self.level, ENTITY_DEFS[enemyName], position, self)) -- spawn the enemy
 end
 
 -- spawn enemies in a dungeon according to spawner feature positions
@@ -111,4 +118,21 @@ end
 function EntityManager:reset()
     self.entities = {} -- clear entity table
     self:spawn() -- spawn new entities
+end
+
+-- remove any inactive entities from the entity manager
+function EntityManager:removeInactiveEntities()
+    for i, entity in ipairs(self.entities) do
+        if not entity.active then
+            table.insert(self.removeList, i) -- add index to list
+        end
+    end
+end
+
+-- remove all entities from the removal list of indexes
+function EntityManager:removeEntitiesFromList()
+    for i, index in ipairs(self.removeList) do
+        table.remove(self.entities, index) -- remove entity from entity table
+    end
+    self.removeList = {} -- reset table
 end

@@ -331,5 +331,17 @@ ANIMATION_DEFS = {
             texture = 'projectiles',
             frames = {8},
         }
+    },
+    ['smoke'] = {
+        ['appear'] = {
+            texture = 'smoke',
+            frames = {1}
+        },
+        ['disappear'] = {
+            texture = 'smoke',
+            frames = {1, 2, 3, 4},
+            interval = 0.15,
+            looping = false
+        }
     }
 }

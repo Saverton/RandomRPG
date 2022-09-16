@@ -42,6 +42,8 @@ require 'src/states/entity/player/PlayerIdleState'
 require 'src/states/entity/player/PlayerWalkState'
 require 'src/states/entity/enemy/EnemyIdleState'
 require 'src/states/entity/enemy/EnemyWalkState'
+require 'src/states/entity/enemy/EnemySpawnState'
+require 'src/states/entity/enemy/EnemyDespawnState'
 require 'src/states/entity/npc/NPCIdleState' 
 require 'src/states/entity/npc/NPCWalkState'
 
@@ -115,7 +117,8 @@ gTextures = {
     ['goblin'] = love.graphics.newImage('graphics/entities/enemies/goblin.png'),
     ['wizard'] = love.graphics.newImage('graphics/entities/enemies/wizard.png'),
     ['projectiles'] = love.graphics.newImage('graphics/entities/projectiles.png'),
-    ['player_death'] = love.graphics.newImage('graphics/entities/player_death.png')
+    ['player_death'] = love.graphics.newImage('graphics/entities/player_death.png'),
+    ['smoke'] = love.graphics.newImage('graphics/entities/smoke.png')
 }
 
 gFrames = {
@@ -131,7 +134,8 @@ gFrames = {
     ['goblin'] = GenerateQuads(gTextures['goblin'], 16, 16),
     ['wizard'] = GenerateQuads(gTextures['wizard'], 16, 16),
     ['projectiles'] = GenerateQuads(gTextures['projectiles'], 16, 16),
-    ['player_death'] = GenerateQuads(gTextures['player_death'], 16, 16)
+    ['player_death'] = GenerateQuads(gTextures['player_death'], 16, 16),
+    ['smoke'] = GenerateQuads(gTextures['smoke'], 16, 16)
 }
 
 gFonts = {
