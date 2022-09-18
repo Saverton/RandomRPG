@@ -107,9 +107,7 @@ end
 
 -- return true if this entity's movement causes a collision with the map, false otherwise
 function Entity:checkCollisionWithMap(x, y)
-    local checkX = x or self.x
-    local checkY = y or self.y
-    local checkList = self:getCollisionCheckList(checkX, checkY) -- get a list of coordinates to check
+    local checkList = self:getCollisionCheckList(x or self.x, y or self.y) -- get a list of coordinates to check
     local map = self.level.map -- reference to the entity's level's map
     for i, coordinate in pairs(checkList) do
         if coordinate.x < 1 or coordinate.x > map.width or coordinate.y < 1 or coordinate.y > map.height then

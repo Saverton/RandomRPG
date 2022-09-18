@@ -46,7 +46,7 @@ function EntityManager:getEntities(entities)
     self.entities = {} -- create an empty entities table
     -- populate every predefined entity into the entities table
     for i, entity in ipairs(entities) do
-        local thisEntity = Enemy(self.level, entity.definitions, entity.position, self)
+        local thisEntity = Enemy(self.level, entity.definitions, {position = entity.position, hasKey = entity.hasKey}, self)
         table.insert(self.entities, thisEntity)
     end
 end
@@ -94,9 +94,9 @@ function EntityManager:spawnRandomEnemy(list, col, row)
 end
 
 -- spawn an enemy given an enemy name at a coordinate col, row
-function EntityManager:spawnEnemy(enemyName, col, row)
+function EntityManager:spawnEnemy(enemyName, col, row, hasKey)
     local position = {x = col, y = row, xOffset = -1 * ENTITY_DEFS[enemyName].xOffset, yOffset = -1 * ENTITY_DEFS[enemyName].yOffset} -- spawning position
-    table.insert(self.entities, Enemy(self.level, ENTITY_DEFS[enemyName], {position = position, hasKey = true}, self)) -- spawn the enemy
+    table.insert(self.entities, Enemy(self.level, ENTITY_DEFS[enemyName], {position = position, hasKey = hasKey}, self)) -- spawn the enemy
 end
 
 -- spawn enemies in a dungeon according to spawner feature positions
@@ -108,7 +108,7 @@ function EntityManager:spawnInDungeon()
         for row = math.max(1, math.floor(camera.cambox.y / TILE_SIZE)), math.min(map.height, math.floor((camera.cambox.y + camera.cambox.height) / TILE_SIZE)), 1 do
             local feature = map.featureMap[col][row] -- the feature at this index
             if (feature ~= nil) and (FEATURE_DEFS[feature.name].spawner) and (feature.active) then -- feature must be an active spawner
-                self:spawnEnemy(feature.enemy, col, row) -- spawn the spawner's enemy
+                self:spawnEnemy(feature.enemy, col, row, (math.random(5) == 1)) -- spawn the spawner's enemy, 1 / 5 chance of key
             end
         end
     end

@@ -156,7 +156,8 @@ function SaveState:saveEntities(path)
             items = {},
             aggressiveDistance = entity.aggressiveDistance,
             color = entity.color,
-            statLevel = entity.statLevel:getSaveData()
+            statLevel = entity.statLevel:getSaveData(),
+            hasKey = entity.hasKey
         }
         local items = {}
         for k, item in ipairs(entity.items) do

@@ -28,7 +28,11 @@ end
 
 -- update each of the components of this Combat Entity
 function CombatEntity:update(dt)
-    Entity.update(self, dt) -- update the entity
+    self.stateMachine:update(dt) -- update the entity's statemachine, where most activity is held
+    self.animator:update(dt) -- update the entity's animation
+    if self.items[self.heldItem] ~= nil then
+        self.items[self.heldItem]:update(dt) --update held item's use timer
+    end
     self.projectileManager:update(dt)
     self.effectManager:update(dt)
     self.invincibilityManager:update(dt)

@@ -14,9 +14,11 @@ end
 -- update push behavior, if pushed
 function PushManager:update(dt)
     if self.isPushed then -- check if the entity is pushed
-        local x, y = self.entity.x + math.floor(self.pushdx), self.entity.y + math.floor(self.pushdy) -- set the new position after the push 
-        if not self.entity:checkCollisionWithMap(x, y) then
-            self.entity.x, self.entity.y = x, y -- if there is no collision, set the new position of the entity
+        local oldX, oldY = self.entity.x, self.entity.y
+        self.entity.x, self.entity.y = self.entity.x + math.floor(self.pushdx), self.entity.y + math.floor(self.pushdy) -- set the new position after the push 
+        if self.entity:checkCollisionWithMap() then
+            self.isPushed = false
+            self.entity.x, self.entity.y = oldX, oldY -- if there is no collision, set the new position of the entity
         end
         self.pushdx, self.pushdy = self.pushdx / PUSH_DECAY, self.pushdy / PUSH_DECAY -- decay the push amount
         if math.abs(self.pushdx) < 1 and math.abs(self.pushdy) < 1 then 

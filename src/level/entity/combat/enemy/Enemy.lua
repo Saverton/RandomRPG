@@ -37,7 +37,7 @@ end
 -- render the enemy on screen
 function Enemy:render(camera)
     local onScreenX, onScreenY = math.floor(self.x - camera.x + self.xOffset), math.floor(self.y - camera.y + self.yOffset - 4)
-    if self.hasKey then -- render a key behind the enemy if it holds a key
+    if self.hasKey and self.currentStats.hp > 0 then -- render a key behind the enemy if it holds a key
         love.graphics.draw(gTextures['items'], gFrames['items'][11], onScreenX, onScreenY) -- draw a key
     end
     love.graphics.setColor(self.color) -- set the color to the enemy's color
@@ -112,6 +112,9 @@ end
 
 -- generates a list of items to drop from enemy's loot table, then spawns pickups accordingly
 function Enemy:dropItems()
+    for i, drop in ipairs(self.drops) do
+        drop.x, drop.y = self.x, self.y -- set all drops to drop at entity position
+    end
     self.level.pickupManager:spawnPickups(self.drops) -- create pickups with each of the dropped items
 end
 
