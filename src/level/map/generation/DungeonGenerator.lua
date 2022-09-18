@@ -11,9 +11,8 @@ function DungeonGenerator.generateDungeon(definitions, dungeonSize)
     local landmarks = DungeonGenerator.generateRooms(definitions, dungeonGrid, dungeonSize) -- generate rooms, return a table with the starting and ending x and y
     local tileMap, featureMap = DungeonGenerator.generateFill(definitions, dimensions) -- generate the tiles and features of the dungeon
     DungeonGenerator.generateStructures(DungeonGenerator.getStructureMap(dungeonGrid), tileMap, featureMap) -- generate the structures of the dungeon (rooms)
-    DungeonGenerator.generatePath(dungeonGrid, landmarks, definitions, tileMap) -- generate a path through the dungeon
+    DungeonGenerator.generatePath(dungeonGrid, landmarks, definitions, tileMap, featureMap) -- generate a path through the dungeon
     DungeonGenerator.removeDeadRooms(dungeonGrid, definitions, tileMap, featureMap) -- remove any rooms that do not have access via paths
-
     return DungeonMap(dimensions, {tileMap = tileMap, featureMap = featureMap, gatewayMap = {}, start = {
         x = ((landmarks.startX - 1) * ROOM_WIDTH) + (ROOM_WIDTH / 2 + 1), y =  ((landmarks.startY - 1) * ROOM_HEIGHT) + (ROOM_HEIGHT / 2 + 1)
     }}) -- create a new dungeon map
@@ -84,13 +83,14 @@ function DungeonGenerator.getStructureMap(dungeonGrid)
 end
 
 -- generate a path through the dungeon that connects the start room to the end room.
-function DungeonGenerator.generatePath(dungeonGrid, landmarks, definitions, tileMap)
+function DungeonGenerator.generatePath(dungeonGrid, landmarks, definitions, tileMap, featureMap)
     local startX, startY, finishX, finishY = ((landmarks.startX - 1) * ROOM_WIDTH) + (ROOM_WIDTH / 2 + 1), ((landmarks.startY - 1) * ROOM_HEIGHT) + (ROOM_HEIGHT / 2 + 1), 
         ((landmarks.endX - 1) * ROOM_WIDTH) + (ROOM_WIDTH / 2 + 1), ((landmarks.endY - 1) * ROOM_HEIGHT) + (ROOM_HEIGHT / 2 + 1) -- start and finish locations of the dungeon
     local x, y = startX, startY -- set the starting x and y for the path
     local dungeonX, dungeonY = landmarks.startX, landmarks.startY -- set starting dungeon grid coordinates
     while x ~= finishX or y ~= finishY do
         local dir = math.random(4)  -- pick a random direction
+        local spawnKeyDoor = math.random(4) == 1 -- 1 / 4 chance to spawn key door
         local potentialDungeonX, potentialDungeonY = dungeonX + DIRECTION_COORDS[dir].x, dungeonY + DIRECTION_COORDS[dir].y
         while (potentialDungeonX < 1 or potentialDungeonX > #dungeonGrid or potentialDungeonY < 1 or potentialDungeonY > #dungeonGrid) or 
             (math.random() < 0.75 and dungeonGrid[potentialDungeonX][potentialDungeonY].access) do -- keep changng direction until result is in the map
@@ -101,6 +101,10 @@ function DungeonGenerator.generatePath(dungeonGrid, landmarks, definitions, tile
         dungeonGrid[dungeonX][dungeonY].access = true -- set this room as accessible
         for i = 1, math.abs(DIRECTION_COORDS[dir].x * ROOM_WIDTH) + math.abs(DIRECTION_COORDS[dir].y * ROOM_HEIGHT), 1 do
             local carveX, carveY = x + (DIRECTION_COORDS[dir].x * i), y + (DIRECTION_COORDS[dir].y * i) -- carve out a path to this new room
+            if spawnKeyDoor and tileMap[carveX][carveY].name == definitions.wallTile then
+                featureMap[carveX][carveY] = Feature('key_door') -- spawn a key door in the passage
+                spawnKeyDoor = false -- stop spawning key doors
+            end
             tileMap[carveX][carveY] = Tile(definitions.floorTile)
             for borderX = carveX - 1, carveX + 1, 1 do
                 for borderY = carveY - 1, carveY + 1, 1 do

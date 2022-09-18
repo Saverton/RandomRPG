@@ -226,7 +226,7 @@ ITEM_DEFS = {
         type = 'pickup',
         stackable = false,
         texture = 'items',
-        frame = 4,
+        frame = 9,
         price = {
             buy = 30,
             sell = 0
@@ -238,5 +238,27 @@ ITEM_DEFS = {
             holder.combatStats['maxHp'] = holder.combatStats['maxHp'] + 1 
             holder:totalHeal() -- totally heal the entity
         end
+    },
+    ['key'] = {
+        name = 'key',
+        displayName = 'Key',
+        description = 'Key can open locked doors',
+        type = 'item',
+        stackable = true,
+        texture = 'items',
+        frame = 11,
+        price = {
+            buy = 15,
+            sell = 1
+        },
+        useRate = 0.5,
+        useTime = 0.5,
+        onUse = function(item, holder, target) 
+            holder:changeState('interact', {time = ITEM_DEFS[item.name].useTime})
+            local origin = {x = holder.x, y = holder.y, direction = holder.direction}
+
+            holder.projectileManager:spawnProjectile('key', origin)
+        end,
+        onPickup = function() end
     }
 }

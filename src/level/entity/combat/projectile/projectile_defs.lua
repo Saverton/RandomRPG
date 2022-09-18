@@ -96,5 +96,17 @@ PROJECTILE_DEFS = {
         push = 10,
         type = 'melee',
         inflictions = {}
+    },
+    ['key'] = {
+        width = 16,
+        height = 16,
+        attached = true,
+        damage = 0,
+        speed = 0,
+        lifetime = 0.5,
+        hits = 1,
+        push = 0,
+        type = 'none',
+        inflictions = {}
     }
 }

@@ -330,6 +330,10 @@ ANIMATION_DEFS = {
         ['arrow'] = {
             texture = 'projectiles',
             frames = {8},
+        },
+        ['key'] = {
+            texture = 'items',
+            frames = {11}
         }
     },
     ['smoke'] = {

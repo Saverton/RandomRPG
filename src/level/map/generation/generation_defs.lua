@@ -102,6 +102,7 @@ DUNGEON_DEFS = {
     ['dungeon'] = {
         rooms = {'fortress_room_goblins', 'fortress_room_empty', 'fortress_room_skeletons'},
         floorTile = 'floor',
+        wallTile = 'wall_edge',
         pathBorderTile = 'wall_edge',
         insideTile = 'wall_inside',
         startRoom = 'fortress_exit',

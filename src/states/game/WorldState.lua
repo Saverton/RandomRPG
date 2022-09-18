@@ -27,6 +27,9 @@ function WorldState:update(dt)
         if love.keyboard.wasPressed('m') then -- give player 10 money when press m
             self.level.player:giveItem(Item('money', self.level.player, 10))
         end
+        if love.keyboard.wasPressed('k') then -- give player a key
+            self.level.player:giveItem(Item('key', self.level.player, 1))
+        end
     end
     if love.keyboard.wasPressed('escape') then -- pause game if pressed escape
         gStateStack:push(MenuState(MENU_DEFS['pause'], {parent = self.level}))

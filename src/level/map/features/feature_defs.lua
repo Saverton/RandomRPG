@@ -139,10 +139,13 @@ FEATURE_DEFS = {
             local featureMap = map.featureMap
             if player.items[player.heldItem].name == 'key' then
                 featureMap[col][row] = nil
-                player.items[player.heldItem] = player.items[player.heldItem] - 1
+                player.items[player.heldItem].quantity = player.items[player.heldItem].quantity - 1
+                player:updateInventory()
                 return true
             end
             return false
-        end
+        end,
+        onCollide = function() end,
+        isSolid = true
     }
 }
