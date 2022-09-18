@@ -35,7 +35,7 @@ end
 
 -- render this menu
 function Menu:render()
-    self.panel:render() -- render the background panel
+    self.panel:render(1, self.x, self.y) -- render the background panel
     self:printTitleAndSubtitle() -- print the title and subtitle of the menu
     self:printSelections() -- print all the selections in the menu
 end

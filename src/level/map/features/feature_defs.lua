@@ -87,7 +87,6 @@ FEATURE_DEFS = {
                 table.insert(player.level.pickupManager.pickups, Pickup('wood', (col - 1) * TILE_SIZE, (row - 1) * TILE_SIZE))
                 return true
             end
-
             return false
         end,
         onCollide = function() end,
@@ -130,5 +129,20 @@ FEATURE_DEFS = {
         onInteract = function() end,
         onCollide = function() end,
         isSolid = false
+    },
+    ['key_door'] = {
+        id = 8,
+        name = 'key_door',
+        texture = 'features',
+        frame = 12,
+        onInteract = function(player, map, col, row)
+            local featureMap = map.featureMap
+            if player.items[player.heldItem].name == 'key' then
+                featureMap[col][row] = nil
+                player.items[player.heldItem] = player.items[player.heldItem] - 1
+                return true
+            end
+            return false
+        end
     }
 }

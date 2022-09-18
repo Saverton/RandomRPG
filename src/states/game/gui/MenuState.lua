@@ -7,6 +7,13 @@ MenuState = Class{__includes = BaseState}
 
 function MenuState:init(definitions, instance)
     self.menu = Menu(definitions, instance) -- menu displayed in this state
+    self.shiftIn = definitions.shiftIn -- whether or not to shift the menu onto the screen
+end
+
+function MenuState:enter()
+    if self.shiftIn then
+        gStateStack:push(GuiShiftState(self.menu, 1)) -- push a shift in state for the menu from the top
+    end
 end
 
 -- update the menu, check if closed with escape

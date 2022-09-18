@@ -29,7 +29,7 @@ function WorldState:update(dt)
         end
     end
     if love.keyboard.wasPressed('escape') then -- pause game if pressed escape
-        gStateStack:push(MenuState(Menu(MENU_DEFS['pause']), {parent = self.level}))
+        gStateStack:push(MenuState(MENU_DEFS['pause'], {parent = self.level}))
     elseif love.keyboard.wasPressed('i') then -- open inventory if pressed i
         gStateStack:push(InventoryState(MENU_DEFS['inventory'], self.level.player))
     elseif love.keyboard.wasPressed('q') then -- open quest inventory if pressed q

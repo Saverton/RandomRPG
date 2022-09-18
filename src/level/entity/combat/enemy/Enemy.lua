@@ -93,11 +93,9 @@ end
 
 -- generates a list of items to drop from enemy's loot table, then spawns pickups accordingly
 function Enemy:dropItems()
-    print('try dropping items')
     local itemsToDrop = {} -- list of items to drop
     for i, item in pairs(ENTITY_DEFS[self.name].drops) do
         if math.random() < item.chance then -- go through each potential drop and check each one's chance against random number
-            print('dropping item')
             table.insert(itemsToDrop, {name = item.name, x = self.x, y = self.y, quantity = math.random(item.min, item.max)})
         end
     end

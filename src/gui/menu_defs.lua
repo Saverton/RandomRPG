@@ -51,6 +51,7 @@ MENU_DEFS = {
         height = MENU_HEIGHT,
         title = 'Pause',
         subtitle = '',
+        shiftIn = true,
         selections = {
             Selection('Resume', function() gStateStack:pop() end),
             Selection('Save Game', function(level) 
@@ -294,6 +295,7 @@ MENU_DEFS = {
         height = MENU_HEIGHT / 2 - 5,
         title = 'Level Up',
         subtitle = 'choose stat to upgrade:',
-        selections = {}
+        selections = {},
+        shiftIn = true
     }
 }

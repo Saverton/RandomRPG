@@ -89,7 +89,7 @@ end
 -- totally heal the combat entity
 function CombatEntity:totalHeal()
     local maxHp = self:getStat('maxHp')
-    while self.currenthp ~= maxHp do
+    while self.currentStats.hp ~= maxHp do
         self:heal(1) -- heal by one until the entity's max hp is reached
     end
 end
@@ -107,7 +107,6 @@ end
 function CombatEntity:useAmmo(amount)
     local successful = false
     local index = GetIndex(self.items, 'ammo')
-    print('ammo index = ' .. tostring(index))
     if index ~= -1 and self.items[index].quantity >= amount then -- check if the entity has any ammo
         self.items[index].quantity = self.items[index].quantity - amount -- deplete ammo by amount
         successful = true

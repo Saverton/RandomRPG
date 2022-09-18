@@ -100,7 +100,7 @@ LEVEL_DEFS = {
 
 DUNGEON_DEFS = {
     ['dungeon'] = {
-        rooms = {'fortress_room_skeletons', 'fortress_room_goblins', 'fortress_room_empty'},
+        rooms = {'fortress_room_goblins', 'fortress_room_empty', 'fortress_room_skeletons'},
         floorTile = 'floor',
         pathBorderTile = 'wall_edge',
         insideTile = 'wall_inside',
