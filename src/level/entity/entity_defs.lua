@@ -150,7 +150,7 @@ NPC_DEFS = {
         hasShop = true,
         shop = {
             size = 3,
-            itemPool = {'ammo', 'health', 'sword', 'bow', 'battle_axe', 'hp_upgrade'}
+            itemPool = {'ammo', 'health', 'sword', 'bow', 'key'}
         },
         onInteract = function(player, npc)
             npc.shop:open(player)
