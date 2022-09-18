@@ -44,7 +44,7 @@ function Enemy:render(camera)
     CombatEntity.render(self, camera) -- draw the entity onscreen
     if self.active and self.currentStats.hp > 0 then
         self.hpBar:render(onScreenX, onScreenY) -- render the hp bar
-        self:renderAggression(onScreenX, onScreenY) -- draw a little '!' if aggressiveDistance
+        self:renderAggression(onScreenX, onScreenY) -- draw a little '!' if aggressive
     end
 end
 
