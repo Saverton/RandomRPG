@@ -9,7 +9,7 @@ function GuiShiftState:init(gui, direction)
     local endX, endY = gui.x, gui.y -- final position of the gui
     gui.x, gui.y = (VIRTUAL_WIDTH * DIRECTION_COORDS[direction].x) + gui.x, 
         (VIRTUAL_HEIGHT * DIRECTION_COORDS[direction].y) + gui.y -- gui start position
-    Timer.tween(1, {
+    Timer.tween(0.5, {
         [gui] = {x = endX, y = endY}
     }):finish(function() gStateStack:pop() end)
 end

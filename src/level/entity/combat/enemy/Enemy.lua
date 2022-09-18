@@ -5,8 +5,8 @@
 
 Enemy = Class{__includes = CombatEntity}
 
-function Enemy:init(level, definition, position, manager)
-    CombatEntity.init(self, level, definition, position) -- initiate the combat entity
+function Enemy:init(level, definition, instance, manager)
+    CombatEntity.init(self, level, definition, instance.position) -- initiate the combat entity
     self.manager = manager -- reference to entity manager
     self.target = nil -- target which the entity will seek out
     self.color = ENEMY_COLORS[math.min(#ENEMY_COLORS, self.statLevel.level)] -- color of the enemy, based on its level
@@ -14,6 +14,8 @@ function Enemy:init(level, definition, position, manager)
     self.hpBar:updateRatio(self.currentStats.hp / self:getStat('maxHp'))
     self.statLevel:levelUpTo(math.random(math.max(1, self.level.player.statLevel.level - 2), self.level.player.statLevel.level)) -- level up enemy
     self.active = false -- enemy doesn't attack or find targets if not active. 
+    self.hasKey = instance.hasKey or false -- whether or not the enemy has a key.
+    self.drops = self:generateDrops() -- generates the list of items that the enemy will drop
     self.stateMachine = StateMachine({
         ['idle'] = function() return EnemyIdleState(self) end,
         ['walk'] = function() return EnemyWalkState(self, self.level) end,
@@ -34,9 +36,12 @@ end
 
 -- render the enemy on screen
 function Enemy:render(camera)
+    local onScreenX, onScreenY = math.floor(self.x - camera.x + self.xOffset), math.floor(self.y - camera.y + self.yOffset - 4)
+    if self.hasKey then -- render a key behind the enemy if it holds a key
+        love.graphics.draw(gTextures['items'], gFrames['items'][11], onScreenX, onScreenY) -- draw a key
+    end
     love.graphics.setColor(self.color) -- set the color to the enemy's color
     CombatEntity.render(self, camera) -- draw the entity onscreen
-    local onScreenX, onScreenY = math.floor(self.x - camera.x + self.xOffset), math.floor(self.y - camera.y + self.yOffset - 4)
     if self.active and self.currentStats.hp > 0 then
         self.hpBar:render(onScreenX, onScreenY) -- render the hp bar
         self:renderAggression(onScreenX, onScreenY) -- draw a little '!' if aggressiveDistance
@@ -91,15 +96,23 @@ function Enemy:dies()
     self:changeState('despawn') -- change state to despawn state
 end
 
--- generates a list of items to drop from enemy's loot table, then spawns pickups accordingly
-function Enemy:dropItems()
-    local itemsToDrop = {} -- list of items to drop
+-- generate the enemy's drop table
+function Enemy:generateDrops()
+    local drops = {} -- table of drops
     for i, item in pairs(ENTITY_DEFS[self.name].drops) do
         if math.random() < item.chance then -- go through each potential drop and check each one's chance against random number
-            table.insert(itemsToDrop, {name = item.name, x = self.x, y = self.y, quantity = math.random(item.min, item.max)})
+            table.insert(drops, {name = item.name, x = self.x, y = self.y, quantity = math.random(item.min, item.max)})
         end
     end
-    self.level.pickupManager:spawnPickups(itemsToDrop) -- create pickups with each of the dropped items
+    if self.hasKey then
+        table.insert(drops, {name = 'key', x = self.x, y = self.y, quantity = 1}) -- add a key if the enemy holds a key
+    end
+    return drops -- return the table with all drops
+end
+
+-- generates a list of items to drop from enemy's loot table, then spawns pickups accordingly
+function Enemy:dropItems()
+    self.level.pickupManager:spawnPickups(self.drops) -- create pickups with each of the dropped items
 end
 
 -- update all progress bars
