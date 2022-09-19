@@ -23,7 +23,7 @@ FEATURE_DEFS = {
             if player.items[player.heldItem].name == 'battle_axe' then
                 gSounds['world']['tree_falls']:play()
                 featureMap[col][row] = nil
-                table.insert(player.level.pickupManager.pickups, Pickup('wood', (col - 1) * TILE_SIZE, (row - 1) * TILE_SIZE))
+                table.insert(player.level.pickupManager.pickups, Pickup('wood', {x = (col - 1) * TILE_SIZE, y = (row - 1) * TILE_SIZE}))
                 return true
             end
 
@@ -84,7 +84,7 @@ FEATURE_DEFS = {
             if player.items[player.heldItem].name == 'battle_axe' then
                 gSounds['world']['tree_falls']:play()
                 featureMap[col][row] = nil
-                table.insert(player.level.pickupManager.pickups, Pickup('wood', (col - 1) * TILE_SIZE, (row - 1) * TILE_SIZE))
+                table.insert(player.level.pickupManager.pickups, Pickup('wood', {x = (col - 1) * TILE_SIZE, y = (row - 1) * TILE_SIZE}))
                 return true
             end
             return false

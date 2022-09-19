@@ -23,6 +23,7 @@ function WorldState:update(dt)
             self.level.player:giveItem(Item('sword', self.level.player, 1))
             self.level.player:giveItem(Item('bow', self.level.player, 1))
             self.level.player:giveItem(Item('fire_tome', self.level.player, 1))
+            self.level.player:giveItem(Item('battle_axe', self.level.player, 1))
         end
         if love.keyboard.wasPressed('m') then -- give player 10 money when press m
             self.level.player:giveItem(Item('money', self.level.player, 10))

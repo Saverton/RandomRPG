@@ -5,8 +5,10 @@
 
 PROJECTILE_DEFS = {
     ['sword'] = {
-        width = 16,
+        width = 6,
         height = 16,
+        hitboxOffsetX = 5,
+        hitboxOffsetY = 0,
         attached = true,
         damage = 3,
         speed = 0,
@@ -29,8 +31,10 @@ PROJECTILE_DEFS = {
         inflictions = {}
     },
     ['arrow'] = {
-        width = 16,
+        width = 4,
         height = 16,
+        hitboxOffsetX = 6,
+        hitboxOffsetY = 0,
         damage = 1,
         speed = 128,
         lifetime = 2,
@@ -40,8 +44,10 @@ PROJECTILE_DEFS = {
         inflictions = {}
     },
     ['fireball'] = {
-        width = 16,
-        height = 16,
+        width = 8,
+        height = 8,
+        hitboxOffsetX = 4,
+        hitboxOffsetY = 4,
         damage = 0,
         speed = 64,
         lifetime = 1,
@@ -63,8 +69,10 @@ PROJECTILE_DEFS = {
         inflictions = {}
     },
     ['ice'] = {
-        width = 16,
-        height = 16,
+        width = 8,
+        height = 8,
+        hitboxOffsetX = 4,
+        hitboxOffsetY = 4,
         damage = 0,
         speed = 64,
         lifetime = 1,
@@ -74,8 +82,10 @@ PROJECTILE_DEFS = {
         inflictions = {{name = 'freeze', duration = 5}}
     },
     ['wooden_sword'] = {
-        width = 16,
+        width = 6,
         height = 16,
+        hitboxOffsetX = 5,
+        hitboxOffsetY = 0,
         attached = true,
         damage = 1,
         speed = 0,
@@ -86,8 +96,10 @@ PROJECTILE_DEFS = {
         inflictions = {}
     },
     ['battle_axe'] = {
-        width = 16,
+        width = 10,
         height = 16,
+        hitboxOffsetX = 3,
+        hitboxOffsetY = 0,
         attached = true,
         damage = 4,
         speed = 0,

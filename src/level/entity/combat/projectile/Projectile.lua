@@ -23,7 +23,8 @@ end
 
 -- render the projectile
 function Projectile:render(camera)
-    self.animation:render(self.x + self.offsetX - camera.x, self.y + self.offsetY - camera.y, self.rotation)
+    local onScreenX, onScreenY = self.x - camera.x, self.y - camera.y
+    self.animation:render(onScreenX + self.offsetX, onScreenY + self.offsetY, self.rotation)
 end
 
 -- update attached projectiles to their new origin
@@ -63,19 +64,25 @@ end
 --gets the position of a projectile according to its origin
 function Projectile:getPosition()
     self.x, self.y = self.origin.x, self.origin.y -- set origin position x and y
+    self.width, self.height = PROJECTILE_DEFS[self.name].width, PROJECTILE_DEFS[self.name].height
     self.rotation = 0
-    self.offsetX, self.offsetY = 0, 0 -- set offsets to default 0
+    self.offsetX, self.offsetY = 0, 0
+    self.hitboxOffsetX, self.hitboxOffsetY = PROJECTILE_DEFS[self.name].hitboxOffsetX or 0, PROJECTILE_DEFS[self.name].hitboxOffsetY or 0 -- set offsets to default 0
     self.dx, self.dy = DIRECTION_COORDS[DIRECTION_TO_NUM[self.origin.direction]].x * PROJECTILE_DEFS[self.name].speed, 
         DIRECTION_COORDS[DIRECTION_TO_NUM[self.origin.direction]].y * PROJECTILE_DEFS[self.name].speed
         -- set directional velocities according to origin direction and projectile speed
     if self.origin.direction == 'up' then
         self.x, self.y = self.origin.x - 3, self.origin.y - 18
     elseif self.origin.direction == 'right' then
-        self.x, self.offsetX = self.origin.x + 10, 16
+        self.x, self.offsetX = self.origin.x + 10, self.offsetX + 16
+        self.width, self.height = PROJECTILE_DEFS[self.name].height, PROJECTILE_DEFS[self.name].width
+        self.hitboxOffsetX, self.hitboxOffsetY = PROJECTILE_DEFS[self.name].hitboxOffsetY or 0, PROJECTILE_DEFS[self.name].hitboxOffsetX or 0
     elseif self.origin.direction == 'down' then
-        self.x, self.y, self.offsetX, self.offsetY = self.origin.x - 3, self.origin.y + 10, 16, 16
+        self.x, self.y, self.offsetX, self.offsetY = self.origin.x - 3, self.origin.y + 10, self.offsetX + 16, self.offsetY + 16
     elseif self.origin.direction == 'left' then
-        self.x, self.offsetY = self.origin.x - 16, 16
+        self.x, self.offsetY = self.origin.x - 16, self.offsetY + 16
+        self.width, self.height = PROJECTILE_DEFS[self.name].height, PROJECTILE_DEFS[self.name].width
+        self.hitboxOffsetX, self.hitboxOffsetY = PROJECTILE_DEFS[self.name].hitboxOffsetY or 0, PROJECTILE_DEFS[self.name].hitboxOffsetX or 0
     end -- set offsets and position according to origin direction
     self.rotation = math.rad((DIRECTION_TO_NUM[self.origin.direction] - 1) * 90) -- set rotation according to direction
 end
@@ -98,8 +105,9 @@ end
 
 -- return a list of coordinates to check for a collision
 function Projectile:getCollisionCheckList()
-    local leftCol, rightCol, topRow, bottomRow = (math.ceil(self.x / TILE_SIZE)), (math.ceil((self.x + PROJECTILE_DEFS[self.name].width) / TILE_SIZE)), 
-        (math.ceil(self.y / TILE_SIZE)), (math.ceil((self.y + PROJECTILE_DEFS[self.name].height) / TILE_SIZE)) -- get the map coordinates of each side of this projectile
+    local x, y = self.x + self.hitboxOffsetX, self.y + self.hitboxOffsetY
+    local leftCol, rightCol, topRow, bottomRow = (math.ceil(x / TILE_SIZE)), (math.ceil((x + self.width) / TILE_SIZE)), 
+        (math.ceil(y / TILE_SIZE)), (math.ceil((y + self.height) / TILE_SIZE)) -- get the map coordinates of each side of this projectile
     local dx, dy = self.dy, self.dy -- get projectile's directional velocity
     local checkList = {} -- the list of coordinates to be checked for collision
     if dx < 0 or dy < 0 then
@@ -116,5 +124,6 @@ end
 
 -- return a table with collision information
 function Projectile:getCollisionTable()
-    return {x = self.x, y = self.y, width = PROJECTILE_DEFS[self.name].width, height = PROJECTILE_DEFS[self.name].height}
+    return {x = self.x + self.hitboxOffsetX, y = self.y + self.hitboxOffsetY, 
+        width = self.width, height = self.height}
 end
