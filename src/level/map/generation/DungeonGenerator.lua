@@ -5,16 +5,18 @@
 
 DungeonGenerator = Class{}
 
-function DungeonGenerator.generateDungeon(definitions, dungeonSize)
+function DungeonGenerator.generateDungeon(definitions, difficultyTable)
+    local dungeonSize = difficultyTable.size + 2 -- size is min 3, max 5
     local dimensions = {width = (dungeonSize * ROOM_WIDTH) + 1, height = (dungeonSize * ROOM_HEIGHT) + 1} -- set width and height of map
     local dungeonGrid = DungeonGenerator.generateDunGrid(dungeonSize) -- create grid of rooms
-    local landmarks = DungeonGenerator.generateRooms(definitions, dungeonGrid, dungeonSize) -- generate rooms, return a table with the starting and ending x and y
+    local landmarks = DungeonGenerator.generateRooms(definitions, dungeonGrid, dungeonSize, difficultyTable) -- generate rooms, return a table with the starting and ending x and y
     local tileMap, featureMap = DungeonGenerator.generateFill(definitions, dimensions) -- generate the tiles and features of the dungeon
-    DungeonGenerator.generateStructures(DungeonGenerator.getStructureMap(dungeonGrid), tileMap, featureMap) -- generate the structures of the dungeon (rooms)
+    DungeonGenerator.generateStructures(DungeonGenerator.getStructureMap(dungeonGrid), tileMap, featureMap, difficultyTable) -- generate the structures of the dungeon (rooms)
     DungeonGenerator.generatePath(dungeonGrid, landmarks, definitions, tileMap, featureMap) -- generate a path through the dungeon
     DungeonGenerator.removeDeadRooms(dungeonGrid, definitions, tileMap, featureMap) -- remove any rooms that do not have access via paths
     return DungeonMap(dimensions, {tileMap = tileMap, featureMap = featureMap, gatewayMap = {}, start = {
-        x = ((landmarks.startX - 1) * ROOM_WIDTH) + (ROOM_WIDTH / 2 + 1), y =  ((landmarks.startY - 1) * ROOM_HEIGHT) + (ROOM_HEIGHT / 2 + 1)
+        x = ((landmarks.startX - 1) * ROOM_WIDTH) + (ROOM_WIDTH / 2 + 1), y =  ((landmarks.startY - 1) * ROOM_HEIGHT) + (ROOM_HEIGHT / 2 + 1),
+        color = difficultyTable.color
     }}) -- create a new dungeon map
 end
 
@@ -34,7 +36,7 @@ function DungeonGenerator.generateDunGrid(dungeonSize)
 end
 
 -- generate the rooms that will be placed in the dungeon
-function DungeonGenerator.generateRooms(definitions, dungeonGrid, dungeonSize)
+function DungeonGenerator.generateRooms(definitions, dungeonGrid, dungeonSize, difficultyTable)
     local startX, startY, endX, endY = 1, 1, 1, 1
     while startX == endX or startY == endY do
         startX, startY, endX, endY = math.random(dungeonSize), math.random(dungeonSize), math.random(dungeonSize), math.random(dungeonSize)
@@ -42,17 +44,21 @@ function DungeonGenerator.generateRooms(definitions, dungeonGrid, dungeonSize)
     local landmarks = {startX = startX, startY = startY, endX = endX, endY = endY}
     for x = 1, dungeonSize, 1 do
         for y = 1, dungeonSize, 1 do
-            local name = definitions.rooms[math.random(#definitions.rooms)] -- choose a room name
+            local name = DungeonGenerator.getRoom(definitions.rooms, difficultyTable) -- choose a room name
             local col, row = ((x - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[name].width / 2)),
                 ((y - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[name].height / 2)) -- define tile coordinates for the room
             dungeonGrid[x][y].room = {name = name, col = col, row = row} -- set the room
         end
     end
-    dungeonGrid[startX][startY] = {room = {name = definitions.startRoom, col = ((startX - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[definitions.startRoom].width / 2)),
-    row = ((startY - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[definitions.startRoom].height / 2))}, access = true}
+    local startRoom = DungeonGenerator.getRoom(definitions.startRooms, difficultyTable)
+    dungeonGrid[startX][startY] = {room = {name = startRoom, 
+        col = ((startX - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[startRoom].width / 2)),
+        row = ((startY - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[startRoom].height / 2))}, access = true}
         -- create the start room flag as accessible
-    dungeonGrid[endX][endY] = {room = {name = definitions.endRoom, col = ((endX - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[definitions.endRoom].width / 2)),
-    row = ((endY - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[definitions.endRoom].height / 2))}, access = true}
+    local endRoom = DungeonGenerator.getRoom(definitions.endRooms, difficultyTable)
+    dungeonGrid[endX][endY] = {room = {name = endRoom, 
+        col = ((endX - 1) * ROOM_WIDTH) + ((ROOM_WIDTH / 2 + 1) - math.floor(STRUCTURE_DEFS[endRoom].width / 2)),
+        row = ((endY - 1) * ROOM_HEIGHT) + ((ROOM_HEIGHT / 2 + 1) - math.floor(STRUCTURE_DEFS[endRoom].height / 2))}, access = true}
         -- create the end room, flag as accessible
     return landmarks -- the list containing the starting and ending room x and y positions on the dungeon grid
 end
@@ -136,7 +142,7 @@ function DungeonGenerator.removeDeadRooms(dungeonGrid, definitions, tileMap, fea
 end
 
 -- generate structures onto the map using the structure map
-function DungeonGenerator.generateStructures(structureMap, tileMap, featureMap)
+function DungeonGenerator.generateStructures(structureMap, tileMap, featureMap, difficultyTable)
     for i, structure in pairs(structureMap) do
         local structureDefinitions = STRUCTURE_DEFS[structure.name] -- reference to structure's definitions table
         if structureDefinitions.border_tile ~= nil or structureDefinitions.bottom_tile ~= nil then
@@ -157,7 +163,7 @@ function DungeonGenerator.generateStructures(structureMap, tileMap, featureMap)
             end
         end
         if structureDefinitions.layouts ~= nil then -- check for a feature layout map
-            local layout = LAYOUT_DEFS[structureDefinitions.layouts[math.random(#structureDefinitions.layouts)]] -- reference to the layout
+            local layout = LAYOUT_DEFS[DungeonGenerator.getLayout(structureDefinitions.layouts, difficultyTable)] -- reference to the layout
             for x = 1, structureDefinitions.width, 1 do 
                 for y = 1, structureDefinitions.height, 1 do
                     local col, row = x + structure.col - 1, y + structure.row - 1 -- set the location of this feature
@@ -180,4 +186,16 @@ function DungeonGenerator.generateStructures(structureMap, tileMap, featureMap)
             end
         end
     end
+end
+
+-- return a room name that is taken based on the difficulty and the generation definitions
+function DungeonGenerator.getRoom(rooms, difficultyTable)
+    local resultRoomTable = rooms[math.min(math.random(difficultyTable.room), #rooms)]
+    return resultRoomTable[math.random(#resultRoomTable)] -- return the resulting room
+end
+
+-- return a layout that is taken based on the difficulty and the room definition
+function DungeonGenerator.getLayout(layouts, difficultyTable)
+    local resultLayoutTable = layouts[math.min(math.random(difficultyTable.layout), #layouts)]
+    return resultLayoutTable[math.random(#resultLayoutTable)] -- return resulting layout
 end

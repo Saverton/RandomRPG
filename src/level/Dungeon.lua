@@ -8,7 +8,7 @@ Dungeon = Class{__includes = Level}
 
 function Dungeon:init(worldName, levelName, definitions)
     Level.init(self, worldName, levelName, definitions) -- initiate a level
-    self.map = definitions.map or DungeonGenerator.generateDungeon(DUNGEON_DEFS['dungeon'], math.random(3, 3)) -- carries and manages all data for the level's map (tiles, features)
+    self.map = definitions.map or DungeonGenerator.generateDungeon(DUNGEON_DEFS['dungeon'], self:getDifficulty(levelName)) -- carries and manages all data for the level's map (tiles, features)
     self:spawnPlayer(definitions.player or {}) -- initiate, set stateMachine, and spawn in the player
     self.camera = DungeonCamera(self.player, self) -- create a dungeon camera with a reference to the player as its target and this level.
     self.entityManager = EntityManager(self, definitions.entityManager or {}, 'dungeon') 
@@ -19,4 +19,15 @@ end
 function Dungeon:spawnPlayer(definitions)
     Level.spawnPlayer(self, definitions)
     self.player.x, self.player.y = (self.map.start.x - 1) * TILE_SIZE, (self.map.start.y - 1) * TILE_SIZE
+end
+
+-- return a table with the difficulty values for size, rooms, and layouts
+function Dungeon:getDifficulty(levelName)
+    local overallDifficulty = ((tonumber(string.sub(levelName, string.find(levelName, "-") + 1, string.len(levelName))) - 1) * 2) + 3
+        -- get the difficulty based on the level name
+    local difficultyTable = {0, 0, 0} -- default table with difficulty values
+    while SumTable(difficultyTable) ~= overallDifficulty do
+        difficultyTable = {math.random(3), math.random(3), math.random(3)} -- randomize difficulties until matches overall
+    end
+    return {size = difficultyTable[1], room = difficultyTable[2], layout = difficultyTable[3], color = overallDifficulty}
 end

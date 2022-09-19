@@ -21,7 +21,11 @@ STRUCTURE_DEFS = {
                 enemy = 'skeleton'
             }
         },
-        layouts = {'ring', 'corners', 'dividers', 'grid', 'maze-1', 'maze-2', 'maze-3'},
+        layouts = {
+            [1] = {'ring', 'corners', 'dividers'},
+            [2] = {'maze-1', 'grid'},
+            [3] = {'maze-2', 'maze-3'},
+        },
         keepTiles = {'floor'}
     },
     ['fortress_room_goblins'] = {
@@ -41,7 +45,11 @@ STRUCTURE_DEFS = {
                 enemy = 'goblin'
             }
         },
-        layouts = {'ring', 'corners', 'dividers', 'grid', 'maze-1', 'maze-2', 'maze-3'},
+        layouts = {
+            [1] = {'ring', 'corners'},
+            [2] = {'maze-2', 'dividers'},
+            [3] = {'maze-1', 'maze-3', 'grid'},
+        },
         keepTiles = {'floor'}
     },
     ['fortress_room_empty'] = {
@@ -56,7 +64,10 @@ STRUCTURE_DEFS = {
                 chance = 1
             }
         },
-        layouts = {'ring', 'corners', 'dividers', 'grid', 'maze-1', 'maze-2', 'maze-3'},
+        layouts = {
+            [1] = {'ring', 'corners', 'grid', 'dividers'},
+            [2] = {'maze-1', 'maze-3',  'maze-2'}
+        },
         keepTiles = {'floor'}
     },
     ['fortress_exit'] = {
@@ -72,7 +83,7 @@ STRUCTURE_DEFS = {
                 destination = 'overworld-1'
             }
         },
-        layouts = {'exit-1'},
+        layouts = {[1] = {'exit-1'}},
         keepTiles = {'floor'}
     },
     ['fortress_treasure'] = {
@@ -84,7 +95,7 @@ STRUCTURE_DEFS = {
         features = {
             [1] = {
                 name = 'rock',
-                chance = 0.75
+                chance = 1 
             },
             [2] = {
                 name = 'chest',
@@ -105,7 +116,7 @@ STRUCTURE_DEFS = {
                 chance = 1
             }
         },
-        layouts = {'treasure-1'},
+        layouts = {[1] = {'treasure-1'}},
         keepTiles = {'floor'}
     }
 }

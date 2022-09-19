@@ -144,3 +144,12 @@ function ProductOfBoosts(boostTable)
     end
     return totalBoost
 end
+
+-- return the sum of all elements in a table
+function SumTable(table)
+    local sum = 0
+    for i, element in ipairs(table) do
+        sum = sum + element
+    end
+    return sum
+end
