@@ -176,7 +176,8 @@ gSounds = {
         ['tree_falls'] = love.audio.newSource('sounds/tree_falls.wav', 'static'),
     },
     ['music'] = {
-        ['dungeon_theme'] = love.audio.newSource('sounds/dungeon.mp3', 'stream'),
-        ['fortress'] = love.audio.newSource('sounds/fortress.mp3', 'stream')
+        ['dungeon'] = love.audio.newSource('sounds/dungeon.mp3', 'stream'),
+        ['underground'] = love.audio.newSource('sounds/underground.mp3', 'stream'),
+        ['overworld'] = love.audio.newSource('sounds/overworld.mp3', 'stream')
     }
 }

@@ -15,6 +15,7 @@ end
 -- function called when the feature is collided with and the entity is a player, transports the player to the destination
 function GatewayFeature:onEnter(level)
     self.active = false
+    level:stopMusic() -- stop the music
     gSounds['world']['enter_gateway']:play()
     gStateStack:push(ConvergePointState({x = level.player.x + level.player.width / 2 - level.camera.x, 
         y = level.player.y + level.player.height / 2 - level.camera.y},

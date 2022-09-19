@@ -50,3 +50,14 @@ function Level:updateFlags()
     self.player.questManager:updateFlags(self.flags)
     self.flags = {}
 end
+
+-- start playing background music on loop
+function Level:playMusic()
+    gSounds['music'][self.backgroundMusic]:setLooping(true) 
+    gSounds['music'][self.backgroundMusic]:play()
+end
+
+-- stop playing music
+function Level:stopMusic()
+    gSounds['music'][self.backgroundMusic]:stop()
+end
