@@ -145,23 +145,18 @@ end
 function DungeonGenerator.generateStructures(structureMap, tileMap, featureMap, difficultyTable)
     for i, structure in pairs(structureMap) do
         local structureDefinitions = STRUCTURE_DEFS[structure.name] -- reference to structure's definitions table
-        if structureDefinitions.border_tile ~= nil or structureDefinitions.bottom_tile ~= nil then
-            for x = structure.col - 1, structure.col + structureDefinitions.width, 1 do 
-                for y = structure.row - 1, structure.row + structureDefinitions.height, 1 do -- set structure's tiles
+        if structureDefinitions.border_tile ~= nil or structureDefinitions.bottomTile ~= nil then
+            for x = structure.col, structure.col + structureDefinitions.width, 1 do 
+                for y = structure.row, structure.row + structureDefinitions.height, 1 do -- set structure's tiles
                     if Contains(structureDefinitions.keepTiles, tileMap[x][y].name) then
                         goto continue -- if this tile is flagged as one to keep, don't override
                     end
-                    if structureDefinitions.border_tile ~= nil and (x == structure.col - 1 or x == structure.col + structureDefinitions.width or 
-                        y == structure.row - 1 or y == structure.row + structureDefinitions.height) then
-                        featureMap[x][y] = nil -- build a structure border on outside tiles
-                        tileMap[x][y] = Tile(structureDefinitions.border_tile)
-                    elseif structureDefinitions.bottom_tile ~= nil then
-                        tileMap[x][y] = Tile(structureDefinitions.bottom_tile)
-                    end
+                    tileMap[x][y] = Tile(structureDefinitions.bottomTile)
                     ::continue::
                 end
             end
         end
+        DungeonGenerator.generateWalls(structure, tileMap) -- generate the walls of this structure
         if structureDefinitions.layouts ~= nil then -- check for a feature layout map
             local layout = LAYOUT_DEFS[DungeonGenerator.getLayout(structureDefinitions.layouts, difficultyTable)] -- reference to the layout
             for x = 1, structureDefinitions.width, 1 do 
@@ -198,4 +193,27 @@ end
 function DungeonGenerator.getLayout(layouts, difficultyTable)
     local resultLayoutTable = layouts[math.min(math.random(difficultyTable.layout), #layouts)]
     return resultLayoutTable[math.random(#resultLayoutTable)] -- return resulting layout
+end
+
+-- generate the walls of a structure
+function DungeonGenerator.generateWalls(structure, tileMap)
+    local structureDefinitions = STRUCTURE_DEFS[structure.name]
+    local x, y = structure.col, structure.row
+    local width, height = structureDefinitions.width, structureDefinitions.height
+    tileMap[x - 1][y - 1] = Tile(structureDefinitions.cornerTile) -- generate corners
+    tileMap[x + width][y - 1] = Tile(structureDefinitions.cornerTile, 90)
+    tileMap[x + width][y + height] = Tile(structureDefinitions.cornerTile, 180)
+    tileMap[x - 1][y + height] = Tile(structureDefinitions.cornerTile, 270)
+    for i = x, x + width - 1, 1 do -- generate sides
+        tileMap[i][y - 1] = Tile(structureDefinitions.sideTile)
+    end
+    for i = x, x + width - 1, 1 do
+        tileMap[i][y + height] = Tile(structureDefinitions.sideTile, 180)
+    end
+    for j = y, y + height - 1, 1 do
+        tileMap[x - 1][j] = Tile(structureDefinitions.sideTile, 270)
+    end
+    for j = y, y + height - 1, 1 do
+        tileMap[x + width][j] = Tile(structureDefinitions.sideTile, 90)
+    end
 end

@@ -17,6 +17,7 @@ MAP_OFFSET_X = 0
 MAP_OFFSET_Y = 0
 DEFAULT_MAP_SIZE = 100
 OVERWORLD_TYPES = {'classic', 'wasteland', 'winter_wonderland', 'winter_wasteland'}
+ROTATION_OFFSETS = {[0] = {x = 0, y = 0}, [90] = {x = 1, y = 0}, [180] = {x = 1, y = 1}, [270] = {x = 0, y = 1}}
 
 -- dungeon generation
 ROOM_WIDTH = 24

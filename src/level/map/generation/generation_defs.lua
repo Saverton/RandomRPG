@@ -105,8 +105,8 @@ DUNGEON_DEFS = {
             [2] = {'fortress_room_skeletons'}
         },
         floorTile = 'floor',
-        wallTile = 'wall_edge',
-        pathBorderTile = 'wall_edge',
+        wallTile = 'wall_side',
+        pathBorderTile = 'wall_block',
         insideTile = 'wall_inside',
         startRooms = {[1] = {'fortress_exit'}},
         endRooms = {[1] = {'fortress_treasure'}}

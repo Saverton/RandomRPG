@@ -65,8 +65,8 @@ TILE_DEFS = {
         barrier = true,
         onInteract = function() end
     },
-    ['wall_edge'] = {
-        name = 'wall_edge',
+    ['wall_block'] = {
+        name = 'wall_block',
         texture = 'tiles',
         frame = 9,
         barrier = true,
@@ -77,6 +77,20 @@ TILE_DEFS = {
         texture = 'tiles',
         frame = 10,
         barrier = false,
+        onInteract = function() end
+    },
+    ['wall_side'] = {
+        name = 'wall_side',
+        texture = 'tiles',
+        frame = 11,
+        barrier = true,
+        onInteract = function() end
+    },
+    ['wall_corner'] = {
+        name = 'wall_corner',
+        texture = 'tiles',
+        frame = 12,
+        barrier = true,
         onInteract = function() end
     }
 }
