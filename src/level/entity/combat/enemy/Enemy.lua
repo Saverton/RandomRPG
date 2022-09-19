@@ -29,7 +29,7 @@ end
 -- update the enemy
 function Enemy:update(dt)
     CombatEntity.update(self, dt) -- update combatentity components
-    if self.active then
+    if self.active and self.currentStats.hp > 0 then
         self:seekTarget() -- try to find or track down a target
     end
 end

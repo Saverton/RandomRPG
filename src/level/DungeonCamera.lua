@@ -36,7 +36,6 @@ function DungeonCamera:update()
     if newX ~= self.x or newY ~= self.y then
         newX, newY = self:keepInMapBounds(newX, newY) -- make sure that the new camera position doesn't go out of the map's boundaries
         gStateStack:push(CameraShiftState(self, {x = newX, y = newY}, 2))
-        self.level.entityManager:reset() -- reset the entity manager of the level to remove all entities and respawn them in the new room.
     end 
 end
 

@@ -11,5 +11,6 @@ function CameraShiftState:init(camera, newPosition, time)
     }):finish(function() 
         gStateStack:pop() -- remove this game state from the stack
         camera:resetCambox() -- reset the camera's update box such that it only covers the on screen material.
+        camera.level.entityManager:reset() -- reset the entity manager of the level to remove all entities and respawn them in the new room.
     end)
 end

@@ -18,7 +18,8 @@ end
 -- initiate player, spawn it at the designated spawn space
 function Dungeon:spawnPlayer(definitions)
     Level.spawnPlayer(self, definitions)
-    self.player.x, self.player.y = (self.map.start.x - 1) * TILE_SIZE, (self.map.start.y - 1) * TILE_SIZE
+    self.player.x, self.player.y = (self.map.start.x - 1) * TILE_SIZE + PLAYER_SPAWN_X_OFFSET, 
+        (self.map.start.y - 1) * TILE_SIZE + PLAYER_SPAWN_Y_OFFSET -- spawn the player in the dungeon
 end
 
 -- return a table with the difficulty values for size, rooms, and layouts
