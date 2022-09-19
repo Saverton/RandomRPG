@@ -16,7 +16,7 @@ function DungeonGenerator.generateDungeon(definitions, difficultyTable)
     DungeonGenerator.removeDeadRooms(dungeonGrid, definitions, tileMap, featureMap) -- remove any rooms that do not have access via paths
     return DungeonMap(dimensions, {tileMap = tileMap, featureMap = featureMap, gatewayMap = {}, start = {
         x = ((landmarks.startX - 1) * ROOM_WIDTH) + (ROOM_WIDTH / 2 + 1), y =  ((landmarks.startY - 1) * ROOM_HEIGHT) + (ROOM_HEIGHT / 2 + 1),
-        color = difficultyTable.color
+        color = ENEMY_COLORS[difficultyTable.color]
     }}) -- create a new dungeon map
 end
 
