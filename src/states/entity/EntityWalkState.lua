@@ -23,7 +23,7 @@ function EntityWalkState:update(dt)
         self.entity.x = self.entity.x - (self.entity:getSpeed() * dt)
     end
     local stopMoving = false-- flag to show if at any point the entity has to stop moving and change into an idle state.
-    if (self.entity:checkCollisionWithMap()) then
+    if (self.entity:checkCollisionWithMap(dt)) then
         -- if the movement causes a collision, move the entity back to its old location at the start of this frame
         self.entity.x, self.entity.y = oldX, oldY
         stopMoving = true

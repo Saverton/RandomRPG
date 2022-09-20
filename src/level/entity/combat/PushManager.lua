@@ -16,7 +16,7 @@ function PushManager:update(dt)
     if self.isPushed then -- check if the entity is pushed
         local oldX, oldY = self.entity.x, self.entity.y
         self.entity.x, self.entity.y = self.entity.x + math.floor(self.pushdx), self.entity.y + math.floor(self.pushdy) -- set the new position after the push 
-        if self.entity:checkCollisionWithMap() then
+        if self.entity:checkCollisionWithMap(dt) then
             self.isPushed = false
             self.entity.x, self.entity.y = oldX, oldY -- if there is no collision, set the new position of the entity
         end

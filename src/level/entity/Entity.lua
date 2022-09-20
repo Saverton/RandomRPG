@@ -106,8 +106,8 @@ function Entity:useHeldItem()
 end
 
 -- return true if this entity's movement causes a collision with the map, false otherwise
-function Entity:checkCollisionWithMap(x, y)
-    local checkList = self:getCollisionCheckList(x or self.x, y or self.y) -- get a list of coordinates to check
+function Entity:checkCollisionWithMap(dt, x, y)
+    local checkList = self:getCollisionCheckList(dt, x or self.x, y or self.y) -- get a list of coordinates to check
     local map = self.level.map -- reference to the entity's level's map
     for i, coordinate in pairs(checkList) do
         if coordinate.x < 1 or coordinate.x > map.width or coordinate.y < 1 or coordinate.y > map.height then
@@ -125,10 +125,10 @@ function Entity:checkCollisionWithMap(x, y)
 end
 
 -- return a list of map coordinates to check for collision with.
-function Entity:getCollisionCheckList(x, y)
+function Entity:getCollisionCheckList(dt, x, y)
     local leftCol, rightCol, topRow, bottomRow = (math.ceil(x / TILE_SIZE)), (math.ceil((x + self.width) / TILE_SIZE)), 
         (math.ceil(y / TILE_SIZE)), (math.ceil((y + self.height) / TILE_SIZE)) -- get the map coordinates of each side of this entity
-    local dx, dy = self:getDirectionalVelocities() -- get entity's directional velocity
+    local dx, dy = self:getDirectionalVelocities(dt) -- get entity's directional velocity
     local checkList = {} -- the list of coordinates to be checked for collision
     if dx < 0 or dy < 0 then
         table.insert(checkList, {x = leftCol, y = topRow})
@@ -143,13 +143,13 @@ function Entity:getCollisionCheckList(x, y)
 end
 
 -- return the directional velocity for the x and y axis of this entity (dx = delta x, dy = delta y)
-function Entity:getDirectionalVelocities()
+function Entity:getDirectionalVelocities(dt)
     local dx, dy = 0, 0 -- set base velocity as 0
     if self.pushManager ~= nil and self.pushManager.isPushed then
        dx, dy = self.pushManager.pushdx, self.pushManager.pushdy -- add in push velocity
     end
-    dx, dy = dx + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].x * self:getSpeed()), 
-        dy + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].y * self:getSpeed()) -- add in the entity's movement velocity
+    dx, dy = dx + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].x * (self:getSpeed() * dt)), 
+        dy + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].y * (self:getSpeed() * dt)) -- add in the entity's movement velocity
     return dx, dy
 end
 
