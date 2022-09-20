@@ -12,8 +12,9 @@ function DeathAnimationState:init(player, x, y)
     self.updateAnimation = false -- whether or not to update the current animation
     self.renderPlayerExtra = true -- whether or not to render the large eyes and sweat on the dead player
     self.extraAnimation = Animation('player_death', player.direction) -- the animation of the eyes and sweat drawn on the player
-
     Timer.after(1, function() -- after one second, start the spinning animation and fade to dark red
+        gSounds['combat']['death_jingle']:stop()
+        gSounds['combat']['death_jingle']:play() -- play the death sound
         self.animation:changeAnimation('spin')
         self.updateAnimation = true
         self.renderPlayerExtra = false

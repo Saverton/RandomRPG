@@ -243,4 +243,5 @@ function Player:dies()
             -- play the player's death animations
     end
     self.dead = true -- player is now flagged dead
+    self.level:stopMusic() -- stop the background music
 end

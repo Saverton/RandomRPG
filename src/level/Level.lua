@@ -54,8 +54,8 @@ end
 function Level:getPlayerSpawnPosition(position)
     for x = position.x, position.x + 2, 1 do
         for y = position.y, position.y + 2 do
-            if self.map:isSpawnableSpace(x, y) then
-                position.x, position.y = x, y -- new position of player
+            if self.map:isSpawnableSpace(x + 1, y + 1) then
+                position.x, position.y = x + 1, y + 1 -- new position of player, add one to reflect the offset from the player position and map position
                 return
             end
         end
