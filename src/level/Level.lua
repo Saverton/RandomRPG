@@ -53,8 +53,8 @@ end
 -- get player position (used to prevent player spawning on top of a feature when coming out of an exit)
 function Level:getPlayerSpawnPosition(position)
     for x = position.x, position.x + 2, 1 do
-        for y = position.y, position.y + 2 do
-            if self.map:isSpawnableSpace(x + 1, y + 1) then
+        for y = position.y, position.y + 2, 1 do
+            if self.map.featureMap[x + 1][y + 1] == nil then
                 position.x, position.y = x + 1, y + 1 -- new position of player, add one to reflect the offset from the player position and map position
                 return
             end
