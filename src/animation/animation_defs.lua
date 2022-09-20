@@ -64,6 +64,10 @@ ANIMATION_DEFS = {
             texture = 'player',
             frames = {1, 4, 7, 13},
             interval = 0.1
+        },
+        ['item-get'] = {
+            texture = 'player',
+            frames = {14}
         }
     },
     ['player_death'] = {

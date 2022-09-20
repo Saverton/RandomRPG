@@ -33,9 +33,8 @@ end
 
 -- Initiate the player
 function Level:spawnPlayer(playerDefinitions)
-    local col, row = self.map:getSpawnableCoord() -- spawnable coordiante to place player
-    self.player = Player(self, (playerDefinitions or {}).definitions or ENTITY_DEFS['player'], (playerDefinitions or {}).position or 
-        {x = col, y = row, xOffset = PLAYER_SPAWN_X_OFFSET, yOffset = PLAYER_SPAWN_Y_OFFSET})
+    local position = {x = 1, y = 1, xOffset = PLAYER_SPAWN_X_OFFSET, yOffset = PLAYER_SPAWN_Y_OFFSET}
+    self.player = Player(self, (playerDefinitions or {}).definitions or ENTITY_DEFS['player'], position)
 end
 
 -- throw a list of flags into the level's tracker that are checked at the end of the update cycle
@@ -51,10 +50,27 @@ function Level:updateFlags()
     self.flags = {}
 end
 
+-- get player position (used to prevent player spawning on top of a feature when coming out of an exit)
+function Level:getPlayerSpawnPosition(position)
+    for x = position.x, position.x + 2, 1 do
+        for y = position.y, position.y + 2 do
+            if self.map:isSpawnableSpace(x, y) then
+                position.x, position.y = x, y -- new position of player
+                return
+            end
+        end
+    end
+end
+
 -- start playing background music on loop
 function Level:playMusic()
     gSounds['music'][self.backgroundMusic]:setLooping(true) 
     gSounds['music'][self.backgroundMusic]:play()
+end
+
+-- pause the music
+function Level:pauseMusic()
+    gSounds['music'][self.backgroundMusic]:pause()
 end
 
 -- stop playing music

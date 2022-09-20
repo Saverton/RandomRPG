@@ -13,7 +13,8 @@ function Player:init(level, definitions, position)
     self.stateMachine = StateMachine({
         ['idle'] = function() return PlayerIdleState(self) end,
         ['walk'] = function() return PlayerWalkState(self, self.level) end,
-        ['interact'] = function() return EntityInteractState(self) end
+        ['interact'] = function() return EntityInteractState(self) end,
+        ['item-get'] = function() return PlayerItemState(self) end
     }) -- initiate a state machine and set state to idle
     self:changeState('idle')
     if #self.items == 0 then -- if the player is starting, give him a wooden sword

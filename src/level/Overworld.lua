@@ -29,3 +29,16 @@ function Overworld:render()
     Level.render(self) 
     self.npcManager:render(self.camera)
 end
+
+function Overworld:spawnPlayer(playerDefinitions)
+    Level.spawnPlayer(self, playerDefinitions)
+    local position = nil
+    if ((playerDefinitions or {}).position ~= nil) then
+        self:getPlayerSpawnPosition(playerDefinitions.position)
+        position = playerDefinitions.position
+    else
+        local col, row = self.map:getSpawnableCoord() -- spawnable coordiante to place player
+        position = {x = col, y = row, xOffset = PLAYER_SPAWN_X_OFFSET, yOffset = PLAYER_SPAWN_Y_OFFSET}
+    end
+    self.player:setPosition(position) -- set the player's position
+end
