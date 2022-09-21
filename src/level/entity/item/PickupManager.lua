@@ -19,7 +19,8 @@ function PickupManager:update(dt)
             if ITEM_DEFS[item.name].type ~= 'pickup' then -- add to player inventory if not a pickup
                 self.level.player:giveItem(item)
             end
-            gSounds['items'][ITEM_DEFS[pickup.name].pickupSound or 'pickup_item']:play() -- play pickup sound
+            gSounds['items'][pickupSound]:stop() -- play pickup sound
+            gSounds['items'][pickupSound]:play() -- play pickup sound
             if pickupSound == 'special_item' then
                 self.level.player:changeState('item-get', {item = item}) -- make the player perform the special pickup animation
             end

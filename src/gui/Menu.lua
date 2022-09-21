@@ -16,6 +16,7 @@ function Menu:init(definitions, instance)
     self.selector = 1 -- the selector that is currently being modified
     self.selectors = definitions.selectors or {{position = 1, onChoose = function(position, menu) self.selections[position].onSelect(menu.parent) end}}
         -- the selectors that will navigate this menu, by default executes the selection's onSelect function.
+    self.showSelector = false -- flag to render the selector, only set to true in update function so the only selector rendered is on the top menu
 end
 
 -- update the menu each frame
@@ -31,6 +32,7 @@ function Menu:update(dt)
             selector.onChoose(math.max(math.min(selector.position, #self.selections), 1), self) -- select this selection
         end
     end
+    self.showSelector = true
 end
 
 -- render this menu
@@ -71,8 +73,9 @@ function Menu:printSelections()
         local x, y = self.x + SELECTION_MARGIN, self.y + (SELECTION_MARGIN * i) + (SELECTION_HEIGHT * i) + 30 -- x and y positions of the selection
         selection:render(x, y, self.width - (2 * SELECTION_MARGIN)) -- render the selection
         for k, selector in pairs(self.selectors) do
-            if selector.position == i then
+            if self.showSelector and selector.position == i then
                 self:renderSelector(x, y, k) -- render any selectors on this position
+                self.showSelector = false
             end
         end
     end
