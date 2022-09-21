@@ -145,7 +145,7 @@ end
 function DungeonGenerator.generateStructures(structureMap, tileMap, featureMap, difficultyTable)
     for i, structure in pairs(structureMap) do
         local structureDefinitions = STRUCTURE_DEFS[structure.name] -- reference to structure's definitions table
-        if structureDefinitions.border_tile ~= nil or structureDefinitions.bottomTile ~= nil then
+        if structureDefinitions.bottomTile ~= nil then
             for x = structure.col, structure.col + structureDefinitions.width, 1 do 
                 for y = structure.row, structure.row + structureDefinitions.height, 1 do -- set structure's tiles
                     if Contains(structureDefinitions.keepTiles, tileMap[x][y].name) then
