@@ -69,7 +69,7 @@ function SaveState:saveMap(path)
     for i, col in ipairs(self.map.tileMap) do
         tileMap[i] = {}
         for j, tile in ipairs(col) do
-            tileMap[i][j] = tile.name
+            tileMap[i][j] = tile.name .. '-' .. tostring(tile.rotation) -- string with the name and tile rotation
         end
     end
     love.filesystem.write(path .. '/world_features.lua', Serialize(featureMap))

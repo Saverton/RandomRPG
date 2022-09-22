@@ -63,7 +63,10 @@ function LoadState:loadMap()
     local tileMap = loadstring(love.filesystem.read(self.path .. '/world_tiles.lua'))()
     for i, col in ipairs(tileMap) do
         for j, tile in ipairs(col) do
-            tileMap[i][j] = Tile(tile)
+            local tileString = tileMap[i][j]
+            local tileName = string.sub(tileString, 0, string.find(tileString, "-") - 1)
+            local tileRotation = string.sub(tileString, string.find(tileString, "-") + 1)
+            tileMap[i][j] = Tile(tileName, tonumber(tileRotation))
         end
     end
     local width, height = #tileMap, #tileMap[1]
