@@ -17,3 +17,13 @@ function Tile:render(camx, camy, xPos, yPos)
     love.graphics.draw(gTextures[TILE_DEFS[self.name].texture], gFrames[TILE_DEFS[self.name].texture][TILE_DEFS[self.name].frame], 
         x, y, math.rad(self.rotation))
 end
+
+-- returns true if the tile is habitable by entities, false otherwise
+function Tile:isHabitableTile()
+    return not TILE_DEFS[self.name].barrier and not TILE_DEFS[self.name].wall
+end
+
+-- returns true if the tile is collidable by projectiles, false otherwise
+function Tile:isProjectileHabitableTile()
+    return not TILE_DEFS[self.name].wall
+end

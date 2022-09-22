@@ -136,7 +136,7 @@ function Entity:checkCollisionWithMap(dt, x, y)
         end
         local feature = map.featureMap[coordinate.x][coordinate.y] or Feature('empty') -- the feature in this coordinate
         local tile = map.tileMap[coordinate.x][coordinate.y] -- definitions table for tile in this coordinate
-        if FEATURE_DEFS[feature.name].isSolid or TILE_DEFS[tile.name].barrier then
+        if FEATURE_DEFS[feature.name].isSolid or not tile:isHabitableTile() then
             return true -- determine if the entity collides with something that stops it
         end
         FEATURE_DEFS[feature.name].onCollide(self, feature) -- if this feature has an onCollide function, call it

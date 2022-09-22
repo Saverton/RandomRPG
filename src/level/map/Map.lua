@@ -71,15 +71,15 @@ end
 
 -- return true if the space at this index is considered spawnable, false otherwise.
 function Map:isSpawnableSpace(col, row)
-    return not (TILE_DEFS[self.tileMap[col][row].name].barrier or (self.featureMap[col][row] ~= nil and FEATURE_DEFS[self.featureMap[col][row].name].isSolid))
+    return (self.tileMap[col][row]:isHabitableTile() and not(self.featureMap[col][row] ~= nil and FEATURE_DEFS[self.featureMap[col][row].name].isSolid))
 end
 
 -- return a spawnable set of random coordinates on the map
 function Map:getSpawnableCoord()
-    local col, row = math.random(2, self.width - 1), math.random(2, self.height - 1)
-    while not self:isSpawnableSpace(col, row) do -- choose random spaces until the space is spawnable
+    local col, row = 0, 0
+    repeat
         col, row = math.random(2, self.width - 1), math.random(2, self.height - 1)
-    end
+    until self:isSpawnableSpace(col, row)
     return col, row -- return the coordinate
 end
 

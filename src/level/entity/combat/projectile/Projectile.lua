@@ -95,7 +95,8 @@ function Projectile:checkCollisionWithMap(map)
             goto skipThisCoordinate -- if the coordinate is out of map bounds, skip the check
         end
         local feature = map.featureMap[coordinate.x][coordinate.y]
-        if (feature ~= nil and FEATURE_DEFS[feature.name].isSolid) then
+        local tile = map.tileMap[coordinate.x][coordinate.y]
+        if (feature ~= nil and FEATURE_DEFS[feature.name].isSolid) or not tile:isProjectileHabitableTile() then
             return true -- collision found
         end
         ::skipThisCoordinate:: -- skip checking label
@@ -108,15 +109,14 @@ function Projectile:getCollisionCheckList()
     local x, y = self.x + self.hitboxOffsetX, self.y + self.hitboxOffsetY
     local leftCol, rightCol, topRow, bottomRow = (math.ceil(x / TILE_SIZE)), (math.ceil((x + self.width) / TILE_SIZE)), 
         (math.ceil(y / TILE_SIZE)), (math.ceil((y + self.height) / TILE_SIZE)) -- get the map coordinates of each side of this projectile
-    local dx, dy = self.dy, self.dy -- get projectile's directional velocity
     local checkList = {} -- the list of coordinates to be checked for collision
-    if dx < 0 or dy < 0 then
+    if self.dx < 0 or self.dy < 0 then
         table.insert(checkList, {x = leftCol, y = topRow})
-    end if dx > 0 or dy < 0 then
+    end if self.dx > 0 or self.dy < 0 then
         table.insert(checkList, {x = rightCol, y = topRow})
-    end if dx > 0 or dy > 0 then
+    end if self.dx > 0 or self.dy > 0 then
         table.insert(checkList, {x = rightCol, y = bottomRow})
-    end if dx < 0 or dy > 0 then
+    end if self.dx < 0 or self.dy > 0 then
         table.insert(checkList, {x = leftCol, y = bottomRow})
     end -- add in coordinates according to the projectile's x and y velocity
     return checkList

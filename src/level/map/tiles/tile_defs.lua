@@ -63,6 +63,7 @@ TILE_DEFS = {
         texture = 'tiles',
         frame = 8,
         barrier = true,
+        wall = true,
         onInteract = function() end
     },
     ['wall_block'] = {
@@ -70,6 +71,7 @@ TILE_DEFS = {
         texture = 'tiles',
         frame = 9,
         barrier = true,
+        wall = true,
         onInteract = function() end
     },
     ['floor'] = {
@@ -84,6 +86,7 @@ TILE_DEFS = {
         texture = 'tiles',
         frame = 11,
         barrier = true,
+        wall = true,
         onInteract = function() end
     },
     ['wall_corner'] = {
@@ -91,6 +94,7 @@ TILE_DEFS = {
         texture = 'tiles',
         frame = 12,
         barrier = true,
+        wall = true,
         onInteract = function() end
     }
 }

@@ -133,7 +133,7 @@ function Enemy:getEnemyInventory(items)
     local level = self.statLevel.level
     for i, item in ipairs(items) do -- go through each item in order
         local itemLevel = item.level or 1 -- the level at which this item is held by the entity
-        if level >= itemLevel and math.random() > item.chance then
+        if level >= itemLevel and math.random() > (item.chance or 1) then
             self:giveItem(Item(item.name, self, item.quantity)) -- give the item to the entity
             self:setHeldItem(#self.items) -- set the held item to this item
         end
