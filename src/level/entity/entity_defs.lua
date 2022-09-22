@@ -91,7 +91,8 @@ ENTITY_DEFS = {
         deathSound = 'enemy_dies',
         push = 8,
         items = {
-            {name = 'wooden_sword', quantity = 1}
+            {name = 'wooden_sword', quantity = 1, level = 1},
+            {name = 'sword', quantity = 1, level = 5}
         },
         aiType = 'default'
     },

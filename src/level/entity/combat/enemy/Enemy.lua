@@ -25,6 +25,7 @@ function Enemy:init(level, definition, instance, manager)
     }) -- initiate a state machine and set state to spawn
     self:changeState('spawn')
     self.aiSubType = 'wander'
+    self:getEnemyInventory(definition.items or {})
 end
 
 -- update the enemy
@@ -124,4 +125,17 @@ end
 -- update all progress bars
 function Enemy:updateBars()
     self.hpBar:updateRatio(self.currentStats.hp / self:getStat('maxHp')) -- update hp bar
+end
+
+-- determine which item this enemy will hold given an item list for this enemy and this enemy's stat level
+function Enemy:getEnemyInventory(items)
+    self.items = {} -- set the item inventory to be empty
+    local level = self.statLevel.level
+    for i, item in ipairs(items) do -- go through each item in order
+        local itemLevel = item.level or 1 -- the level at which this item is held by the entity
+        if level >= itemLevel then
+            self:giveItem(Item(item.name, self, item.quantity)) -- give the item to the entity
+            self:setHeldItem(#self.items) -- set the held item to this item
+        end
+    end
 end
