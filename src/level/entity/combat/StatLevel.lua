@@ -20,13 +20,11 @@ end
 
 -- give the stat level expereince
 function StatLevel:expGain(amount)
+    local didLevelUp = false
     self.exp = self.exp + amount -- add new exp
-    if self.exp >= math.pow(3, self.level) then
-        self:playerLevelUp() -- if this is enough to level up, call the player level up function
-        return true
-    end
+    didLevelUp = self:checkForLevelUp()
     self.entity.expBar:updateRatio(self:getExpRatio())
-    return false
+    return didLevelUp
 end
 
 -- level up an enemy, auto upgrades each bonus accordingly
@@ -67,6 +65,7 @@ function StatLevel:playerLevelUp()
     }
     gStateStack:push(MenuState(MENU_DEFS['level_up'], {selections = selections}))
     self.entity:updateBars() -- update stat bars
+    self:checkForLevelUp() -- check if the player needs to level up again in case enough exp was gained to pass the threshold again.
 end
 
 -- level up an enemy to a certain level, used when initiating an enemy to a level higher than 1
@@ -92,4 +91,14 @@ function StatLevel:getSaveData()
         exp = self.exp,
         bonuses = self.bonuses
     }
+end
+
+-- check if the exp bar is full and, if so, level up
+function StatLevel:checkForLevelUp()
+    if self.exp >= math.pow(3, self.level) then
+        self:playerLevelUp() -- if this is enough to level up, call the player level up function
+        return true
+    else
+        return false
+    end
 end

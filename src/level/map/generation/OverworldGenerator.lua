@@ -62,13 +62,13 @@ function OverworldGenerator.generatePath(biomeMap, dimensions, definitions)
     local x, y = 0, 0 -- start position of path
     local direction = math.random(4) -- starting direction of the path
     if direction == 1 then
-        x, y = math.random(1, dimensions.width), 1
-    elseif direction == 2 then
-        x, y = dimensions.width, math.random(1, dimensions.height)
-    elseif direction == 3 then
         x, y = math.random(1, dimensions.width), dimensions.height
-    elseif direction == 4 then
+    elseif direction == 2 then
         x, y = 1, math.random(1, dimensions.height)
+    elseif direction == 3 then
+        x, y = math.random(1, dimensions.width), 1
+    elseif direction == 4 then
+        x, y = dimensions.width, math.random(1, dimensions.height)
     end -- choose start position based on starting direction of the map
     while true do
         local length = math.random(definitions.minPathSegment, definitions.maxPathSegment) -- the length of this segment
@@ -87,9 +87,9 @@ function OverworldGenerator.generatePath(biomeMap, dimensions, definitions)
                 end
             end
         end
-        x, y = x + deltas.x * length, y + deltas.y * length -- set the x and y positions to the new length
+        x, y = x + (deltas.x * length), y + (deltas.y * length) -- set the x and y positions to the new length
         pathLength = pathLength - length -- remove this segment's length from the total path length
-        if x <= 1 or x >= dimensions.width or y <= 1 or y >= dimensions.height or pathLength <= 0 then 
+        if x < 1 or x > dimensions.width or y < 1 or y > dimensions.height or pathLength <= 0 then 
             break -- stop if out of map or out of path to generate
         else
             -- otherwise, change direction
