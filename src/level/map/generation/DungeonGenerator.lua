@@ -204,16 +204,34 @@ function DungeonGenerator.generateWalls(structure, tileMap)
     tileMap[x + width][y - 1] = Tile(structureDefinitions.cornerTile, 90)
     tileMap[x + width][y + height] = Tile(structureDefinitions.cornerTile, 180)
     tileMap[x - 1][y + height] = Tile(structureDefinitions.cornerTile, 270)
-    for i = x, x + width - 1, 1 do -- generate sides
-        tileMap[i][y - 1] = Tile(structureDefinitions.sideTile)
+    local wallWidth, wallHeight = x + width - 1, y + height - 1
+    local wallTile = structureDefinitions.sideTile
+    for i = x, wallWidth, 1 do -- generate sides (top)
+        if i - x == math.ceil((wallWidth - x) / 2) then
+            tileMap[i][y - 1] = Tile(wallTile)
+        else
+            tileMap[i][y - 1] = Tile(wallTile .. ((i - x) < (wallWidth - x) / 2 and '_left' or '_right'))
+        end
     end
-    for i = x, x + width - 1, 1 do
-        tileMap[i][y + height] = Tile(structureDefinitions.sideTile, 180)
+    for i = x, wallWidth, 1 do -- generate sides (bottom)
+        if i - x == math.ceil((wallWidth - x) / 2) then
+            tileMap[i][y + height] = Tile(wallTile, 180)
+        else
+            tileMap[i][y + height] = Tile(wallTile .. ((i - x) < (wallWidth - x) / 2 and '_right' or '_left'), 180)
+        end
     end
-    for j = y, y + height - 1, 1 do
-        tileMap[x - 1][j] = Tile(structureDefinitions.sideTile, 270)
+    for j = y, wallHeight, 1 do -- generate sides (left)
+        if j - y == math.ceil((wallHeight - y) / 2) then
+            tileMap[x - 1][j] = Tile(wallTile, 270)
+        else
+            tileMap[x - 1][j] = Tile(wallTile .. ((j - y) < (wallHeight - y) / 2 and '_right' or '_left'), 270)
+        end
     end
-    for j = y, y + height - 1, 1 do
-        tileMap[x + width][j] = Tile(structureDefinitions.sideTile, 90)
+    for j = y, wallHeight, 1 do -- generate sides (right)
+        if j - y == math.ceil((wallHeight - y) / 2) then
+            tileMap[x + width][j] = Tile(wallTile, 90)
+        else
+            tileMap[x + width][j] = Tile(wallTile .. ((j - y) < (wallHeight - y) / 2 and '_left' or '_right'), 90)
+        end
     end
 end
