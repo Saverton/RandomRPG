@@ -15,6 +15,7 @@ function Entity:init(level, definitions, position)
     self.animator = Animation(self.animationName, definitions.startAnimation or 'idle-right') -- the animator used to display this entity
     self:initiateInventory(definitions.items or {}) -- initiate the inventory of this entity
     self.speed = definitions.speed or DEFAULT_SPEED -- set the move speed for this entity
+    self.stateName = '' -- the name of the current state that this entity is in
 end
 
 -- update each of the components of this entity
@@ -57,11 +58,31 @@ end
 -- change the state of this entity's stateMachine, pass parameters onward
 function Entity:changeState(name, parameters)
     self.stateMachine:change(name, parameters)
+    self.stateName = name -- set the entity's stateName to the new state's name
 end
 
 -- change the animation of this entity's animator
 function Entity:changeAnimation(name)
     self.animator:changeAnimation(name)
+end
+
+-- change the entity's direction
+function Entity:changeDirection(newDirection)
+    self.direction = newDirection -- set the new direction as this entity's direction
+    self:changeAnimation(self.stateName .. '-' .. self.direction) -- change the entity's animation to reflect its new direction
+end
+
+-- change the entity's direction to a random direction
+function Entity:setRandomDirection()
+    local newDirection = DIRECTIONS[math.random(4)] -- choose a new random direction
+    self:changeDirection(newDirection) -- apply the new direction
+end
+
+-- change the direction of the entity by incrementing/shifting it by a certain amount (+ = clockwise, - = counterclockwise)
+function Entity:shiftDirection(shiftAmount)
+    local numericalDirection = DIRECTION_TO_NUM[self.direction] -- get the numerical representation of the entity's direction
+    local newNumericalDirection = (((numericalDirection - 1) + shiftAmount) % 4) + 1 -- shift the numerical direction accordingly
+    self:changeDirection(DIRECTIONS[newNumericalDirection]) -- change the direction to the new direction
 end
 
 -- return true if this entity collides with the target, false otherwise

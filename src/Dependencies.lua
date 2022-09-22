@@ -76,6 +76,7 @@ require 'src/level/map/OverworldMap'
 
 require 'src/level/entity/Entity' 
 require 'src/level/entity/entity_defs'
+require 'src/level/entity/ai_defs'
 require 'src/level/entity/combat/CombatEntity'
 require 'src/level/entity/combat/StatLevel'
 require 'src/level/entity/combat/PushManager'

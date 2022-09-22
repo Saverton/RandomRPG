@@ -9,9 +9,11 @@ function EntityWalkState:init(entity)
     EntityBaseState.init(self, entity) -- init base state
     self.animate = true -- animate the entity in this state
     self.entity:changeAnimation('walk-' .. self.entity.direction) -- update the animation
+    self.collidesWithObstacle = false
 end
 
 function EntityWalkState:update(dt)
+    self.collidesWithObstacle = false -- set the collidesWithObstacle flag to false so we don't get a false flag
     local oldX, oldY = self.entity.x, self.entity.y
     if self.entity.direction == 'up' then
         self.entity.y = self.entity.y - (self.entity:getSpeed() * dt)
@@ -30,7 +32,7 @@ function EntityWalkState:update(dt)
     end
     stopMoving = stopMoving or self:checkEntityWithMapBoundaries() -- keep entity on map
     if stopMoving then
-        self.hitObstacle = true -- if the entity has hit an obstacle, used in processing AI
+        self.collidesWithObstacle = true -- if the entity has hit an obstacle, used in processing AI
     end
 end
 

@@ -22,6 +22,7 @@ function NPC:init(level, definitions, position, manager)
     }) -- instantiate and set new stateMachine
     self:changeState('idle')
     self.despawnTimer = -1 -- timer for npc fade out animation
+    self.aiSubType = 'wander'
 end
 
 -- update all npc components

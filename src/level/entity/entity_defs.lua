@@ -42,7 +42,7 @@ ENTITY_DEFS = {
                 ['defense'] = 1,
                 ['maxMana'] = 1
             }
-        }
+        },
     },
     ['goblin'] = {
         name = 'goblin',
@@ -65,7 +65,8 @@ ENTITY_DEFS = {
             {name = 'health', chance = 0.25, min = 1, max = 1},
             {name = 'money', chance = 0.75, min = 1, max = 3}},
         deathSound = 'enemy_dies',
-        push = 8
+        push = 8,
+        aiType = 'default'
     },
     ['skeleton'] = {
         name = 'skeleton',
@@ -91,7 +92,8 @@ ENTITY_DEFS = {
         push = 8,
         items = {
             {name = 'wooden_sword', quantity = 1}
-        }
+        },
+        aiType = 'default'
     },
     ['wizard'] = {
         name = 'wizard',
@@ -120,7 +122,8 @@ ENTITY_DEFS = {
         push = 8,
         items = {
             {name = 'fire_tome', quantity = 1}
-        }
+        },
+        aiType = 'default'
     }
 }
 
@@ -143,6 +146,7 @@ NPC_DEFS = {
             return (npc.timesInteractedWith >= 1)
         end,
         speed = 16,
+        aiType = 'default'
     },
     ['shop'] = {
         name = 'shop',
@@ -165,6 +169,7 @@ NPC_DEFS = {
             return (npc.shop:getNumberOfItems() == 0 or npc.timesInteractedWith >= 5)
         end,
         speed = 16,
+        aiType = 'default'
     },
     ['quest'] = {
         name = 'quest',
@@ -183,5 +188,6 @@ NPC_DEFS = {
             return (npc.quest.completed or npc.quest.denied)
         end,
         speed = 16,
+        aiType = 'default'
     }
 }

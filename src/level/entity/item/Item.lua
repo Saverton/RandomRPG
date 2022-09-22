@@ -55,3 +55,8 @@ function Item:checkForPickup()
         ITEM_DEFS[self.name].onPickup(self.holder, self.quantity)
     end
 end
+
+-- return the use range (in pixels) that this item should be used in by a non-player entity
+function Item:getUseRange()
+    return (ITEM_DEFS[self.name].useRange * TILE_SIZE) -- the use range (in tiles) multiplied by the size of a tile.
+end

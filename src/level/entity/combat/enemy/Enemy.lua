@@ -24,6 +24,7 @@ function Enemy:init(level, definition, instance, manager)
         ['despawn'] = function() return EnemyDespawnState(self) end
     }) -- initiate a state machine and set state to spawn
     self:changeState('spawn')
+    self.aiSubType = 'wander'
 end
 
 -- update the enemy
@@ -67,6 +68,7 @@ function Enemy:findTarget(entity)
     if GetDistance(self, entity) <= ENTITY_DEFS[self.name].aggressiveDistance * TILE_SIZE then -- if the entity is within the aggressive range
         gSounds['combat']['target_found']:play() -- play aggressive sound
         self.target = entity
+        self.aiSubType = 'target' -- enter the targeting state of AI
         table.insert(self.boosts['speed'], {name = 'aggressive', multiplier = ENTITY_DEFS[self.name].aggressiveSpeedBoost})
     end 
 end
@@ -74,6 +76,7 @@ end
 -- release the current target, remove speed boost
 function Enemy:loseTarget()
     self.target = nil -- target is now undefined
+    self.aiSubType = 'wander' -- return to wandering state
     table.remove(self.boosts['speed'], GetIndex(self.boosts['speed'], 'aggressive')) -- remove speed boost
 end
 
