@@ -23,13 +23,14 @@ end
 function Menu:update(dt)
     local selector = self.selectors[self.selector] -- reference to the current selector
     if selector ~= nil then
+        local numOfSelections = selector.maxIndex or #self.selections
         if love.keyboard.wasPressed('w') or love.keyboard.wasPressed('up') then
-            self:setSelectorPosition(selector, (selector.position + #self.selections - 2) % (#self.selections) + 1) -- move up one selection
+            self:setSelectorPosition(selector, (selector.position + numOfSelections - 2) % (numOfSelections) + 1) -- move up one selection
         elseif love.keyboard.wasPressed('s') or love.keyboard.wasPressed('down') then
-            self:setSelectorPosition(selector, ((selector.position) % #self.selections) + 1) -- move down one selection
+            self:setSelectorPosition(selector, ((selector.position) % numOfSelections) + 1) -- move down one selection
         elseif love.keyboard.wasPressed('space') or love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
             love.audio.play(gSounds['gui']['menu_select_1'])
-            selector.onChoose(math.max(math.min(selector.position, #self.selections), 1), self) -- select this selection
+            selector.onChoose(math.max(math.min(selector.position, numOfSelections), 1), self) -- select this selection
         end
     end
     self.showSelector = true
@@ -75,10 +76,10 @@ function Menu:printSelections()
         for k, selector in pairs(self.selectors) do
             if self.showSelector and selector.position == i then
                 self:renderSelector(x, y, k) -- render any selectors on this position
-                self.showSelector = false
             end
         end
     end
+    self.showSelector = false
 end
 
 -- render a selector at an x and y position

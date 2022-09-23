@@ -89,7 +89,7 @@ MENU_DEFS = {
                 gStateStack:push(DialogueState(item.displayName .. ': ' .. item.description, item.texture, item.frame)) 
             end),
             Selection('Switch', function(menuState)
-                table.insert(menuState.menu.selectors, {position = 1, selected = false, text = 'select item to switch', 
+                table.insert(menuState.menu.selectors, {position = 1, selected = false, text = 'select item to switch', maxIndex = #menuState.menu.selections - 1,
                     onChoose = function() 
                         menuState.menu:switch(menuState.menu.selectors[1].position, menuState.menu.selectors[2].position) 
                         menuState:updateInventory()

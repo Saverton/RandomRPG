@@ -23,6 +23,7 @@ end
 
 -- update the timer
 function PlayerItemState:update(dt)
+    print('pause updates state')
     Timer.update(dt, self.exitTimer)
 end
 
