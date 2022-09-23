@@ -51,11 +51,11 @@ BIOME_DEFS = {
         features = {
             {
                 name = 'rock', 
-                chance = 0.999
+                chance = 0.5
             },
             {
                 name = 'chest',
-                chance = 0.001
+                chance = 0.5
             }
         },
         featProc = 0.5

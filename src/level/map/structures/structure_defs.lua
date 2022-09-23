@@ -63,7 +63,7 @@ STRUCTURE_DEFS = {
         bottomTile = 'floor',
         features = {
             [1] = {
-                name = 'rock',
+                name = 'chest',
                 chance = 1
             }
         },

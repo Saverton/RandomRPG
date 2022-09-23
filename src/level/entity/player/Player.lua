@@ -245,3 +245,11 @@ function Player:dies()
     self.dead = true -- player is now flagged dead
     self.level:stopMusic() -- stop the background music
 end
+
+-- give the player an item, check for the special item tag
+function Player:giveItem(item)
+    Entity.giveItem(self, item)
+    if ITEM_DEFS[item.name].pickupSound == 'special_item' then
+        self:changeState('item-get', {item = item}) -- animate the player getting a special item
+    end
+end

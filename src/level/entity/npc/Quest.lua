@@ -75,7 +75,7 @@ end
 -- reward the player for completing the quest, set as complete, and display finish text
 function Quest:reward(player)
     for i, reward in pairs(self.rewards) do -- give each of the rewards to the player.
-        player:giveItem(Item(reward.name, player, reward.quantity))
+        Entity.giveItem(player, Item(reward.name, player, reward.quantity))
     end
     table.remove(player.questManager.quests, GetIndex(player.questManager.quests, self.quest.name)) -- remove the quest from the player's quest list.
     self.completed = true -- set the quest as complete

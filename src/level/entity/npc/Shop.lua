@@ -98,7 +98,7 @@ end
 function Shop:transaction(item)
     gSounds['gui']['shop_exchange']:play() -- play transaction sound
     self.player.money = math.max(0, self.player.money - item.price) -- update player money
-    self.player:giveItem(Item(item.name, self.player, 1)) -- give the player the purchased item
+    Entity.giveItem(self.player, Item(item.name, self.player, 1)) -- give the player the purchased item
     item.quantity = math.max(0, item.quantity - 1) -- update shop quantity
 end
 
