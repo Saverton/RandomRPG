@@ -22,8 +22,8 @@ end
 function Entity:update(dt)
     self.stateMachine:update(dt) -- update the entity's statemachine, where most activity is held
     self.animator:update(dt) -- update the entity's animation
-    if self.items[self.heldItem] ~= nil then
-        self.items[self.heldItem]:update(dt) --update held item's use timer
+    if self:getHeldItem() ~= nil then
+        self:getHeldItem():update(dt) --update held item's use timer
     end
 end
 
