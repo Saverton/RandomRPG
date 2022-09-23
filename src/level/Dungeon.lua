@@ -13,7 +13,7 @@ function Dungeon:init(worldName, levelName, definitions)
     self.camera = DungeonCamera(self.player, self) -- create a dungeon camera with a reference to the player as its target and this level.
     self.entityManager = EntityManager(self, definitions.entityManager or {}, 'dungeon') 
         -- initiate an entityManager with a reference to this class, the entities that are loaded in or an empty set of entities, and the spawning type.
-    self.backgroundMusic = 'underground'
+    self.backgroundMusic = 'dungeon'
     self:playMusic()
 end
 

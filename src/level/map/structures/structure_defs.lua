@@ -63,12 +63,12 @@ STRUCTURE_DEFS = {
         bottomTile = 'floor',
         features = {
             [1] = {
-                name = 'chest',
+                name = 'rock',
                 chance = 1
             }
         },
         layouts = {
-            [1] = {'ring', 'corners', 'grid', 'dividers'},
+            [1] = {'ring', 'grid', 'dividers'},
             [2] = {'maze-1', 'maze-3',  'maze-2'}
         },
         keepTiles = {'floor'}
