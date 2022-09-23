@@ -100,7 +100,9 @@ end
 -- insert a new item into the entity's inventory
 function Entity:giveItem(item)
     local itemData = ITEM_DEFS[item.name] -- reference to item's definition table
-    if itemData.stackable then -- determine if the item is able to be stacked
+    if itemData.type == 'pickup' then -- check if the item is a pickup
+        itemData.onPickup(self, item.quantity) -- register as a pickup
+    elseif itemData.stackable then -- determine if the item is able to be stacked
         self:giveStackableItem(item) -- add the item as a stackable
     else -- add the new items as a new index if not stackable
         table.insert(self.items, item)

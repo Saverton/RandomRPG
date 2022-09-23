@@ -16,9 +16,7 @@ function PickupManager:update(dt)
         if GetDistance(self.level.player, pickup) < PICKUP_RANGE then
             local item = Item(pickup.name, self.level.player, pickup.quantity) -- item made from pickup
             local pickupSound = ITEM_DEFS[pickup.name].pickupSound or 'pickup_item'
-            if ITEM_DEFS[item.name].type ~= 'pickup' then -- add to player inventory if not a pickup
-                self.level.player:giveItem(item)
-            end
+            self.level.player:giveItem(item)
             gSounds['items'][pickupSound]:stop() -- play pickup sound
             gSounds['items'][pickupSound]:play() -- play pickup sound
             if pickupSound == 'special_item' then
