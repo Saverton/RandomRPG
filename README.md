@@ -1,6 +1,7 @@
 # PROJECT TITLE : Random RPG
 
-# PROJECT DESCRIPTION : This application is a top-down RPG game that can be played through the LOVE2D engine. The game is played similar to the original Legend of Zelda (1986) (https://en.wikipedia.org/wiki/The_Legend_of_Zelda_(video_game)). Once a "world" has been created, the player is free to roam around the overworld, fighting monsters, hunting treasure, completing basic quests, and visiting shops. Eventually, players will stumble upon dungeons which, when entered, transport the player to a new "underworld" composed by a randomly generated labyrinth of rooms that contain enemies, treasure, or both! As of now, there is no ultimate objective in the game that is recognized in the code. There are three dungeons that generate currently (in random locations), each with their own difficulty. completing all three dungeons would be considered "beating" the game in its current state. In it's current testing phase, running the game will cause an immediate loading of a world in debug mode, which allows for some shortcut controls for feature testing. pressing the 'r' key in debug mode will generate and load a new world instantly in debug mode. pressing the 'm' key in debug mode will automatically increase the player's money count by 10. pressing the 'b' key in debug mode will give the player some stronger items to help against tougher foes or test inventory management.
+# PROJECT DESCRIPTION : 
+  This application is a top-down RPG game that can be played through the LOVE2D engine. The game is played similar to the original Legend of Zelda (1986) (https://en.wikipedia.org/wiki/The_Legend_of_Zelda_(video_game)). Once a "world" has been created, the player is free to roam around the overworld, fighting monsters, hunting treasure, completing basic quests, and visiting shops. Eventually, players will stumble upon dungeons which, when entered, transport the player to a new "underworld" composed by a randomly generated labyrinth of rooms that contain enemies, treasure, or both! As of now, there is no ultimate objective in the game that is recognized in the code. There are three dungeons that generate currently (in random locations), each with their own difficulty. completing all three dungeons would be considered "beating" the game in its current state. In it's current testing phase, running the game will cause an immediate loading of a world in debug mode, which allows for some shortcut controls for feature testing. pressing the 'r' key in debug mode will generate and load a new world instantly in debug mode. pressing the 'm' key in debug mode will automatically increase the player's money count by 10. pressing the 'b' key in debug mode will give the player some stronger items to help against tougher foes or test inventory management.
   # BROAD FEATURE LIST
     - Randomly generated overworld map
     - Enemies that spawn according to the rules of the current 'level' or 'map'
@@ -19,9 +20,11 @@
     - Visual polish in the dungeon (adding door frames, stencils, better camera boundaries)
     - game completion state / objective
     
-# HOW TO RUN : Download the Love2d engine (https://love2d.org/) and find the folder that contains the application 'love.exe'. Using a command line interface or by dragging the project file onto the 'love.exe' application, run the project folder in 'love.exe'. This should start the game automatically in debug mode, which is further detailed in the 'PROJECT DESCRIPTION' section.
+# HOW TO RUN : 
+  Download the Love2d engine (https://love2d.org/) and find the folder that contains the application 'love.exe'. Using a command line interface or by dragging the project file onto the 'love.exe' application, run the project folder in 'love.exe'. This should start the game automatically in debug mode, which is further detailed in the 'PROJECT DESCRIPTION' section.
 
-# HOW TO USE : Run the application as described above. Normal game controls are as follows:
+# HOW TO USE : 
+  Run the application as described above. Normal game controls are as follows:
   # CONTROLS
     - 'w'/'up arrow' = move up OR navigate up in menu
     - 'a'/'left arrow' = move left
