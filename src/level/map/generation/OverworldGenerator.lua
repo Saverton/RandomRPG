@@ -18,41 +18,13 @@ function OverworldGenerator.generateMap(definitions)
     return OverworldMap(dimensions, {biomeMap = biomeMap, tileMap = tileMap, featureMap = featureMap, gatewayMap = gatewayMap})
 end
 
+-- generate biomes through spreading them from random starting positions, then dividing them with rivers
 function OverworldGenerator.generateBiomes(definitions, dimensions)
     local biomeMap = {}
-    local numOfBiomes = math.random(definitions.minBiomes, definitions.maxBiomes)
-    local numOfPaths = math.random(definitions.minPaths, definitions.maxPaths)
-    local biomes = definitions.biomes
-    for col = 1, dimensions.width, 1 do
-        biomeMap[col] = {}
-        for row = 1, dimensions.height, 1 do
-            biomeMap[col][row] = Biome(definitions.baseBiome)
-        end
-    end -- fill with base biome by definitionsault
-    for i = 1, numOfBiomes, 1 do
-        local biomeSize = math.random(definitions.minBiomeSize, definitions.maxBiomeSize)
-        local biomeType = biomes[math.random(#biomes)]
-        local x, y = math.random(1, dimensions.width - biomeSize), math.random(1, dimensions.height - biomeSize)
-        for col = x, x + biomeSize, 1 do
-            for row = y, y + biomeSize, 1 do
-                biomeMap[col][row] = Biome(biomeType)
-            end
-        end
-    end -- generate sub-biomes at different locations and sizes
-    if definitions.generateBorder then -- generate border around edges
-        for i = 1, dimensions.width, 1 do -- generate top and bottom borders
-            biomeMap[i][1] = Biome(definitions.borderBiome)
-            biomeMap[i][dimensions.height] = Biome(definitions.borderBiome)
-        end 
-        for i = 1, dimensions.height, 1 do -- generate left and right borders
-            biomeMap[1][i] = Biome(definitions.borderBiome)
-            biomeMap[dimensions.width][i] = Biome(definitions.borderBiome)
-        end
-    end 
-    for i = 1, numOfPaths, 1 do
-        OverworldGenerator.generatePath(biomeMap, dimensions, definitions) -- generate paths (such as rivers)
-    end
-    return biomeMap
+    local divisionGrid = OverworldGenerator.createDivisionGrid(dimensions, #definitions.biomes) -- create a division grid
+    -- place each biome in a square of the grid
+    -- spread each biome 
+    -- place rivers between different biomes
 end
 
 function OverworldGenerator.generatePath(biomeMap, dimensions, definitions)
@@ -223,16 +195,7 @@ end
 -- generate any gateways, in this case dungeons
 function OverworldGenerator.generateGateways(definitions, dimensions, tileMap)
     local gateways = {} -- table of gateways
-    local gatewayDivider = {} -- 
-    for x = 1, #definitions.gateways, 1 do
-        gatewayDivider[x] = {}
-        for y = 1, #definitions.gateways, 1 do
-            gatewayDivider[x][y] = {x = math.floor((dimensions.width / #definitions.gateways) * (x - 1)),
-                y = math.floor((dimensions.height / #definitions.gateways) * (y - 1)), filled = false, 
-                dimensions = {width = math.floor(dimensions.width / #definitions.gateways), 
-                    height = math.floor(dimensions.height / #definitions.gateways)}} -- mark a portion of the map to generate a potential gateway feature
-        end
-    end
+    local gatewayDivider = OverworldGenerator.createDivisionGrid(dimensions, #definitions.gateways)
     for i, gateway in ipairs(definitions.gateways) do -- go through each gateway that must be generated
         local location = gatewayDivider[math.random(#gatewayDivider)][math.random(#gatewayDivider)]
         while (location.filled) do
@@ -246,4 +209,19 @@ function OverworldGenerator.generateGateways(definitions, dimensions, tileMap)
         table.insert(gateways, {name = gateway.name, x = spawnX, y = spawnY, destination = gateway.destination}) -- add the gateway feature
     end
     return gateways -- return the populated table
+end
+
+-- generate a set of invisible division marks across the map
+function OverworldGenerator.createDivisionGrid(dimensions, numOfDividers)
+    local dividers = {}
+    for x = 1, numOfDividers, 1 do
+        dividers[x] = {}
+        for y = 1, numOfDividers, 1 do
+            dividers[x][y] = {x = math.floor((dimensions.width / numOfDividers) * (x - 1)),
+                y = math.floor((dimensions.height / numOfDividers) * (y - 1)), filled = false, 
+                dimensions = {width = math.floor(dimensions.width / numOfDividers), 
+                    height = math.floor(dimensions.height / numOfDividers)}} -- mark a portion of the map to generate a potential gateway feature
+        end
+    end
+    return dividers
 end
