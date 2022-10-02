@@ -20,11 +20,33 @@ end
 
 -- generate biomes through spreading them from random starting positions, then dividing them with rivers
 function OverworldGenerator.generateBiomes(definitions, dimensions)
-    local biomeMap = {}
-    local divisionGrid = OverworldGenerator.createDivisionGrid(dimensions, #definitions.biomes) -- create a division grid
-    -- place each biome in a square of the grid
-    -- spread each biome 
+    local biomeMap = OverworldGenerator.generateNewBiomeMap(dimensions, "empty")
+    local numberOfBiomes = #definitions.biomes
+    local divisionGrid = OverworldGenerator.createDivisionGrid(dimensions, numberOfBiomes) -- create a division grid
+    local startBiomeList = {}
+    print_r(definitions)
+    for i, biome in ipairs(definitions.biomes) do -- place each biome in a square of the grid
+        table.insert(startBiomeList, 
+            {col = divisionGrid[i][math.random(1, numberOfBiomes)].x + math.random(0, divisionGrid[i][math.random(1, numberOfBiomes)].dimensions.width), 
+            row = divisionGrid[i][math.random(1, numberOfBiomes)].x + math.random(0, divisionGrid[i][math.random(1, numberOfBiomes)].dimensions.height), 
+            biome = biome}) -- add the biome starting squares
+    end
+    local biomeSpreader = BiomeSpreader(startBiomeList, biomeMap) -- spread each biome 
+    biomeSpreader:runSpreader()
     -- place rivers between different biomes
+    return biomeMap
+end
+
+-- fill a new biome map with a given biome
+function OverworldGenerator.generateNewBiomeMap(dimensions, biomeName)
+    local biomeMap = {}
+    for col = 1, dimensions.width, 1 do
+        biomeMap[col] = {}
+        for row = 1, dimensions.height, 1 do
+            biomeMap[col][row] = Biome(biomeName)
+        end
+    end
+    return biomeMap
 end
 
 function OverworldGenerator.generatePath(biomeMap, dimensions, definitions)
@@ -93,7 +115,7 @@ function OverworldGenerator.generateFeatures(biomeMap, dimensions)
         featureMap[col] = {}
         for row = 1, dimensions.height, 1 do
             local biome = biomeMap[col][row]
-            if math.random() < BIOME_DEFS[biome.name].featProc then -- determine if we generate a feature in this tile
+            if math.random() < BIOME_DEFS[biome.name].featureChance then -- determine if we generate a feature in this tile
                 local featureName = biome:getFeature() -- get a feature belonging to this biome
                 local feature = Feature(featureName) -- feature to be added
                 if FEATURE_DEFS[featureName].animated then

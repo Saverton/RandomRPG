@@ -4,6 +4,19 @@
 ]]
 
 BIOME_DEFS = {
+    ['empty'] = {
+        id = 0,
+        name = 'empty',
+        tiles = {
+            {
+                tileType = 'water',
+                chance = 1
+            }
+        },
+        enemies = {},
+        features = {},
+        featureChance = 0
+    },
     ['grassland'] = {
         id = 1,
         name = 'grassland',
@@ -30,7 +43,7 @@ BIOME_DEFS = {
                 chance = 0.1
             }
         },
-        featProc = 0.05
+        featureChance = 0.05
     },
     ['mountain'] = {
         id = 2,
@@ -58,7 +71,7 @@ BIOME_DEFS = {
                 chance = 0.001
             }
         },
-        featProc = 0.5
+        featureChance = 0.5
     },
     ['water'] = {
         id = 3,
@@ -72,7 +85,7 @@ BIOME_DEFS = {
         enemies = {},
         spawnRate = 0,
         features = {},
-        featProc = 0
+        featureChance = 0
     },
     ['desert'] = {
         id = 4,
@@ -100,7 +113,7 @@ BIOME_DEFS = {
                 chance = 0.05
             }
         },
-        featProc = 0.1
+        featureChance = 0.1
     },
     ['snow_forest'] = {
         id = 5,
@@ -124,7 +137,7 @@ BIOME_DEFS = {
                 chance = 1
             }
         },
-        featProc = 0.25
+        featureChance = 0.25
     },
     ['snow_field'] = {
         id = 5,
@@ -152,7 +165,7 @@ BIOME_DEFS = {
                 chance = 0.5
             }
         },
-        featProc = 0.025
+        featureChance = 0.025
     },
     ['beach'] = {
         id = 6,
@@ -171,7 +184,7 @@ BIOME_DEFS = {
         },
         spawnRate = 0.05,
         features = {},
-        featProc = 0
+        featureChance = 0
     },
     ['fortress_inside'] = {
         id = 7,
@@ -185,7 +198,7 @@ BIOME_DEFS = {
         enemies = {},
         spawnRate = 0,
         features = {},
-        featProc = 0
+        featureChance = 0
     },
     ['fortress_wall'] = {
         id = 8,
@@ -199,7 +212,7 @@ BIOME_DEFS = {
         enemies = {},
         spawnRate = 0,
         features = {},
-        featProc = 0
+        featureChance = 0
     },
     ['fortress_room'] = {
         id = 9,
@@ -213,6 +226,6 @@ BIOME_DEFS = {
         enemies = {},
         spawnRate = 0.05,
         features = {},
-        featProc = 0
+        featureChance = 0
     }
 }

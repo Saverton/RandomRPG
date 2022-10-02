@@ -7,7 +7,7 @@ Queue = Class{}
 
 function Queue:init(list)
     self.queue = {}
-    for i, index in list do
+    for i, index in ipairs(list) do
         self:append(index)
     end
 end
