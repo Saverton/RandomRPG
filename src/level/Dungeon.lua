@@ -10,7 +10,7 @@ function Dungeon:init(worldName, levelName, definitions)
     Level.init(self, worldName, levelName, definitions) -- initiate a level
     self.map = definitions.map or DungeonGenerator.generateDungeon(LEVEL_DEFS['dungeon'], self:getDifficulty(levelName)) -- carries and manages all data for the level's map (tiles, features)
     self:spawnPlayer(definitions.player or {}) -- initiate, set stateMachine, and spawn in the player
-    self.camera = DungeonCamera(self.player, self) -- create a dungeon camera with a reference to the player as its target and this level.
+    self.camera = DungeonCamera(self.player, self, self:getCurrentRoom()) -- create a dungeon camera with a reference to the player as its target and this level.
     self.entityManager = EntityManager(self, definitions.entityManager or {}, 'dungeon')
         -- initiate an entityManager with a reference to this class, the entities that are loaded in or an empty set of entities, and the spawning type.
 end
@@ -31,4 +31,9 @@ function Dungeon:getDifficulty(levelName)
         difficultyTable = {math.random(3), math.random(3), math.random(3)} -- randomize difficulties until matches overall
     end
     return {size = difficultyTable[1], room = difficultyTable[2], layout = difficultyTable[3], color = overallDifficulty}
+end
+
+-- return the room coordinates of the current room that the player is in
+function Dungeon:getCurrentRoom()
+    return {x = math.floor(self.player.x / (ROOM_WIDTH * TILE_SIZE)), y = math.floor(self.player.y / (ROOM_HEIGHT * TILE_SIZE))}
 end

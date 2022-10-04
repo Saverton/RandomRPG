@@ -18,7 +18,7 @@ function Player:init(level, definitions, position)
     }) -- initiate a state machine and set state to idle
     self:changeState('idle')
     if #self.items == 0 then -- if the player is starting, give him a wooden sword
-        self:giveItem(Item('wooden_sword', self, 1))
+        Entity.giveItem(self, Item('wooden_sword', self, 1))
     end
     self.isPlayer = true -- simple flag used to check if an entity is the player
     self.dead = false -- flags player as dead, doesn't render player
