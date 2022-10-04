@@ -4,6 +4,29 @@
 ]]
 
 LEVEL_DEFS = {
+    ['overworld'] = {
+        width = DEFAULT_MAP_SIZE,
+        height = DEFAULT_MAP_SIZE,
+        minBiomes = 10,
+        maxBiomes = 15,
+        minPaths = 4,
+        maxPaths = 6,
+        minPathLength = 30,
+        maxPathLength = 80,
+        minPathSegment = 2,
+        maxPathSegment = 10,
+        minBiomeSize = 5,
+        maxBiomeSize = 15,
+        biomes = {'grassland', 'mountain', 'snow_forest', 'snow_field', 'desert', 'water'},
+        generateBorder = true,
+        borderBiome = 'water',
+        pathBiome = 'water',
+        pathBorderBiome = 'beach',
+        spawnNpcs = true,
+        gateways = {{name = 'fortress', destination = 'dungeon-1'}, {name = 'fortress', destination = 'dungeon-2'}, 
+            {name = 'fortress', destination = 'dungeon-3'}},
+        music = 'overworld'
+    },
     ['classic'] = {
         width = DEFAULT_MAP_SIZE,
         height = DEFAULT_MAP_SIZE,

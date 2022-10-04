@@ -13,6 +13,8 @@ function Music:init(trackName, introTrack)
     else
         self.introTrack = nil
     end
+    self.currentTrack = self.track
+    self.introTimer = nil
     self:playIntro()
 end
 
@@ -21,11 +23,12 @@ function Music:playIntro()
     if self.introTrack == nil then
         self:play()
     else
-        love.audio.play(self.introTrack)
-        local intro
-        intro = Timer.after(self.introTrack:getDuration("seconds"), function()
-            intro:remove()
-            love.audio.stop(self.introTrack)
+        self.currentTrack = self.introTrack
+        self:play()
+        self.introTimer = Timer.after(self.introTrack:getDuration("seconds"), function()
+            self.introTimer:remove()
+            self:stop()
+            self.currentTrack = self.track
             self:play()
         end)
     end
@@ -33,15 +36,18 @@ end
 
 -- play the music if not playing
 function Music:play()
-    love.audio.play(self.track)
+    love.audio.play(self.currentTrack)
 end
 
 -- stops music playing
 function Music:pause()
-    love.audio.pause(self.track)
+    love.audio.pause(self.currentTrack)
 end
 
 -- stops music playing and rewind to start
 function Music:stop()
-    love.audio.stop(self.track)
+    love.audio.stop(self.currentTrack)
+    if self.introTimer ~= nil then
+        self.introTimer:remove()
+    end
 end
