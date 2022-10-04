@@ -56,6 +56,7 @@ require 'src/level/Dungeon'
 require 'src/level/Overworld'
 require 'src/level/Camera'
 require 'src/level/DungeonCamera'
+require 'src/level/Music'
 
 require 'src/level/map/biomes/biome_defs'
 require 'src/level/map/biomes/Biome'
@@ -183,6 +184,7 @@ gSounds = {
     },
     ['music'] = {
         ['dungeon'] = love.audio.newSource('sounds/dungeon.mp3', 'stream'),
+        ['dungeon_intro'] = love.audio.newSource('sounds/dungeon_intro.mp3', 'stream'),
         ['underground'] = love.audio.newSource('sounds/underground.mp3', 'stream'),
         ['overworld'] = love.audio.newSource('sounds/overworld.mp3', 'stream')
     }

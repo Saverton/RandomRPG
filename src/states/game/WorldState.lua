@@ -47,5 +47,5 @@ function WorldState:render()
 end
 
 function WorldState:exit()
-    self.level:stopMusic()
+    self.level.music:stop()
 end

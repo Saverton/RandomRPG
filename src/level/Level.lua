@@ -11,6 +11,8 @@ function Level:init(worldName, levelName, definitions)
     self.levelName = levelName -- the name of the folder in which this level's data is stored, format <level_type>-<level_number>
     self.pickupManager = PickupManager(self, definitions.pickups) -- initiate a pickupManager with a reference to this class and any pickups that are loaded in.
     self.flags = {} -- used to track thrown flags by actions in the Level.
+    local levelType = string.sub(self.levelName, 0, string.find(self.levelName, '-') - 1)
+    self.music = Music(MUSIC_DEFS[levelType].track or 'overworld', MUSIC_DEFS[levelType].intro)
 end
 
 -- update each of the level's components
@@ -60,20 +62,4 @@ function Level:getPlayerSpawnPosition(position)
             end
         end
     end
-end
-
--- start playing background music on loop
-function Level:playMusic()
-    gSounds['music'][self.backgroundMusic]:setLooping(true) 
-    gSounds['music'][self.backgroundMusic]:play()
-end
-
--- pause the music
-function Level:pauseMusic()
-    gSounds['music'][self.backgroundMusic]:pause()
-end
-
--- stop playing music
-function Level:stopMusic()
-    gSounds['music'][self.backgroundMusic]:stop()
 end

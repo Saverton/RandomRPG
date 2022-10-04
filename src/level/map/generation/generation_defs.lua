@@ -24,7 +24,8 @@ LEVEL_DEFS = {
         pathBorderBiome = 'beach',
         spawnNpcs = true,
         gateways = {{name = 'fortress', destination = 'dungeon-1'}, {name = 'fortress', destination = 'dungeon-2'}, 
-            {name = 'fortress', destination = 'dungeon-3'}}
+            {name = 'fortress', destination = 'dungeon-3'}},
+        music = 'overworld'
     },
     ['wasteland'] = {
         width = DEFAULT_MAP_SIZE,
@@ -46,7 +47,8 @@ LEVEL_DEFS = {
         pathBorderBiome = 'beach',
         spawnNpcs = true,
         gateways = {{name = 'fortress', destination = 'dungeon-1'}, {name = 'fortress', destination = 'dungeon-2'}, 
-            {name = 'fortress', destination = 'dungeon-3'}}
+            {name = 'fortress', destination = 'dungeon-3'}},
+        music = 'overworld'
     },
     ['winter_wonderland'] = { 
         width = DEFAULT_MAP_SIZE,
@@ -68,7 +70,8 @@ LEVEL_DEFS = {
         pathBorderBiome = 'snow_field',
         spawnNpcs = true,
         gateways = {{name = 'fortress', destination = 'dungeon-1'}, {name = 'fortress', destination = 'dungeon-2'}, 
-            {name = 'fortress', destination = 'dungeon-3'}}
+            {name = 'fortress', destination = 'dungeon-3'}},
+        music = 'overworld'
     },
     ['winter_wasteland'] = {
         width = DEFAULT_MAP_SIZE,
@@ -90,11 +93,9 @@ LEVEL_DEFS = {
         pathBorderBiome = 'snow_field',
         spawnNpcs = true,
         gateways = {{name = 'fortress', destination = 'dungeon-1'}, {name = 'fortress', destination = 'dungeon-2'}, 
-            {name = 'fortress', destination = 'dungeon-3'}}
-    }
-}
-
-DUNGEON_DEFS = {
+            {name = 'fortress', destination = 'dungeon-3'}},
+        music = 'overworld'
+    },
     ['dungeon'] = {
         rooms = {
             [1] = {'fortress_room_goblins', 'fortress_room_empty'}, 
@@ -105,6 +106,23 @@ DUNGEON_DEFS = {
         pathBorderTile = 'wall_block',
         insideTile = 'wall_inside',
         startRooms = {[1] = {'fortress_exit'}},
-        endRooms = {[1] = {'fortress_treasure'}}
+        endRooms = {[1] = {'fortress_treasure'}},
+        music = 'dungeon',
+        introMusic = nil
+    }
+}
+
+MUSIC_DEFS = {
+    ['overworld'] = {
+        track = 'overworld',
+        intro = nil
+    },
+    ['underground'] = {
+        track = 'underground',
+        intro = nil
+    },
+    ['dungeon'] = {
+        track = 'dungeon',
+        intro = 'dungeon_intro'
     }
 }

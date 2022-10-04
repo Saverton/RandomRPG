@@ -14,8 +14,6 @@ function Overworld:init(worldName, levelName, definitions)
         -- initiate an entityManager with a reference to this class, the entities that are loaded in or an empty set of entities, and the spawning type.
     self.npcManager = NPCManager(self, definitions.npcs or {}) -- initiate an NPC Manager with a list of loaded npcs.
     self.camera = Camera(self.player, self) -- initiate a camera with a reference to its target, the player, and this level.
-    self.backgroundMusic = 'overworld'
-    self:playMusic()
 end
 
 -- update each of the level's components

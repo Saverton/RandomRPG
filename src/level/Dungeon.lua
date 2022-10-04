@@ -8,13 +8,11 @@ Dungeon = Class{__includes = Level}
 
 function Dungeon:init(worldName, levelName, definitions)
     Level.init(self, worldName, levelName, definitions) -- initiate a level
-    self.map = definitions.map or DungeonGenerator.generateDungeon(DUNGEON_DEFS['dungeon'], self:getDifficulty(levelName)) -- carries and manages all data for the level's map (tiles, features)
+    self.map = definitions.map or DungeonGenerator.generateDungeon(LEVEL_DEFS['dungeon'], self:getDifficulty(levelName)) -- carries and manages all data for the level's map (tiles, features)
     self:spawnPlayer(definitions.player or {}) -- initiate, set stateMachine, and spawn in the player
     self.camera = DungeonCamera(self.player, self) -- create a dungeon camera with a reference to the player as its target and this level.
-    self.entityManager = EntityManager(self, definitions.entityManager or {}, 'dungeon') 
+    self.entityManager = EntityManager(self, definitions.entityManager or {}, 'dungeon')
         -- initiate an entityManager with a reference to this class, the entities that are loaded in or an empty set of entities, and the spawning type.
-    self.backgroundMusic = 'dungeon'
-    self:playMusic()
 end
 
 -- initiate player, spawn it at the designated spawn space

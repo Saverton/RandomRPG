@@ -18,7 +18,7 @@ end
 -- enter the state and set the item to the parameter item
 function PlayerItemState:enter(params)
     self.item = params.item
-    self.entity.level:pauseMusic() -- stop the level music
+    self.entity.level.music:pause() -- stop the level music
 end
 
 -- update the timer
@@ -36,5 +36,5 @@ end
 
 -- exit the player state
 function PlayerItemState:exit()
-    self.entity.level:playMusic() -- resume the music
+    self.entity.level.music:play() -- resume the music
 end
