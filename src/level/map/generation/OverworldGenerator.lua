@@ -238,7 +238,7 @@ function OverworldGenerator.generateGateways(definitions, dimensions, tileMap)
         repeat
             spawnX, spawnY = math.random(location.x, location.x + location.dimensions.width), 
                 math.random(location.y, location.y + location.dimensions.height) -- spawn x and y of the feature
-        until not (spawnX <= 1 or spawnX >= dimensions.width or spawnY <= 1 or spawnY >= dimensions.height or tileMap[spawnX][spawnY] == 'water')
+        until not (spawnX <= 1 or spawnX >= dimensions.width or spawnY <= 1 or spawnY >= dimensions.height or tileMap[spawnX][spawnY].name == 'water')
         table.insert(gateways, {name = gateway.name, x = spawnX, y = spawnY, destination = gateway.destination}) -- add the gateway feature
     end
     return gateways -- return the populated table
