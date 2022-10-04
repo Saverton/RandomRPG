@@ -14,7 +14,6 @@ function OverworldGenerator.generateMap(definitions)
     local featureMap = OverworldGenerator.generateFeatures(biomeMap, dimensions) -- generate feature map based on biomes
     OverworldGenerator.generateStructures(structureMap, biomeMap, tileMap, featureMap) -- generate the structures determined into the map itself
     local gatewayMap = OverworldGenerator.generateGateways(definitions, dimensions, tileMap) -- mark positions to generate gateway features
-
     return OverworldMap(dimensions, {biomeMap = biomeMap, tileMap = tileMap, featureMap = featureMap, gatewayMap = gatewayMap})
 end
 
@@ -24,7 +23,6 @@ function OverworldGenerator.generateBiomes(definitions, dimensions)
     local numberOfBiomes = #definitions.biomes
     local divisionGrid = OverworldGenerator.createDivisionGrid(dimensions, numberOfBiomes) -- create a division grid
     local startBiomeList = {}
-    print_r(definitions)
     for i, biome in ipairs(definitions.biomes) do -- place each biome in a square of the grid
         table.insert(startBiomeList, 
             {col = divisionGrid[i][math.random(1, numberOfBiomes)].x + math.random(0, divisionGrid[i][math.random(1, numberOfBiomes)].dimensions.width), 
@@ -33,7 +31,7 @@ function OverworldGenerator.generateBiomes(definitions, dimensions)
     end
     local biomeSpreader = BiomeSpreader(startBiomeList, biomeMap) -- spread each biome 
     biomeSpreader:runSpreader()
-    -- place rivers between different biomes
+    OverworldGenerator.generateBorderBiome(biomeMap, definitions.borderBiome) -- place rivers between different biomes and water around the map border
     return biomeMap
 end
 
@@ -47,6 +45,19 @@ function OverworldGenerator.generateNewBiomeMap(dimensions, biomeName)
         end
     end
     return biomeMap
+end
+
+-- build border biomes between biomes of different types and around the edges
+function OverworldGenerator.generateBorderBiome(biomeMap, borderBiome)
+    for col = 1, #biomeMap, 1 do
+        for row = 1, #biomeMap[col], 1 do
+            local thisBiome = biomeMap[col][row].name
+            if col == 1 or col == #biomeMap or row == 1 or row == #biomeMap[col] or thisBiome ~= biomeMap[col + 1][row].name 
+                or thisBiome ~= biomeMap[col][row + 1].name or thisBiome ~= biomeMap[col + 1][row + 1].name then
+                biomeMap[col][row] = Biome(borderBiome) -- if the biomes don't match with those to the right and below, place a border biome
+            end
+        end
+    end
 end
 
 function OverworldGenerator.generatePath(biomeMap, dimensions, definitions)
@@ -223,11 +234,11 @@ function OverworldGenerator.generateGateways(definitions, dimensions, tileMap)
         while (location.filled) do
             location = gatewayDivider[math.random(#gatewayDivider)][math.random(#gatewayDivider)] -- set the divider that this feature will generate in
         end
-        local spawnX, spawnY = math.random(location.x, location.x + location.dimensions.width), 
-            math.random(location.y, location.y + location.dimensions.height) -- spawn x and y of the feature
-        while (spawnX <= 1 or spawnX >= dimensions.width or spawnY <= 1 or spawnY >= dimensions.height or tileMap[spawnX][spawnY] == 'water') do
-            spawnX, spawnY = math.random(location.x, location.x + location.dimensions.width), math.random(location.y, location.y + location.dimensions.height)
-        end
+        local spawnX, spawnY
+        repeat
+            spawnX, spawnY = math.random(location.x, location.x + location.dimensions.width), 
+                math.random(location.y, location.y + location.dimensions.height) -- spawn x and y of the feature
+        until not (spawnX <= 1 or spawnX >= dimensions.width or spawnY <= 1 or spawnY >= dimensions.height or tileMap[spawnX][spawnY] == 'water')
         table.insert(gateways, {name = gateway.name, x = spawnX, y = spawnY, destination = gateway.destination}) -- add the gateway feature
     end
     return gateways -- return the populated table
