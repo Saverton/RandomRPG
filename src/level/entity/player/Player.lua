@@ -243,7 +243,7 @@ function Player:dies()
             -- play the player's death animations
     end
     self.dead = true -- player is now flagged dead
-    self.level:stopMusic() -- stop the background music
+    self.level.music:stop() -- stop the background music
 end
 
 -- give the player an item, check for the special item tag
