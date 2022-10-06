@@ -38,6 +38,8 @@ function WorldState:update(dt)
         gStateStack:push(InventoryState(MENU_DEFS['inventory'], self.level.player))
     elseif love.keyboard.wasPressed('q') then -- open quest inventory if pressed q
         gStateStack:push(QuestState(MENU_DEFS['quest'], self.level.player))
+    elseif love.keyboard.wasPressed('tab') then -- open worldMap if pressed tab
+        gStateStack:push(MapViewState(WorldMap(self.level.map, self.level.player)))
     end
 end
 

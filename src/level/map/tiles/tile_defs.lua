@@ -8,7 +8,8 @@ TILE_DEFS = {
         texture = 'tiles',
         frame = 1,
         barrier = false,
-        onInteract = function() end
+        onInteract = function() end,
+        mapColor = {56/255, 143/255, 60/255}
     },
     ['water'] = {
         name = 'water',
@@ -28,35 +29,40 @@ TILE_DEFS = {
             end
 
             return false
-        end
+        end,
+        mapColor = {91/255, 96/255, 245/255}
     },
     ['stone'] = {
         name = 'stone',
         texture = 'tiles',
         frame = 2,
         barrier = false,
-        onInteract = function() end
+        onInteract = function() end,
+        mapColor = {103/255, 104/255, 110/255}
     },
     ['bridge'] = {
         name = 'bridge',
         texture = 'tiles',
         frame = 5,
         barrier = false,
-        onInteract = function() end
+        onInteract = function() end,
+        mapColor = {74/255, 36/255, 27/255}
     },
     ['sand'] = {
         name = 'sand',
         texture = 'tiles',
         frame = 6,
         barrier = false,
-        onInteract = function() end
+        onInteract = function() end,
+        mapColor = {227/255, 102/255, 73/255}
     },
     ['snow'] = {
         name = 'snow',
         texture = 'tiles',
         frame = 7,
         barrier = false,
-        onInteract = function() end
+        onInteract = function() end,
+        mapColor = {1, 1, 1}
     },
     ['wall_inside'] = {
         name = 'wall_inside',
@@ -64,7 +70,8 @@ TILE_DEFS = {
         frame = 8,
         barrier = true,
         wall = true,
-        onInteract = function() end
+        onInteract = function() end,
+        mapColor = {0, 0, 0}
     },
     ['wall_block'] = {
         name = 'wall_block',
@@ -72,14 +79,16 @@ TILE_DEFS = {
         frame = 9,
         barrier = true,
         wall = true,
-        onInteract = function() end
+        onInteract = function() end,
+        mapColor = {66/255, 66/255, 66/255}
     },
     ['floor'] = {
         name = 'floor',
         texture = 'tiles',
         frame = 10,
         barrier = false,
-        onInteract = function() end
+        onInteract = function() end,
+        mapColor = {150/255, 150/255, 150/255}
     },
     ['wall_side_left'] = {
         name = 'wall_side_left',
@@ -87,7 +96,8 @@ TILE_DEFS = {
         frame = 11,
         barrier = true,
         wall = true,
-        onInteract = function() end
+        onInteract = function() end,
+        mapColor = {66/255, 66/255, 66/255}
     },
     ['wall_side_right'] = {
         name = 'wall_side_right',
@@ -95,7 +105,8 @@ TILE_DEFS = {
         frame = 12,
         barrier = true,
         wall = true,
-        onInteract = function() end
+        onInteract = function() end,
+        mapColor = {66/255, 66/255, 66/255}
     },
     ['wall_side'] = {
         name = 'wall_side',
@@ -103,7 +114,8 @@ TILE_DEFS = {
         frame = 14,
         barrier = true,
         wall = true,
-        onInteract = function() end
+        onInteract = function() end,
+        mapColor = {66/255, 66/255, 66/255}
     },
     ['wall_corner'] = {
         name = 'wall_corner',
@@ -111,6 +123,7 @@ TILE_DEFS = {
         frame = 13,
         barrier = true,
         wall = true,
-        onInteract = function() end
+        onInteract = function() end,
+        mapColor = {66/255, 66/255, 66/255}
     }
 }

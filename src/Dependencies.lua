@@ -28,6 +28,7 @@ require 'src/states/game/gui/MenuState'
 require 'src/states/game/gui/InventoryState'
 require 'src/states/game/gui/QuestState'
 require 'src/states/game/gui/ConfirmState'
+require 'src/states/game/gui/MapViewState'
 require 'src/states/game/asthetic/DeathAnimationState'
 require 'src/states/game/asthetic/CameraShiftState'
 require 'src/states/game/asthetic/ConvergePointState'
@@ -110,6 +111,7 @@ require 'src/gui/Menu'
 require 'src/gui/menu_defs'
 require 'src/gui/Imagebox'
 require 'src/gui/ProgressBar'
+require 'src/gui/WorldMap'
 
 gTextures = {
     ['player'] = love.graphics.newImage('graphics/entities/character.png'),
