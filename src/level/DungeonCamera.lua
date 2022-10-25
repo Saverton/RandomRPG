@@ -49,5 +49,4 @@ function DungeonCamera:resetCambox()
         width = CAMERA_WIDTH,
         height = CAMERA_HEIGHT
     } -- set the cambox to only cover onscreen activity
-    print_r(self.cambox)
 end

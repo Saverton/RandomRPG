@@ -125,6 +125,31 @@ ENTITY_DEFS = {
             {name = 'fire_tome', quantity = 1, level = 1, chance = 1}
         },
         aiType = 'default'
+    },
+    ['bat'] = {
+        name = 'bat',
+        displayName = 'Bat',
+        width = 6,
+        height = 6,
+        xOffset = -5,
+        yOffset = -5,
+        combatStats = {
+            ['maxHp'] = 1,
+            ['attack'] = 1,
+            ['defense'] = 0,
+            ['maxMana'] = 0
+        },
+        speed = 32,
+        aggressiveSpeedBoost = 1.5,
+        aggressiveDistance = 9,
+        exp = 1,
+        drops = {
+            {name = 'health', chance = 0.1, min = 1, max = 1},
+        },
+        deathSound = 'enemy_dies',
+        push = 4,
+        aiType = 'default',
+        isFlying = true
     }
 }
 

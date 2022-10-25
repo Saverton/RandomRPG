@@ -132,13 +132,14 @@ end
 function Entity:checkCollisionWithMap(dt, x, y)
     local checkList = self:getCollisionCheckList(dt, x or self.x, y or self.y) -- get a list of coordinates to check
     local map = self.level.map -- reference to the entity's level's map
+    local isFlying = (self.npcName == nil and ENTITY_DEFS[self.name].isFlying) or false -- determines if features are checked in collisions
     for i, coordinate in pairs(checkList) do
         if coordinate.x < 1 or coordinate.x > map.width or coordinate.y < 1 or coordinate.y > map.height then
             goto skipThisCoordinate -- skip this check if the coordinate is not on the map
         end
         local feature = map.featureMap[coordinate.x][coordinate.y] or Feature('empty') -- the feature in this coordinate
         local tile = map.tileMap[coordinate.x][coordinate.y] -- definitions table for tile in this coordinate
-        if FEATURE_DEFS[feature.name].isSolid or not tile:isHabitableTile() then
+        if (not isFlying and FEATURE_DEFS[feature.name].isSolid) or not tile:isHabitableTile() then
             return true -- determine if the entity collides with something that stops it
         end
         FEATURE_DEFS[feature.name].onCollide(self, feature) -- if this feature has an onCollide function, call it

@@ -20,18 +20,16 @@ end
 -- generate biomes through spreading them from random starting positions, then dividing them with rivers
 function OverworldGenerator.generateBiomes(definitions, dimensions)
     local biomeMap = OverworldGenerator.generateNewBiomeMap(dimensions, "empty")
-    local numberOfBiomes = #definitions.biomes
-    local divisionGrid = OverworldGenerator.createDivisionGrid(dimensions, numberOfBiomes) -- create a division grid
     local startBiomeList = {}
     for i, biome in ipairs(definitions.biomes) do -- place each biome in a square of the grid
         table.insert(startBiomeList, 
-            {col = divisionGrid[i][math.random(1, numberOfBiomes)].x + math.random(0, divisionGrid[i][math.random(1, numberOfBiomes)].dimensions.width), 
-            row = divisionGrid[i][math.random(1, numberOfBiomes)].x + math.random(0, divisionGrid[i][math.random(1, numberOfBiomes)].dimensions.height), 
+            {col = math.random(1, dimensions.width), 
+            row = math.random(1, dimensions.height), 
             biome = biome}) -- add the biome starting squares
     end
     local biomeSpreader = BiomeSpreader(startBiomeList, biomeMap) -- spread each biome 
     biomeSpreader:runSpreader()
-    OverworldGenerator.generateBorderBiome(biomeMap, definitions.borderBiome) -- place rivers between different biomes and water around the map border
+    OverworldGenerator.generateBorderBiome(biomeMap, definitions.borderBiome, 0.75, definitions.fallbackBorderBiome) -- place rivers between different biomes and water around the map border
     return biomeMap
 end
 
@@ -48,13 +46,18 @@ function OverworldGenerator.generateNewBiomeMap(dimensions, biomeName)
 end
 
 -- build border biomes between biomes of different types and around the edges
-function OverworldGenerator.generateBorderBiome(biomeMap, borderBiome)
+function OverworldGenerator.generateBorderBiome(biomeMap, borderBiome, placementChance, fallbackBiome)
     for col = 1, #biomeMap, 1 do
         for row = 1, #biomeMap[col], 1 do
             local thisBiome = biomeMap[col][row].name
-            if col == 1 or col == #biomeMap or row == 1 or row == #biomeMap[col] or thisBiome ~= biomeMap[col + 1][row].name 
-                or thisBiome ~= biomeMap[col][row + 1].name or thisBiome ~= biomeMap[col + 1][row + 1].name then
-                biomeMap[col][row] = Biome(borderBiome) -- if the biomes don't match with those to the right and below, place a border biome
+            if col == 1 or col == #biomeMap or row == 1 or row == #biomeMap[col] then
+                biomeMap[col][row] = Biome(borderBiome) -- if the biome tile is on the edge, set it as water
+            elseif (thisBiome ~= biomeMap[col + 1][row].name or thisBiome ~= biomeMap[col][row + 1].name or thisBiome ~= biomeMap[col + 1][row + 1].name) then -- if the biomes don't match with those to the right and below, place a border biome
+                if (math.random() < (placementChance or 1)) then -- check for a chance to fail placing border biome, opting for a possible fallback biome placement instead
+                    biomeMap[col][row] = Biome(borderBiome)
+                elseif fallbackBiome ~= nil then
+                    biomeMap[col][row] = Biome(fallbackBiome)
+                end
             end
         end
     end

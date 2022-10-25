@@ -243,6 +243,46 @@ ANIMATION_DEFS = {
             xScale = -1
         }
     },
+    ['bat'] = {
+        ['idle-up'] = {
+            texture = 'bat',
+            frames = {8},
+        },
+        ['idle-right'] = {
+            texture = 'bat',
+            frames = {9}
+        },
+        ['idle-down'] = {
+            texture = 'bat',
+            frames = {7}
+        },
+        ['idle-left'] = {
+            texture = 'bat',
+            frames = {9},
+            xScale = -1
+        },
+        ['walk-up'] = {
+            texture = 'bat',
+            frames = {3, 4},
+            interval = DEFAULT_ANIMATION_SPEED
+        },
+        ['walk-right'] = {
+            texture = 'bat',
+            frames = {5, 6},
+            interval = DEFAULT_ANIMATION_SPEED
+        },
+        ['walk-down'] = {
+            texture = 'bat',
+            frames = {1, 2}, 
+            interval = DEFAULT_ANIMATION_SPEED
+        },
+        ['walk-left'] = {
+            texture = 'bat',
+            frames = {5, 6},
+            interval = DEFAULT_ANIMATION_SPEED,
+            xScale = -1
+        }
+    },
     ['npc'] = {
         ['idle-down'] = {
             texture = 'npc',

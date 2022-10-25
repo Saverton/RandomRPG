@@ -142,7 +142,7 @@ function Quest:getRewardString()
         if i > 1 then
             string = string .. ', ' -- add comma if not first index
         end
-        string = string .. ITEM_DEFS[reward.name].displayName .. ' (' .. reward.quantity .. ')' -- ed: ammo (3)
+        string = string .. ITEM_DEFS[reward.name].displayName .. ' (' .. reward.quantity .. ')' -- ex: ammo (3)
     end
     string = string .. '.'
     return string
@@ -158,7 +158,7 @@ function Quest:getSaveData()
 end
 
 -- list of potential flags to mark a quest
-QUEST_FLAGS = {'kill enemy', 'kill goblin', 'kill skeleton'}
+QUEST_FLAGS = {'kill enemy', 'kill goblin', 'kill skeleton', 'kill bat'}
 -- list of potential rewards for a quest
 QUEST_REWARDS = {'ammo', 'money', 'fire_tome', 'ice_tome', 'bow', 'sword', 'battle_axe', 'hp_upgrade'}
 -- list of possible titles for a quest

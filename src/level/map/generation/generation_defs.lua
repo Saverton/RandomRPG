@@ -17,11 +17,10 @@ LEVEL_DEFS = {
         maxPathSegment = 10,
         minBiomeSize = 5,
         maxBiomeSize = 15,
-        biomes = {'grassland', 'mountain', 'snow_forest', 'snow_field', 'desert', 'water'},
+        biomes = {'grassland', 'mountain', 'snow_field', 'desert', 'water'},
         generateBorder = true,
         borderBiome = 'water',
-        pathBiome = 'water',
-        pathBorderBiome = 'beach',
+        fallbackBorderBiome = 'beach',
         spawnNpcs = true,
         gateways = {{name = 'fortress', destination = 'dungeon-1'}, {name = 'fortress', destination = 'dungeon-2'}, 
             {name = 'fortress', destination = 'dungeon-3'}},
@@ -122,7 +121,8 @@ LEVEL_DEFS = {
     ['dungeon'] = {
         rooms = {
             [1] = {'fortress_room_goblins', 'fortress_room_empty'}, 
-            [2] = {'fortress_room_skeletons'}
+            [2] = {'fortress_room_skeletons'},
+            [3] = {'fortress_room_bats'}
         },
         floorTile = 'floor',
         wallTile = 'wall_side',
