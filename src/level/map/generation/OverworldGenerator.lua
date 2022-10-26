@@ -12,9 +12,9 @@ function OverworldGenerator.generateMap(definitions)
     local biomeMap = OverworldGenerator.generateBiomes(definitions, dimensions) -- generate the world biomes
     local tileMap = OverworldGenerator.generateTiles(biomeMap, dimensions) -- generate tile map based on biomes
     local featureMap = OverworldGenerator.generateFeatures(biomeMap, dimensions) -- generate feature map based on biomes
+    OverworldGenerator.generateGateways(definitions, dimensions, structureMap) -- mark positions to generate gateway features
     OverworldGenerator.generateStructures(structureMap, biomeMap, tileMap, featureMap) -- generate the structures determined into the map itself
-    local gatewayMap = OverworldGenerator.generateGateways(definitions, dimensions, tileMap) -- mark positions to generate gateway features
-    return OverworldMap(dimensions, {biomeMap = biomeMap, tileMap = tileMap, featureMap = featureMap, gatewayMap = gatewayMap})
+    return OverworldMap(dimensions, {biomeMap = biomeMap, tileMap = tileMap, featureMap = featureMap})
 end
 
 -- generate biomes through spreading them from random starting positions, then dividing them with rivers
@@ -163,7 +163,10 @@ end
 
 -- generate structures onto the map using the structure map
 function OverworldGenerator.generateStructures(structureMap, biomeMap, tileMap, featureMap)
+    local count = 1
     for i, structure in pairs(structureMap) do
+        print("generate structure " .. tostring(count))
+        print("location: x = " .. tostring(structure.col) .. " y = " .. tostring(structure.row))
         local structureDefinitions = STRUCTURE_DEFS[structure.name] -- reference to structure's definitions table
         if structureDefinitions.biome ~= nil then
             for x = structure.col, structure.col + structureDefinitions.width - 1, 1 do 
@@ -172,18 +175,19 @@ function OverworldGenerator.generateStructures(structureMap, biomeMap, tileMap, 
                 end
             end
         end
-        if structureDefinitions.border_tile ~= nil or structureDefinitions.bottom_tile ~= nil then
+        if structureDefinitions.borderTile ~= nil or structureDefinitions.bottomTile ~= nil then
             for x = structure.col - 1, structure.col + structureDefinitions.width, 1 do 
                 for y = structure.row - 1, structure.row + structureDefinitions.height, 1 do -- set structure's tiles
-                    if Contains(structureDefinitions.keepTiles, tileMap[x][y].name) then
+                    if Contains(structureDefinitions.keepTiles or {}, tileMap[x][y].name) then
                         goto continue -- if this tile is flagged as one to keep, don't override
                     end
-                    if structureDefinitions.border_tile ~= nil and (x == structure.col - 1 or x == structure.col + structureDefinitions.width or 
+                    if structureDefinitions.borderTile ~= nil and (x == structure.col - 1 or x == structure.col + structureDefinitions.width or 
                         y == structure.row - 1 or y == structure.row + structureDefinitions.height) then
                         featureMap[x][y] = nil -- build a structure border on outside tiles
-                        tileMap[x][y] = Tile(structureDefinitions.border_tile)
-                    elseif structureDefinitions.bottom_tile ~= nil then
-                        tileMap[x][y] = Tile(structureDefinitions.bottom_tile)
+                        tileMap[x][y] = Tile(structureDefinitions.borderTile)
+                    elseif structureDefinitions.bottomTile ~= nil then
+                        print("place structure floor tile")
+                        tileMap[x][y] = Tile(structureDefinitions.bottomTile)
                     end
                     ::continue::
                 end
@@ -198,20 +202,13 @@ function OverworldGenerator.generateStructures(structureMap, biomeMap, tileMap, 
                     if (layout[y] ~= nil and layout[y][x] ~= nil and layout[y][x] ~= 0 and layout[y][x] <= #structureDefinitions.features) then
                         local feature = structureDefinitions.features[layout[y][x]] -- feature at this coordinate
                         if math.random() < feature.chance then -- determine if this feature generates based on its defined chance
-                            if FEATURE_DEFS[feature.name].gateway then
-                                featureMap[col][row] = GatewayFeature(feature.name, feature.destination)
-                            elseif FEATURE_DEFS[feature.name].spawner then
-                                featureMap[col][row] = SpawnFeature(feature.name, feature.enemy)
-                            elseif FEATURE_DEFS[feature.name].animated then
-                                featureMap[col][row] = AnimatedFeature(feature.name, Animation(feature.name, 'main'))
-                            else
-                                featureMap[col][row] = Feature(feature.name)
-                            end -- spawn the appropriate feature
+                            OverworldGenerator.spawnFeature(featureMap, col, row, feature, count)
                         end
                     end
                 end
             end
         end
+        count = count + 1
     end
 end
 
@@ -228,8 +225,8 @@ function OverworldGenerator.getAnimatedFeatures(featureMap)
     return animatedFeatures -- return populated table
 end
 
--- generate any gateways, in this case dungeons
-function OverworldGenerator.generateGateways(definitions, dimensions, tileMap)
+-- generate any gateways, in this case dungeons !!!!!!!!!!BUG!!!!!!!!!!
+function OverworldGenerator.generateGateways(definitions, dimensions, structureMap)
     local gateways = {} -- table of gateways
     local gatewayDivider = OverworldGenerator.createDivisionGrid(dimensions, #definitions.gateways)
     for i, gateway in ipairs(definitions.gateways) do -- go through each gateway that must be generated
@@ -241,8 +238,8 @@ function OverworldGenerator.generateGateways(definitions, dimensions, tileMap)
         repeat
             spawnX, spawnY = math.random(location.x, location.x + location.dimensions.width), 
                 math.random(location.y, location.y + location.dimensions.height) -- spawn x and y of the feature
-        until not (spawnX <= 1 or spawnX >= dimensions.width or spawnY <= 1 or spawnY >= dimensions.height or tileMap[spawnX][spawnY].name == 'water')
-        table.insert(gateways, {name = gateway.name, x = spawnX, y = spawnY, destination = gateway.destination}) -- add the gateway feature
+        until not (spawnX <= 1 or spawnX >= dimensions.width or spawnY <= 1 or spawnY >= dimensions.height)
+        table.insert(structureMap, {name = 'fortress-entrance-overworld', col = spawnX, row = spawnY}) -- add the gateway feature
     end
     return gateways -- return the populated table
 end
@@ -256,8 +253,21 @@ function OverworldGenerator.createDivisionGrid(dimensions, numOfDividers)
             dividers[x][y] = {x = math.floor((dimensions.width / numOfDividers) * (x - 1)),
                 y = math.floor((dimensions.height / numOfDividers) * (y - 1)), filled = false, 
                 dimensions = {width = math.floor(dimensions.width / numOfDividers), 
-                    height = math.floor(dimensions.height / numOfDividers)}} -- mark a portion of the map to generate a potential gateway feature
+                height = math.floor(dimensions.height / numOfDividers)}} -- mark a portion of the map to generate a potential gateway feature
         end
     end
     return dividers
+end
+
+-- spawn the appropriate feature at the specified coordinates
+function OverworldGenerator.spawnFeature(featureMap, col, row, feature, count)
+    if FEATURE_DEFS[feature.name].gateway then
+        featureMap[col][row] = GatewayFeature(feature.name, feature.destination .. '-' .. tostring(count))
+    elseif FEATURE_DEFS[feature.name].spawner then
+        featureMap[col][row] = SpawnFeature(feature.name, feature.enemy)
+    elseif FEATURE_DEFS[feature.name].animated then
+        featureMap[col][row] = AnimatedFeature(feature.name, Animation(feature.name, 'main'))
+    else
+        featureMap[col][row] = Feature(feature.name)
+    end -- spawn the appropriate feature
 end

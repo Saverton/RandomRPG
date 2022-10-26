@@ -4,6 +4,23 @@
 ]]
 
 STRUCTURE_DEFS = {
+    ['fortress-entrance-overworld'] = {
+        width = 3,
+        height = 3,
+        biome = 'grassland',
+        bottomTile = 'grass',
+        features = {
+            [1] = {
+                name = 'fortress',
+                chance = 1,
+                destination = 'dungeon'
+            }
+        },
+        layouts = {
+            'basic'
+        },
+        keepTiles = {'sand', 'stone', 'snow'}
+    },
     ['fortress_room_skeletons'] = {
         width = 17,
         height = 9,
@@ -152,6 +169,9 @@ STRUCTURE_DEFS = {
 }
 
 LAYOUT_DEFS = {
+    ['basic'] = {
+        [2] = {0, 1}
+    },
     ['empty'] = {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
