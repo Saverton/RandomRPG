@@ -33,8 +33,8 @@ end
 -- processa AI of the enemy while walking
 function EnemyWalkState:processAI()
     if self.collidesWithObstacle then
-        return AI_DEFS[ENTITY_DEFS[self.entity.name].aiType .. '-obstacle']['walk'](self.entity, self.travel)
+        return AI_DEFS[ENTITY_DEFS[self.entity.name].aiType]['obstacle']['walk'](self.entity, self.travel)
     else
-        return AI_DEFS[ENTITY_DEFS[self.entity.name].aiType .. '-' .. self.entity.aiSubType]['walk'](self.entity, self.travel)  
+        return AI_DEFS[ENTITY_DEFS[self.entity.name].aiType][self.entity.aiSubType]['walk'](self.entity, self.travel)  
     end
 end

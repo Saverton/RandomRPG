@@ -34,7 +34,7 @@ function Entity:render(camera)
     self.stateMachine:render(onScreenX, onScreenY) -- draw the entity at the specified x and y according to stateMachine behavior
     love.graphics.setColor(1, 1, 1, 1) -- set color back to default white in case it was changed
     local mouseX, mouseY = push:toGame(love.mouse.getPosition()) -- get mouse position
-    if (mouseX ~= nil and mouseY ~= nil) and Collide(self, {x = mouseX + camera.x, y = mouseY + camera.y, width = 1, height = 1}) then
+    if self:statsVisible() and (mouseX ~= nil and mouseY ~= nil) and Collide(self, {x = mouseX + camera.x, y = mouseY + camera.y, width = 1, height = 1}) then
         self:printInfoTag(onScreenX, onScreenY)
     end -- if the mouse collides with this entity, print an informational tag above the entity
 end
@@ -192,4 +192,9 @@ end
 -- return the entity's held item
 function Entity:getHeldItem()
     return self.items[self.heldItem] -- returns held item or nil if none
+end
+
+-- return whether or not this entity's stats should be shown
+function Entity:statsVisible()
+    return true
 end

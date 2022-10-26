@@ -4,41 +4,34 @@
 ]]
 
 AI_DEFS = {
-    ['default-wander'] = {
-        ['idle'] = function(entity, timer) 
-            local waitTimer = timer.table -- table that contains the timer group
-            if #waitTimer == 0 then
-                Timer.after(timer.duration, function() -- after the duration is up, start walking in a random direction
-                    entity:setRandomDirection() -- set the entity's direction to a random new direction
-                    entity:changeState('walk') -- tell the entity to start walking
-                end):group(waitTimer) -- add this timer to the group
-            end
-        end,
-        ['walk'] = function(entity, travel)
-            if travel.pixelsToTravel > 0 then
-                ResetTravel(travel, (travel.pixelsToTravel - travel.pixelsTraveled))
-            else
-                entity:changeState('idle')
-            end
-        end
+    ['default'] = {
+        ['wander'] = {
+            ['idle'] = function(entity, timer) return DefaultWanderIdle(entity, timer) end,
+            ['walk'] = function(entity, travel) return DefaultWanderWalk(entity, travel) end,
+        },
+        ['target'] = {
+            ['idle'] = function(entity, timer) return DefaultTargetIdle(entity, timer) end,
+            ['walk'] = function(entity, travel) return DefaultTargetWalk(entity, travel) end
+        },
+        ['obstacle'] = {
+            ['walk'] = function(entity, travel) return DefaultObstacleWalk(entity, travel) end
+        }
     },
-    ['default-target'] = {
-        ['idle'] = function(entity, timer)
-            entity:changeState('walk') -- immediately set the entity to start walking in pursuit of its target.
-        end,
-        ['walk'] = function(entity, travel)
-            if not (TryUsingHeldItem(entity)) then -- try using the entity's held item first
-                local newDirection = GetDirectionToReduceLargestDifference(entity, entity.target) -- find the direction this entity should travel
-                entity:changeDirection(newDirection) -- change the entity's direction
-            end
-            ResetTravel(travel, TILE_SIZE) -- reset the travel parameters
-        end
-    },
-    ['default-obstacle'] = {
-        ['walk'] = function(entity, travel)
-            entity:shiftDirection(math.random() > 0.5 and 1 or -1) -- randomly choose a direction to turn (1 clockwise or counterclockwise)
-            ResetTravel(travel, TILE_SIZE) -- reset the travel parameters
-        end
+    ['camo'] = {
+        ['wander'] = {
+            ['idle'] = function(entity, timer) return CamoWanderIdle(entity, timer) end,
+            ['walk'] = function(entity, travel) return DefaultWanderWalk(entity, travel) end,
+        },
+        ['hide'] = {
+            ['idle'] = function() end -- stays hidden indefinitely until trigger occurs
+        },
+        ['target'] = {
+            ['idle'] = function(entity, timer) return DefaultTargetIdle(entity, timer) end,
+            ['walk'] = function(entity, travel) return DefaultTargetWalk(entity, travel) end,
+        },
+        ['obstacle'] = {
+            ['walk'] = function(entity, travel) return DefaultObstacleWalk(entity, travel) end
+        }
     }
 }
 
@@ -77,4 +70,48 @@ end
 function ResetTravel(travelTable, newPixelsToTravel) -- args
     travelTable.pixelsToTravel = newPixelsToTravel -- set a new distance after which the entity will reach its destination
     travelTable.pixelsTraveled = 0 -- set the traveled distance back to 0
+end
+
+function DefaultWanderIdle(entity, timer) 
+    local waitTimer = timer.table -- table that contains the timer group
+    if #waitTimer == 0 then
+        Timer.after(timer.duration, function() -- after the duration is up, start walking in a random direction
+            entity:setRandomDirection() -- set the entity's direction to a random new direction
+            entity:changeState('walk') -- tell the entity to start walking
+        end):group(waitTimer) -- add this timer to the group
+    end
+end
+
+function DefaultWanderWalk(entity, travel)
+    if travel.pixelsToTravel > 0 then
+        ResetTravel(travel, (travel.pixelsToTravel - travel.pixelsTraveled))
+    else
+        entity:changeState('idle')
+    end
+end
+
+function DefaultTargetIdle(entity, timer)
+    entity:changeState('walk') -- immediately set the entity to start walking in pursuit of its target.
+end
+
+function DefaultTargetWalk(entity, travel)
+    if not (TryUsingHeldItem(entity)) then -- try using the entity's held item first
+        local newDirection = GetDirectionToReduceLargestDifference(entity, entity.target) -- find the direction this entity should travel
+        entity:changeDirection(newDirection) -- change the entity's direction
+    end
+    ResetTravel(travel, TILE_SIZE) -- reset the travel parameters
+end
+
+function DefaultObstacleWalk(entity, travel)
+    entity:shiftDirection(math.random() > 0.5 and 1 or -1) -- randomly choose a direction to turn (1 clockwise or counterclockwise)
+    ResetTravel(travel, TILE_SIZE) -- reset the travel parameters
+end
+
+function CamoWanderIdle(entity, timer) 
+    local waitTimer = timer.table -- table that contains the timer group
+    if #waitTimer == 0 then
+        Timer.after(timer.duration, function() -- after the duration is up, start walking in a random direction
+            entity:changeState('hide') -- tell the entity to start walking
+        end):group(waitTimer) -- add this timer to the group
+    end
 end

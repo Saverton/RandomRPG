@@ -28,7 +28,7 @@ BIOME_DEFS = {
         },
         enemies = {
             {
-                name = 'goblin',
+                name = 'spider',
                 spawnChance = 1
             }
         },
@@ -56,7 +56,7 @@ BIOME_DEFS = {
         },
         enemies = {
             {
-                name = 'skeleton',
+                name = 'spider',
                 spawnChance = 1
             }
         },

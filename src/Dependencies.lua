@@ -49,6 +49,7 @@ require 'src/states/entity/enemy/EnemyIdleState'
 require 'src/states/entity/enemy/EnemyWalkState'
 require 'src/states/entity/enemy/EnemySpawnState'
 require 'src/states/entity/enemy/EnemyDespawnState'
+require 'src/states/entity/enemy/EnemyHideState'
 require 'src/states/entity/npc/NPCIdleState' 
 require 'src/states/entity/npc/NPCWalkState'
 
@@ -87,6 +88,7 @@ require 'src/level/entity/combat/PushManager'
 require 'src/level/entity/combat/InvincibilityManager'
 require 'src/level/entity/combat/enemy/EntityManager'
 require 'src/level/entity/combat/enemy/Enemy'
+require 'src/level/entity/combat/enemy/CamoEnemy'
 require 'src/level/entity/combat/effect/Effect'
 require 'src/level/entity/combat/effect/EffectManager'
 require 'src/level/entity/combat/effect/effect_defs'
@@ -126,6 +128,7 @@ gTextures = {
     ['goblin'] = love.graphics.newImage('graphics/entities/enemies/goblin.png'),
     ['wizard'] = love.graphics.newImage('graphics/entities/enemies/wizard.png'),
     ['bat'] = love.graphics.newImage('graphics/entities/enemies/bat.png'),
+    ['spider'] = love.graphics.newImage('graphics/entities/enemies/spider.png'),
     ['projectiles'] = love.graphics.newImage('graphics/entities/projectiles.png'),
     ['player_death'] = love.graphics.newImage('graphics/entities/player_death.png'),
     ['smoke'] = love.graphics.newImage('graphics/entities/smoke.png')
@@ -143,7 +146,8 @@ gFrames = {
     ['skeleton'] = GenerateQuads(gTextures['skeleton'], 16, 16),
     ['goblin'] = GenerateQuads(gTextures['goblin'], 16, 16),
     ['wizard'] = GenerateQuads(gTextures['wizard'], 16, 16),
-    ['bat'] = GenerateQuads(gTextures['bat'], 16, 16);
+    ['bat'] = GenerateQuads(gTextures['bat'], 16, 16),
+    ['spider'] = GenerateQuads(gTextures['spider'], 16, 16),
     ['projectiles'] = GenerateQuads(gTextures['projectiles'], 16, 16),
     ['player_death'] = GenerateQuads(gTextures['player_death'], 16, 16),
     ['smoke'] = GenerateQuads(gTextures['smoke'], 16, 16)
@@ -168,7 +172,8 @@ gSounds = {
         ['enemy_dies'] = love.audio.newSource('sounds/enemy_dies.wav', 'static'),
         ['fire_hit_1'] = love.audio.newSource('sounds/fire_hit_1.wav', 'static'),
         ['target_found'] = love.audio.newSource('sounds/target_found.wav', 'static'),
-        ['death_jingle'] = love.audio.newSource('sounds/death_jingle.wav', 'static')
+        ['death_jingle'] = love.audio.newSource('sounds/death_jingle.wav', 'static'),
+        ['reveal'] = love.audio.newSource('sounds/reveal.wav', 'static')
     },
     ['items'] = {
         ['sword_swing_1'] = love.audio.newSource('sounds/sword_swing_1.wav', 'static'),

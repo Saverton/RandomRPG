@@ -283,6 +283,49 @@ ANIMATION_DEFS = {
             xScale = -1
         }
     },
+    ['spider'] = {
+        ['idle-up'] = {
+            texture = 'spider',
+            frames = {4}
+        },
+        ['idle-right'] = {
+            texture = 'spider',
+            frames = {7}
+        },
+        ['idle-down'] = {
+            texture = 'spider',
+            frames = {1}
+        },
+        ['idle-left'] = {
+            texture = 'spider',
+            frames = {7},
+            xScale = -1
+        },
+        ['walk-up'] = {
+            texture = 'spider',
+            frames = {4, 5, 4, 6}
+        },
+        ['walk-right'] = {
+            texture = 'spider',
+            frames = {7, 8, 7, 9},
+            interval = DEFAULT_ANIMATION_SPEED
+        },
+        ['walk-down'] = {
+            texture = 'spider',
+            frames = {1, 2, 1, 3},
+            interval = DEFAULT_ANIMATION_SPEED
+        },
+        ['walk-left'] = {
+            texture = 'spider',
+            frames = {7, 8, 7, 9},
+            interval = DEFAULT_ANIMATION_SPEED,
+            xScale = -1
+        },
+        ['hide'] = {
+            texture = 'spider',
+            frames = {10}
+        },
+    },
     ['npc'] = {
         ['idle-down'] = {
             texture = 'npc',

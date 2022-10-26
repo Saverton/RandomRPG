@@ -46,6 +46,7 @@ ENTITY_DEFS = {
     },
     ['goblin'] = {
         name = 'goblin',
+        type = 'normal',
         displayName = 'Goblin',
         width = 12,
         height = 12,
@@ -70,6 +71,7 @@ ENTITY_DEFS = {
     },
     ['skeleton'] = {
         name = 'skeleton',
+        type = 'normal',
         displayName = 'Skeleton',
         width = 10,
         height = 12,
@@ -98,6 +100,7 @@ ENTITY_DEFS = {
     },
     ['wizard'] = {
         name = 'wizard',
+        type = 'normal',
         displayName = 'Wizard',
         width = 10,
         height = 12,
@@ -128,6 +131,7 @@ ENTITY_DEFS = {
     },
     ['bat'] = {
         name = 'bat',
+        type = 'normal',
         displayName = 'Bat',
         width = 6,
         height = 6,
@@ -150,6 +154,32 @@ ENTITY_DEFS = {
         push = 4,
         aiType = 'default',
         isFlying = true
+    },
+    ['spider'] = {
+        name = 'spider',
+        type = 'camo',
+        displayName = 'Spider',
+        width = 8,
+        height = 8,
+        xOffset = -4,
+        yOffset = -4,
+        combatStats = {
+            ['maxHp'] = 1,
+            ['attack'] = 1,
+            ['defense'] = 0,
+            ['maxMana'] = 0
+        },
+        speed = 32,
+        aggressiveSpeedBoost = 1.5,
+        aggressiveDistance = 9,
+        triggerDistance = 5,
+        exp = 1,
+        drops = {
+            {name = 'health', chance = 0.1, min = 1, max = 1}
+        },
+        deathSound = 'enemy_dies',
+        push = 4,
+        aiType = 'camo'
     }
 }
 

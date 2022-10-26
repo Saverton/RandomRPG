@@ -44,7 +44,7 @@ function Enemy:render(camera)
     end
     love.graphics.setColor(self.color) -- set the color to the enemy's color
     CombatEntity.render(self, camera) -- draw the entity onscreen
-    if self.active and self.currentStats.hp > 0 then
+    if self:statsVisible() and self.currentStats.hp > 0 then
         self.hpBar:render(onScreenX, onScreenY) -- render the hp bar
         self:renderAggression(onScreenX, onScreenY) -- draw a little '!' if aggressive
     end
@@ -137,5 +137,20 @@ function Enemy:getEnemyInventory(items)
             self:giveItem(Item(item.name, self, item.quantity)) -- give the item to the entity
             self:setHeldItem(#self.items) -- set the held item to this item
         end
+    end
+end
+
+-- return whether or not this entity's stats should be shown
+function Enemy:statsVisible()
+    return self.active
+end
+
+-- spawn a new enemy appropriately according to the defined type
+function Enemy.spawnEnemy(level, definition, instance, manager)
+    local type = definition.type
+    if (type == 'normal' or type == nil) then
+        return Enemy(level, definition, instance, manager)
+    elseif (type == 'camo') then
+        return CamoEnemy(level, definition, instance, manager)
     end
 end

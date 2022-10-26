@@ -28,5 +28,5 @@ end
 
 -- if the enemy has a target, then start seeking them, otherwise start wandering
 function EnemyIdleState:processAI()
-    return AI_DEFS[ENTITY_DEFS[self.entity.name].aiType .. '-' .. self.entity.aiSubType]['idle'](self.entity, self.timer)
+    return AI_DEFS[ENTITY_DEFS[self.entity.name].aiType][self.entity.aiSubType]['idle'](self.entity, self.timer)
 end

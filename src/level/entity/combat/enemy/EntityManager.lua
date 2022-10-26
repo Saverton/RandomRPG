@@ -96,7 +96,7 @@ end
 -- spawn an enemy given an enemy name at a coordinate col, row
 function EntityManager:spawnEnemy(enemyName, col, row, hasKey)
     local position = {x = col, y = row, xOffset = -1 * ENTITY_DEFS[enemyName].xOffset, yOffset = -1 * ENTITY_DEFS[enemyName].yOffset} -- spawning position
-    table.insert(self.entities, Enemy(self.level, ENTITY_DEFS[enemyName], {position = position, hasKey = hasKey}, self)) -- spawn the enemy
+    table.insert(self.entities, Enemy.spawnEnemy(self.level, ENTITY_DEFS[enemyName], {position = position, hasKey = hasKey}, self)) -- spawn the enemy
 end
 
 -- spawn enemies in a dungeon according to spawner feature positions

@@ -39,3 +39,10 @@ end
 function StateMachine:processAI(params, dt)
 	self.current:processAI(params, dt)
 end
+
+--[[
+	add a new state to the state machine.
+]]
+function StateMachine:addState(name, state)
+	self.states[name] = state
+end
