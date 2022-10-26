@@ -16,10 +16,11 @@ function CamoEnemy:init(level, definition, instance, manager)
     self.aiSubType = 'hide'
 end
 
+-- update the Camo Enemy, includes hidden and triggering functionality
 function CamoEnemy:update(dt)
     CombatEntity.update(self, dt) -- update combatentity components
     if self.active and self.currentStats.hp > 0 then
-        if self.aiSubType == 'hide' then -- check in trigger distance
+        if self.isHiding then -- check in trigger distance
             self:attemptTrigger() -- check and see if the camo is triggered to enter into active state
         else
             self:seekTarget() -- try to find or track down a target
@@ -27,7 +28,7 @@ function CamoEnemy:update(dt)
     end
 end
 
--- render the enemy on screen
+-- render the enemy on screen, includes extra code for proper coloring when hidden
 function CamoEnemy:render(camera)
     local onScreenX, onScreenY = math.floor(self.x - camera.x + self.xOffset), math.floor(self.y - camera.y + self.yOffset - 4)
     if self.hasKey and self.currentStats.hp > 0 then -- render a key behind the enemy if it holds a key
@@ -43,12 +44,14 @@ function CamoEnemy:render(camera)
     end
 end
 
+-- check if the enemy in hiding is able to trigger leaving the hide state
 function CamoEnemy:attemptTrigger()
     if GetDistance(self, self.level.player) <= ENTITY_DEFS[self.name].triggerDistance * TILE_SIZE then
         self:trigger()
     end
 end
 
+-- trigger the hiding enemy by revealing it, playing the reveal sound, having it seek a target, and begin walking
 function CamoEnemy:trigger()
     self.isHiding = false
     love.audio.play(gSounds['combat']['reveal'])-- play trigger sound

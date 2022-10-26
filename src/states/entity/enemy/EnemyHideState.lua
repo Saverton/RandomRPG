@@ -9,5 +9,5 @@ function EnemyHideState:init(entity)
     self.entity = entity
     self.animate = false
     self.entity:changeAnimation('hide') -- set enemy's animation as hiding
-    self.entity.isHiding = true
+    self.entity.isHiding = true -- flag to show that enemy is hiding (for the purpose of rendering properly)
 end
