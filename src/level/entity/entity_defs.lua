@@ -67,6 +67,10 @@ ENTITY_DEFS = {
             {name = 'money', chance = 0.75, min = 1, max = 3}},
         deathSound = 'enemy_dies',
         push = 8,
+        items = {
+            {name = 'ammo', quantity = 3, level = 5, chance = 0.5},
+            {name = 'bow', quantity = 1, level = 5, chance = 1}
+        },
         aiType = 'default'
     },
     ['skeleton'] = {

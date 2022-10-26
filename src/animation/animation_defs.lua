@@ -127,6 +127,23 @@ ANIMATION_DEFS = {
             texture = 'goblin',
             frames = {7, 8, 7, 9},
             interval = DEFAULT_ANIMATION_SPEED
+        },
+        ['interact-right'] = {
+            texture = 'goblin',
+            frames = {10}
+        },
+        ['interact-down'] = {
+            texture = 'goblin',
+            frames = {12}
+        },
+        ['interact-left'] = {
+            texture = 'goblin',
+            frames = {10},
+            xScale = -1
+        },
+        ['interact-up'] = {
+            texture = 'goblin',
+            frames = {11},
         }
     },
     ['skeleton'] = {
