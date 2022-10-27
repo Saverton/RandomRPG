@@ -7,8 +7,8 @@ STRUCTURE_DEFS = {
     ['fortress-entrance-overworld'] = {
         width = 3,
         height = 3,
-        biome = 'grassland',
-        bottomTile = 'grass',
+        biome = 'beach',
+        bottomTile = 'sand',
         features = {
             [1] = {
                 name = 'fortress',
@@ -19,7 +19,7 @@ STRUCTURE_DEFS = {
         layouts = {
             'basic'
         },
-        keepTiles = {'sand', 'stone', 'snow'}
+        keepTiles = {'sand', 'stone', 'snow', 'grass'}
     },
     ['fortress_room_skeletons'] = {
         width = 17,
@@ -42,7 +42,7 @@ STRUCTURE_DEFS = {
         layouts = {
             [1] = {'ring', 'corners', 'dividers'},
             [2] = {'maze-1', 'grid'},
-            [3] = {'maze-2', 'maze-3'},
+            [3] = {'maze-2', 'maze-3', 'joust'},
         },
         keepTiles = {'floor'}
     },
@@ -65,7 +65,7 @@ STRUCTURE_DEFS = {
             }
         },
         layouts = {
-            [1] = {'ring', 'corners'},
+            [1] = {'ring', 'corners', 'joust'},
             [2] = {'maze-2', 'dividers'},
             [3] = {'maze-1', 'maze-3', 'grid'},
         },
@@ -91,7 +91,7 @@ STRUCTURE_DEFS = {
         },
         layouts = {
             [1] = {'corners'},
-            [2] = {'maze-2', 'dividers'},
+            [2] = {'maze-2', 'dividers', 'joust'},
             [3] = {'maze-1', 'maze-3', 'grid', 'ring'},
         },
         keepTiles = {'floor'}
@@ -246,6 +246,17 @@ LAYOUT_DEFS = {
         {0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0},
         {0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0},
         {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    },
+    ['joust'] = {
+        {0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+        {0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+        {0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+        {1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1},
+        {0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+        {0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+        {0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
     },
     ['exit-1'] = {
         [5] = {0, 0, 0, 0, 1}

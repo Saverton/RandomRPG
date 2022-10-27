@@ -21,6 +21,8 @@ LEVEL_DEFS = {
         generateBorder = true,
         borderBiome = 'water',
         fallbackBorderBiome = 'beach',
+        minSubBiomes = 10,
+        maxSubBiomes = 15,
         spawnNpcs = true,
         gateways = {{name = 'fortress', destination = 'dungeon-1'}, {name = 'fortress', destination = 'dungeon-2'}, 
             {name = 'fortress', destination = 'dungeon-3'}},

@@ -43,11 +43,65 @@ BIOME_DEFS = {
                 chance = 0.1
             }
         },
-        featureChance = 0.05
+        featureChance = 0.05,
+        subBiomes = {{name='grassland_forest', minSize=5, maxSize=10}}
+    },
+    ['grassland_forest'] = {
+        id = 2,
+        name = 'grassland_forest',
+        tiles = {
+            {
+                tileType = 'grass',
+                chance = 1
+            }
+        },
+        enemies = {
+            {
+                name = 'goblin',
+                spawnChance = 1
+            }
+        },
+        spawnRate = 0.04,
+        features = {
+            {
+                name = 'tree', 
+                chance = 1
+            }
+        },
+        featureChance = 0.25
     },
     ['mountain'] = {
-        id = 2,
+        id = 3,
         name = 'mountain',
+        tiles = {
+            {
+                tileType = 'stone',
+                chance = 1
+            }
+        },
+        enemies = {
+            {
+                name = 'spider',
+                spawnChance = 1
+            }
+        },
+        spawnRate = 0.025,
+        features = {
+            {
+                name = 'rock', 
+                chance = 0.999
+            },
+            {
+                name = 'chest',
+                chance = 0.001
+            }
+        },
+        featureChance = 0.25,
+        subBiomes = {{name='mountain_cluster', minSize=7, maxSize=15}}
+    },
+    ['mountain_cluster'] = {
+        id = 4,
+        name = 'mountain_cluster',
         tiles = {
             {
                 tileType = 'stone',
@@ -64,17 +118,17 @@ BIOME_DEFS = {
         features = {
             {
                 name = 'rock', 
-                chance = 0.999
+                chance = 0.998
             },
             {
                 name = 'chest',
-                chance = 0.001
+                chance = 0.002
             }
         },
         featureChance = 0.5
     },
     ['water'] = {
-        id = 3,
+        id = 5,
         name = 'water',
         tiles = {
             {
@@ -88,7 +142,7 @@ BIOME_DEFS = {
         featureChance = 0
     },
     ['desert'] = {
-        id = 4,
+        id = 6,
         name = 'desert',
         tiles = {
             {
@@ -113,10 +167,25 @@ BIOME_DEFS = {
                 chance = 0.05
             }
         },
-        featureChance = 0.1
+        featureChance = 0.1,
+        subBiomes = {{name='desert_oasis', minSize=4, maxSize=7}}
+    },
+    ['desert_oasis'] = {
+        id = 7,
+        name = 'desert_oasis',
+        tiles = {
+            {
+                tileType = 'water',
+                chance = 1
+            }
+        },
+        enemies = {},
+        spawnRate = 0.0,
+        features = {},
+        featureChance = 0.0
     },
     ['snow_forest'] = {
-        id = 5,
+        id = 8,
         name = 'snow_forest',
         tiles = {
             {
@@ -140,7 +209,7 @@ BIOME_DEFS = {
         featureChance = 0.25
     },
     ['snow_field'] = {
-        id = 5,
+        id = 9,
         name = 'snow_field',
         tiles = {
             {
@@ -165,10 +234,11 @@ BIOME_DEFS = {
                 chance = 0.5
             }
         },
-        featureChance = 0.025
+        featureChance = 0.025,
+        subBiomes = {{name='snow_forest', minSize=5, maxSize=10}}
     },
     ['beach'] = {
-        id = 6,
+        id = 10,
         name = 'beach',
         tiles = {
             {
@@ -187,7 +257,7 @@ BIOME_DEFS = {
         featureChance = 0
     },
     ['fortress_inside'] = {
-        id = 7,
+        id = 11,
         name = 'fortress_inside',
         tiles = {
             {
@@ -201,7 +271,7 @@ BIOME_DEFS = {
         featureChance = 0
     },
     ['fortress_wall'] = {
-        id = 8,
+        id = 12,
         name = 'fortress_wall',
         tiles = {
             {
@@ -215,7 +285,7 @@ BIOME_DEFS = {
         featureChance = 0
     },
     ['fortress_room'] = {
-        id = 9,
+        id = 13,
         name = 'fortress_room',
         tiles = {
             {

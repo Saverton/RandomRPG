@@ -21,16 +21,44 @@ end
 function OverworldGenerator.generateBiomes(definitions, dimensions)
     local biomeMap = OverworldGenerator.generateNewBiomeMap(dimensions, "empty")
     local startBiomeList = {}
-    for i, biome in ipairs(definitions.biomes) do -- place each biome in a square of the grid
+    for i, biome in ipairs(definitions.biomes) do -- place each biome seed on the map
         table.insert(startBiomeList, 
             {col = math.random(1, dimensions.width), 
             row = math.random(1, dimensions.height), 
             biome = biome}) -- add the biome starting squares
     end
-    local biomeSpreader = BiomeSpreader(startBiomeList, biomeMap) -- spread each biome 
+    local biomeSpreader = BiomeSpreader(startBiomeList, biomeMap) -- spread each biome
     biomeSpreader:runSpreader()
     OverworldGenerator.generateBorderBiome(biomeMap, definitions.borderBiome, 0.75, definitions.fallbackBorderBiome) -- place rivers between different biomes and water around the map border
+    for i = 0, math.random(definitions.minSubBiomes, definitions.maxSubBiomes), 1 do
+        local col, row, biomeAtThisSpot, subBiome
+        repeat
+            col, row = math.random(dimensions.width), math.random(dimensions.height)
+            biomeAtThisSpot = biomeMap[col][row].name
+        until BIOME_DEFS[biomeAtThisSpot].subBiomes ~= nil
+        subBiome = BIOME_DEFS[biomeAtThisSpot].subBiomes[math.random(#BIOME_DEFS[biomeAtThisSpot].subBiomes)]
+        OverworldGenerator.generateSubBiome(biomeMap, {name=subBiome.name, size=math.random(subBiome.minSize, subBiome.maxSize)}, col, row)
+    end
+    OverworldGenerator.generateEdgeBiome(biomeMap, definitions.borderBiome)
     return biomeMap
+end
+
+-- generate a sub-biome of a given size
+function OverworldGenerator.generateSubBiome(biomeMap, subBiome, col, row)
+    local spreadQueue = Queue({{biome=subBiome.name, spacesLeft=subBiome.size, col=col, row=row}})
+    repeat
+        local biomeSpace = spreadQueue:next()
+        for x = math.max(1, biomeSpace.col - 1), math.min(#biomeMap, biomeSpace.col + 1), 1 do
+            for y = math.max(1, biomeSpace.row - 1), math.min(#biomeMap[col], biomeSpace.row + 1), 1 do
+                if (x == biomeSpace.col or y == biomeSpace.row) and biomeMap[x][y].name ~= subBiome.name and biomeSpace.spacesLeft > 0 then
+                    if biomeSpace.spacesLeft > 1 then
+                        spreadQueue:append({col = x, row = y, biome = biomeSpace.biome, spacesLeft = biomeSpace.spacesLeft - math.random(2)})
+                    end
+                    biomeMap[x][y] = Biome(biomeSpace.biome)
+                end
+            end
+        end
+    until spreadQueue:isEmpty()
 end
 
 -- fill a new biome map with a given biome
@@ -47,17 +75,26 @@ end
 
 -- build border biomes between biomes of different types and around the edges
 function OverworldGenerator.generateBorderBiome(biomeMap, borderBiome, placementChance, fallbackBiome)
-    for col = 1, #biomeMap, 1 do
-        for row = 1, #biomeMap[col], 1 do
+    for col = 1, #biomeMap - 1, 1 do
+        for row = 1, #biomeMap[col] - 1, 1 do
             local thisBiome = biomeMap[col][row].name
-            if col == 1 or col == #biomeMap or row == 1 or row == #biomeMap[col] then
-                biomeMap[col][row] = Biome(borderBiome) -- if the biome tile is on the edge, set it as water
-            elseif (thisBiome ~= biomeMap[col + 1][row].name or thisBiome ~= biomeMap[col][row + 1].name or thisBiome ~= biomeMap[col + 1][row + 1].name) then -- if the biomes don't match with those to the right and below, place a border biome
+            if (thisBiome ~= biomeMap[col + 1][row].name or thisBiome ~= biomeMap[col][row + 1].name or thisBiome ~= biomeMap[col + 1][row + 1].name) then -- if the biomes don't match with those to the right and below, place a border biome
                 if (math.random() < (placementChance or 1)) then -- check for a chance to fail placing border biome, opting for a possible fallback biome placement instead
                     biomeMap[col][row] = Biome(borderBiome)
                 elseif fallbackBiome ~= nil then
                     biomeMap[col][row] = Biome(fallbackBiome)
                 end
+            end
+        end
+    end
+end
+
+-- generate the edge biome of the map
+function OverworldGenerator.generateEdgeBiome(biomeMap, borderBiome)
+    for col = 1, #biomeMap, 1 do
+        for row = 1, #biomeMap[col], 1 do
+            if col == 1 or col == #biomeMap or row == 1 or row == #biomeMap[col] then
+                biomeMap[col][row] = Biome(borderBiome) -- if the biome tile is on the edge, set it as water
             end
         end
     end
@@ -165,8 +202,6 @@ end
 function OverworldGenerator.generateStructures(structureMap, biomeMap, tileMap, featureMap)
     local count = 1
     for i, structure in pairs(structureMap) do
-        print("generate structure " .. tostring(count))
-        print("location: x = " .. tostring(structure.col) .. " y = " .. tostring(structure.row))
         local structureDefinitions = STRUCTURE_DEFS[structure.name] -- reference to structure's definitions table
         if structureDefinitions.biome ~= nil then
             for x = structure.col, structure.col + structureDefinitions.width - 1, 1 do 
@@ -186,7 +221,6 @@ function OverworldGenerator.generateStructures(structureMap, biomeMap, tileMap, 
                         featureMap[x][y] = nil -- build a structure border on outside tiles
                         tileMap[x][y] = Tile(structureDefinitions.borderTile)
                     elseif structureDefinitions.bottomTile ~= nil then
-                        print("place structure floor tile")
                         tileMap[x][y] = Tile(structureDefinitions.bottomTile)
                     end
                     ::continue::
