@@ -29,7 +29,7 @@ function OverworldGenerator.generateBiomes(definitions, dimensions)
     end
     local biomeSpreader = BiomeSpreader(startBiomeList, biomeMap) -- spread each biome
     biomeSpreader:runSpreader()
-    OverworldGenerator.generateBorderBiome(biomeMap, definitions.borderBiome, 0.75, definitions.fallbackBorderBiome) -- place rivers between different biomes and water around the map border
+    OverworldGenerator.generateBorderBiome(biomeMap, definitions.borderBiome, 0.75, definitions.fallbackBorderBiome) -- place rivers between different biomes
     for i = 0, math.random(definitions.minSubBiomes, definitions.maxSubBiomes), 1 do
         local col, row, biomeAtThisSpot, subBiome
         repeat
@@ -39,7 +39,7 @@ function OverworldGenerator.generateBiomes(definitions, dimensions)
         subBiome = BIOME_DEFS[biomeAtThisSpot].subBiomes[math.random(#BIOME_DEFS[biomeAtThisSpot].subBiomes)]
         OverworldGenerator.generateSubBiome(biomeMap, {name=subBiome.name, size=math.random(subBiome.minSize, subBiome.maxSize)}, col, row)
     end
-    OverworldGenerator.generateEdgeBiome(biomeMap, definitions.borderBiome)
+    OverworldGenerator.generateEdgeBiome(biomeMap, definitions.borderBiome) -- place water around the map border
     return biomeMap
 end
 
@@ -259,11 +259,11 @@ function OverworldGenerator.getAnimatedFeatures(featureMap)
     return animatedFeatures -- return populated table
 end
 
--- generate any gateways, in this case dungeons !!!!!!!!!!BUG!!!!!!!!!!
+-- generate any gateways, in this case dungeons
 function OverworldGenerator.generateGateways(definitions, dimensions, structureMap)
     local gateways = {} -- table of gateways
-    local gatewayDivider = OverworldGenerator.createDivisionGrid(dimensions, #definitions.gateways)
-    for i, gateway in ipairs(definitions.gateways) do -- go through each gateway that must be generated
+    local gatewayDivider = OverworldGenerator.createDivisionGrid(dimensions, definitions.numberOfDungeons)
+    for i = 0, definitions.numberOfDungeons, 1 do -- go through each gateway that must be generated
         local location = gatewayDivider[math.random(#gatewayDivider)][math.random(#gatewayDivider)]
         while (location.filled) do
             location = gatewayDivider[math.random(#gatewayDivider)][math.random(#gatewayDivider)] -- set the divider that this feature will generate in
