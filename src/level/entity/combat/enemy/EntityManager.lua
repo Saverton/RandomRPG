@@ -46,7 +46,7 @@ function EntityManager:getEntities(entities)
     self.entities = {} -- create an empty entities table
     -- populate every predefined entity into the entities table
     for i, entity in ipairs(entities) do
-        local thisEntity = Enemy(self.level, entity.definitions, {position = entity.position, hasKey = entity.hasKey}, self)
+        local thisEntity = Enemy.spawnEnemy(self.level, entity.definitions, {position = entity.position, hasKey = entity.hasKey}, self)
         table.insert(self.entities, thisEntity)
     end
 end
