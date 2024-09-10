@@ -204,15 +204,23 @@ function OverworldGenerator.generateStructures(structureMap, biomeMap, tileMap, 
     for i, structure in pairs(structureMap) do
         local structureDefinitions = STRUCTURE_DEFS[structure.name] -- reference to structure's definitions table
         if structureDefinitions.biome ~= nil then
-            for x = structure.col, structure.col + structureDefinitions.width - 1, 1 do 
+            for x = structure.col, structure.col + structureDefinitions.width - 1, 1 do
                 for y = structure.row, structure.row + structureDefinitions.height - 1, 1 do
                     biomeMap[x][y] = Biome(structureDefinitions.biome) -- set structure's biomes
                 end
             end
         end
         if structureDefinitions.borderTile ~= nil or structureDefinitions.bottomTile ~= nil then
-            for x = structure.col - 1, structure.col + structureDefinitions.width, 1 do 
+            for x = structure.col - 1, structure.col + structureDefinitions.width, 1 do
                 for y = structure.row - 1, structure.row + structureDefinitions.height, 1 do -- set structure's tiles
+                    if structureDefinitions == nil or
+                        tileMap[x][y] == nil then
+                        print(tileMap[x][y])
+                        print(x)
+                        print(y)
+                        print(structureDefinitions)
+                        error('hit nil')
+                    end
                     if Contains(structureDefinitions.keepTiles or {}, tileMap[x][y].name) then
                         goto continue -- if this tile is flagged as one to keep, don't override
                     end
@@ -263,33 +271,54 @@ end
 function OverworldGenerator.generateGateways(definitions, dimensions, structureMap)
     local gateways = {} -- table of gateways
     local gatewayDivider = OverworldGenerator.createDivisionGrid(dimensions, definitions.numberOfDungeons)
-    for i = 0, definitions.numberOfDungeons, 1 do -- go through each gateway that must be generated
+    local structDef = STRUCTURE_DEFS['fortress_entrance_overworld']
+
+    for _ = 0, definitions.numberOfDungeons, 1 do -- go through each gateway that must be generated
         local location = gatewayDivider[math.random(#gatewayDivider)][math.random(#gatewayDivider)]
         while (location.filled) do
             location = gatewayDivider[math.random(#gatewayDivider)][math.random(#gatewayDivider)] -- set the divider that this feature will generate in
         end
+
         local spawnX, spawnY
         repeat
-            spawnX, spawnY = math.random(location.x, location.x + location.dimensions.width), 
-                math.random(location.y, location.y + location.dimensions.height) -- spawn x and y of the feature
-        until not (spawnX <= 1 or spawnX >= dimensions.width or spawnY <= 1 or spawnY >= dimensions.height)
-        table.insert(structureMap, {name = 'fortress-entrance-overworld', col = spawnX, row = spawnY}) -- add the gateway feature
+            spawnX = math.random(location.x, location.x + location.dimensions.width - structDef.width)
+            spawnY = math.random(location.y, location.y + location.dimensions.height - structDef.height)
+        until not (
+            spawnX <= 1 or
+            spawnX + structDef.width >= dimensions.width or
+            spawnY <= 1 or
+            spawnY + structDef.height >= dimensions.height)
+
+        table.insert(structureMap, {
+            name = 'fortress-entrance-overworld',
+            col = spawnX,
+            row = spawnY
+        }) -- add the gateway feature
     end
-    return gateways -- return the populated table
+
+    return gateways
 end
 
 -- generate a set of invisible division marks across the map
 function OverworldGenerator.createDivisionGrid(dimensions, numOfDividers)
     local dividers = {}
+
     for x = 1, numOfDividers, 1 do
         dividers[x] = {}
         for y = 1, numOfDividers, 1 do
-            dividers[x][y] = {x = math.floor((dimensions.width / numOfDividers) * (x - 1)),
-                y = math.floor((dimensions.height / numOfDividers) * (y - 1)), filled = false, 
-                dimensions = {width = math.floor(dimensions.width / numOfDividers), 
-                height = math.floor(dimensions.height / numOfDividers)}} -- mark a portion of the map to generate a potential gateway feature
+            -- mark a portion of the map to generate a potential gateway feature
+            dividers[x][y] = {
+                x = math.floor((dimensions.width / numOfDividers) * (x - 1)),
+                y = math.floor((dimensions.height / numOfDividers) * (y - 1)),
+                filled = false,
+                dimensions = {
+                    width = math.floor(dimensions.width / numOfDividers),
+                    height = math.floor(dimensions.height / numOfDividers)
+                }
+            }
         end
     end
+
     return dividers
 end
 

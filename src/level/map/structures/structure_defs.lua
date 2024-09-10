@@ -4,7 +4,7 @@
 ]]
 
 STRUCTURE_DEFS = {
-    ['fortress-entrance-overworld'] = {
+    ['fortress_entrance_overworld'] = {
         width = 3,
         height = 3,
         biome = 'beach',

@@ -3,6 +3,8 @@
     @author Saverton
 ]]
 
+local love = love or {}
+
 love.graphics.setDefaultFilter('nearest', 'nearest')
 require 'src/Dependencies'
 
