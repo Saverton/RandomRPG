@@ -290,7 +290,7 @@ function OverworldGenerator.generateGateways(definitions, dimensions, structureM
             spawnY + structDef.height >= dimensions.height)
 
         table.insert(structureMap, {
-            name = 'fortress-entrance-overworld',
+            name = 'fortress_entrance_overworld',
             col = spawnX,
             row = spawnY
         }) -- add the gateway feature
