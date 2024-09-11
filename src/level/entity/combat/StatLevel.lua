@@ -29,14 +29,20 @@ end
 
 -- level up an enemy, auto upgrades each bonus accordingly
 function StatLevel:enemyLevelUp(amount)
-    for i = 1, amount, 1 do
+    for _ = 1, amount, 1 do
         self.level = self.level + 1 -- add one level
-        self:upgradeStat('maxHp')
-        self:upgradeStat('attack')
-        self:upgradeStat('defense')
-        self:upgradeStat('maxMana')
-        self.entity.currentStats.hp = self.entity:getStat('maxHp') -- add all bonuses and set current hp to the new max hp
-        self.entity.hpBar:updateRatio(self.entity.currentStats.hp / self.entity:getStat('maxHp')) -- update the health bar
+
+        -- upgrade a random stat
+        local stats = {
+            'maxHp',
+            'attack',
+            'defense'
+        }
+        self:upgradeStat(stats[math.random(3)])
+
+        -- add all bonuses and set current hp to the new max hp
+        self.entity.currentStats.hp = self.entity:getStat('maxHp')
+        self.entity.hpBar:updateRatio(self.entity.currentStats.hp / self.entity:getStat('maxHp'))
     end
 end
 
@@ -45,21 +51,21 @@ function StatLevel:playerLevelUp()
     gSounds['gui']['level_up']:play() -- play level up sound
     self.level = self.level + 1
     local selections = {
-        Selection('HP + ' .. self.bonuses['maxHp'], function() 
-            self:upgradeStat('maxHp') 
+        Selection('HP + ' .. self.bonuses['maxHp'], function()
+            self:upgradeStat('maxHp')
             self.entity:totalHeal() -- bring player back to full health
             gStateStack:pop()
         end),
-        Selection('Attack + ' .. self.bonuses['attack'], function() 
+        Selection('Attack + ' .. self.bonuses['attack'], function()
             self:upgradeStat('attack')
             gStateStack:pop()
         end),
-        Selection('Defense + ' .. self.bonuses['defense'], function() 
-            self:upgradeStat('defense') 
+        Selection('Defense + ' .. self.bonuses['defense'], function()
+            self:upgradeStat('defense')
             gStateStack:pop()
         end),
-        Selection('Mana + ' .. self.bonuses['maxMana'], function() 
-            self:upgradeStat('maxMana') 
+        Selection('Mana + ' .. self.bonuses['maxMana'], function()
+            self:upgradeStat('maxMana')
             gStateStack:pop()
         end),
     }
