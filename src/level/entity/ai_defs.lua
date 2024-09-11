@@ -97,7 +97,7 @@ end
 function DefaultTargetWalk(entity, travel)
     if not (TryUsingHeldItem(entity)) then -- try using the entity's held item first
         local newDirection = GetDirectionToReduceLargestDifference(entity, entity.target) -- find the direction this entity should travel
-        entity:changeDirection(newDirection) -- change the entity's direction
+        entity:setDirection(newDirection) -- change the entity's direction
     end
     ResetTravel(travel, TILE_SIZE) -- reset the travel parameters
 end

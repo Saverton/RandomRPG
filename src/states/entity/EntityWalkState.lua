@@ -15,15 +15,19 @@ end
 function EntityWalkState:update(dt)
     self.collidesWithObstacle = false -- set the collidesWithObstacle flag to false so we don't get a false flag
     local oldX, oldY = self.entity.x, self.entity.y
-    if self.entity.direction == 'up' then
-        self.entity.y = self.entity.y - (self.entity:getSpeed() * dt)
-    elseif self.entity.direction == 'right' then
-        self.entity.x = self.entity.x + (self.entity:getSpeed() * dt)
-    elseif self.entity.direction == 'down' then
-        self.entity.y = self.entity.y + (self.entity:getSpeed() * dt)
-    elseif self.entity.direction == 'left' then
-        self.entity.x = self.entity.x - (self.entity:getSpeed() * dt)
+
+    local dx, dy
+    if self.entity.dirX ~= 0 and self.entity.dirY ~= 0 then
+        dx = math.cos(math.rad(45)) * self.entity.dirX * (self.entity:getSpeed() * dt)
+        dy = math.sin(math.rad(45)) * self.entity.dirY * (self.entity:getSpeed() * dt)
+    else
+        dx = self.entity.dirX * (self.entity:getSpeed() * dt)
+        dy = self.entity.dirY * (self.entity:getSpeed() * dt)
     end
+
+    self.entity.x = self.entity.x + dx
+    self.entity.y = self.entity.y + dy
+
     local stopMoving = false-- flag to show if at any point the entity has to stop moving and change into an idle state.
     if (self.entity:checkCollisionWithMap(dt)) then
         -- if the movement causes a collision, move the entity back to its old location at the start of this frame

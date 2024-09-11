@@ -9,7 +9,7 @@ function Player:init(level, definitions, position)
     CombatEntity.init(self, level, definitions, position) -- initiate a combat entity
     self.money = definitions.money or 0 -- player's currency
     self.questManager = QuestManager(definitions.quests) -- initiate a quest manager
-    self:initiateGuis() -- initiate all gui elements of the player display
+    self:initGuis() -- initiate all gui elements of the player display
     self.stateMachine = StateMachine({
         ['idle'] = function() return PlayerIdleState(self) end,
         ['walk'] = function() return PlayerWalkState(self, self.level) end,
@@ -27,12 +27,15 @@ end
 -- update the player's components
 function Player:update(dt)
     CombatEntity.update(self, dt) -- update the player's combat statistics
-    if self.currentStats.hp <= 0 then --check for player's death
+
+    if self.currentStats.hp <= 0 then
         self:dies()
     end
-    self:setHeldItem(self:switchItem()) -- switches held item if the mouse wheel is scrolled
+
+    self:updateHeldItem()
+
     if love.keyboard.wasPressed('space') then
-        self:interact() -- if space is pressed, use current item or interact with npcs/features
+        self:interact()
     end
 end
 
@@ -40,33 +43,41 @@ end
 function Player:render(camera)
     if not self.dead then
         CombatEntity.render(self, camera) -- render the entity of the player
-        self:renderGui() -- render gui elements of player displays
+        self:renderGuis()
     end
 end
 
 -- initiate all gui parts for the player
-function Player:initiateGuis()
+function Player:initGuis()
     self.hotbar = self:getHotbar(3) -- player's hotbar gui
     self.hpBar = ProgressBar({x = PLAYER_BAR_X, y = PLAYER_HP_BAR_Y, width = PLAYER_BAR_WIDTH, height = PLAYER_HP_BAR_HEIGHT}, {1, 0, 0, 1}) -- health bar
     self.manaBar = ProgressBar({x = PLAYER_BAR_X, y = PLAYER_MANA_BAR_Y, width = PLAYER_BAR_WIDTH, height = PLAYER_BAR_HEIGHT}, {0, 0, 1, 1}) -- mana bar
     self.expBar = ProgressBar({x = PLAYER_BAR_X, y = PLAYER_EXP_BAR_Y, width = PLAYER_BAR_WIDTH, height = PLAYER_BAR_HEIGHT}, {0, 1, 0, 1}) -- exp bar
-    self:updateBars() -- update stat bars
+    self:updateStatBars() -- update stat bars
 end
 
--- return the new heldItem after the scroll updates
-function Player:switchItem()
-    local yScroll = GetYScroll() -- navigate between held items
+function Player:updateHeldItem()
     local newItem = self.heldItem
+
+    -- check if scroll wheel was scrolled
+    local yScroll = GetYScroll()
     if yScroll ~= 0 then
-        gSounds['gui']['menu_blip_1']:play() -- play switch sound
-        newItem = (((self.heldItem - 1) - yScroll) % (#self.hotbar) + 1) -- set new held item
+        newItem = ((self.heldItem - 1) - yScroll) % (#self.hotbar) + 1
     end
-    for i = 1, #self.hotbar, 1 do -- check if number keys were pressed
+
+    -- check if number keys were pressed
+    for i = 1, #self.hotbar, 1 do
         if love.keyboard.wasPressed(tostring(i)) then
             newItem = i
+            break
         end
     end
-    return newItem
+
+    if newItem == self.heldItem then return end
+
+    -- item changed
+    gSounds['gui']['menu_blip_1']:play() -- play switch sound
+    self:setHeldItem(newItem)
 end
 
 -- run the appropriate interact function based on the conditions of the player.
@@ -82,8 +93,7 @@ function Player:interact()
     end 
 end
 
--- render player gui elements
-function Player:renderGui()
+function Player:renderGuis()
     for i, slot in ipairs(self.hotbar) do --render each Item Hotbar Panel
         self:renderHotbarSlot(slot, i)
     end
@@ -221,35 +231,35 @@ function Player:sell(index, shop, menu)
     if item.quantity == 0 then
         gStateStack:pop() -- remove shop sell item menu
         menu.selections = shop:getPlayerInventorySelections( -- set new selection list for item sell list.
-            function(subMenuState, otherMenu) 
+            function(subMenuState, otherMenu)
                 gStateStack:push(MenuState(MENU_DEFS['shop_sell_item'], {parent = {shop = subMenuState, menu = otherMenu}})) -- menu to open on selection
             end
         )
     end
 end
 
--- update all three stat bars
-function Player:updateBars()
+function Player:updateStatBars()
     self.hpBar:updateRatio(self.currentStats.hp / self:getStat('maxHp'))
     self.manaBar:updateRatio(self.currentStats.mana / self:getStat('maxMana'))
     self.expBar:updateRatio(self.statLevel:getExpRatio())
 end
 
--- called when player dies, calls up to combatEntity
 function Player:dies()
-    CombatEntity.dies(self) -- call combat entity function
+    CombatEntity.dies(self)
+
     if not self.dead then
+        -- play the player's death animations
         gStateStack:push(DeathAnimationState(self, self.x - self.level.camera.x + self.xOffset, self.y - self.level.camera.y + self.yOffset))
-            -- play the player's death animations
     end
-    self.dead = true -- player is now flagged dead
-    self.level.music:stop() -- stop the background music
+
+    self.dead = true
+    self.level.music:stop()
 end
 
--- give the player an item, check for the special item tag
 function Player:giveItem(item)
     Entity.giveItem(self, item)
     if ITEM_DEFS[item.name].pickupSound == 'special_item' then
-        self:changeState('item-get', {item = item}) -- animate the player getting a special item
+        -- animate the player getting a special item
+        self:changeState('item-get', {item = item})
     end
 end

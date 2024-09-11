@@ -70,7 +70,7 @@ function StatLevel:playerLevelUp()
         end),
     }
     gStateStack:push(MenuState(MENU_DEFS['level_up'], {selections = selections}))
-    self.entity:updateBars() -- update stat bars
+    self.entity:updateStatBars() -- update stat bars
     self:checkForLevelUp() -- check if the player needs to level up again in case enough exp was gained to pass the threshold again.
 end
 
@@ -82,7 +82,7 @@ end
 -- upgrade a specific stat
 function StatLevel:upgradeStat(statName)
     self.entity.combatStats[statName] = self.entity.combatStats[statName] + self.bonuses[statName]
-    self.entity:updateBars()
+    self.entity:updateStatBars()
 end
 
 -- get the ratio of current exp to the exp needed for the next level
