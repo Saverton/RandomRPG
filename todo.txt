@@ -1,0 +1,10 @@
+Fix quests
+Improve weapon swinging
+Plan game end goal
+Add underworld
+Add bosses
+Remove tip guys
+Health bar -> hearts
+exp + lvl labels
+mouse controls
+entity layering w/ player gui
