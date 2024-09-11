@@ -172,7 +172,7 @@ gSounds = {
         ['enemy_dies'] = love.audio.newSource('sounds/enemy_dies.wav', 'static'),
         ['fire_hit_1'] = love.audio.newSource('sounds/fire_hit_1.wav', 'static'),
         ['target_found'] = love.audio.newSource('sounds/target_found.wav', 'static'),
-        ['death_jingle'] = love.audio.newSource('sounds/death_jingle.wav', 'static'),
+        ['death_jingle'] = love.audio.newSource('sounds/death_jingle.mp3', 'stream'),
         ['reveal'] = love.audio.newSource('sounds/reveal.wav', 'static')
     },
     ['items'] = {
@@ -192,6 +192,7 @@ gSounds = {
         ['tree_falls'] = love.audio.newSource('sounds/tree_falls.wav', 'static'),
     },
     ['music'] = {
+        ['title_screen'] = love.audio.newSource('sounds/title_screen.mp3', 'stream'),
         ['dungeon'] = love.audio.newSource('sounds/dungeon.mp3', 'stream'),
         ['dungeon_intro'] = love.audio.newSource('sounds/dungeon_intro.mp3', 'stream'),
         ['underground'] = love.audio.newSource('sounds/underground.mp3', 'stream'),
