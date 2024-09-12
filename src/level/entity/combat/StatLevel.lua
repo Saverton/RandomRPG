@@ -87,7 +87,10 @@ end
 
 -- get the ratio of current exp to the exp needed for the next level
 function StatLevel:getExpRatio()
-    return ((self.exp - math.pow(3, self.level - 1)) / (math.pow(3, self.level) - math.pow(3, self.level - 1)))
+    local expToNextLvl = self.getExpToLevel(self.level + 1)
+    local expToLastLvl = self.getExpToLevel(self.level)
+
+    return (self.exp - expToLastLvl) / (expToNextLvl - expToLastLvl)
 end
 
 -- return a table with the necessary save data
@@ -99,10 +102,15 @@ function StatLevel:getSaveData()
     }
 end
 
+function StatLevel.getExpToLevel(level)
+    assert(type(level) == 'number', 'level must be a number')
+    return math.pow(3, level - 1)
+end
+
 -- check if the exp bar is full and, if so, level up
 function StatLevel:checkForLevelUp()
-    if self.exp >= math.pow(3, self.level) then
-        self:playerLevelUp() -- if this is enough to level up, call the player level up function
+    if self.exp >= self.getExpToLevel(self.level + 1) then
+        self:playerLevelUp()
         return true
     else
         return false

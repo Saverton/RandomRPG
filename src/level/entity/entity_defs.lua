@@ -188,26 +188,6 @@ ENTITY_DEFS = {
 }
 
 NPC_DEFS = {
-    ['tips'] = {
-        name = 'tips',
-        animationName = 'npc',
-        displayName = 'Advisor',
-        width = 12,
-        height = 12,
-        xOffset = -2,
-        yOffset = -4,
-        startAnim = 'idle-down',
-        onInteract = function(player, npc)
-            gStateStack:push(
-                DialogueState(TIPS[math.random(#TIPS)], npc.animator.texture, 1)
-            )
-        end,
-        isDespawnable = function(npc)
-            return (npc.timesInteractedWith >= 1)
-        end,
-        speed = 16,
-        aiType = 'default'
-    },
     ['shop'] = {
         name = 'shop',
         animationName = 'npc',

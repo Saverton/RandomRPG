@@ -49,11 +49,28 @@ end
 
 -- initiate all gui parts for the player
 function Player:initGuis()
-    self.hotbar = self:getHotbar(3) -- player's hotbar gui
-    self.hpBar = ProgressBar({x = PLAYER_BAR_X, y = PLAYER_HP_BAR_Y, width = PLAYER_BAR_WIDTH, height = PLAYER_HP_BAR_HEIGHT}, {1, 0, 0, 1}) -- health bar
-    self.manaBar = ProgressBar({x = PLAYER_BAR_X, y = PLAYER_MANA_BAR_Y, width = PLAYER_BAR_WIDTH, height = PLAYER_BAR_HEIGHT}, {0, 0, 1, 1}) -- mana bar
-    self.expBar = ProgressBar({x = PLAYER_BAR_X, y = PLAYER_EXP_BAR_Y, width = PLAYER_BAR_WIDTH, height = PLAYER_BAR_HEIGHT}, {0, 1, 0, 1}) -- exp bar
-    self:updateStatBars() -- update stat bars
+    self.hotbar = self:getHotbar(3)
+
+    self.hpBar = ProgressBar({
+        x = PLAYER_BAR_X,
+        y = PLAYER_HP_BAR_Y,
+        width = PLAYER_BAR_WIDTH,
+        height = PLAYER_HP_BAR_HEIGHT
+    }, {1, 0, 0, 1})
+    self.manaBar = ProgressBar({
+        x = PLAYER_BAR_X,
+        y = PLAYER_MANA_BAR_Y,
+        width = PLAYER_BAR_WIDTH,
+        height = PLAYER_BAR_HEIGHT
+    }, {0, 0, 1, 1})
+    self.expBar = ProgressBar({
+        x = PLAYER_BAR_X,
+        y = PLAYER_EXP_BAR_Y,
+        width = PLAYER_BAR_WIDTH,
+        height = PLAYER_BAR_HEIGHT
+    }, {0, 1, 0, 1})
+
+    self:updateStatBars()
 end
 
 function Player:updateHeldItem()
@@ -93,16 +110,35 @@ function Player:interact()
     end
 end
 
+local function getExpRatioString(statLevel)
+    local expToNextLvl = statLevel.getExpToLevel(statLevel.level + 1)
+    local expToLastLvl = statLevel.getExpToLevel(statLevel.level)
+
+    return tostring(statLevel.exp - expToLastLvl) .. '/' .. tostring(expToNextLvl - expToLastLvl)
+end
+
 function Player:renderGuis()
-    for i, slot in ipairs(self.hotbar) do --render each Item Hotbar Panel
+    for i, slot in ipairs(self.hotbar) do
         self:renderHotbarSlot(slot, i)
     end
-    love.graphics.setFont(gFonts['small']) -- set font to small
-    PrintWithShadow('Ammo: ' .. tostring(self:getAmmoCount()), PLAYER_TEXT_POS_X, AMMO_TEXT_POS_Y) -- render ammo count
-    PrintWithShadow('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X,  MONEY_TEXT_POS_Y) -- render money amount
+
+    love.graphics.setFont(gFonts['small'])
     self.hpBar:render() -- render hp bar
     self.manaBar:render() -- render mana bar
+    PrintWithShadow(
+        'Lvl: ' .. tostring(self.statLevel.level),
+        PLAYER_TEXT_POS_X,
+        PLAYER_LVL_TEXT_Y
+    )
+    PrintWithShadow(
+        'Exp: ' .. getExpRatioString(self.statLevel),
+        PLAYER_TEXT_POS_X,
+        PLAYER_EXP_TEXT_Y
+    )
     self.expBar:render() -- render exp bar
+    PrintWithShadow('Ammo: ' .. tostring(self:getAmmoCount()), PLAYER_TEXT_POS_X, AMMO_TEXT_POS_Y) -- render ammo count
+    PrintWithShadow('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X,  MONEY_TEXT_POS_Y) -- render money amount
+
     PrintWithShadow('\'i\' = Open Inventory', TIPTEXT_X, TIPTEXT_Y) -- print inventory text
     if #self.questManager.quests > 0 then
         PrintWithShadow('\'q\' = Open Quests', TIPTEXT_X, TIPTEXT_Y - 10) -- print quest text
