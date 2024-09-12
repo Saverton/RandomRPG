@@ -135,13 +135,15 @@ function Player:renderGuis()
         PLAYER_TEXT_POS_X,
         PLAYER_EXP_TEXT_Y
     )
-    self.expBar:render() -- render exp bar
-    PrintWithShadow('Ammo: ' .. tostring(self:getAmmoCount()), PLAYER_TEXT_POS_X, AMMO_TEXT_POS_Y) -- render ammo count
-    PrintWithShadow('Money: ' .. tostring(self.money), PLAYER_TEXT_POS_X,  MONEY_TEXT_POS_Y) -- render money amount
+    self.expBar:render()
+    love.graphics.draw(gTextures['projectiles'], gFrames['projectiles'][8], PLAYER_TEXT_POS_X, AMMO_TEXT_POS_Y, 0, 1, 1, 4, 4)
+    PrintWithShadow(tostring(self:getAmmoCount()), PLAYER_TEXT_POS_X + 10, AMMO_TEXT_POS_Y)
+    love.graphics.draw(gTextures['items'], gFrames['items'][5], PLAYER_TEXT_POS_X, MONEY_TEXT_POS_Y, 0, 1, 1, 4, 4)
+    PrintWithShadow(tostring(self.money), PLAYER_TEXT_POS_X + 10,  MONEY_TEXT_POS_Y)
 
-    PrintWithShadow('\'i\' = Open Inventory', TIPTEXT_X, TIPTEXT_Y) -- print inventory text
+    PrintWithShadow('\'i\' = Open Inventory', TIPTEXT_X, TIPTEXT_Y)
     if #self.questManager.quests > 0 then
-        PrintWithShadow('\'q\' = Open Quests', TIPTEXT_X, TIPTEXT_Y - 10) -- print quest text
+        PrintWithShadow('\'q\' = Open Quests', TIPTEXT_X, TIPTEXT_Y - 10)
     end
 end
 
