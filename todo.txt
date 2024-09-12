@@ -4,5 +4,4 @@ Plan game end goal
 Add underworld
 Add bosses
 Health bar -> hearts
-exp + lvl labels
 mouse controls

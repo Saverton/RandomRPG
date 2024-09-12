@@ -51,24 +51,28 @@ end
 function Player:initGuis()
     self.hotbar = self:getHotbar(3)
 
+    local red = {1, 0, 0, 1}
+    local purple = {.7, .4, .8, 1}
+    local green = {0, 1, 0, 0}
+
     self.hpBar = ProgressBar({
         x = PLAYER_BAR_X,
         y = PLAYER_HP_BAR_Y,
         width = PLAYER_BAR_WIDTH,
         height = PLAYER_HP_BAR_HEIGHT
-    }, {1, 0, 0, 1})
+    }, red)
     self.manaBar = ProgressBar({
         x = PLAYER_BAR_X,
         y = PLAYER_MANA_BAR_Y,
         width = PLAYER_BAR_WIDTH,
         height = PLAYER_BAR_HEIGHT
-    }, {0, 0, 1, 1})
+    }, purple)
     self.expBar = ProgressBar({
         x = PLAYER_BAR_X,
         y = PLAYER_EXP_BAR_Y,
         width = PLAYER_BAR_WIDTH,
         height = PLAYER_BAR_HEIGHT
-    }, {0, 1, 0, 1})
+    }, green)
 
     self:updateStatBars()
 end
