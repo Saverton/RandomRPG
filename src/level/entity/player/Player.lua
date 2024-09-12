@@ -90,7 +90,7 @@ function Player:interact()
         self:interactWithMap(checkBox) -- interact with the map at selected coordinates
     elseif self.items[self.heldItem] == nil then
         self:interactWithMap(checkBox) -- interact with the map at selected coordinates
-    end 
+    end
 end
 
 function Player:renderGuis()
