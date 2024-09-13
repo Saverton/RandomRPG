@@ -13,12 +13,13 @@ function Level:init(worldName, levelName, definitions)
     self.flags = {} -- used to track thrown flags by actions in the Level.
     local levelType = string.sub(self.levelName, 0, string.find(self.levelName, '-') - 1)
     self.music = Music(MUSIC_DEFS[levelType].track or 'overworld', MUSIC_DEFS[levelType].intro)
+    self.isUpdatingEntities = true
 end
 
 -- update each of the level's components
 function Level:update(dt)
     self.map:update(dt)
-    self.entityManager:update(dt)
+    if self.isUpdatingEntities then self.entityManager:update(dt) end
     self.pickupManager:update(dt)
     self.player:update(dt)
     self.camera:update()

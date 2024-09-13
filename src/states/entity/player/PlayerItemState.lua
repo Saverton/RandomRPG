@@ -10,9 +10,12 @@ function PlayerItemState:init(entity)
     EntityBaseState.init(self, entity)
     self.entity:changeAnimation('item-get')
     self.item = nil
-    gStateStack:push(PauseUpdatesState(3.2)) -- pause updates for 3.2 seconds
+    self.entity.level.isUpdatingEntities = false
     self.exitTimer = {} -- timer to exit this player state
-    Timer.after(0.01, function() self.entity:changeState('idle') end):group(self.exitTimer)
+    Timer.after(3.2, function()
+        self.entity:changeState('idle')
+        self.entity.level.isUpdatingEntities = true
+    end):group(self.exitTimer)
 end
 
 -- enter the state and set the item to the parameter item
@@ -23,7 +26,6 @@ end
 
 -- update the timer
 function PlayerItemState:update(dt)
-    print('pause updates state')
     Timer.update(dt, self.exitTimer)
 end
 
