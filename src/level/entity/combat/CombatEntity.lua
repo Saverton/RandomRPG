@@ -44,8 +44,15 @@ end
 function CombatEntity:render(camera)
     local onScreenX, onScreenY = self:getOnScreenPosition(camera)
     love.graphics.setColor(self.invincibilityManager:getCurrentColor()) -- sets opacity to reflect flash counter
-    Entity.render(self, camera) -- render entity
-    self.projectileManager:render(camera) -- render owned projectiles
+
+    if self.direction == 'down' then
+        Entity.render(self, camera)
+        self.projectileManager:render(camera)
+    else
+        self.projectileManager:render(camera)
+        Entity.render(self, camera)
+    end
+
     self.effectManager:render(onScreenX, onScreenY) -- render effects
 end
 
