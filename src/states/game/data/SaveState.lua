@@ -110,21 +110,15 @@ function SaveState:savePlayer(path)
         boosts = self.player.boosts,
         currentStats = self.player.currentStats,
         speed = self.player.speed,
-        quests = {},
         effectManager = self.player.effectManager:getSaveData(),
         items = {},
         statLevel = self.player.statLevel:getSaveData()
     }
     local items = {}
-    local quests = {}
     for i, item in ipairs(self.player.items) do
         table.insert(items, {name = item.name, quantity = item.quantity})
     end
     definitions.items = items
-    for i, quest in ipairs(self.player.questManager.quests) do
-        table.insert(quests, {name = quest.name, flags = quest.flags})
-    end
-    definitions.quests = quests
     local player = {definitions = definitions, position = position, currentLevel = self.levelName} -- create player table holding all player data
     love.filesystem.write(path .. '/player.lua', Serialize(player))
 end
@@ -187,13 +181,9 @@ function SaveState:saveNPCS(path)
             speed = entity.speed,
             timesInteractedWith = entity.timesInteractedWith,
             shop = {},
-            quest = {},
-            hasQuest = NPC_DEFS[entity.name].hasQuest
         }
         if entity.shop ~= nil then
             definitions.shop = entity.shop:getSaveData()
-        elseif entity.quest ~= nil then
-            definitions.quest = entity.quest:getSaveData()
         end
         local entityTable = {definitions = definitions, position = position}
         table.insert(npcs, entityTable)

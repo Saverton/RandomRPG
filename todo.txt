@@ -1,4 +1,3 @@
-Fix quests
 Improve weapon swinging
 Plan game end goal
 Add underworld

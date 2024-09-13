@@ -13,7 +13,7 @@ function love.load()
     love.window.setTitle('Random RPG')
     math.randomseed(os.time())
 
-    push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
+    LibPush:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
         vsync = true,
         resizable = true
@@ -35,7 +35,7 @@ end
 
 -- resize screen
 function love.resize(w, h)
-    push:resize(w, h)
+    LibPush:resize(w, h)
 end
 
 -- add a key to the table of keys pressed this frame
@@ -69,7 +69,7 @@ end
 
 -- render the game this frame
 function love.draw()
-    push:start()
+    LibPush:start()
     gStateStack:render()
-    push:finish()
+    LibPush:finish()
 end

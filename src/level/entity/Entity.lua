@@ -33,7 +33,7 @@ function Entity:render(camera)
     local onScreenX, onScreenY = self:getOnScreenPosition(camera)
     self.stateMachine:render(onScreenX, onScreenY) -- draw the entity at the specified x and y according to stateMachine behavior
     love.graphics.setColor(1, 1, 1, 1) -- set color back to default white in case it was changed
-    local mouseX, mouseY = push:toGame(love.mouse.getPosition()) -- get mouse position
+    local mouseX, mouseY = LibPush:toGame(love.mouse.getPosition()) -- get mouse position
     if self:statsVisible() and (mouseX ~= nil and mouseY ~= nil) and Collide(self, {x = mouseX + camera.x, y = mouseY + camera.y, width = 1, height = 1}) then
         self:printInfoTag(onScreenX, onScreenY)
     end -- if the mouse collides with this entity, print an informational tag above the entity
@@ -44,6 +44,13 @@ function Entity:setPosition(position)
     -- set the x and y position
     self.x, self.y = (((position.x - 1) * TILE_SIZE) + (position.xOffset or 0)), (((position.y - 1) * TILE_SIZE) + (position.yOffset or 0))
     self:setDirection(START_DIRECTION)
+end
+
+function Entity:getMapPosition()
+    return {
+        x = math.floor(self.x / TILE_SIZE),
+        y = math.floor(self.y / TILE_SIZE)
+    }
 end
 
 -- initiate the inventory with a list of items.

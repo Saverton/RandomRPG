@@ -123,10 +123,10 @@ CHEST_ITEMS = {'sword', 'battle_axe', 'bow', 'fire_tome', 'ice_tome'}
 
 -- npcs
 DESPAWN_TIMER = 2
-NPC_CAP = 3
-NPC_TYPES = {'quest', 'shop'}
+NPC_CAP = 1
+NPC_TYPES = {'shop'}
 NPC_NAMES = {'Dorfinkle', 'Adronian', 'Quandale', 'Steve', 'Terrence', 'Dumbledalf', 'Frippin', 'Zink'}
-QUEST_LIMIT = 2
+--[[ QUEST_LIMIT = 2
 TIPS = {
     'Have you found six weapons?',
     'Tomes inflict status effects.',
@@ -134,7 +134,7 @@ TIPS = {
     'Don\'t get too close to skeletons.',
     'Enemies will get stronger too!',
     'Have you visited a dungeon?'
-} -- unused currently, may be added to quest or shop npc dialog
+} -- unused currently, may be added to quest or shop npc dialog ]]
 
 -- leveling
 DEFAULT_BONUS = 1

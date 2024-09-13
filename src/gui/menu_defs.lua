@@ -25,9 +25,9 @@ MENU_DEFS = {
         title = 'Play',
         subtitle = '',
         selections = {
-            Selection('New Game', function() 
+            Selection('New Game', function()
                 gStateStack:pop()
-                gStateStack:push(CreateWorldState()) 
+                gStateStack:push(CreateWorldState())
             end),
             Selection('Load Game', function() gStateStack:push(MenuState(MENU_DEFS['choose_world'], {
                 selections = LoadWorldList()
@@ -112,7 +112,7 @@ MENU_DEFS = {
             Selection('Back', function() gStateStack:pop() end)
         }
     },
-    ['quest'] = {
+    --[[ ['quest'] = {
         x = MENU_X,
         y = MENU_Y,
         width = MENU_WIDTH,
@@ -129,7 +129,7 @@ MENU_DEFS = {
         title = 'Quest',
         subtitle = '',
         selections = {
-            Selection('Info', function(menuState) 
+            Selection('Info', function(menuState)
                 local menu = menuState.menu
                 local questManager = menuState.player.questManager
                 local playerQuest = questManager.quests[GetIndex(questManager.quests, menu.selections[menu.selectors[menu.selector].position].name)]
@@ -138,7 +138,7 @@ MENU_DEFS = {
             end),
             Selection('Abandon', function(menuState) 
                 gStateStack:push(ConfirmState(MENU_DEFS['confirm'], {
-                    onConfirm = function() 
+                    onConfirm = function()
                         local menu = menuState.menu
                         local quest = menuState.player.questManager.quests[GetIndex(menuState.player.questManager.quests, menu.selections[menu.selectors[menu.selector].position].name)]
                         table.remove(menuState.player.questManager.quests, GetIndex(menuState.player.questManager.quests, quest.name))
@@ -149,7 +149,7 @@ MENU_DEFS = {
             end),
             Selection('Back', function() gStateStack:pop() end)
         }
-    },
+    }, ]]
     ['confirm'] = {
         x = VIRTUAL_WIDTH / 2 - 40,
         y = VIRTUAL_HEIGHT / 2 - 40,
@@ -168,7 +168,7 @@ MENU_DEFS = {
             end)
         }
     },
-    ['quest_confirm'] = {
+    --[[ ['quest_confirm'] = {
         x = VIRTUAL_WIDTH / 2 - 40,
         y = VIRTUAL_HEIGHT / 2 - 40,
         width = 80,
@@ -185,7 +185,7 @@ MENU_DEFS = {
                 menuState.onDeny()
             end)
         }
-    },
+    }, ]]
     ['shop_main'] = {
         x = VIRTUAL_WIDTH / 2 - 40,
         y = MENU_Y + 20,

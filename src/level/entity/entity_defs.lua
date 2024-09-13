@@ -211,7 +211,8 @@ NPC_DEFS = {
         speed = 16,
         aiType = 'default'
     },
-    ['quest'] = {
+    -- REMOVED DUE TO ISSUES WITH STATE ACROSS DIFFERENT LEVELS
+    --[[ ['quest'] = {
         name = 'quest',
         animationName = 'npc',
         displayName = 'Questgiver',
@@ -229,5 +230,5 @@ NPC_DEFS = {
         end,
         speed = 16,
         aiType = 'default'
-    }
+    } ]]
 }

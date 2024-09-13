@@ -1,5 +1,5 @@
 --[[
-    Player Class: defines behavior of the player that the user controls, has money, a hotbar, guis for health, mana, and exp, a list of held quests.
+    Player Class: defines behavior of the player that the user controls, has money, a hotbar, guis for health, mana, and exp
     @author Saverton
 ]]
 
@@ -8,7 +8,6 @@ Player = Class{__includes = CombatEntity}
 function Player:init(level, definitions, position)
     CombatEntity.init(self, level, definitions, position) -- initiate a combat entity
     self.money = definitions.money or 0 -- player's currency
-    self.questManager = QuestManager(definitions.quests) -- initiate a quest manager
     self:initGuis() -- initiate all gui elements of the player display
     self.stateMachine = StateMachine({
         ['idle'] = function() return PlayerIdleState(self) end,
@@ -53,7 +52,7 @@ function Player:initGuis()
 
     local red = {1, 0, 0, 1}
     local purple = {.7, .4, .8, 1}
-    local green = {0, 1, 0, 0}
+    local green = {0, 1, 0, 1}
 
     self.hpBar = ProgressBar({
         x = PLAYER_BAR_X,
@@ -146,9 +145,6 @@ function Player:renderGuis()
     PrintWithShadow(tostring(self.money), PLAYER_TEXT_POS_X + 10,  MONEY_TEXT_POS_Y)
 
     PrintWithShadow('\'i\' = Open Inventory', TIPTEXT_X, TIPTEXT_Y)
-    if #self.questManager.quests > 0 then
-        PrintWithShadow('\'q\' = Open Quests', TIPTEXT_X, TIPTEXT_Y - 10)
-    end
 end
 
 -- return the amount of ammo that the player has in his inventory
