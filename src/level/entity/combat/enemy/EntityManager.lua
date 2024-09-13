@@ -36,7 +36,7 @@ end
 
 -- render all the entities
 function EntityManager:render(camera)
-    for i, entity in pairs(self.entities) do 
+    for i, entity in pairs(self.entities) do
         entity:render(camera)
     end
 end

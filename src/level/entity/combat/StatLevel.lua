@@ -29,14 +29,20 @@ end
 
 -- level up an enemy, auto upgrades each bonus accordingly
 function StatLevel:enemyLevelUp(amount)
-    for i = 1, amount, 1 do
+    for _ = 1, amount, 1 do
         self.level = self.level + 1 -- add one level
-        self:upgradeStat('maxHp')
-        self:upgradeStat('attack')
-        self:upgradeStat('defense')
-        self:upgradeStat('maxMana')
-        self.entity.currentStats.hp = self.entity:getStat('maxHp') -- add all bonuses and set current hp to the new max hp
-        self.entity.hpBar:updateRatio(self.entity.currentStats.hp / self.entity:getStat('maxHp')) -- update the health bar
+
+        -- upgrade a random stat
+        local stats = {
+            'maxHp',
+            'attack',
+            'defense'
+        }
+        self:upgradeStat(stats[math.random(3)])
+
+        -- add all bonuses and set current hp to the new max hp
+        self.entity.currentStats.hp = self.entity:getStat('maxHp')
+        self.entity.hpBar:updateRatio(self.entity.currentStats.hp / self.entity:getStat('maxHp'))
     end
 end
 
@@ -45,26 +51,26 @@ function StatLevel:playerLevelUp()
     gSounds['gui']['level_up']:play() -- play level up sound
     self.level = self.level + 1
     local selections = {
-        Selection('HP + ' .. self.bonuses['maxHp'], function() 
-            self:upgradeStat('maxHp') 
+        Selection('HP + ' .. self.bonuses['maxHp'], function()
+            self:upgradeStat('maxHp')
             self.entity:totalHeal() -- bring player back to full health
             gStateStack:pop()
         end),
-        Selection('Attack + ' .. self.bonuses['attack'], function() 
+        Selection('Attack + ' .. self.bonuses['attack'], function()
             self:upgradeStat('attack')
             gStateStack:pop()
         end),
-        Selection('Defense + ' .. self.bonuses['defense'], function() 
-            self:upgradeStat('defense') 
+        Selection('Defense + ' .. self.bonuses['defense'], function()
+            self:upgradeStat('defense')
             gStateStack:pop()
         end),
-        Selection('Mana + ' .. self.bonuses['maxMana'], function() 
-            self:upgradeStat('maxMana') 
+        Selection('Mana + ' .. self.bonuses['maxMana'], function()
+            self:upgradeStat('maxMana')
             gStateStack:pop()
         end),
     }
     gStateStack:push(MenuState(MENU_DEFS['level_up'], {selections = selections}))
-    self.entity:updateBars() -- update stat bars
+    self.entity:updateStatBars() -- update stat bars
     self:checkForLevelUp() -- check if the player needs to level up again in case enough exp was gained to pass the threshold again.
 end
 
@@ -76,12 +82,15 @@ end
 -- upgrade a specific stat
 function StatLevel:upgradeStat(statName)
     self.entity.combatStats[statName] = self.entity.combatStats[statName] + self.bonuses[statName]
-    self.entity:updateBars()
+    self.entity:updateStatBars()
 end
 
 -- get the ratio of current exp to the exp needed for the next level
 function StatLevel:getExpRatio()
-    return ((self.exp - math.pow(3, self.level - 1)) / (math.pow(3, self.level) - math.pow(3, self.level - 1)))
+    local expToNextLvl = self.getExpToLevel(self.level + 1)
+    local expToLastLvl = self.getExpToLevel(self.level)
+
+    return (self.exp - expToLastLvl) / (expToNextLvl - expToLastLvl)
 end
 
 -- return a table with the necessary save data
@@ -93,10 +102,15 @@ function StatLevel:getSaveData()
     }
 end
 
+function StatLevel.getExpToLevel(level)
+    assert(type(level) == 'number', 'level must be a number')
+    return math.pow(3, level - 1)
+end
+
 -- check if the exp bar is full and, if so, level up
 function StatLevel:checkForLevelUp()
-    if self.exp >= math.pow(3, self.level) then
-        self:playerLevelUp() -- if this is enough to level up, call the player level up function
+    if self.exp >= self.getExpToLevel(self.level + 1) then
+        self:playerLevelUp()
         return true
     else
         return false

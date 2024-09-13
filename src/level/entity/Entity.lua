@@ -11,11 +11,11 @@ function Entity:init(level, definitions, position)
     self.animationName = definitions.animationName or self.name -- the name for this entity's animation
     self.xOffset, self.yOffset = definitions.xOffset or 0, definitions.yOffset or 0 -- set the entity's offsets
     self.width, self.height = definitions.width or DEFAULT_ENTITY_WIDTH, definitions.height or DEFAULT_ENTITY_HEIGHT -- set entity's width and height
-    self:setPosition(position) -- set the entity's spawning position
+    self.stateName = 'idle' -- the name of the current state that this entity is in
     self.animator = Animation(self.animationName, definitions.startAnimation or 'idle-right') -- the animator used to display this entity
     self:initiateInventory(definitions.items or {}) -- initiate the inventory of this entity
     self.speed = definitions.speed or DEFAULT_SPEED -- set the move speed for this entity
-    self.stateName = '' -- the name of the current state that this entity is in
+    self:setPosition(position) -- set the entity's spawning position
 end
 
 -- update each of the components of this entity
@@ -33,7 +33,7 @@ function Entity:render(camera)
     local onScreenX, onScreenY = self:getOnScreenPosition(camera)
     self.stateMachine:render(onScreenX, onScreenY) -- draw the entity at the specified x and y according to stateMachine behavior
     love.graphics.setColor(1, 1, 1, 1) -- set color back to default white in case it was changed
-    local mouseX, mouseY = push:toGame(love.mouse.getPosition()) -- get mouse position
+    local mouseX, mouseY = LibPush:toGame(love.mouse.getPosition()) -- get mouse position
     if self:statsVisible() and (mouseX ~= nil and mouseY ~= nil) and Collide(self, {x = mouseX + camera.x, y = mouseY + camera.y, width = 1, height = 1}) then
         self:printInfoTag(onScreenX, onScreenY)
     end -- if the mouse collides with this entity, print an informational tag above the entity
@@ -43,7 +43,14 @@ end
 function Entity:setPosition(position)
     -- set the x and y position
     self.x, self.y = (((position.x - 1) * TILE_SIZE) + (position.xOffset or 0)), (((position.y - 1) * TILE_SIZE) + (position.yOffset or 0))
-    self.direction = START_DIRECTION -- set the entity's direction to the default direction
+    self:setDirection(START_DIRECTION)
+end
+
+function Entity:getMapPosition()
+    return {
+        x = math.floor(self.x / TILE_SIZE),
+        y = math.floor(self.y / TILE_SIZE)
+    }
 end
 
 -- initiate the inventory with a list of items.
@@ -66,23 +73,40 @@ function Entity:changeAnimation(name)
     self.animator:changeAnimation(name)
 end
 
--- change the entity's direction
-function Entity:changeDirection(newDirection)
-    self.direction = newDirection -- set the new direction as this entity's direction
+function Entity:setDirection(dir)
+    if self.direction == dir then return end
+
+    self.direction = dir
+
+    if dir == 'left' then
+        self.dirX, self.dirY = -1, 0
+    elseif dir == 'right' then
+        self.dirX, self.dirY = 1, 0
+    elseif dir == 'up' then
+        self.dirX, self.dirY = 0, -1
+    elseif dir == 'down' then
+        self.dirX, self.dirY = 0, 1
+    else
+        error('invalid direction name => ' .. dir)
+    end
+
     self:changeAnimation(self.stateName .. '-' .. self.direction) -- change the entity's animation to reflect its new direction
+end
+
+function Entity:setDirXY(dirX, dirY)
+    self.dirX, self.dirY = dirX, dirY
 end
 
 -- change the entity's direction to a random direction
 function Entity:setRandomDirection()
-    local newDirection = DIRECTIONS[math.random(4)] -- choose a new random direction
-    self:changeDirection(newDirection) -- apply the new direction
+    self:setDirection(DIRECTIONS[math.random(4)])
 end
 
--- change the direction of the entity by incrementing/shifting it by a certain amount (+ = clockwise, - = counterclockwise)
+-- change the direction of the entity by shifting it by a certain amount (+ = clockwise, - = counterclockwise)
 function Entity:shiftDirection(shiftAmount)
-    local numericalDirection = DIRECTION_TO_NUM[self.direction] -- get the numerical representation of the entity's direction
-    local newNumericalDirection = (((numericalDirection - 1) + shiftAmount) % 4) + 1 -- shift the numerical direction accordingly
-    self:changeDirection(DIRECTIONS[newNumericalDirection]) -- change the direction to the new direction
+    local currDir = DIRECTION_TO_NUM[self.direction]
+    local newDir = (((currDir - 1) + shiftAmount) % 4) + 1
+    self:setDirection(DIRECTIONS[newDir])
 end
 
 -- return true if this entity collides with the target, false otherwise
@@ -150,7 +174,7 @@ end
 
 -- return a list of map coordinates to check for collision with.
 function Entity:getCollisionCheckList(dt, x, y)
-    local leftCol, rightCol, topRow, bottomRow = (math.ceil(x / TILE_SIZE)), (math.ceil((x + self.width) / TILE_SIZE)), 
+    local leftCol, rightCol, topRow, bottomRow = (math.ceil(x / TILE_SIZE)), (math.ceil((x + self.width) / TILE_SIZE)),
         (math.ceil(y / TILE_SIZE)), (math.ceil((y + self.height) / TILE_SIZE)) -- get the map coordinates of each side of this entity
     local dx, dy = self:getDirectionalVelocities(dt) -- get entity's directional velocity
     local checkList = {} -- the list of coordinates to be checked for collision
@@ -172,7 +196,7 @@ function Entity:getDirectionalVelocities(dt)
     if self.pushManager ~= nil and self.pushManager.isPushed then
        dx, dy = self.pushManager.pushdx, self.pushManager.pushdy -- add in push velocity
     end
-    dx, dy = dx + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].x * (self:getSpeed() * dt)), 
+    dx, dy = dx + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].x * (self:getSpeed() * dt)),
         dy + (DIRECTION_COORDS[DIRECTION_TO_NUM[self.direction]].y * (self:getSpeed() * dt)) -- add in the entity's movement velocity
     return dx, dy
 end

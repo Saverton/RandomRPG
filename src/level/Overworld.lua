@@ -16,16 +16,17 @@ function Overworld:init(worldName, levelName, definitions)
     self.camera = Camera(self.player, self) -- initiate a camera with a reference to its target, the player, and this level.
 end
 
--- update each of the level's components
 function Overworld:update(dt)
-    Level.update(self, dt) 
+    Level.update(self, dt)
     self.npcManager:update(dt)
 end
 
--- render each of the level's components
 function Overworld:render()
-    Level.render(self) 
+    self.map:render(self.camera)
+    self.pickupManager:render(self.camera)
+    self.entityManager:render(self.camera)
     self.npcManager:render(self.camera)
+    self.player:render(self.camera)
 end
 
 function Overworld:spawnPlayer(playerDefinitions)

@@ -44,11 +44,25 @@ function NPCManager:getNpcs(npcList)
     end
 end
 
+function NPCManager:spawnNPC(def, pos)
+    local npc = NPC(self.level, def, pos, self)
+
+    table.insert(self.npcs, npc)
+end
+
 -- attempt to spawn npcs in this map
 function NPCManager:spawnNPCs()
     while #self.npcs < self.cap do
+        local type = NPC_TYPES[math.random(#NPC_TYPES)]
+
         local x, y = self.level.map:getSpawnableCoord() -- find a place to spawn the npc
-        table.insert(self.npcs, NPC(self.level, NPC_DEFS[NPC_TYPES[math.random(#NPC_TYPES)]], {x = x, y = y, xOffset = 0, yOffset = 0}, self))
-            -- insert a random npc in at this location
+        local pos = {
+            x = x,
+            y = y,
+            xOffset = 0,
+            yOffset = 0
+        }
+
+        self:spawnNPC(NPC_DEFS[type], pos)
     end
 end

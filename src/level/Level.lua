@@ -48,7 +48,6 @@ end
 
 -- send any flags to the player, reset the flags table
 function Level:updateFlags()
-    self.player.questManager:updateFlags(self.flags)
     self.flags = {}
 end
 

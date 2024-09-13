@@ -122,7 +122,7 @@ end
 
 -- print a message in white with a shadow rendered one pixel to the right and down
 function PrintWithShadow(message, x, y)
-    love.graphics.setColor({0, 0, 0, 0.5})
+    love.graphics.setColor({0, 0, 0, 0.75})
     love.graphics.print(message, math.floor(x + 1), math.floor(y + 1)) -- print the shadow in transparent black
     love.graphics.setColor({1, 1, 1, 1})
     love.graphics.print(message, math.floor(x), math.floor(y)) -- print the message in white

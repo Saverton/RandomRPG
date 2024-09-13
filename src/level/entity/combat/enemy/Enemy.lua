@@ -123,7 +123,7 @@ function Enemy:dropItems()
 end
 
 -- update all progress bars
-function Enemy:updateBars()
+function Enemy:updateStatBars()
     self.hpBar:updateRatio(self.currentStats.hp / self:getStat('maxHp')) -- update hp bar
 end
 

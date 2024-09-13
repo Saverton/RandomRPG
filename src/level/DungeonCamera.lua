@@ -37,8 +37,8 @@ function DungeonCamera:update()
     end
     if newX ~= self.x or newY ~= self.y then
         newX, newY = self:keepInMapBounds(newX, newY) -- make sure that the new camera position doesn't go out of the map's boundaries
-        gStateStack:push(CameraShiftState(self, {x = newX, y = newY}, 2))
-    end 
+        gStateStack:push(CameraShiftState(self, {x = newX, y = newY}, DUNGEON_CAMERA_SHIFT_TIME))
+    end
 end
 
 -- reset the cambox to cover only what is onscreen, called at the end of the CameraShiftState.

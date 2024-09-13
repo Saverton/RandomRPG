@@ -13,7 +13,7 @@ function Quest:init(definitions, difficulty, npc)
     self.denied = false -- if the quest was denied by the player
     self.text = definitions.text or {
         start = 'Can you do a job for me?', -- when the quest is introduced
-        finish = 'Thank You! Here is a reward:', -- when the quest is completed
+        finish = 'Thank You! Here is a reward: ', -- when the quest is completed
         accept = 'Thanks! Speak to me as soon as you are done!', -- when the quest is accepted
         deny = 'Pity! Now I have to fade away into nothingness.', -- when the quest is denied
         ongoing = 'Oh, it seems you already have my quest. Here is what remains: ' -- when the quest is already accepted, but not completed

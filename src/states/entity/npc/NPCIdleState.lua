@@ -29,6 +29,6 @@ end
 
 -- process what to do next
 function NPCIdleState:processAI()
-    self.entity.direction = DIRECTIONS[math.random(1, 4)] -- choose a random direction
+    self.entity:setDirection(DIRECTIONS[math.random(4)])
     self.entity:changeState('walk', {distance = math.random(1, 3)}) -- start wandering
 end

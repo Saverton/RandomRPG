@@ -28,6 +28,7 @@ CAMERA_WIDTH = VIRTUAL_WIDTH
 CAMERA_HEIGHT = VIRTUAL_HEIGHT
 OFFSCREEN_CAM_WIDTH = 32
 OFFSCREEN_CAM_HEIGHT = 32
+DUNGEON_CAMERA_SHIFT_TIME = 1
 
 -- entity
 DEFAULT_ENTITY_WIDTH = 16
@@ -53,10 +54,10 @@ PLAYER_X_OFFSET = -3
 PLAYER_Y_OFFSET = -4
 PLAYER_BASE_HP = 3
 PLAYER_BASE_ATTACK = 0
-PLAYER_BASE_SPEED = 64
+PLAYER_BASE_SPEED = 80
 PLAYER_BASE_DEFENSE = 0
 PLAYER_BASE_MANA = 5
-PLAYER_ANIMATION_SPEED = 0.2
+PLAYER_ANIMATION_SPEED = 0.1
 PLAYER_SPAWN_X_OFFSET = 3
 PLAYER_SPAWN_Y_OFFSET = 3
 PLAYER_BAR_X = 34
@@ -65,11 +66,13 @@ PLAYER_HP_BAR_HEIGHT = 6
 PLAYER_BAR_WIDTH = 40
 PLAYER_HP_BAR_Y = 12
 PLAYER_MANA_BAR_Y = 12 + PLAYER_HP_BAR_HEIGHT + 4
-PLAYER_EXP_BAR_Y = 12 + (PLAYER_HP_BAR_HEIGHT + PLAYER_BAR_HEIGHT) + 8
+PLAYER_LVL_TEXT_Y = PLAYER_MANA_BAR_Y + PLAYER_BAR_HEIGHT + 2
+PLAYER_EXP_TEXT_Y = PLAYER_LVL_TEXT_Y + 8 + 2
+PLAYER_EXP_BAR_Y = PLAYER_EXP_TEXT_Y + 8 + 2
 START_AMMO = 10
 PLAYER_TEXT_POS_X = 34
-AMMO_TEXT_POS_Y = PLAYER_EXP_BAR_Y + PLAYER_BAR_HEIGHT + 4
-MONEY_TEXT_POS_Y = AMMO_TEXT_POS_Y + 8 + 2
+AMMO_TEXT_POS_Y = PLAYER_EXP_BAR_Y + PLAYER_BAR_HEIGHT + 6
+MONEY_TEXT_POS_Y = AMMO_TEXT_POS_Y + 8 + 8
 
 -- animations
 DEFAULT_ANIMATION_SPEED = 0.2
@@ -120,12 +123,18 @@ CHEST_ITEMS = {'sword', 'battle_axe', 'bow', 'fire_tome', 'ice_tome'}
 
 -- npcs
 DESPAWN_TIMER = 2
-NPC_CAP = 3
-NPC_TYPES = {'quest', 'shop', 'tips'}
+NPC_CAP = 1
+NPC_TYPES = {'shop'}
 NPC_NAMES = {'Dorfinkle', 'Adronian', 'Quandale', 'Steve', 'Terrence', 'Dumbledalf', 'Frippin', 'Zink'}
-QUEST_LIMIT = 2
-TIPS = {'Have you found six weapons?', 'Tomes inflict status effects.', 'A Battle Axe is not just a weapon...',
-    'Don\'t get too close to skeletons.', 'Enemies will get stronger too!', 'Have you visited a dungeon?'}
+--[[ QUEST_LIMIT = 2
+TIPS = {
+    'Have you found six weapons?',
+    'Tomes inflict status effects.',
+    'A Battle Axe is not just a weapon...',
+    'Don\'t get too close to skeletons.',
+    'Enemies will get stronger too!',
+    'Have you visited a dungeon?'
+} -- unused currently, may be added to quest or shop npc dialog ]]
 
 -- leveling
 DEFAULT_BONUS = 1

@@ -53,7 +53,7 @@ end
 function CombatEntity:regenMana(dt)
     if self.currentStats.mana ~= self:getStat('maxMana') then
         self.currentStats.mana = math.min(self:getStat('maxMana'), self.currentStats.mana + ((ENTITY_DEFS[self.name].manaRegenRate or 0) * dt))
-        self:updateBars()
+        self:updateStatBars()
     end
 end
 
@@ -77,7 +77,7 @@ function CombatEntity:hurt(amount)
             self:dies() -- call death function
         end
         self.invincibilityManager:goInvincible()
-        self:updateBars() -- update the health bar
+        self:updateStatBars() -- update the health bar
         return true -- return that the entity is hurt
     end
     return false -- return  that the entity is not hurt
@@ -87,7 +87,7 @@ end
 function CombatEntity:heal(amount)
     gSounds['items']['health']:play()
     self.currentStats.hp = math.min(self:getStat('maxHp'), math.floor(self.currentStats.hp + amount)) -- set the current hp to either the max or the current plus amount
-    self:updateBars() -- update the health bar
+    self:updateStatBars() -- update the health bar
 end
 
 -- totally heal the combat entity
@@ -123,7 +123,7 @@ function CombatEntity:useMana(amount)
     local successful = false
     if (amount <= math.floor(self.currentStats.mana)) then -- determine if have enough mana
         self.currentStats.mana = math.floor(self.currentStats.mana - amount) -- deplete mana by amount
-        self:updateBars() -- update mana bar
+        self:updateStatBars() -- update mana bar
         successful = true
     end
     return successful

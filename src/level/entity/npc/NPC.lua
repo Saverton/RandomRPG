@@ -12,9 +12,7 @@ function NPC:init(level, definitions, position, manager)
     self.npcName = NPC_NAMES[math.random(#NPC_NAMES)] -- choose a random name from the list of npc names (constants)
     self.timesInteractedWith = 0
     if NPC_DEFS[self.name].hasShop then -- create a shop object for this npc to own.
-        self.shop = Shop(definitions.shop, self) 
-    elseif NPC_DEFS[self.name].hasQuest then -- create a quest object with a random difficulty level for this NPC to own
-        self.quest = Quest(definitions.quest or {}, math.random(1, 3), self) 
+        self.shop = Shop(definitions.shop, self)
     end
     self.stateMachine = StateMachine({
         ['idle'] = function() return NPCIdleState(self) end,
